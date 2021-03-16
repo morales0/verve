@@ -1,8 +1,34 @@
-import React from 'react';
+import React, {useState} from 'react';
+import { Exercise } from '../../components';
 
 import './Workout.css';
 
+const exercises = [
+	{
+		name: "Pushups"
+	},
+	{
+		name: "Pullups"
+	}
+]
+
+const currEx = []
+
 const Workout = () => {
+	// State
+	const [currEx, setCurEx] = useState([])
+
+
+	// Functions
+	const addExercise = name => {
+		setCurEx([
+			...currEx,
+			{name: name}
+		])
+		console.log("Add Exercise: ", name)
+	}
+
+	// Render
 	return (
 		<div className="Workout">
 			<h2>Workout</h2>
@@ -14,11 +40,9 @@ const Workout = () => {
 						</header>
 
 						<div className="exercisesContainer">
-							<div>Exercise</div>
-
-							<div>Exercise</div>
-
-							<div>Exercise</div>
+							{currEx.map((ex)=>
+								<Exercise key={ex.name} name={ex.name}/>
+							)}
 						</div>
 					</div>
 
@@ -39,31 +63,23 @@ const Workout = () => {
 					</header>
 
                <div className="exercisesList">
-                  <div>
-                     Exercise
-                  </div>
-                  <div>
-                     Exercise
-                  </div>
-                  <div>
-                     Exercise
-                  </div>
-
-                  <div>
-                     Exercise
-                  </div>
-                  <div>
-                     Exercise
-                  </div>
-                  <div>
-                     Exercise
-                  </div>
-                  
+                  {exercises.map((ex) => 
+							<ExerciseInfo key={ex.name} name={ex.name} handleAdd={addExercise}/>
+						)}
                </div>
 				</aside> 
 			</div>
 		</div>
 	);
 };
+
+const ExerciseInfo = (props) => {
+	return (
+		<div className="exerciseInfo">
+			<h4>{props.name}</h4>
+			<button onClick={() => props.handleAdd(props.name)}>+</button>
+		</div>
+	)
+}
 
 export default Workout;
