@@ -1,6 +1,7 @@
 .Exercise {
    max-width: max-content;
    min-width: 200px;
+   margin: 5px;
    border: 1px solid #adadad;
    border-radius: 0px;
    overflow: hidden; /* Hide leak */

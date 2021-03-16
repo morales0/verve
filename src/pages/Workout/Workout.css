@@ -83,8 +83,10 @@ aside#exercisesSide {
 }
 
 .exercisesContainer {
-	display: grid;
-	grid-template-columns: repeat(auto-fill, minmax(200px, auto));
+	/* display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(200px, auto)); */
+   display: flex;
+   flex-flow: row wrap;
 	padding: .75rem;
 }
 

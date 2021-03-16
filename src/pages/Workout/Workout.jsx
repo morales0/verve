@@ -1,6 +1,8 @@
 import React, {useState} from 'react';
 import { Exercise } from '../../components';
+import { Flex } from '../../layout';
 
+import styled from 'styled-components/macro';
 import './Workout.css';
 
 const exercises = [
@@ -9,32 +11,59 @@ const exercises = [
 	},
 	{
 		name: "Pullups"
+	},
+	{
+		name: "Squats"
+	},
+	{
+		name: "Bench Press"
+	},
+	{
+		name: "Rows"
+	},
+	{
+		name: "Shoulder Press"
 	}
 ]
-
-const currEx = []
 
 const Workout = () => {
 	// State
 	const [currEx, setCurEx] = useState([])
+	const [currExNames, setCurExNames] = useState([])
+
 
 
 	// Functions
 	const addExercise = name => {
-		setCurEx([
-			...currEx,
-			{name: name}
-		])
-		console.log("Add Exercise: ", name)
+		if (!currExNames.includes(name)){ 
+			setCurEx([
+				...currEx,
+				{name: name}
+			])
+
+			setCurExNames([
+				...currExNames,
+				name
+			])
+		}
 	}
 
 	// Render
 	return (
-		<div className="Workout">
+		<Flex column>
 			<h2>Workout</h2>
-			<div className="Workout_main">
-				<div className="workout_container">
-					<div className="exercises" id="progress">
+			{/* Workout main content */}
+			<Flex box item row grow='1' css={`position: relative; overflow: hidden;`}>
+				{/* Current workout grids */}
+				<Flex box item column grow='1' css={`overflow-y: auto;`}>
+					{/* Exercises in progress */}
+					<Flex item flex='1 1 auto' css={`
+						&>header{
+							display: flex;
+							padding: 12px 16px;
+							background: #c4e4ff8f;
+						}
+					`}>
 						<header>
 							<h3>My Workout</h3>
 						</header>
@@ -44,9 +73,16 @@ const Workout = () => {
 								<Exercise key={ex.name} name={ex.name}/>
 							)}
 						</div>
-					</div>
+					</Flex>
 
-					<div className="exercises" id="completed">
+					{/* Completed exercises */}
+					<Flex item shrink='0' css={`
+						&>header{
+							display: flex;
+							padding: 12px 16px;
+							background: #8fef898f;
+						}
+					`}>
 						<header>
 							<h3>Completed</h3>
 						</header>
@@ -54,30 +90,31 @@ const Workout = () => {
 						<div>
 							<p>Finish some exercises!</p>
 						</div>
-					</div>
-				</div>
+					</Flex>
+				</Flex>
 
+				{/* Toolbar on the side with exercises */}
 				<aside id="exercisesSide">
 					<header>
 						<h3>Exercises</h3>
 					</header>
 
                <div className="exercisesList">
-                  {exercises.map((ex) => 
+                  {exercises.filter(ex => !currExNames.includes(ex.name)).map((ex) => 
 							<ExerciseInfo key={ex.name} name={ex.name} handleAdd={addExercise}/>
 						)}
                </div>
 				</aside> 
-			</div>
-		</div>
+			</Flex>
+		</Flex>
 	);
 };
 
 const ExerciseInfo = (props) => {
 	return (
 		<div className="exerciseInfo">
-			<h4>{props.name}</h4>
 			<button onClick={() => props.handleAdd(props.name)}>+</button>
+			<h4>{props.name}</h4>
 		</div>
 	)
 }
