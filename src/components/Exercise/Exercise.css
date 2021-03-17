@@ -1,5 +1,5 @@
 .Exercise {
-   max-width: max-content;
+   max-width: min-content;
    min-width: 200px;
    margin: 5px;
    border: 1px solid #adadad;
@@ -8,8 +8,8 @@
 }
 
 .Exercise > header {
-   padding: .25rem .75rem;
-   background-color: #dbedfc;
+   /* background-color: #dbedfc; */
+   background-color: #dee3e6;
    border-bottom: 1px solid #adadad;
 }
 
