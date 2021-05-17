@@ -50,3 +50,8 @@ h1, h2 {
 h3, h4 {
 	font-weight: 400;
 }
+
+input[type="text"] {
+	padding: 5px 5px;
+	font-family: inherit;
+}

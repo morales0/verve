@@ -5,26 +5,7 @@ import { Flex } from '../../layout';
 import styled from 'styled-components/macro';
 import './Workout.css';
 
-const exercises = [
-	{
-		name: "Pushups"
-	},
-	{
-		name: "Pullups"
-	},
-	{
-		name: "Squats"
-	},
-	{
-		name: "Bench Press"
-	},
-	{
-		name: "Rows"
-	},
-	{
-		name: "Shoulder Press"
-	}
-]
+import ogExercises from '../../data/original-exercises'
 
 const Workout = () => {
 	// State + Hooks
@@ -169,7 +150,7 @@ const Workout = () => {
 					</header>
 
                <div className="exercisesList">
-                  {exercises.filter(ex => !currExNames.includes(ex.name)).map((ex) => 
+                  {ogExercises.filter(ex => !currExNames.includes(ex.name)).map((ex) => 
 							<ExerciseInfo key={ex.name} name={ex.name} handleAdd={addExercise}/>
 						)}
 						<ExerciseInput handleAdd={addExercise}/>
