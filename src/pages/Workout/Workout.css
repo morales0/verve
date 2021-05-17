@@ -1,28 +1,33 @@
 /* Grid */
 
-.WorkoutGrid {
+.Workout {
 	display: grid;
 	grid-template-columns: 1fr 35%;
-	grid-template-rows: 50px minmax(40%, 75%) auto;
+	grid-template-rows: 50px auto;
 }
 
-.WorkoutGrid > div {
-
-}
-
-.WorkoutGrid > header {
+.Workout > header {
 	grid-column: 1/span 2;
 }
 
-#workoutInProgress {
-
+.exInProgress {
 }
 
-#workoutCompleted {
-
+.exInProgress > header {
+	padding: .4rem .6rem;
+	background: #c4e4ff8f;
 }
 
-#workoutExerciseList {
+.exCompleted {
+	
+}
+
+.exCompleted > header {
+	padding: .4rem .6rem;
+	background: #f1dfa18f;
+}
+
+.exList {
 	display: flex;
 	flex-direction: column;
 	flex: 0 0 35%;
@@ -30,14 +35,14 @@
 	border-left: 2px solid #c2c7ce;
 
 	overflow-y: auto;
-	grid-row: 2/span 2;
+	/* grid-row: 2/span 2; */
    grid-column: 2;
 }
 
-#workoutExerciseList > header {
+.exList > header {
 	display: flex;
 	justify-content: center;
-	padding: 12px 16px;
+	padding: .4rem .6rem;
 	background: #f1d0d0;
 }
 
@@ -98,10 +103,6 @@ aside#exercisesSide {
 
 
 /* Real */
-.Workout {
-	display: flex;
-	flex-direction: column;
-}
 
 .Workout_main {
 	position: relative;

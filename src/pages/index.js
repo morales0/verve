@@ -1,5 +1,5 @@
 import Home from "./Home/Home"
-import Workout from "./Workout/WorkoutGrid"
+import Workout from "./Workout/Workout"
 
 
 export {
