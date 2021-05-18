@@ -4,9 +4,29 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
+import 'firebase/firestore';
+import { FirebaseAppProvider, useFirestoreDocData, useFirestore } from 'reactfire';
+import AuthWrapper from './context/auth';
+
+// Firebase config
+const firebaseConfig = {
+  apiKey: "AIzaSyAWFkdLm3ip4KDKV6Je82bMo-HHchAGy7g",
+  authDomain: "workout-app-37a10.firebaseapp.com",
+  databaseURL: "https://workout-app-37a10.firebaseio.com",
+  projectId: "workout-app-37a10",
+  storageBucket: "workout-app-37a10.appspot.com",
+  messagingSenderId: "645282706661",
+  appId: "1:645282706661:web:ad9a702c2c012dc54bd00c",
+  measurementId: "G-26WXTMBPLN"
+};
+
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <FirebaseAppProvider firebaseConfig={firebaseConfig}>
+      <AuthWrapper>
+        <App />
+      </AuthWrapper>
+    </FirebaseAppProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );
