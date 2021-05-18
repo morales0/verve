@@ -1,19 +1,54 @@
-import { useSignInCheck } from 'reactfire'
+import { createContext, useContext, useEffect, useState } from 'react';
+import 'firebase/auth'
+import { useAuth, useUser } from 'reactfire'
 
-// Will provide the authentication data
-const AuthWrapper = (props) => {
-   const {status, data: authResult } = useSignInCheck()
+const AuthContext = createContext()
+const AuthProvider = (props) => {
+   // Get the auth
+   const auth = useAuth()
+   const [authLoading, setAuthLoading] = useState(true);
+   const [user, setUser] = useState(null);
 
-   if (status === 'loading') {
-      return <p>Signing in...</p>
-   } else if (authResult.signedIn) {
-      return props.children
+   // Subscribe to any auth changes
+   useEffect(() => {
+      auth.onAuthStateChanged((user) => {
+         if (user) {
+            console.log("User is logged in", user)
+         } else {
+            console.log("User is not logged in")
+         }
+
+         setUser(user)
+         setAuthLoading(false)
+      })
+   }, []);
+
+   useEffect(() => {
+   console.log("Full re-render")  
+   });
+
+   // Wait for authentication to load app
+   if (authLoading) {
+      return <h2>Loading...</h2>
+   } else {
+      return (
+         <AuthContext.Provider value={{
+            user: user, authenticated: user !== null, authLoading
+         }}>
+            {props.children}
+         </AuthContext.Provider>
+      )
    }
-
-   // Redirect to sign in page
-   return (
-      <p>No account</p>
-   )
 }
 
-export default AuthWrapper
+const useAuthCheck = () => {
+   const authCheck = useContext(AuthContext)
+
+   return authCheck
+}
+
+export {
+   AuthProvider,
+   useAuthCheck
+}
+   

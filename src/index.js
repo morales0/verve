@@ -6,7 +6,7 @@ import reportWebVitals from './reportWebVitals';
 
 import 'firebase/firestore';
 import { FirebaseAppProvider, useFirestoreDocData, useFirestore } from 'reactfire';
-import AuthWrapper from './context/auth';
+import AuthWrapper, { AuthProvider } from './context/auth';
 
 // Firebase config
 const firebaseConfig = {
@@ -23,9 +23,9 @@ const firebaseConfig = {
 ReactDOM.render(
   <React.StrictMode>
     <FirebaseAppProvider firebaseConfig={firebaseConfig}>
-      <AuthWrapper>
+      <AuthProvider>
         <App />
-      </AuthWrapper>
+      </AuthProvider>
     </FirebaseAppProvider>
   </React.StrictMode>,
   document.getElementById('root')

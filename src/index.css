@@ -51,7 +51,10 @@ h3, h4 {
 	font-weight: 400;
 }
 
-input[type="text"] {
+input[type="text"],
+input[type="email"],
+input[type="password"] {
 	padding: 5px 5px;
+	margin-bottom: 6px;
 	font-family: inherit;
 }
