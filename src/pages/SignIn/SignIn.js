@@ -53,9 +53,4 @@ const SignIn = (props) => {
    );
 }
 
-const ButtonLink = styled(Link)`
-   text-decoration: none;
-   color: inherit;
-`
-
 export default SignIn;

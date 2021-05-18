@@ -58,9 +58,4 @@ const SignUp = (props) => {
    );
 }
 
-const ButtonLink = styled(Link)`
-   text-decoration: none;
-   color: inherit;
-`
-
 export default SignUp;
