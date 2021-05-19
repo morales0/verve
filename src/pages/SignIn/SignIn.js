@@ -16,6 +16,7 @@ const SignIn = (props) => {
    // Functions
    const signIn = () => {
       auth.signInWithEmailAndPassword(email, password).then((user) => {
+         console.log("User signed in!")
          // If a user was redirected, send back to that page (stopped working)
          /* console.log(location.state)
          if (location.state.from) {
