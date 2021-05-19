@@ -18,7 +18,7 @@ const AuthProvider = (props) => {
          uid: uid,
          email: email,
       });
-    }
+   }
 
    // Subscribe to any auth changes
    useEffect(() => {
@@ -36,7 +36,7 @@ const AuthProvider = (props) => {
                   createUser(user.uid, user.email)
                }
             })
-            
+
          } else {
             console.log("User is not logged in")
          }
@@ -47,7 +47,7 @@ const AuthProvider = (props) => {
    }, []);
 
    useEffect(() => {
-   console.log("Full re-render")  
+      console.log("Full re-render")
    });
 
    // Wait for authentication to load app
@@ -74,4 +74,3 @@ export {
    AuthProvider,
    useAuthCheck
 }
-   

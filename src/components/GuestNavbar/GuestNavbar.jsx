@@ -4,7 +4,9 @@ import Navbar from "../Navbar/Navbar";
 const GuestNavbar = (props) => {
    return ( 
       <Navbar>
-         <NavLink exact to="/" activeClassName="activeNavLink">Verve</NavLink>
+         <div>
+            <NavLink exact to="/" activeClassName="activeNavLink">Verve</NavLink>
+         </div>
          {/* <NavLink to="/demo" activeClassName="activeNavLink">DEMO</NavLink> */}
          <div>
             <NavLink to="/signIn" activeClassName="activeNavLink">Sign In</NavLink>

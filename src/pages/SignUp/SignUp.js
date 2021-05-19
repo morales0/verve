@@ -1,7 +1,7 @@
 import 'firebase/auth'
 import { useState } from 'react';
 import { Link, useHistory, useLocation } from 'react-router-dom';
-import { useAuth } from 'reactfire';
+import { useAuth, useDatabase } from 'reactfire';
 import styled from 'styled-components/macro'
 import { AuthForm } from '../../components';
 
@@ -12,10 +12,20 @@ const SignUp = (props) => {
    const [password, setPassword] = useState('');
    const [error, setError] = useState();
    const auth = useAuth()
+   const db = useDatabase()
    const history = useHistory()
    const location = useLocation()
 
    // Functions
+   const createUser = (uid, email, name, username) => {
+      db.ref('users/' + uid).set({
+         uid: uid,
+         email: email,
+         name: name,
+         username: username
+      });
+   }
+
    const signUp = () => {
       auth.createUserWithEmailAndPassword(email, password).then((user) => {
          // If a user was redirected, send back to that page (stopped working)
@@ -24,6 +34,8 @@ const SignUp = (props) => {
          } else {
             history.push("/workout")
          } */
+         createUser(user.user.uid, user.email, name, username)
+         
       })
          .catch((err) => {
             console.log("Error", err)
