@@ -11,9 +11,11 @@ Providers:
 Firebase: Auth, User, and Database
 Theme Provider
 */
+const routes = ["/signIn", "/signUp", "./workouts", "/history", "/user"]
 
 function App() {
    const authCheck = useAuthCheck()
+   const auth = useAuth()
    /* const db = useDatabase()
    const ref = db.ref('users')
    const { status, data } = useDatabaseObjectData(ref)
@@ -36,9 +38,19 @@ function App() {
    return (
       <Router>
 
-         <UserNavbar/>
-         
+         {/* Render appropriate navbar */}
+         <Switch>
+            <Route path="/signIn">
+               <nav>Verve</nav>
+            </Route>
+            <Route path="/signUp">
+               <nav>Verve</nav>
+            </Route>
+            <UserNavbar />
+         </Switch>
 
+         
+         {/* Render the page component */}
          <Switch>
             <Route exact path="/" component={Home} />
 
@@ -62,6 +74,13 @@ function App() {
 
             <PrivateRoute path="/history">
                <div>History</div>
+            </PrivateRoute>
+
+            <PrivateRoute path="/user">
+               <div>
+                  {authCheck.authenticated && authCheck.user.email}
+                  <button onClick={() => auth.signOut()}>Sign Out</button>
+               </div>
             </PrivateRoute>
 
          </Switch>

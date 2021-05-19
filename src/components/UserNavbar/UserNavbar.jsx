@@ -5,14 +5,14 @@ const UserNavbar = (props) => {
    return ( 
       <nav className="UserNavbar">
          <div>
-            Verve
+            <NavLink exact to="/" activeClassName="activeNavLink">Verve</NavLink>
          </div>
          <div className="navLinks">
             <NavLink to="/workout" activeClassName="activeNavLink">Workouts</NavLink>
             <NavLink to="/history" activeClassName="activeNavLink">History</NavLink>
          </div>
          <div>
-            Name
+            <NavLink to="/user" activeClassName="activeNavLink">User</NavLink>
          </div>
       </nav>
     );
