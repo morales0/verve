@@ -4,7 +4,7 @@ import { useAuth, useDatabase, useDatabaseObjectData, useUser } from 'reactfire'
 import 'firebase/database';
 import { Home, SignIn, SignUp, Workout } from './pages';
 import AuthWrapper, { useAuthCheck } from './context/auth';
-import { UserNavbar } from './components';
+import { GuestNavbar, UserNavbar } from './components';
 
 /* 
 Providers:
@@ -40,19 +40,23 @@ function App() {
 
          {/* Render appropriate navbar */}
          <Switch>
-            <Route path="/signIn">
-               <nav>Verve</nav>
-            </Route>
-            <Route path="/signUp">
-               <nav>Verve</nav>
-            </Route>
-            <UserNavbar />
+            {authCheck.authenticated ? (
+               <UserNavbar />
+            ) : (
+               <GuestNavbar />
+            )}
          </Switch>
 
          
          {/* Render the page component */}
          <Switch>
-            <Route exact path="/" component={Home} />
+            <Route exact path="/">
+               {authCheck.authenticated ? (
+                  <Home />
+               ) : (
+                  <div>demo</div>
+               )}
+            </Route>
 
             <Route path="/signIn">
                {authCheck.authenticated ? (
@@ -76,12 +80,12 @@ function App() {
                <div>History</div>
             </PrivateRoute>
 
-            <PrivateRoute path="/user">
+            <PrivateRoute path="/user" component={() =>
                <div>
                   {authCheck.authenticated && authCheck.user.email}
                   <button onClick={() => auth.signOut()}>Sign Out</button>
                </div>
-            </PrivateRoute>
+            } />
 
          </Switch>
 

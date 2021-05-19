@@ -1,9 +1,10 @@
 import { Link, NavLink } from 'react-router-dom'
+import Navbar from '../Navbar/Navbar'
 import './UserNavbar.css'
 
 const UserNavbar = (props) => {
    return ( 
-      <nav className="UserNavbar">
+      <Navbar>
          <div>
             <NavLink exact to="/" activeClassName="activeNavLink">Verve</NavLink>
          </div>
@@ -14,7 +15,7 @@ const UserNavbar = (props) => {
          <div>
             <NavLink to="/user" activeClassName="activeNavLink">User</NavLink>
          </div>
-      </nav>
+      </Navbar>
     );
 }
  
