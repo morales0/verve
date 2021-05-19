@@ -7,7 +7,7 @@ const Home = () => {
    const auth = useAuth()
    return (
       <div>
-         <button onClick={() => auth.signOut()}>Sign Out</button>
+         Home
       </div>
    )
 }

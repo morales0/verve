@@ -4,6 +4,7 @@ import { useAuth, useDatabase, useDatabaseObjectData, useUser } from 'reactfire'
 import 'firebase/database';
 import { Home, SignIn, SignUp, Workout } from './pages';
 import AuthWrapper, { useAuthCheck } from './context/auth';
+import { UserNavbar } from './components';
 
 /* 
 Providers:
@@ -35,9 +36,8 @@ function App() {
    return (
       <Router>
 
-         <nav>
-
-         </nav>
+         <UserNavbar/>
+         
 
          <Switch>
             <Route exact path="/" component={Home} />

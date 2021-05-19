@@ -1,0 +1,31 @@
+.UserNavbar {
+   display: flex;
+   justify-content: space-between;
+   align-items: center;
+   height: 35px;
+   background-color: #e0eaea;
+}
+
+.UserNavbar > .navLinks {
+   height: 100%;
+   display: flex;
+}
+
+.UserNavbar > .navLinks > a {
+   display: flex;
+   text-decoration: none;
+   align-items: center;
+   padding: 0 10px;
+}
+.UserNavbar > .navLinks > a:hover {
+   background-color: #d7e1f1;
+}
+
+.UserNavbar > .navLinks > a:active {
+   color: inherit;
+}
+
+.activeNavLink {
+   border-bottom: 1px solid #a9a9a9;
+}
+
