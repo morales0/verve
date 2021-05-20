@@ -1,20 +1,17 @@
-import { Link, NavLink } from 'react-router-dom'
+import { NavLink } from 'react-router-dom'
 import Navbar from '../Navbar/Navbar'
-import './UserNavbar.css'
 
 const UserNavbar = (props) => {
    return ( 
       <Navbar>
+         <NavLink exact to="/" activeClassName="activeNavLink">Verve</NavLink>
+         
          <div>
-            <NavLink exact to="/" activeClassName="activeNavLink">Verve</NavLink>
-         </div>
-         <div className="navLinks">
             <NavLink to="/workout" activeClassName="activeNavLink">Workouts</NavLink>
             <NavLink to="/history" activeClassName="activeNavLink">History</NavLink>
          </div>
-         <div>
-            <NavLink to="/user" activeClassName="activeNavLink">User</NavLink>
-         </div>
+         
+         <NavLink to="/user" activeClassName="activeNavLink">User</NavLink>
       </Navbar>
     );
 }
