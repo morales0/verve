@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import { Exercise } from '../../components';
 import { Flex } from '../../layout';
 
@@ -6,6 +6,7 @@ import styled from 'styled-components/macro';
 import './Workout.css';
 
 import ogExercises from '../../data/original-exercises'
+import { useDatabase, useUser } from 'reactfire';
 
 const Workout = () => {
 	// State + Hooks
@@ -15,6 +16,24 @@ const Workout = () => {
 		completed: 0
 	})
 	const [currExNames, setCurExNames] = useState([])
+	
+
+	// Subscribe to user workout data
+	// useEffect(() => {
+	// 	const workout = db.ref(`users/${user.data.uid}/workout`)
+	// 	workout.on('value', (snapshot) => {
+	// 		if (!snapshot.exists()) {
+	// 			console.log("No workout found, add")
+	// 			// Add a workout
+	// 			workout.set({
+	// 				dateStarted: new Date().toString(),
+	// 			}).then((ret) => console.log(ret))
+	// 			.catch((err) => console.log(err))
+	// 		} else {
+	// 			console.log("Found", snapshot)
+	// 		}
+	// 	})
+	// });
 
 
 

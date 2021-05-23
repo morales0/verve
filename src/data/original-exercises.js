@@ -1,21 +1,27 @@
 const ogExercises = [
 	{
-		name: "Pushups"
+		name: "Pushups",
+		measures: ['reps']
 	},
 	{
-		name: "Pullups"
+		name: "Pullups",
+		measures: ['reps']
 	},
 	{
-		name: "Squats"
+		name: "Squats",
+		measures: ['reps', 'weight']
 	},
 	{
-		name: "Bench Press"
+		name: "Bench Press",
+		measures: ['reps', 'weight']
 	},
 	{
-		name: "Rows"
+		name: "Rows",
+		measures: ['reps', 'weight']
 	},
 	{
-		name: "Shoulder Press"
+		name: "Shoulder Press",
+		measures: ['reps', 'weight']
 	}
 ]
 
