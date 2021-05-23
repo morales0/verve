@@ -7,6 +7,7 @@ import './Workout.css';
 
 import ogExercises from '../../data/original-exercises'
 import { useDatabase, useUser } from 'reactfire';
+import { useWorkout } from '../../hooks/workout';
 
 const Workout = () => {
 	// State + Hooks
@@ -16,6 +17,9 @@ const Workout = () => {
 		completed: 0
 	})
 	const [currExNames, setCurExNames] = useState([])
+
+	// Hooks
+	const workout = useWorkout()
 	
 
 	// Subscribe to user workout data
@@ -137,13 +141,16 @@ const Workout = () => {
 					</header>
 
 					<Flex row wrap={true} crossAxis="flex-start" css={`padding: .75rem`} >
-						{meta['inProgress'] > 0 ? currEx.filter((ex) => !ex.completed).map((ex, i)=>
-							<Exercise key={ex.name} name={ex.name} sets={ex.sets} 
-								addSet={() => addSet(i)} removeSet={() => removeSet(i)}
-								completeExercise={() => completeExercise(i)}
-								removeExercise={() => removeExercise(i)}
-							/>
-						) : <p>Add some exercises from the right!</p>}
+						{ workout.status === 'loading' ? (
+							<p>Loading exercises...</p>
+						) : workout.status === 'ok' ? (
+							workout.data.numExInProgress > 0 ? (
+								workout.data.exercises.filter(ex => !ex.completed).map((ex, i) => {
+									// <Exercise key={ex.name + i + "progress"} eid={ex.id} />
+									<div>Ex here</div>
+								})
+							) : <p>Add some exercises from the right!</p>
+						) : <p>something is wrong...</p>}
 					</Flex>
 				</div>
 
@@ -165,13 +172,13 @@ const Workout = () => {
 					</Flex> */}
 
 					<Flex row wrap={true} css={`padding: .75rem`} >
-						{meta['completed'] > 0 ? currEx.filter((ex) => ex.completed).map((ex, i)=>
-							<Exercise key={ex.name} name={ex.name} sets={ex.sets} 
-								addSet={() => addSet(i)} removeSet={() => removeSet(i)}
-								completeExercise={() => completeExercise(i)}
-								removeExercise={() => removeExercise(i)}
-							/>
-						) : <p>Finish some excercises up there!</p>}
+						{ workout.status === 'ok' && (
+							workout.data.numExCompleted > 0 ? (
+								workout.data.exCompleted.filter(ex => ex.completed).map((ex, i) => {
+									//<Exercise key={ex.name + i + "progress"} eid={ex.id} complete={true}/>
+									<div>Ex here</div>
+								})
+							) : <p>Finish some exercises!</p>)}
 					</Flex>
 				</div>
 			</Flex>
@@ -184,7 +191,7 @@ const Workout = () => {
 
             <div className="exercisesList">
                {ogExercises.filter(ex => !currExNames.includes(ex.name)).map((ex) => 
-                  <ExerciseInfo key={ex.name} name={ex.name} handleAdd={addExercise}/>
+                  <ExerciseInfo key={ex.name} name={ex.name} handleAdd={workout.api.addExercise}/>
                )}
                <ExerciseInput handleAdd={addExercise}/>
             </div>
