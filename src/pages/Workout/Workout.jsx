@@ -145,9 +145,13 @@ const Workout = () => {
 							<p>Loading exercises...</p>
 						) : workout.status === 'ok' ? (
 							workout.data.numExInProgress > 0 ? (
-								workout.data.exercises.filter(ex => !ex.completed).map((ex, i) => {
-									// <Exercise key={ex.name + i + "progress"} eid={ex.id} />
-									<div>Ex here</div>
+								Object.values(workout.data.exercises).filter(ex => !ex.completed).map((ex, i) => {
+									return <Exercise key={ex.name + "-progress"} eid={ex.id} 
+										name={ex.name} completeExercise={() => {}} 
+										removeExercise={()=>{workout.api.removeExercise(ex.name)}} 
+										sets={[]} addSet={()=>{}} removeSet={()=>{}}
+									/>
+									//<div>Ex here</div>
 								})
 							) : <p>Add some exercises from the right!</p>
 						) : <p>something is wrong...</p>}
@@ -191,9 +195,11 @@ const Workout = () => {
 
             <div className="exercisesList">
                {ogExercises.filter(ex => !currExNames.includes(ex.name)).map((ex) => 
-                  <ExerciseInfo key={ex.name} name={ex.name} handleAdd={workout.api.addExercise}/>
+                  <ExerciseInfo key={ex.name + '-add'} name={ex.name} 
+							handleAdd={() => workout.api.addExercise(ex.name, ex.measures)}
+						/>
                )}
-               <ExerciseInput handleAdd={addExercise}/>
+               <ExerciseInput handleAdd={() => workout.api.addExercise('Basic', ['reps'])}/>
             </div>
          </aside> 
 		</div>
@@ -203,7 +209,7 @@ const Workout = () => {
 const ExerciseInfo = (props) => {
 	return (
 		<div className="exerciseInfo">
-			<button onClick={() => props.handleAdd(props.name)}>+</button>
+			<button onClick={props.handleAdd}>+</button>
 			<h4>{props.name}</h4>
 		</div>
 	)

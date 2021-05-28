@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { useDatabase, useUser } from "reactfire"
+import { useDatabase, useFirebaseApp, useUser } from "reactfire"
+import firebase from 'firebase'
 
 const useWorkout = () => {
    // State
@@ -14,11 +15,10 @@ const useWorkout = () => {
    const workout = db.ref(`users/${user.data.uid}/workout`)
    const exList = db.ref(`users/${user.data.uid}/workout/exercises`)
 
-
-   // Subscribe to the child add and remove
+   // Subscribe to the current workout
    useEffect(() => {
-      // Listen for changes
       workout.on('value', snapshot => {
+         // Create a new workout if none is found
          if (!snapshot.exists()) {
             console.log("No workout found, add")
             // Add a workout
@@ -30,29 +30,35 @@ const useWorkout = () => {
          } else {
             setData(snapshot.val())
             setStatus('ok')
+            console.log(snapshot.val().exercises)
          }
       })
 
-      return () => {
-         workout.off()
-      }
+      // Close subscription once unmounted
+      return () => workout.off()
    }, []);
 
    // API
    const api = {
       addWorkout: () => {},
       removeWorkout: () => {},
-      addExercise: (name) => {
-         console.log("Add")
-         let newExKey = exList.push().key
-         let newExRef = db.ref(`users/${user.data.uid}/workout/exercises/${newExKey}`)
-
-         newExRef.set({
+      addExercise: (name, measures) => {
+         console.log("Adding exercise")
+         let updates = {};
+         updates[`/exercises/${name}`] = {
             name: name,
-            complete: false
-         })
+            complete: false,
+            measures: measures
+         };
+         updates['/numExInProgress'] = firebase.database.ServerValue.increment(1);
+         workout.update(updates);
       },
-      removeExercise: () => {},
+      removeExercise: (name) => {
+         let updates = {}
+         updates[`exercises/${name}`] = null
+         updates['/numExInProgress'] = firebase.database.ServerValue.increment(-1);
+         workout.update(updates);
+      },
       addSet: () => {},
       removeSet: () => {},
       updateSet: () => {}
