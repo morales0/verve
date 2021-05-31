@@ -149,7 +149,11 @@ const Workout = () => {
 									return <Exercise key={ex.name + "-progress"} eid={ex.id} 
 										name={ex.name} completeExercise={() => {}} 
 										removeExercise={()=>{workout.api.removeExercise(ex.name)}} 
-										sets={[]} addSet={()=>{}} removeSet={()=>{}}
+										sets={ex.sets} addSet={()=>{workout.api.addSet(ex.name)}} 
+										removeSet={()=>{workout.api.removeSet(ex.name)}}
+										updateSet={(setInd, measure, newVal)=>
+											workout.api.updateSet(ex.name, setInd, measure, newVal)
+										}
 									/>
 									//<div>Ex here</div>
 								})

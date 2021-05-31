@@ -44,23 +44,25 @@ const Exercise = (props) => {
                   border-left: 1px solid #ccc;
                }
             `}>
-               {props.sets.length === 0 ? (
+               {!props.sets || props.sets.length === 0 ? (
                   <div>
-                     Add exercises from the toolbar!
+                     Add sets to the right
                   </div>
                ) :
-                  props.sets.map(((set, setInd) => {
+                  Object.values(props.sets).map(((set, setInd) => {
                      return (
                         <Flex box column item grow="1" key={`Flex${setInd}`}>
-                           {set.map((setPart, setPartInd) => 
-                              <Set key={props.name+setInd+setPartInd} defaultValue={set[0].value} 
-                                 type={setPart.type}
+                           {Object.entries(set).map(([m, val], i) => {
+                              return (
+                             
+                              <Set key={props.name+setInd+i} defaultValue={val} 
+                                 type={m}
                                  css={`
                                     flex-grow: 1;
                                     min-width: 50px;
                                  `}
-                              />
-                           )}
+                              />)
+                           })}
                         </Flex>
                      )
                      

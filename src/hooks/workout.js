@@ -30,7 +30,6 @@ const useWorkout = () => {
          } else {
             setData(snapshot.val())
             setStatus('ok')
-            console.log(snapshot.val().exercises)
          }
       })
 
@@ -40,15 +39,15 @@ const useWorkout = () => {
 
    // API
    const api = {
-      addWorkout: () => {},
-      removeWorkout: () => {},
+      completeWorkout: () => {},
       addExercise: (name, measures) => {
          console.log("Adding exercise")
+
          let updates = {};
          updates[`/exercises/${name}`] = {
             name: name,
             complete: false,
-            measures: measures
+            measures: measures,
          };
          updates['/numExInProgress'] = firebase.database.ServerValue.increment(1);
          workout.update(updates);
@@ -59,9 +58,44 @@ const useWorkout = () => {
          updates['/numExInProgress'] = firebase.database.ServerValue.increment(-1);
          workout.update(updates);
       },
-      addSet: () => {},
-      removeSet: () => {},
-      updateSet: () => {}
+      completeExercise: (name) => {
+         let updates = {}
+
+         updates[`exercises/${name}/complete`] = true
+         updates['/numExInProgress'] = firebase.database.ServerValue.increment(-1)
+         updates['/numExCompleted'] = firebase.database.ServerValue.increment(1)
+
+         workout.update(updates)
+      },
+      addSet: (exName) => {
+         let newSet = Object.values(data.exercises[exName].measures).reduce((acc, m) => {
+            acc[m] = 0
+            return acc
+         }, {})
+         let newSetList = data.exercises[exName].sets ? 
+            [...Object.values(data.exercises[exName].sets)] : []
+            
+         newSetList.push(newSet)
+
+         console.log(newSetList)
+
+         let updates = {}
+         updates[`/exercises/${exName}/sets`] = newSetList
+         workout.update(updates)
+      },
+      removeSet: (exName) => {
+         let newSets = data.exercises[exName].sets
+         newSets.pop(-1)
+
+         let updates = {}
+         updates[`/exercises/${exName}/sets`] = newSets
+         workout.update(updates)
+      },
+      updateSet: (exName, setInd, measure, newVal) => {
+         let updates = {}
+
+         updates[`/exercises/${exName}/sets/${setInd}/${measure}`] = newVal
+      }
    }   
 
    return { status, data, api }
