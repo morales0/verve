@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import { Exercise } from '../../components';
+import Exercise from './components/Exercise/Exercise';
 import { Flex } from '../../layout';
 
 import styled from 'styled-components/macro';
@@ -20,171 +20,59 @@ const Workout = () => {
 
 	// Hooks
 	const workout = useWorkout()
-	
-
-	// Subscribe to user workout data
-	// useEffect(() => {
-	// 	const workout = db.ref(`users/${user.data.uid}/workout`)
-	// 	workout.on('value', (snapshot) => {
-	// 		if (!snapshot.exists()) {
-	// 			console.log("No workout found, add")
-	// 			// Add a workout
-	// 			workout.set({
-	// 				dateStarted: new Date().toString(),
-	// 			}).then((ret) => console.log(ret))
-	// 			.catch((err) => console.log(err))
-	// 		} else {
-	// 			console.log("Found", snapshot)
-	// 		}
-	// 	})
-	// });
-
-
-
-
-	// Functions
-	const addExercise = name => {
-		if (!currExNames.includes(name)){ 
-			setCurEx([
-				...currEx,
-				{
-					name: name,
-					completed: false,
-					sets: [
-						[{type: 'reps', value: 10},{type: 'lbs', value: 10}],
-						[{type: 'reps', value: 20},{type: 'lbs', value: 10}]
-					]
-				}
-			])
-
-			setMeta((curr) => {
-				return {
-					...curr,
-					inProgress: curr.inProgress + 1
-				}
-			})
-
-			setCurExNames([
-				...currExNames,
-				name
-			])
-		}
-	}
-
-	const removeExercise = (exInd) => {
-		let copy = [...currEx]
-		copy.splice(exInd, 1)
-
-		setCurEx(copy)
-
-		setMeta((curr) => {
-			return {
-				...curr,
-				inProgress: curr.inProgress - 1
-			}
-		})
-
-		let copyNames = [...currExNames]
-		copyNames.splice(exInd, 1)
-
-		setCurExNames(copyNames)
-	}
-
-	const completeExercise = (exInd) => {
-		let copy = [...currEx]
-		console.log(copy[exInd])
-		copy[exInd].completed = true;
-
-		setCurEx(copy)
-	}
-
-	const addSet = (exInd) => {
-		let copy = [...currEx]
-		console.log(copy[exInd])
-		let setlen = copy[exInd].sets.length;
-		let lastSet = copy[exInd].sets[setlen - 1]
-
-		copy[exInd].sets.push([{type: 'reps', value: lastSet[0].value  + 10},
-			{type: 'lbs', value: lastSet[1].value + 10}])
-
-		// Set state
-		setCurEx(copy)
-	}
-
-	const removeSet = (exInd) => {
-		let copy = [...currEx]
-		if (copy[exInd].sets.length == 1) return;
-		copy[exInd].sets.pop()
-
-		// Set state
-		setCurEx(copy)
-	}
 
 	// Render
 	return (
 		<div className="Workout">
-			<header css={`padding: .5rem 1rem;`}>
-				<h2>Workout</h2>
-			</header>
-
 			<Flex column css={`overflow-y: auto`}>
 				{/* Exercises in progress */}
-				<div css={`
-					flex-grow: 1;
-					& > header {
-						padding: .4rem .6rem;
-						background: #c4e4ff8f;
-					}
-				`}>
-					<header>
+				<div css={`flex-grow: 1;`}>
+					<header css={`padding: .4rem .6rem`}>
 						<h3>My Workout</h3>
 					</header>
 
-					<Flex row wrap={true} crossAxis="flex-start" css={`padding: .75rem`} >
+					<Flex row wrap={true} crossAxis="flex-start" css={`padding: .2rem .75rem .75rem .75rem`} >
 						{ workout.status === 'loading' ? (
 							<p>Loading exercises...</p>
 						) : workout.status === 'ok' ? (
 							workout.data.numExInProgress > 0 ? (
+								// Iterate through the exercises that are not complete
 								Object.values(workout.data.exercises).filter(ex => !ex.completed).map((ex, i) => {
-									return <Exercise key={ex.name + "-progress"} eid={ex.id} 
-										name={ex.name} completeExercise={() => {}} 
+									return <Exercise key={ex.name + "-progress"} 
+										eid={ex.id} name={ex.name} 
+										completeExercise={() => {workout.api.completeExercise(ex.name)}} 
 										removeExercise={()=>{workout.api.removeExercise(ex.name)}} 
-										sets={ex.sets} addSet={()=>{workout.api.addSet(ex.name)}} 
+										sets={ex.sets} 
+										addSet={()=>{workout.api.addSet(ex.name)}} 
 										removeSet={()=>{workout.api.removeSet(ex.name)}}
-										updateSet={(setInd, measure, newVal)=>
+										updateSet={(setInd, measure, newVal) =>
 											workout.api.updateSet(ex.name, setInd, measure, newVal)
 										}
 									/>
-									//<div>Ex here</div>
 								})
+							// No exercises
 							) : <p>Add some exercises from the right!</p>
+						// Error with firebase
 						) : <p>something is wrong...</p>}
 					</Flex>
 				</div>
 
 				{/* Completed exercises */}
-				<div css={`
-					flex-basis: 100px;
-					& > header {
+				<div css={`flex-basis: 100px`}>
+					<header css={`
+						background: #b4e6b4;
 						padding: .4rem .6rem;
-						background: #f1dfa18f;
-					}
-				`}>
-					<header>
+					`}>
 						<h3>Completed</h3>
 					</header>
-
-
-					{/* <Flex mainAxis="center" crossAxis="center" css={`padding: 1rem`}>
-						<p>Finish some exercises!</p>
-					</Flex> */}
 
 					<Flex row wrap={true} css={`padding: .75rem`} >
 						{ workout.status === 'ok' && (
 							workout.data.numExCompleted > 0 ? (
+								// Render completed exercises in a "read only" mode
 								workout.data.exCompleted.filter(ex => ex.completed).map((ex, i) => {
 									//<Exercise key={ex.name + i + "progress"} eid={ex.id} complete={true}/>
-									<div>Ex here</div>
+									<div>ex.name</div>
 								})
 							) : <p>Finish some exercises!</p>)}
 					</Flex>

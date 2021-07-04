@@ -3,7 +3,7 @@
 .Workout {
 	display: grid;
 	grid-template-columns: 1fr 35%;
-	grid-template-rows: 50px auto;
+	grid-template-rows: auto;
 }
 
 .Workout > header {

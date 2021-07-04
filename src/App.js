@@ -1,4 +1,4 @@
-import React, { Component, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
 import { useAuth, useDatabase, useDatabaseObjectData, useUser } from 'reactfire';
 import 'firebase/database';
@@ -39,16 +39,13 @@ function App() {
       <Router>
 
          {/* Render appropriate navbar */}
-         <Switch>
-            {authCheck.authenticated ? (
-               <UserNavbar />
-            ) : (
-               <GuestNavbar />
-            )}
-         </Switch>
-
+         {authCheck.authenticated ? (
+            <UserNavbar user={'user'}/>
+         ) : (
+            <GuestNavbar />
+         )}
          
-         {/* Render the page component */}
+         {/* Render the page component (depending on auth status) */}
          <Switch>
             <Route exact path="/">
                {authCheck.authenticated ? (
@@ -60,7 +57,7 @@ function App() {
 
             <Route path="/signIn">
                {authCheck.authenticated ? (
-                  <Redirect to="/workout" />
+                  <Redirect to="/" />
                ) : (
                   <SignIn />
                )}
@@ -68,7 +65,7 @@ function App() {
 
             <Route path="/signUp">
                {authCheck.authenticated ? (
-                  <Redirect to="/workout" />
+                  <Redirect to="/" />
                ) : (
                   <SignUp />
                )}
@@ -86,7 +83,6 @@ function App() {
                   <button onClick={() => auth.signOut()}>Sign Out</button>
                </div>
             } />
-
          </Switch>
 
       </Router>

@@ -9,11 +9,12 @@ const Navbar = (props) => {
 }
 
 const StyledNav = styled.nav`
+   z-index: 99;
    display: flex;
    justify-content: space-between;
    align-items: stretch;
    height: 2rem;
-   background-color: #e0eaea;
+   background-color: #d2d5d8;
    box-shadow: 0 0 5px 1px rgba(0,0,0, 0.15);
 
    & > div {

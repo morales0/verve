@@ -39,26 +39,39 @@ const useWorkout = () => {
 
    // API
    const api = {
-      completeWorkout: () => {},
+      completeWorkout: () => {
+         console.log("Workout -- Complete workout")
+      },
+
       addExercise: (name, measures) => {
-         console.log("Adding exercise")
+         console.log(`Workout -- Adding exercise: ${name}`)
 
          let updates = {};
+
          updates[`/exercises/${name}`] = {
             name: name,
             complete: false,
             measures: measures,
          };
          updates['/numExInProgress'] = firebase.database.ServerValue.increment(1);
+
          workout.update(updates);
       },
+
       removeExercise: (name) => {
+         console.log(`Workout -- Removing exercise: ${name}`)
+
          let updates = {}
+
          updates[`exercises/${name}`] = null
          updates['/numExInProgress'] = firebase.database.ServerValue.increment(-1);
+         
          workout.update(updates);
       },
+
       completeExercise: (name) => {
+         console.log(`Workout -- Completing exercise: ${name}`)
+
          let updates = {}
 
          updates[`exercises/${name}/complete`] = true
@@ -67,7 +80,22 @@ const useWorkout = () => {
 
          workout.update(updates)
       },
+
+      unCompleteExercise: (name) => {
+         console.log(`Workout -- Un-completing exercise: ${name}`)
+
+         let updates = {}
+
+         updates[`exercises/${name}/complete`] = false
+         updates['/numExInProgress'] = firebase.database.ServerValue.increment(1)
+         updates['/numExCompleted'] = firebase.database.ServerValue.increment(-1)
+
+         workout.update(updates)
+      },
+
       addSet: (exName) => {
+         console.log(`Workout -- Adding set to exercise: ${exName}`)
+
          let newSet = Object.values(data.exercises[exName].measures).reduce((acc, m) => {
             acc[m] = 0
             return acc
@@ -81,9 +109,13 @@ const useWorkout = () => {
 
          let updates = {}
          updates[`/exercises/${exName}/sets`] = newSetList
+
          workout.update(updates)
       },
+
       removeSet: (exName) => {
+         console.log(`Workout -- Removing set from exercise: ${exName}`)
+
          let newSets = data.exercises[exName].sets
          newSets.pop(-1)
 
@@ -91,7 +123,10 @@ const useWorkout = () => {
          updates[`/exercises/${exName}/sets`] = newSets
          workout.update(updates)
       },
+
       updateSet: (exName, setInd, measure, newVal) => {
+         console.log(`Workout -- Updating set for exercise: ${exName}`)
+
          let updates = {}
 
          updates[`/exercises/${exName}/sets/${setInd}/${measure}`] = newVal
@@ -99,7 +134,6 @@ const useWorkout = () => {
    }   
 
    return { status, data, api }
-
 }
 
 const useExercise = (eid) => {

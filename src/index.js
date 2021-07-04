@@ -4,8 +4,7 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
-import 'firebase/firestore';
-import { FirebaseAppProvider, useFirestoreDocData, useFirestore } from 'reactfire';
+import { FirebaseAppProvider } from 'reactfire';
 import AuthWrapper, { AuthProvider } from './context/auth';
 
 // Firebase config
