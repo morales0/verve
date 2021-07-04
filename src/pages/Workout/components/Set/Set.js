@@ -1,50 +1,23 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 import styled from 'styled-components/macro'
 import { Flex } from '../../../../layout'
 
 const Set = (props) => {
+   const [val, setVal] = useState(0);
+
    return (
       <Flex column crossAxis='center'>
-         <Flex column>
-            
-            {/* Buttons to add sets */}
-            <Flex box row item stretch css={`
-               width: auto;
-
-               &> button {
-                  color: #5a5a5a;
-                  
-                  flex-grow: 1;
-                  width: 20px;
-                  height: 20px;
-                  
-                  background: #fff;
-                  box-shadow: none;
-                  outline: none;
-                  border: none;
-                  border-radius: 0px;
-                  border-bottom: 1px solid #a9a9a9;
-                  cursor: pointer;
-               }
-
-               &> button + button {
-                  border-left: 1px solid #a9a9a9;
-               }
-
-               
-            `}>
-               <button>
-                  -
-               </button>
-               <button>
-                  +
-               </button>
-            </Flex>
-
-            <StyledSetInput {...props}>
+         <Flex row>
+            <IncBtn onClick={() => setVal(val - 1)}>
+               -
+            </IncBtn>
+            <StyledSetInput css={`min-width: 32px;`} value={val} onChange={(e) => setVal(e.target.value)}>
                {props.children}
             </StyledSetInput>
+            <IncBtn onClick={() => setVal(val + 1)} >
+               +
+            </IncBtn>
          </Flex>
          <label css={`
             font-size: .8rem;
@@ -86,6 +59,19 @@ const StyledSetInput = styled.input.attrs(props => ({
       background: #f5f7f6;
    }
 
+`
+
+const IncBtn = styled.button`
+   flex-grow: 1;
+   padding: 6px;
+   
+   background: #fff;
+   color: #797979;
+   font-size: .55rem;
+   box-shadow: none;
+   outline: none;
+   border: none;
+   cursor: pointer;
 `
 
 export default Set
