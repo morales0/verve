@@ -7,26 +7,16 @@ const Set = (props) => {
    const [val, setVal] = useState(0);
 
    return (
-      <Flex column crossAxis='center'>
-         <Flex row>
+      <Flex column crossAxis='center' className={props.className}>
+         <Flex row mainAxis='center'>
             <IncBtn onClick={() => setVal(val - 1)}>
                -
             </IncBtn>
-            <StyledSetInput css={`min-width: 32px;`} value={val} onChange={(e) => setVal(e.target.value)}>
-               {props.children}
-            </StyledSetInput>
+            <StyledSetInput css={`min-width: 32px;`} value={val} onChange={(e) => setVal(e.target.value)} />
             <IncBtn onClick={() => setVal(val + 1)} >
                +
             </IncBtn>
          </Flex>
-         <label css={`
-            font-size: .8rem;
-            line-height: .8rem;
-            padding: 4px 0;
-            
-         `}>
-            {props.type}
-         </label>
          {/* <div>
             <button>+</button>
             <button>-</button>
@@ -44,7 +34,6 @@ const StyledSetInput = styled.input.attrs(props => ({
    padding: 8px 2px;
    text-align: center;
    border: none;
-   border-bottom: 1px solid #a9a9a9;
    border-radius: 0;
 
    

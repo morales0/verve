@@ -42,7 +42,7 @@ const Exercise = (props) => {
          </Flex>
 
          {/* Content of the exercise box */}
-         <Flex crossAxis='stretch' css={`width: 100%; max-width: 350px;`}>
+         <Flex crossAxis='stretch' css={`position: relative; width: 100%; max-width: 350px;`}>
             {/* Buttons to add sets */}
             <Flex box column item stretch css={`
                width: auto;
@@ -77,37 +77,42 @@ const Exercise = (props) => {
             </Flex>
 
             {/* Set values */}
-            <Flex css={`
+            <Flex box column css={`
                flex-grow: 1;
                overflow-x: auto;
-
-               & > div + div {
-                  border-left: 1px solid #ccc;
-               }
             `}>
                {!props.sets || props.sets.length === 0 ? (
                   <Flex item box mainAxis="center" crossAxis="center" grow="1">
                      Add sets &#8594;
                   </Flex>
                ) :
-                  Object.values(props.sets).map(((set, setInd) => {
-                     return (
-                        <Flex box column item grow="1" key={`Flex${setInd}`}>
-                           {Object.entries(set).map(([m, val], i) => {
-                              return (
-                             
-                              <Set key={props.name+setInd+i} defaultValue={val} 
-                                 type={m}
-                                 css={`
-                                    flex-grow: 1;
-                                    min-width: 32px;
-                                 `}
-                              />)
-                           })}
+                  Object.values(props.measures).map((m, i) => {
+                     return ( 
+                        <Flex box column>
+                           <Flex box row >
+                              {Object.values(props.sets).map((set, j) => {
+                                 return (
+                                    <Set value={set[m]} css={`
+                                       margin-top: 20px;
+                                    `}/>
+                                 )
+                              })}
+                           </Flex>
+                           <div css={`
+                              position: absolute;
+                              display: flex;
+                              align-items: center;
+                              padding: 0 5px;
+                              width: 100%;
+                              height: 20px;
+                              font-size: 12px;
+                              background: #f1f1f1;
+                           `}>
+                              {m}
+                           </div>
                         </Flex>
                      )
-                     
-                  }))
+                  })
                }
             </Flex>
 

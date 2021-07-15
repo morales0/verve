@@ -37,9 +37,9 @@ const Workout = () => {
 						) : workout.status === 'ok' ? (
 							workout.data.numExInProgress > 0 ? (
 								// Iterate through the exercises that are not complete
-								Object.values(workout.data.exercises).filter(ex => !ex.completed).map((ex, i) => {
+								Object.values(workout.data.exercises).filter(ex => !ex.complete).map((ex, i) => {
 									return <Exercise key={ex.name + "-progress"} 
-										eid={ex.id} name={ex.name} 
+										eid={ex.id} name={ex.name} measures={ex.measures}
 										completeExercise={() => {workout.api.completeExercise(ex.name)}} 
 										removeExercise={()=>{workout.api.removeExercise(ex.name)}} 
 										sets={ex.sets} 
@@ -70,9 +70,9 @@ const Workout = () => {
 						{ workout.status === 'ok' && (
 							workout.data.numExCompleted > 0 ? (
 								// Render completed exercises in a "read only" mode
-								workout.data.exCompleted.filter(ex => ex.completed).map((ex, i) => {
+								Object.values(workout.data.exercises).filter(ex => ex.complete).map((ex, i) => {
 									//<Exercise key={ex.name + i + "progress"} eid={ex.id} complete={true}/>
-									<div>ex.name</div>
+									return <div>{ex.name}</div>
 								})
 							) : <p>Finish some exercises!</p>)}
 					</Flex>
