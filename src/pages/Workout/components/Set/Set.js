@@ -3,25 +3,22 @@ import React, { useState } from 'react'
 import styled from 'styled-components/macro'
 import { Flex } from '../../../../layout'
 
+import './Set.scss';
+
 const Set = (props) => {
    const [val, setVal] = useState(0);
 
    return (
-      <Flex column crossAxis='center' className={props.className}>
-         <Flex row mainAxis='center'>
-            <IncBtn onClick={() => setVal(val - 1)}>
-               -
-            </IncBtn>
-            <StyledSetInput css={`min-width: 32px;`} value={val} onChange={(e) => setVal(e.target.value)} />
-            <IncBtn onClick={() => setVal(val + 1)} >
-               +
-            </IncBtn>
-         </Flex>
-         {/* <div>
-            <button>+</button>
-            <button>-</button>
-         </div> */}
+      <Flex row mainAxis='center' className='Set_container'>
+         <IncBtn onClick={() => setVal(val - 1)} className='incBtn'>
+            -
+         </IncBtn>
+         <StyledSetInput value={val} onChange={(e) => setVal(e.target.value)} />
+         <IncBtn onClick={() => setVal(val + 1)} className='incBtn'>
+            +
+         </IncBtn>
       </Flex>
+      
    )
 }
 
@@ -30,7 +27,7 @@ const StyledSetInput = styled.input.attrs(props => ({
 
 }))`
    font-size: .85rem;
-   width: 100%;
+   width: 40px;
    padding: 8px 2px;
    text-align: center;
    border: none;

@@ -14,7 +14,7 @@ const StyledNav = styled.nav`
    justify-content: space-between;
    align-items: stretch;
    height: 2rem;
-   background-color: #d2d5d8;
+   background-color: #dee3e6;
    box-shadow: 0 0 5px 1px rgba(0,0,0, 0.15);
 
    & > div {

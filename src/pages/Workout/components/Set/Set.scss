@@ -1,0 +1,7 @@
+.Set_container {
+   flex-grow: 1;
+   margin-top: 20px;
+   & + .Set_container {
+      border-left: 1px solid #a9a9a9;
+   }
+}
