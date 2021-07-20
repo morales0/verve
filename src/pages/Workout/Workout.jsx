@@ -10,6 +10,8 @@ import { useDatabase, useUser } from 'reactfire';
 import { useWorkout } from '../../hooks/workout';
 import ExerciseDisplay from './components/Exercise/ExerciseDisplay';
 
+import AddIcon from '../../images/add.png'
+
 const Workout = () => {
 	// State + Hooks
 	const [currEx, setCurEx] = useState([])
@@ -50,6 +52,16 @@ const Workout = () => {
 							) : <p>Add some exercises from the right!</p>
 						// Error with firebase
 						) : <p>something is wrong...</p>}
+						
+						{/* <button css={`
+							background: transparent;
+							outline: none;
+							border: none;
+							margin: 0 1rem;
+							cursor: pointer;
+						`}>
+							<img src={AddIcon} alt="button to add exercise" height="30px"/>
+						</button> */}
 					</Flex>
 				</div>
 

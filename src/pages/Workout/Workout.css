@@ -39,6 +39,15 @@
    grid-column: 2;
 }
 
+@media screen and (max-width: 600px){
+	.Workout {
+		grid-template-columns: 1fr;
+	}
+	.exList {
+		display: none;
+	}
+}
+
 .exList > header {
 	display: flex;
 	justify-content: center;

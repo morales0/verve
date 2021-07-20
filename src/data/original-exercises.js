@@ -22,6 +22,10 @@ const ogExercises = [
 	{
 		name: "Shoulder Press",
 		measures: ['reps', 'weight']
+	},
+	{
+		name: "Running",
+		measures: ['miles']
 	}
 ]
 
