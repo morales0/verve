@@ -10,6 +10,10 @@
 .exercise_header {
    background-color: #dee3e6;
    border-bottom: 1px solid #adadad;
+
+   & > .exerciseName {
+      padding: .2rem .5rem;
+   }
 }
 
 .exercise_content {

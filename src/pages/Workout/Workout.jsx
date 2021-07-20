@@ -8,6 +8,7 @@ import './Workout.css';
 import ogExercises from '../../data/original-exercises'
 import { useDatabase, useUser } from 'reactfire';
 import { useWorkout } from '../../hooks/workout';
+import ExerciseDisplay from './components/Exercise/ExerciseDisplay';
 
 const Workout = () => {
 	// State + Hooks
@@ -17,6 +18,11 @@ const Workout = () => {
 		completed: 0
 	})
 	const [currExNames, setCurExNames] = useState([])
+
+	// Lifecycle
+	useEffect(() => {
+		// console.log("Workout re-render")
+	});
 
 	// Hooks
 	const workout = useWorkout()
@@ -38,17 +44,7 @@ const Workout = () => {
 							workout.data.numExInProgress > 0 ? (
 								// Iterate through the exercises that are not complete
 								Object.values(workout.data.exercises).filter(ex => !ex.complete).map((ex, i) => {
-									return <Exercise key={ex.name + "-progress"} {...ex} {...workout.api}
-
-										/* completeExercise={() => {workout.api.completeExercise(ex.name)}} 
-										removeExercise={()=>{workout.api.removeExercise(ex.name)}} 
-										sets={ex.sets} 
-										addSet={()=>{workout.api.addSet(ex.name)}} 
-										removeSet={()=>{workout.api.removeSet(ex.name)}}
-										updateSet={(setInd, measure, newVal) =>
-											workout.api.updateSet(ex.name, setInd, measure, newVal)
-										} */
-									/>
+									return <Exercise key={ex.name + "-progress"} {...ex} {...workout.api} />
 								})
 							// No exercises
 							) : <p>Add some exercises from the right!</p>
@@ -72,7 +68,7 @@ const Workout = () => {
 								// Render completed exercises in a "read only" mode
 								Object.values(workout.data.exercises).filter(ex => ex.complete).map((ex, i) => {
 									//<Exercise key={ex.name + i + "progress"} eid={ex.id} complete={true}/>
-									return <div>{ex.name}</div>
+									return <ExerciseDisplay {...ex} undoExercise={() => workout.api.unCompleteExercise(ex.name)} />
 								})
 							) : <p>Finish some exercises!</p>)}
 					</Flex>
