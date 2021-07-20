@@ -7,26 +7,25 @@ import { StyledSetInput, IncBtn } from './components';
 import './Set.scss';
 
 const Set = (props) => {
-   const [val, setVal] = useState(0);
    const [prev, setPrev] = useState(0);
 
    // Set hook?
-   const [, set] = useState();
+   const [set, setSet] = useState();
 
    // Functions
    const validateNum = (newVal) => {
       if (newVal === '' || newVal < 0) {
-         setVal(prev)
+         updateSetValue(prev)
       } else {
-         setVal(newVal)
+         updateSetValue(newVal)
       }
    }
 
    const onFocus = () => {
       // Save prev value
-      setPrev(val)
+      setPrev(props.value)
       // Clear the input
-      setVal('')
+      updateSetValue('')
    }
 
    const onBlur = (newVal) => {
@@ -34,22 +33,26 @@ const Set = (props) => {
          validateNum(newVal)
          setPrev(newVal)
       } else {
-         setVal(prev)
+         updateSetValue(prev)
       }
+   }
+
+   const updateSetValue = (newVal) => {
+      props.onChange(newVal)
    }
 
    return (
       <Flex row mainAxis='center' className='Set_container'>
-         <IncBtn onClick={() => validateNum(parseInt(val) - 1)} className='incBtn'>
+         <IncBtn onClick={() => validateNum(parseInt(props.value) - 1)} className='incBtn'>
             -
          </IncBtn>
          <StyledSetInput 
-            value={val} 
-            onChange={(e) => setVal(e.target.value)} 
+            value={props.value} 
+            onChange={(e) => updateSetValue(e.target.value)} 
             onFocus={onFocus}
             onBlur={(e) => onBlur(e.target.value)}
          />
-         <IncBtn onClick={() => validateNum(parseInt(val) + 1)} className='incBtn' >
+         <IncBtn onClick={() => validateNum(parseInt(props.value) + 1)} className='incBtn'>
             +
          </IncBtn>
       </Flex>

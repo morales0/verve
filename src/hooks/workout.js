@@ -128,8 +128,9 @@ const useWorkout = () => {
          console.log(`Workout -- Updating set for exercise: ${exName}`)
 
          let updates = {}
-
          updates[`/exercises/${exName}/sets/${setInd}/${measure}`] = newVal
+
+         workout.update(updates)
       }
    }   
 

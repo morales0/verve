@@ -38,16 +38,16 @@ const Workout = () => {
 							workout.data.numExInProgress > 0 ? (
 								// Iterate through the exercises that are not complete
 								Object.values(workout.data.exercises).filter(ex => !ex.complete).map((ex, i) => {
-									return <Exercise key={ex.name + "-progress"} 
-										eid={ex.id} name={ex.name} measures={ex.measures}
-										completeExercise={() => {workout.api.completeExercise(ex.name)}} 
+									return <Exercise key={ex.name + "-progress"} {...ex} {...workout.api}
+
+										/* completeExercise={() => {workout.api.completeExercise(ex.name)}} 
 										removeExercise={()=>{workout.api.removeExercise(ex.name)}} 
 										sets={ex.sets} 
 										addSet={()=>{workout.api.addSet(ex.name)}} 
 										removeSet={()=>{workout.api.removeSet(ex.name)}}
 										updateSet={(setInd, measure, newVal) =>
 											workout.api.updateSet(ex.name, setInd, measure, newVal)
-										}
+										} */
 									/>
 								})
 							// No exercises
