@@ -4,6 +4,8 @@
 	display: grid;
 	grid-template-columns: 1fr 35%;
 	grid-template-rows: auto;
+	overflow-x: hidden;
+	position: relative;
 }
 
 .Workout > header {
@@ -27,32 +29,15 @@
 	background: #f1dfa18f;
 }
 
-.exList {
-	display: flex;
-	flex-direction: column;
-	flex: 0 0 35%;
-	background: #f6f8f7;
-	border-left: 2px solid #c2c7ce;
-
-	overflow-y: auto;
-	/* grid-row: 2/span 2; */
-   grid-column: 2;
-}
-
 @media screen and (max-width: 600px){
 	.Workout {
+		position: relative;
 		grid-template-columns: 1fr;
 	}
-	.exList {
+
+	.exerciseToolbar_container {
 		display: none;
 	}
-}
-
-.exList > header {
-	display: flex;
-	justify-content: center;
-	padding: .4rem .6rem;
-	background: #f1d0d0;
 }
 
 

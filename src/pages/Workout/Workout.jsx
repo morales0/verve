@@ -11,6 +11,9 @@ import { useWorkout } from '../../hooks/workout';
 import ExerciseDisplay from './components/Exercise/ExerciseDisplay';
 
 import AddIcon from '../../images/add.png'
+import HamburgerIcon from '../../images/hamburger.png'
+import ExerciseToolbar from './components/ExerciseToolbar/ExerciseToolbar';
+import { useMediaQuery } from 'react-responsive';
 
 const Workout = () => {
 	// State + Hooks
@@ -21,13 +24,25 @@ const Workout = () => {
 	})
 	const [currExNames, setCurExNames] = useState([])
 
+	const [toolbarToggled, setToolbarToggled] = useState(false);
+	const collapsedToolbar = useMediaQuery({query: '(max-width: 600px)'})
+
 	// Lifecycle
 	useEffect(() => {
 		// console.log("Workout re-render")
 	});
 
+	useEffect(() => {
+		setToolbarToggled(collapsedToolbar)
+	}, [collapsedToolbar]);
+
 	// Hooks
 	const workout = useWorkout()
+
+	// Functions
+	const toggleToolbar = () => {
+		setToolbarToggled(!toolbarToggled)
+	}
 
 	// Render
 	return (
@@ -35,9 +50,12 @@ const Workout = () => {
 			<Flex column css={`overflow-y: auto`}>
 				{/* Exercises in progress */}
 				<div css={`flex-grow: 1;`}>
-					<header css={`padding: .4rem .6rem`}>
+					<WorkoutHeader className="workoutHeader">
 						<h3>My Workout</h3>
-					</header>
+						<ToolbarToggle className="workoutToolbarToggle_button" onClick={toggleToolbar} toggled={toolbarToggled}>
+							<img src={HamburgerIcon} alt="toggle for exercise list" height="30px"/>
+						</ToolbarToggle>
+					</WorkoutHeader>
 
 					<Flex row wrap={true} crossAxis="flex-start" css={`padding: .2rem .75rem .75rem .75rem`} >
 						{ workout.status === 'loading' ? (
@@ -88,42 +106,29 @@ const Workout = () => {
 			</Flex>
 
          {/* Toolbar on the side with exercises */}
-         <aside className="exList">
-            <header>
-               <h3>Exercises</h3>
-            </header>
-
-            <div className="exercisesList">
-               {ogExercises.filter(ex => !currExNames.includes(ex.name)).map((ex) => 
-                  <ExerciseInfo key={ex.name + '-add'} name={ex.name} 
-							handleAdd={() => workout.api.addExercise(ex.name, ex.measures)}
-						/>
-               )}
-               <ExerciseInput handleAdd={() => workout.api.addExercise('Basic', ['reps'])}/>
-            </div>
-         </aside> 
+         <ExerciseToolbar exerciseList={ogExercises} handleAdd={workout.api.addExercise} collapsed={collapsedToolbar && toolbarToggled} />
 		</div>
 	);
 };
 
-const ExerciseInfo = (props) => {
-	return (
-		<div className="exerciseInfo">
-			<button onClick={props.handleAdd}>+</button>
-			<h4>{props.name}</h4>
-		</div>
-	)
-}
+const WorkoutHeader = styled.header`
+	display: flex; 
+	justify-content: space-between; 
+	padding: .4rem .6rem;
+`
 
-const ExerciseInput = (props) => {
-	return (
-		<div className="exerciseInfo">
-			<button onClick={() => props.handleAdd(props.name)}>+</button>
-			<h4>
-				<input type="text" placeholder="New Exercise"/>
-			</h4>
-		</div>
-	)
-}
+const ToolbarToggle = styled.button`
+	display: none;
+	outline: none;
+	border: none;
+	background: white;
+	padding: none;
+	transition: 1s;
+
+	@media (max-width: 600px) {
+		display: block;
+		transform: translate(${props => props.toggled ? '0' : '-250px'});
+	}
+`
 
 export default Workout;

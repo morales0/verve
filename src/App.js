@@ -49,7 +49,7 @@ function App() {
          <Switch>
             <Route exact path="/">
                {authCheck.authenticated ? (
-                  <Home />
+                  <Redirect to="/workout" />
                ) : (
                   <div>demo</div>
                )}
