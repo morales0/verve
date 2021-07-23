@@ -11,7 +11,7 @@
          "@hooks/*": [
             "./hooks/*"
          ]
-      },
+      }
    },
    "exclude": [
       "node_modules"

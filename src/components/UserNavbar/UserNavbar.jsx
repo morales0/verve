@@ -11,7 +11,9 @@ const UserNavbar = (props) => {
             <NavLink to="/history" activeClassName="activeNavLink">History</NavLink>
          </div>
          
-         <NavLink to="/user" activeClassName="activeNavLink">User</NavLink>
+         <NavLink to="/user" activeClassName="activeNavLink">
+            {props.username}
+         </NavLink>
       </Navbar>
     );
 }
