@@ -41,6 +41,21 @@ const useWorkout = () => {
    const api = {
       completeWorkout: () => {
          console.log("Workout -- Complete workout")
+
+         // Stop listening to workout
+         //workout.off()
+
+         // Save workout in history
+         const history = db.ref(`users/${user.data.uid}/history`)
+         history.set({
+            ...data,
+            dateEnded: new Date().toString()
+         })
+
+         // Remove workout
+         workout.remove()
+
+         // Send user to a summary page, then to the home page
       },
 
       addExercise: (name, measures) => {

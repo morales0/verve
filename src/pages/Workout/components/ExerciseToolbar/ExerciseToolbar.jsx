@@ -8,10 +8,6 @@ import { ExerciseInfo, ExerciseToolbarAside } from "./components";
 const ExerciseToolbar = (props) => {
    const [collapsed, setCollapsed] = useState();
 
-   useEffect(() => {
-      console.log(props.collapsed)
-   });
-
    return ( 
       <ExerciseToolbarAside className="exerciseToolbar_container" collapsed={props.collapsed}>
          <header className="exerciseToolbar_header">

@@ -16,30 +16,28 @@ import ExerciseToolbar from './components/ExerciseToolbar/ExerciseToolbar';
 import { useMediaQuery } from 'react-responsive';
 
 const Workout = () => {
-	// State + Hooks
-	const [currEx, setCurEx] = useState([])
-	const [meta, setMeta] = useState({
-		inProgress: 0,
-		completed: 0
-	})
-	const [currExNames, setCurExNames] = useState([])
-
+	// Hooks
+	const workout = useWorkout()
+	const [exToAdd, setExToAdd] = useState([]);
 	const [toolbarToggled, setToolbarToggled] = useState(false);
 	const collapsedToolbar = useMediaQuery({query: '(max-width: 600px)'})
 
-	// Lifecycle
+	//// Lifecycle methods
+
+	// DEV
 	useEffect(() => {
 		// console.log("Workout re-render")
 	});
 
+	// Reset exercise toggle when screen becomes small
 	useEffect(() => {
+		console.log("Collapsed")
 		setToolbarToggled(collapsedToolbar)
 	}, [collapsedToolbar]);
 
-	// Hooks
-	const workout = useWorkout()
+	//// Functions
 
-	// Functions
+	// User toggles the exercise toolbar
 	const toggleToolbar = () => {
 		setToolbarToggled(!toolbarToggled)
 	}
@@ -86,7 +84,8 @@ const Workout = () => {
 				{/* Completed exercises */}
 				<div css={`flex-basis: 100px`}>
 					<header css={`
-						background: #b4e6b4;
+						/*background: linear-gradient(27deg, #abeaab, transparent);*/
+						color: #29b929;
 						padding: .4rem .6rem;
 					`}>
 						<h3>Completed</h3>
@@ -106,7 +105,11 @@ const Workout = () => {
 			</Flex>
 
          {/* Toolbar on the side with exercises */}
-         <ExerciseToolbar exerciseList={ogExercises} handleAdd={workout.api.addExercise} collapsed={collapsedToolbar && toolbarToggled} />
+         <ExerciseToolbar 
+				exerciseList={ogExercises} 
+				handleAdd={workout.api.addExercise} 
+				collapsed={collapsedToolbar && toolbarToggled} 
+			/>
 		</div>
 	);
 };

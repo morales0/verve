@@ -1,15 +1,15 @@
 import styled from "styled-components"
 
 const StyledSetInput = styled.input.attrs(props => ({
-   type: "number",
-
+   type: "number"
 }))`
-   font-size: .85rem;
-   width: 40px;
+   font-size: 1rem;
+   width: 44px;
    padding: 8px 2px;
    text-align: center;
    border: none;
    border-radius: 0;
+   color: #43434a;
 
    
    &::-webkit-inner-spin-button,
@@ -27,11 +27,11 @@ const StyledSetInput = styled.input.attrs(props => ({
 
 const IncBtn = styled.button`
    flex-grow: 1;
-   padding: 6px;
+   width: 24px;
    
    background: #fff;
    color: #797979;
-   font-size: .55rem;
+   font-size: .8rem;
    box-shadow: none;
    outline: none;
    border: none;

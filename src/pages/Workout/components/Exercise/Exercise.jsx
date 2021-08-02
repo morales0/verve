@@ -28,7 +28,7 @@ const Exercise = (props) => {
 					<button onClick={() => props.removeExercise(props.name)}>
                   <img src={DeleteIcon} height="10px"/>
                </button>
-					<button onClick={() => props.completeExercise(props.name)}>
+					<button onClick={() => props.completeExercise(props.name)} disabled={!props.sets}>
                   <img src={CompleteIcon} height="10px"/>
                </button>
 				</div>
@@ -41,7 +41,7 @@ const Exercise = (props) => {
                <button onClick={() => props.addSet(props.name)}>
                   +
                </button>
-               <button onClick={()=>props.removeSet(props.name)}>
+               <button onClick={()=>props.removeSet(props.name)} disabled={!props.sets}>
                   -
                </button>
             </Flex>
@@ -64,6 +64,7 @@ const Exercise = (props) => {
                                        onChange={(newVal) => props.updateSet(props.name, j, m, newVal)} 
                                        css={`
                                           margin-top: 20px;
+                                          background: transparent;
                                        `}
                                     />
                                  )

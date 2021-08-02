@@ -2,8 +2,10 @@
 	display: flex;
 	flex-direction: column;
 	flex: 0 0 35%;
-	background: #f6f8f7;
-	border-left: 2px solid #c2c7ce;
+	background: #f1f1f1;
+	// border-left: 2px solid #c2c7ce;
+   box-shadow: 0 0 3px 1px rgba(0,0,0, 0.15);
+
 
 	overflow-y: auto;
 	/* grid-row: 2/span 2; */
@@ -25,7 +27,7 @@
 	display: flex;
 	justify-content: center;
 	padding: .4rem .6rem;
-	background: #f1d0d0;
+	// background: #f1d0d0;
 }
 
 .exerciseToolbar-main_container {
@@ -36,8 +38,9 @@
 
 .exerciseInfo_button {
 	display: flex;
-	border: 1px solid #adadad;
 	width: max-content;
+	border: 1px solid #adadad;
+	background: white;
 }
 
 .exerciseInfo_button + .exerciseInfo_button {

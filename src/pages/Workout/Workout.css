@@ -143,7 +143,7 @@ aside#exercisesSide {
 }
 
 .exercises#completed > header {
-	background: #8fef898f;
+	background: linear-gradient(27deg, #abeaab, transparent);
 }
 
 /* At 800px, hide the sidebar */

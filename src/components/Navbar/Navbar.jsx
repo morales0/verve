@@ -14,8 +14,8 @@ const StyledNav = styled.nav`
    justify-content: space-between;
    align-items: stretch;
    height: 2rem;
-   background-color: #dee3e6;
-   box-shadow: 0 0 5px 1px rgba(0,0,0, 0.15);
+   background: linear-gradient(10deg, #daecf7, #e0e0e0);
+   box-shadow: 0 0 3px 0px rgba(0,0,0, 0.15);
 
    & > div {
       display: flex;

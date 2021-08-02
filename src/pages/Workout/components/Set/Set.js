@@ -51,6 +51,7 @@ const Set = (props) => {
             onChange={(e) => updateSetValue(e.target.value)} 
             onFocus={onFocus}
             onBlur={(e) => onBlur(e.target.value)}
+            inputMode="numeric"
          />
          <IncBtn onClick={() => validateNum(parseInt(props.value) + 1)} className='incBtn'>
             +
