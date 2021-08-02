@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useDatabase, useFirebaseApp, useUser } from "reactfire"
 import firebase from 'firebase'
+import { useHistory } from "react-router-dom";
 
 const useWorkout = () => {
    // State
@@ -8,6 +9,7 @@ const useWorkout = () => {
    const [data, setData] = useState(null)
 
    // Hooks
+   const history = useHistory()
    const user = useUser()
    const db = useDatabase()
    
@@ -43,11 +45,11 @@ const useWorkout = () => {
          console.log("Workout -- Complete workout")
 
          // Stop listening to workout
-         //workout.off()
+         workout.off()
 
          // Save workout in history
-         const history = db.ref(`users/${user.data.uid}/history`)
-         history.set({
+         const workoutHistory = db.ref(`users/${user.data.uid}/history`)
+         workoutHistory.push({
             ...data,
             dateEnded: new Date().toString()
          })
@@ -56,6 +58,7 @@ const useWorkout = () => {
          workout.remove()
 
          // Send user to a summary page, then to the home page
+         history.push("/home")
       },
 
       addExercise: (name, measures) => {

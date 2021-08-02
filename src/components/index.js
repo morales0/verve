@@ -3,6 +3,7 @@ import Exercise from "./Exercise/Exercise";
 import GuestNavbar from "./GuestNavbar/GuestNavbar";
 import Navbar from "./Navbar/Navbar";
 import PrivateRoute from "./PrivateRoute/PrivateRoute";
+import Button from "./ui/Button/Button";
 import UserNavbar from "./UserNavbar/UserNavbar";
 
 
@@ -12,5 +13,6 @@ export {
    UserNavbar,
    GuestNavbar,
    Navbar,
-   PrivateRoute
+   PrivateRoute,
+   Button
 }

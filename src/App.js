@@ -4,7 +4,7 @@ import { useAuth, useDatabase, useDatabaseObjectData, useUser } from 'reactfire'
 import 'firebase/database';
 import { History, Home, SignIn, SignUp, Workout } from './pages';
 import AuthWrapper, { useAuthCheck } from './context/auth';
-import { GuestNavbar, UserNavbar } from './components';
+import { GuestNavbar, UserNavbar, PrivateRoute } from './components';
 
 /* 
 Providers:

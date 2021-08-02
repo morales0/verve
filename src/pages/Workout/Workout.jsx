@@ -14,6 +14,7 @@ import AddIcon from '../../images/add.png'
 import HamburgerIcon from '../../images/hamburger.png'
 import ExerciseToolbar from './components/ExerciseToolbar/ExerciseToolbar';
 import { useMediaQuery } from 'react-responsive';
+import { Button } from 'components';
 
 const Workout = () => {
 	// Hooks
@@ -40,6 +41,12 @@ const Workout = () => {
 	// User toggles the exercise toolbar
 	const toggleToolbar = () => {
 		setToolbarToggled(!toolbarToggled)
+	}
+
+	// Mock complete workout
+	const completeWorkout = () => {
+		alert('not implemented yet!')
+		workout.api.completeWorkout()
 	}
 
 	// Render
@@ -84,11 +91,18 @@ const Workout = () => {
 				{/* Completed exercises */}
 				<div css={`flex-basis: 100px`}>
 					<header css={`
-						/*background: linear-gradient(27deg, #abeaab, transparent);*/
+						display: flex;
+						justify-content: space-between;
 						color: #29b929;
 						padding: .4rem .6rem;
 					`}>
 						<h3>Completed</h3>
+						{
+						workout.data?.numExCompleted > 0 && workout.data?.numExInProgress === 0 &&
+							<Button onClick={completeWorkout}>
+								Finish
+							</Button>
+						}
 					</header>
 
 					<Flex row wrap={true} css={`padding: .75rem`} >

@@ -1,4 +1,7 @@
-export default PrivateRoute = ({ component: Component, ...rest }) => {
+import { useAuthCheck } from "context/auth"
+import { Route, Redirect } from "react-router"
+
+const PrivateRoute = ({ component: Component, ...rest }) => {
    const authCheck = useAuthCheck()
 
    if (authCheck.authLoading) {
@@ -20,3 +23,5 @@ export default PrivateRoute = ({ component: Component, ...rest }) => {
       />
    )
 }
+
+export default PrivateRoute
