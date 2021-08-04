@@ -1,4 +1,5 @@
-import styled from "styled-components";
+import styled from "styled-components/macro";
+import { flexRow, flexCol, flexCenter } from "layout";
 
 // Styled components
 const HistoryContainer = styled.div`
@@ -54,7 +55,7 @@ const WorkoutDisplayContainer = styled.div`
 const History = (props) => {
    return (
       <HistoryContainer>
-         <header>
+         <header css={`${flexRow}`}>
             Header
          </header>
 

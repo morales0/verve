@@ -1,6 +1,9 @@
-import Flex from "./Flex/Flex"
+import {Flex, flexRow, flexCol, flexCenter } from "./Flex/Flex"
 
 
 export {
-   Flex
+   Flex,
+   flexRow,
+   flexCenter,
+   flexCol
 }

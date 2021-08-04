@@ -1,22 +1,5 @@
 import React from 'react'
-import styled, { css } from 'styled-components'
-
-const flexRow = (props) => css`
-  display: flex;
-  flex-direction: row;
-`
-
-const flexCol = (props) => css`
-   display: flex;
-   flex-direction: column;
-`
-
-const flexCenter = (props) => css`
-   justify-content: center;
-   align-items: center;
-`
-
-/* ------------   */
+import styled from 'styled-components'
 
 const Flex = (props) => {
    if (props.item) {
@@ -60,9 +43,4 @@ const StyledFlexItem = styled.div`
 
 
 
-export {
-   flexRow,
-   flexCol,
-   flexCenter,
-   Flex
-}
+export default Flex
