@@ -1,5 +1,5 @@
 import { NavLink } from "react-router-dom";
-import Navbar from "../Navbar/Navbar";
+import Navbar from '../../ui/Navbar/Navbar';
 
 const GuestNavbar = (props) => {
    return ( 

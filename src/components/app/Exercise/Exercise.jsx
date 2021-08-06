@@ -1,10 +1,10 @@
 import React from 'react'
-import { Flex } from '../../layout'
+import { Flex } from '../../../layout'
 
 import styled from 'styled-components/macro'
 
 import './Exercise.css'
-import Set from '../../pages/Workout/components/Set/Set'
+import Set from '../../../pages/Workout/components/Set/Set'
 
 const Exercise = (props) => {
    return (

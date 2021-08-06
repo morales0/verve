@@ -5,20 +5,12 @@ import { buildQueries } from '@testing-library/dom';
 
 const AuthContext = createContext()
 const AuthProvider = (props) => {
-   // Get the auth
    const auth = useAuth()
-   const db = useDatabase()
-   const usersRef = db.ref('users')
    const [authLoading, setAuthLoading] = useState(true);
    const [user, setUser] = useState(null);
-
-   // Create user document
-   const createUser = (uid, email) => {
-      db.ref('users/' + uid).set({
-         uid: uid,
-         email: email,
-      });
-   }
+   const db = useDatabase()
+   const usersRef = db.ref('users')
+   const [userData, setUserData] = useState(null);
 
    // Subscribe to any auth changes
    useEffect(() => {
@@ -33,7 +25,11 @@ const AuthProvider = (props) => {
                if (!snapshot.exists()) {
                   console.log("No user data, need to add")
                   // Create user document in database
-                  createUser(user.uid, user.email)
+                  userRef.set({uid: user.uid, email: user.email})
+                     .then(() => userRef.once('value'))
+                     .then(newUserSnapshot => setUserData(newUserSnapshot.val()))
+               } else {
+                  setUserData(snapshot.val())
                }
             })
 
@@ -56,7 +52,7 @@ const AuthProvider = (props) => {
    } else {
       return (
          <AuthContext.Provider value={{
-            user: user, authenticated: user !== null, authLoading
+            user: userData, authenticated: user !== null, authLoading, userAuth: user
          }}>
             {props.children}
          </AuthContext.Provider>
@@ -66,7 +62,6 @@ const AuthProvider = (props) => {
 
 const useAuthCheck = () => {
    const authCheck = useContext(AuthContext)
-
    return authCheck
 }
 

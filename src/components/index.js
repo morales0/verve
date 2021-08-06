@@ -1,10 +1,9 @@
-import AuthForm from "./AuthForm/AuthForm";
-import Exercise from "./Exercise/Exercise";
-import GuestNavbar from "./GuestNavbar/GuestNavbar";
-import Navbar from "./Navbar/Navbar";
-import PrivateRoute from "./PrivateRoute/PrivateRoute";
+import AuthForm from "./app/AuthForm/AuthForm";
+import Exercise from "./app/Exercise/Exercise";
+import GuestNavbar from "./app/GuestNavbar/GuestNavbar";
+import PrivateRoute from "./util/PrivateRoute/PrivateRoute";
 import Button from "./ui/Button/Button";
-import UserNavbar from "./UserNavbar/UserNavbar";
+import UserNavbar from "./app/UserNavbar/UserNavbar";
 
 
 export {
@@ -12,7 +11,6 @@ export {
    AuthForm,
    UserNavbar,
    GuestNavbar,
-   Navbar,
    PrivateRoute,
    Button
 }
