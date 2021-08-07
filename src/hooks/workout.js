@@ -29,6 +29,9 @@ const useWorkout = () => {
                numExInProgress: 0,
                numExCompleted: 0
             })
+
+            // Set user to working out
+            db.ref(`users/${user.data.uid}/isWorkingOut`).set(true)
          } else {
             setData(snapshot.val())
             setStatus('ok')
@@ -56,6 +59,9 @@ const useWorkout = () => {
 
          // Remove workout
          workout.remove()
+
+         // Set user to not working out
+         db.ref(`users/${user.data.uid}/isWorkingOut`).set(false)
 
          // Send user to a summary page, then to the home page
          history.push("/home")

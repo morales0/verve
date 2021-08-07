@@ -1,9 +1,26 @@
 import { useAuthCheck } from 'context/auth';
+import { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom'
+import { useDatabase } from 'reactfire';
 import Navbar from '../../ui/Navbar/Navbar'
 
 const UserNavbar = (props) => {
    const authCheck = useAuthCheck()
+   const db = useDatabase()
+   const workoutRef = db.ref(`users/${authCheck.userAuth.uid}/isWorkingOut`)
+   const [isWorkout, setIsWorkout] = useState(false);
+
+   useEffect(() => {
+      workoutRef.on('value', snapshot => {
+         if (snapshot.exists()) {
+            setIsWorkout(snapshot.val())
+         } else {
+            setIsWorkout(false)
+         }
+      })
+
+      return () => workoutRef.off()
+   }, []);
 
    return ( 
       <Navbar>
@@ -11,7 +28,7 @@ const UserNavbar = (props) => {
          
          <div>
             {
-               authCheck.user?.workout &&
+               isWorkout &&
                <NavLink to="/workout" activeClassName="activeNavLink">Workouts</NavLink>
             }
             <NavLink to="/history" activeClassName="activeNavLink">History</NavLink>
