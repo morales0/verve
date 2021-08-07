@@ -41,7 +41,7 @@ function App() {
          <Router>
             {/* Render appropriate navbar */}
             {authCheck.authenticated ? (
-               <UserNavbar username={authCheck.userAuth.email}/>
+               <UserNavbar/>
             ) : (
                <GuestNavbar />
             )}

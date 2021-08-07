@@ -1,5 +1,9 @@
 import styled from "styled-components/macro";
 import { flexRow, flexCol, flexCenter } from "layout";
+import { useDatabase } from "reactfire";
+import { useAuthCheck } from "context/auth";
+import { useHistory } from "hooks/history";
+import { Link } from "react-router-dom";
 
 // Styled components
 const HistoryContainer = styled.div`
@@ -53,13 +57,39 @@ const WorkoutDisplayContainer = styled.div`
 
 // History component
 const History = (props) => {
+   const workoutHistory = useHistory()
+
    return (
       <HistoryContainer>
          <header css={`${flexRow}`}>
             Header
          </header>
 
-         <div className="historyMainContent_container">
+         {
+            workoutHistory.data ? (
+               <div className="historyMainContent_container">
+                  <div className="historyDay_container">
+                     <h2>Today</h2>
+                     <div className="workoutListDay_container">
+                        {Object.values(workoutHistory.data).map(workout => {
+                           return (
+                              <WorkoutDisplayContainer>
+                                 <h3>{workout.dateStarted}</h3>
+                                 <div>
+                                    {Object.keys(workout.exercises).map(ex => <h4>{ex}</h4>)}
+                                 </div>
+                              </WorkoutDisplayContainer>
+                           )
+                        })}
+                     </div>
+                  </div>
+               </div>
+            ) : (
+               <div>Everybody starts somewhere. Go on and <Link to="/workout">make history!</Link></div>
+            )
+         }
+
+         {/* <div className="historyMainContent_container">
             <div className="historyDay_container">
                <h2>Today</h2>
                <div className="workoutListDay_container">
@@ -83,7 +113,7 @@ const History = (props) => {
                   <WorkoutDisplayContainer>Workout 2</WorkoutDisplayContainer>
                </div>
             </div>
-         </div>
+         </div> */}
       </HistoryContainer>
    );
 }

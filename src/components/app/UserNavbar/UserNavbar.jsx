@@ -18,7 +18,7 @@ const UserNavbar = (props) => {
          </div>
          
          <NavLink to="/user" activeClassName="activeNavLink">
-            {props.username}
+            {authCheck.user?.username}
          </NavLink>
       </Navbar>
     );
