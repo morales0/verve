@@ -22,10 +22,8 @@ const HistoryContainer = styled.div`
 
       // background: #ffa2a240;
 
-      .historyDay_container {
-         & + & {
-            margin-top: 1rem;
-         }
+      .historyDay_container + .historyDay_container {
+         margin-top: 1.5rem;
       }
 
       .workoutListDay_container {
@@ -59,6 +57,47 @@ const WorkoutDisplayContainer = styled.div`
 const History = (props) => {
    const workoutHistory = useHistory()
 
+   // Functions
+   const isDateToday = (date) => {
+      const now = new Date()
+
+      return now.getDate() === date.getDate() &&
+         now.getDay() === date.getDay() &&
+         now.getMonth() === date.getMonth() &&
+         now.getFullYear() === date.getFullYear()
+   }
+
+   // Turn dates into strings like "today", "yesterday", etc
+   const dateToDetailString = (date) => {
+
+   }
+
+   const orgByDay = (workouts) => {
+      const workoutsByDay = {}
+      const dayOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+
+      workouts.forEach((workout) => {
+         console.log(workout)
+         const workoutDate = new Date(workout.dateStarted)
+
+         const day = dayOfWeek[workoutDate.getDay()]
+         const date = workoutDate.getDate()
+         const month = workoutDate.getMonth()
+         const year = workoutDate.getFullYear()
+
+         const key = `${day}, ${month}-${date}-${year}`
+
+         // Save the workouts in an array hashed by day
+         if (key in workoutsByDay) {
+            workoutsByDay[key].push(workout)
+         } else {
+            workoutsByDay[key] = [workout]
+         }
+      })
+
+      return workoutsByDay
+   }
+
    return (
       <HistoryContainer>
          <header css={`${flexRow}`}>
@@ -68,21 +107,27 @@ const History = (props) => {
          {
             workoutHistory.data ? (
                <div className="historyMainContent_container">
-                  <div className="historyDay_container">
-                     <h2>Today</h2>
-                     <div className="workoutListDay_container">
-                        {Object.values(workoutHistory.data).map(workout => {
-                           return (
-                              <WorkoutDisplayContainer>
-                                 <h3>{workout.dateStarted}</h3>
-                                 <div>
-                                    {Object.keys(workout.exercises).map(ex => <h4>{ex}</h4>)}
-                                 </div>
-                              </WorkoutDisplayContainer>
-                           )
-                        })}
-                     </div>
-                  </div>
+                  {
+                     Object.entries(orgByDay(Object.values(workoutHistory.data))).map(([day, workoutList]) => (
+                        <div className="historyDay_container">
+                           <h2>{day}</h2>
+                           <div className="workoutListDay_container">
+                              {
+                                 workoutList.map(workout => (
+                                    <WorkoutDisplayContainer>
+                                       <div>
+                                          <input type="text" placeholder="We will use this to filter"/>
+                                       </div>
+                                       <div>
+                                          {Object.keys(workout.exercises).map(ex => <h4>{ex}</h4>)}
+                                       </div>
+                                    </WorkoutDisplayContainer>
+                                 ))
+                              }
+                           </div>
+                        </div>
+                     ))
+                  }
                </div>
             ) : (
                <div>Everybody starts somewhere. Go on and <Link to="/workout">make history!</Link></div>

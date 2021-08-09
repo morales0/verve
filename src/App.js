@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
 import { useAuth, useDatabase, useDatabaseObjectData, useUser } from 'reactfire';
-import { History, Home, SignIn, SignUp, Workout } from './pages';
+import { Data, History, Home, SignIn, SignUp, Workout } from './pages';
 import { useAuthCheck } from './context/auth';
 import { GuestNavbar, UserNavbar, PrivateRoute } from './components';
 import { ThemeProvider } from 'styled-components';
@@ -82,6 +82,7 @@ function App() {
                </Route>
                <PrivateRoute path="/workout" component={Workout} />
                <PrivateRoute path="/history" component={History} />
+               <PrivateRoute path="/data" component={Data} />
                <PrivateRoute path="/user" component={() =>
                   <div>
                      {authCheck.authenticated && authCheck.user.email}

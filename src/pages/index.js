@@ -3,6 +3,7 @@ import SignIn from "./SignIn/SignIn"
 import SignUp from "./SignUp/SignUp"
 import Workout from "./Workout/Workout"
 import History from "./History/History"
+import Data from "./Data/Data"
 
 
 export {
@@ -10,5 +11,6 @@ export {
    Workout,
    SignIn,
    SignUp,
-   History
+   History,
+   Data
 }

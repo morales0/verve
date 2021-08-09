@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom';
 import { useAuth } from 'reactfire';
 
 import './Home.css';
@@ -9,6 +10,7 @@ const Home = () => {
       <div>
          <div>User's Dashboard</div>
          <div>Not implemented</div>
+         <Link>Start new workout</Link>
       </div>
    )
 }
