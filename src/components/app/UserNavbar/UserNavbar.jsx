@@ -32,6 +32,7 @@ const UserNavbar = (props) => {
                <NavLink to="/workout" activeClassName="activeNavLink">Workouts</NavLink>
             }
             <NavLink to="/history" activeClassName="activeNavLink">History</NavLink>
+            <NavLink to="/data" activeClassName="activeNavLink">Data</NavLink>
          </div>
          
          <NavLink to="/user" activeClassName="activeNavLink">
