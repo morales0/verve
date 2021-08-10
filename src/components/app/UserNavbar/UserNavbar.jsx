@@ -1,3 +1,4 @@
+import { SideNavbar } from 'components';
 import { useAuthCheck } from 'context/auth';
 import { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom'
@@ -23,22 +24,39 @@ const UserNavbar = (props) => {
    }, []);
 
    return ( 
-      <Navbar>
-         <NavLink exact to="/" className="navbarBrand" activeClassName="activeNavLink">Verve</NavLink>
+      <SideNavbar>
+         <SideNavbar.Brand exact to="/" activeClassName="activeBrandLink">
+            Verve
+         </SideNavbar.Brand>
          
-         <div>
+         <div className="navGroup_container">
             {
                isWorkout &&
-               <NavLink to="/workout" activeClassName="activeNavLink">Workouts</NavLink>
+               <SideNavbar.NavLink to="/workout" activeClassName="activeNavLink">
+                  Workouts
+               </SideNavbar.NavLink>
             }
-            <NavLink to="/history" activeClassName="activeNavLink">History</NavLink>
-            <NavLink to="/data" activeClassName="activeNavLink">Data</NavLink>
+            <SideNavbar.NavLink to="/history" activeClassName="activeNavLink">
+               History
+            </SideNavbar.NavLink>
+            <SideNavbar.NavLink to="/data" activeClassName="activeNavLink">
+               Data
+            </SideNavbar.NavLink> 
+            <SideNavbar.NavLink to="/builder" activeClassName="activeNavLink">
+               Builder
+            </SideNavbar.NavLink> 
+            <SideNavbar.NavLink to="/calculator" activeClassName="activeNavLink">
+               Calculator
+            </SideNavbar.NavLink> 
+            <SideNavbar.NavLink to="/about" activeClassName="activeNavLink">
+               About
+            </SideNavbar.NavLink> 
          </div>
          
-         <NavLink to="/user" activeClassName="activeNavLink">
+         <SideNavbar.UserLink to="/user" activeClassName="activeNavLink">
             {authCheck.user?.username}
-         </NavLink>
-      </Navbar>
+         </SideNavbar.UserLink>
+      </SideNavbar>
     );
 }
  

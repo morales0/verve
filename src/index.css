@@ -24,13 +24,14 @@ body {
 
 #root {
 	display: flex;
-   flex-direction: column;
+   flex-direction: row;
 	height: 100%;
 }
 
 #root > div:first-of-type {
 	flex-grow: 1; /* Fill up space */
 	overflow-y: hidden; /* Don't grow off screen, components decide scroll */
+	padding: 1rem; /* Breathing room */
 }
 
 *,
