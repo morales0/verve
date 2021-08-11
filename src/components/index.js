@@ -5,6 +5,7 @@ import PrivateRoute from "./util/PrivateRoute/PrivateRoute";
 import Button from "./ui/Button/Button";
 import UserNavbar from "./app/UserNavbar/UserNavbar";
 import SideNavbar from "./ui/Navbar/SideNavbar";
+import { PageHeader } from "./ui/Text/Text";
 
 
 export {
@@ -14,5 +15,6 @@ export {
    GuestNavbar,
    PrivateRoute,
    Button,
-   SideNavbar
+   SideNavbar,
+   PageHeader
 }

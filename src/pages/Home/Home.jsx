@@ -1,16 +1,21 @@
+import { PageHeader } from 'components';
 import React from 'react'
 import { Link } from 'react-router-dom';
 import { useAuth } from 'reactfire';
 
-import './Home.css';
+import './Home.scss';
+
+
 
 const Home = () => {
    const auth = useAuth()
    return (
-      <div>
-         <div>User's Dashboard</div>
+      <div className="Home_container">
+         <PageHeader title="Home" />
          <div>Not implemented</div>
-         <Link>Start new workout</Link>
+         <Link to="/workout">
+            Start new workout
+         </Link>
       </div>
    )
 }
