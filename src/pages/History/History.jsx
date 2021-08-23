@@ -45,6 +45,7 @@ const HistoryContainer = styled.div`
 const WorkoutDisplayContainer = styled.div`
    display: flex;
    flex-direction: column;
+   flex: 0 0 200px;
    padding: .5rem;
    width: 200px;
    height: 300px;

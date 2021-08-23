@@ -1,5 +1,6 @@
 import { NavLink } from "react-router-dom";
 import Navbar from '../../ui/Navbar/Navbar';
+import SideNavbar from "components/ui/Navbar/SideNavbar";
 
 const GuestNavbar = (props) => {
    return ( 

@@ -1,10 +1,11 @@
 import React, { useEffect } from 'react'
 import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
 import { useAuth, useDatabase, useDatabaseObjectData, useUser } from 'reactfire';
+import { useMediaQuery } from 'react-responsive';
 import { Data, History, Home, SignIn, SignUp, Workout } from './pages';
 import { useAuthCheck } from './context/auth';
 import { GuestNavbar, UserNavbar, PrivateRoute } from './components';
-import { ThemeProvider } from 'styled-components';
+import styled, { ThemeProvider } from 'styled-components';
 
 /* 
 Providers:
@@ -28,9 +29,23 @@ const draft_theme = {
    }
 }
 
+const AppWrapper = styled.div`
+   display: flex;
+   flex-direction: ${props => props.vertical ? 'column' : 'row'};
+
+   height: 100%;
+
+   & > div:first-of-type {
+      flex-grow: 1; /* Fill up space */
+      overflow-y: hidden; /* Don't grow off screen, components decide scroll */
+   }
+
+`
+
 function App() {
    const authCheck = useAuthCheck()
    const auth = useAuth()
+   const isMobile = useMediaQuery({query: '(max-width: 412px)'});
 
    useEffect(() => {
       console.log("App", authCheck.user)
@@ -38,59 +53,62 @@ function App() {
 
    return (
       <ThemeProvider theme={draft_theme}>
-         <Router>
-            {/* Render appropriate navbar */}
-            {authCheck.authenticated ? (
-               <UserNavbar/>
-            ) : (
-               <GuestNavbar />
-            )}
-         
-            {/* Render the page component (depending on auth status) */}
-            <Switch>
-               {/* Take user to current workout if it is live here */}
-               <Route exact path="/">
-                  {authCheck.authenticated ? (
-                     // <Redirect to="/workout" />
-                     <Home />
-                  ) : (
-                     <div>demo</div>
-                  )}
-               </Route>
-               {/* This is the real home route */}
-               <Route path="/home">
-                  {authCheck.authenticated ? (
+         {/* <AppWrapper vertical={!authCheck.authenticated || isMobile}> */}
+         <AppWrapper vertical={!authCheck.authenticated}>
+            <Router>
+               {/* Render appropriate navbar */}
+               {authCheck.authenticated ? (
+                  <UserNavbar isMobile={isMobile} />
+               ) : (
+                  <GuestNavbar />
+               )}
+            
+               {/* Render the page component (depending on auth status) */}
+               <Switch>
+                  {/* Take user to current workout if it is live here */}
+                  <Route exact path="/">
+                     {authCheck.authenticated ? (
                         // <Redirect to="/workout" />
                         <Home />
                      ) : (
                         <div>demo</div>
                      )}
-               </Route>
-               <Route path="/signIn">
-                  {authCheck.authenticated ? (
-                     <Redirect to="/" />
-                  ) : (
-                     <SignIn />
-                  )}
-               </Route>
-               <Route path="/signUp">
-                  {authCheck.authenticated ? (
-                     <Redirect to="/" />
-                  ) : (
-                     <SignUp />
-                  )}
-               </Route>
-               <PrivateRoute path="/workout" component={Workout} />
-               <PrivateRoute path="/history" component={History} />
-               <PrivateRoute path="/data" component={Data} />
-               <PrivateRoute path="/user" component={() =>
-                  <div>
-                     {authCheck.authenticated && authCheck.user.email}
-                     <button onClick={() => auth.signOut()}>Sign Out</button>
-                  </div>
-               } />
-            </Switch>
-         </Router>
+                  </Route>
+                  {/* This is the real home route */}
+                  <Route path="/home">
+                     {authCheck.authenticated ? (
+                           // <Redirect to="/workout" />
+                           <Home />
+                        ) : (
+                           <div>demo</div>
+                        )}
+                  </Route>
+                  <Route path="/signIn">
+                     {authCheck.authenticated ? (
+                        <Redirect to="/" />
+                     ) : (
+                        <SignIn />
+                     )}
+                  </Route>
+                  <Route path="/signUp">
+                     {authCheck.authenticated ? (
+                        <Redirect to="/" />
+                     ) : (
+                        <SignUp />
+                     )}
+                  </Route>
+                  <PrivateRoute path="/workout" component={Workout} />
+                  <PrivateRoute path="/history" component={History} />
+                  <PrivateRoute path="/data" component={Data} />
+                  <PrivateRoute path="/user" component={() =>
+                     <div>
+                        {authCheck.authenticated && authCheck.user.email}
+                        <button onClick={() => auth.signOut()}>Sign Out</button>
+                     </div>
+                  } />
+               </Switch>
+            </Router>
+         </AppWrapper>
       </ThemeProvider>
    );
 }

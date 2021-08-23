@@ -4,7 +4,7 @@ import GuestNavbar from "./app/GuestNavbar/GuestNavbar";
 import PrivateRoute from "./util/PrivateRoute/PrivateRoute";
 import Button from "./ui/Button/Button";
 import UserNavbar from "./app/UserNavbar/UserNavbar";
-import SideNavbar from "./ui/Navbar/SideNavbar";
+import { SideNavbar, AppNavLink, Brand, UserLink } from "./ui/Navbar/SideNavbar";
 import { PageHeader } from "./ui/Text/Text";
 
 
@@ -16,5 +16,8 @@ export {
    PrivateRoute,
    Button,
    SideNavbar,
+   AppNavLink,
+   Brand,
+   UserLink,
    PageHeader
 }
