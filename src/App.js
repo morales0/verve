@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
 import { useAuth, useDatabase, useDatabaseObjectData, useUser } from 'reactfire';
 import { useMediaQuery } from 'react-responsive';
-import { Data, History, Home, SignIn, SignUp, Workout } from './pages';
+import { About, Builder, Calculator, Data, History, Home, SignIn, SignUp, Workout } from 'pages';
 import { useAuthCheck } from './context/auth';
 import { GuestNavbar, UserNavbar, PrivateRoute } from './components';
 import styled, { ThemeProvider } from 'styled-components';
@@ -45,6 +45,9 @@ const AppWrapper = styled.div`
 function App() {
    const authCheck = useAuthCheck()
    const auth = useAuth()
+   // On mobile, app will have a different layout
+   // Desktop will have a responsive side navbar
+   // Mobile will have a responsive top navbar
    const isMobile = useMediaQuery({query: '(max-width: 412px)'});
 
    useEffect(() => {
@@ -100,6 +103,9 @@ function App() {
                   <PrivateRoute path="/workout" component={Workout} />
                   <PrivateRoute path="/history" component={History} />
                   <PrivateRoute path="/data" component={Data} />
+                  <PrivateRoute path="/builder" component={Builder} />
+                  <PrivateRoute path="/calculator" component={Calculator} />
+                  <PrivateRoute path="/about" component={About} />
                   <PrivateRoute path="/user" component={() =>
                      <div>
                         {authCheck.authenticated && authCheck.user.email}
@@ -112,7 +118,5 @@ function App() {
       </ThemeProvider>
    );
 }
-
-
 
 export default App;
