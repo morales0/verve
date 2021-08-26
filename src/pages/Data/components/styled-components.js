@@ -1,4 +1,4 @@
-import { PageHeader } from "components"
+import { Button, PageHeader } from "components"
 import styled from "styled-components"
 
 
@@ -6,11 +6,15 @@ const DataPageHeader = styled(PageHeader)`
    padding: .6rem;
 `
 
+const ExerciseOption = styled(Button)`
+
+`
 
 const StyledExerciseBar = styled.div`
    grid-row: span 2;
    
    background: #f1f1f1;
+   box-shadow: 0 0 3px 1px rgb(0 0 0 / 15%);
 
    & > header {
       display: grid;
@@ -23,20 +27,34 @@ const StyledExerciseBar = styled.div`
    }
 
    & > .exerciseBarContent_container {
+      display: flex;
+      flex-direction: column;
       padding: .6rem;
+
+      & .exerciseOption_btn + .exerciseOption_btn {
+         margin-top: .5rem;
+      }
    }
 `
 
-const ExerciseBar = () => {
+const ExerciseBar = ({exercises, setExercise}) => {
    return (
       <StyledExerciseBar>
          <header>
-            <h2 className='headerTitle'>
+            <h3 className='headerTitle'>
                Exercises
-            </h2>
+            </h3>
          </header>
          <div className='exerciseBarContent_container'>
-            Content
+            {
+               exercises?.map((ex, i) => (
+                  <ExerciseOption key={`${ex.name-i}`} className='exerciseOption_btn' 
+                     onClick={() => setExercise(ex)}
+                  >
+                     {ex.name}
+                  </ExerciseOption>
+               ))
+            }
          </div>
       </StyledExerciseBar>
    )

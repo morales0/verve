@@ -122,7 +122,7 @@ const StyledSideNav = styled.nav`
    // height: 2rem;
    // background: linear-gradient(10deg, #daecf7, #e0e0e0);
    // background: #505050;
-   background: #93909c;
+   background: #a5a5a5;
    color: white;
    box-shadow: 0 0 3px 0px rgba(0,0,0, 0.15);
 
