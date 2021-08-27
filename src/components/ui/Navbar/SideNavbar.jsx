@@ -96,6 +96,7 @@ const Brand = ({children, ...rest}) => {
 const StyledUserLink = styled(StyledAppNavLink)`
    justify-content: center;
    background: #865c5c;
+   color: white;
    border-left: 0;
    border-top: 1px solid #4c4c4c;
 `
@@ -122,9 +123,9 @@ const StyledSideNav = styled.nav`
    // height: 2rem;
    // background: linear-gradient(10deg, #daecf7, #e0e0e0);
    // background: #505050;
-   background: #a5a5a5;
-   color: white;
-   box-shadow: 0 0 3px 0px rgba(0,0,0, 0.15);
+   background: #f1f1f1;
+   color: #333;
+   box-shadow: 0 0 3px 1px rgba(0,0,0, 0.15);
 
    & > .navGroup_container {
       display: flex;

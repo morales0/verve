@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
 import { useAuth, useDatabase, useDatabaseObjectData, useUser } from 'reactfire';
 import { useMediaQuery } from 'react-responsive';
-import { About, Builder, Calculator, Data, History, Home, SignIn, SignUp, Workout } from 'pages';
+import { About, Builder, Calculator, Data, Demo, History, Home, SignIn, SignUp, Workout } from 'pages';
 import { useAuthCheck } from './context/auth';
 import { GuestNavbar, UserNavbar, PrivateRoute } from './components';
 import styled, { ThemeProvider } from 'styled-components';
@@ -74,7 +74,7 @@ function App() {
                         // <Redirect to="/workout" />
                         <Home />
                      ) : (
-                        <div>demo</div>
+                        <Demo />
                      )}
                   </Route>
                   {/* This is the real home route */}
