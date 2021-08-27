@@ -1,7 +1,6 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import 'firebase/auth'
 import { useAuth, useDatabase, useUser } from 'reactfire'
-import { buildQueries } from '@testing-library/dom';
 
 const AuthContext = createContext()
 const AuthProvider = (props) => {
