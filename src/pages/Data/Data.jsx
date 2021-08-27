@@ -48,6 +48,12 @@ const Data = (props) => {
    const [currentExercise, setCurrentExercise] = useState(null);
 
    return (
+      <div style={{padding: '1rem'}}>
+         Exercise Data coming soon!
+      </div>
+   )
+
+   return (
       <div className='Data_page'>
          <DataPageHeader
             title='Exercise Data'
