@@ -1,13 +1,3 @@
-import { createContext, useContext, useState } from "react";
-import { NavLink } from "react-router-dom";
-import styled from "styled-components";
-
-import ArrowsIcon from 'images/triple-right-arrows.png'
-
-// Navbar context
-const NavbarContext = createContext({})
-
-// Navbar link components
 
 const StyledAppNavLink = styled(NavLink)`
    display: flex;
@@ -16,7 +6,6 @@ const StyledAppNavLink = styled(NavLink)`
    width: 100%;
    color: inherit;
    text-decoration: none;
-   border-left: 2px solid transparent;
    transition: .2s;
 
    &:hover {
@@ -111,60 +100,3 @@ const UserLink = ({ icon, username, ...rest }) => {
       </StyledUserLink>
    )
 }
-
-// The navbar component
-const StyledSideNav = styled.nav`
-   z-index: 99;
-   display: flex;
-   flex-direction: column;
-   justify-content: space-between;
-   align-items: flex-start;
-   width: auto;
-   // height: 2rem;
-   // background: linear-gradient(10deg, #daecf7, #e0e0e0);
-   // background: #505050;
-   background: #f1f1f1;
-   color: #333;
-   box-shadow: 0 0 3px 1px rgba(0,0,0, 0.15);
-
-   & > .navGroup_container {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: flex-start;
-      width: 100%;
-   }
-
-   // When user is on the page for this link
-   .activeNavLink {
-      border-left: 2px solid #b495ff!important;
-   }
-
-   .activeBrandLink {
-      border-bottom: 2px solid #b495ff!important;
-   }
-
-
-   // Testing
-   //width: 40px;
-   //overflow-x: hidden;
-`
-
-const SideNavbar = (props) => {
-   const [collapsed, setCollapsed] = useState(false);
-
-   return (
-      <NavbarContext.Provider value={{collapsed, setCollapsed}}>
-         <StyledSideNav>
-            {props.children}
-         </StyledSideNav>
-      </NavbarContext.Provider>
-   )
-}
- 
-export {
-   SideNavbar,
-   AppNavLink,
-   Brand,
-   UserLink
-};

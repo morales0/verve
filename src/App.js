@@ -31,7 +31,7 @@ const draft_theme = {
 
 const AppWrapper = styled.div`
    display: flex;
-   flex-direction: ${props => props.vertical ? 'column' : 'row'};
+   flex-direction: ${props => props.vertical || props.theme.isMobile ? 'column' : 'row'};
 
    height: 100%;
 
@@ -48,14 +48,14 @@ function App() {
    // On mobile, app will have a different layout
    // Desktop will have a responsive side navbar
    // Mobile will have a responsive top navbar
-   const isMobile = useMediaQuery({query: '(max-width: 412px)'});
+   const isMobile = useMediaQuery({query: '(max-width: 748px)'});
 
    useEffect(() => {
       console.log("App", authCheck.user)
    });
 
    return (
-      <ThemeProvider theme={draft_theme}>
+      <ThemeProvider theme={{...draft_theme, isMobile: isMobile}}>
          {/* <AppWrapper vertical={!authCheck.authenticated || isMobile}> */}
          <AppWrapper vertical={!authCheck.authenticated}>
             <Router>
@@ -108,7 +108,7 @@ function App() {
                   <PrivateRoute path="/about" component={About} />
                   <PrivateRoute path="/user" component={() =>
                      <div>
-                        {authCheck.authenticated && authCheck.user.email}
+                        {authCheck.authenticated && authCheck.user?.email}
                         <button onClick={() => auth.signOut()}>Sign Out</button>
                      </div>
                   } />
