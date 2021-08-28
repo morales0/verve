@@ -6,6 +6,7 @@ import { useAuthCheck } from "context/auth";
 import { useHistory } from "hooks/history";
 import { Link } from "react-router-dom";
 import { Button, PageHeader } from "components";
+import ExerciseDropdown from "./components/ExerciseDropdown";
 
 // Styled components
 const HistoryContainer = styled.div`
@@ -32,6 +33,10 @@ const HistoryContainer = styled.div`
          display: flex;
          padding: .75rem 0;
          overflow-x: auto;
+      }
+
+      .exercises_container {
+         overflow-y: auto;
       }
    }
 
@@ -206,7 +211,9 @@ const History = (props) => {
                                              <input type="text" placeholder="We will use this to filter" />
                                           </div>
                                           <div className="exercises_container">
-                                             {Object.keys(workout.exercises).map(ex => <h4>{ex}</h4>)}
+                                             {Object.values(workout.exercises).map(ex => (
+                                                <ExerciseDropdown name={ex.name} sets={ex.sets} />
+                                             ))}
                                           </div>
                                           <div className="date">
                                              {toTimeString(new Date(workout.dateStarted))}
