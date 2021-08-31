@@ -20,12 +20,48 @@ const ogExercises = [
 		measures: ['reps', 'weight']
 	},
 	{
-		name: "Shoulder Press",
+		name: "Dumbell Shoulder Press",
 		measures: ['reps', 'weight']
 	},
 	{
 		name: "Running",
 		measures: ['miles']
+	},
+	{
+		name: "Walking Lunges",
+		measures: ['steps', 'weight']
+	},
+	{
+		name: 'Face Pulls',
+		measures: ['reps', 'weight']
+	},
+	{
+		name: 'Front Planks',
+		measures: ['time']
+	},
+	{
+		name: 'Shoulder Flies',
+		measures: ['reps', 'weight']
+	},
+	{
+		name: 'Machine Shoulder Press',
+		measures: ['reps', 'weight']
+	},
+	{
+		name: 'Leg Press',
+		measures: ['reps', 'weight']
+	},
+	{
+		name: 'Bulgarian Split Squats',
+		measures: ['reps', 'weight']
+	},
+	{
+		name: 'Backstep Lunges',
+		measures: ['reps', 'weight']
+	},
+	{
+		name: 'Hip Machine',
+		measures: ['reps', 'weight']
 	}
 ]
 
