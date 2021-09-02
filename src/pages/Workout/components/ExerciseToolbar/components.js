@@ -2,9 +2,10 @@ import styled from 'styled-components'
 import './ExerciseToolbar.scss'
 
 const ExerciseToolbarAside = styled.aside`
-   @media screen and (max-width: 600px){
+	display: ${props => props.collapsed ? 'none' : 'flex'};
+   /* @media screen and (max-width: 600px){
       transform: translate(${props => props.collapsed ? '250px' : '0'});
-   }
+   } */
 `
 
 const ExerciseInfo = (props) => {

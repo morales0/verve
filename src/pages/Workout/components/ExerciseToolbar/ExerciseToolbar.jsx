@@ -15,6 +15,7 @@ const ExerciseToolbar = (props) => {
          </header>
 
          <div className="exerciseToolbar-main_container">
+            <button>Create new Exercise</button>
             {props.exerciseList.map((ex) => 
                <ExerciseInfo key={ex.name + '-add'} name={ex.name} 
                   handleAdd={() => props.handleAdd(ex.name, ex.measures)}

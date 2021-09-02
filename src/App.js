@@ -6,6 +6,9 @@ import { About, Builder, Calculator, Data, Demo, History, Home, SignIn, SignUp, 
 import { useAuthCheck } from './context/auth';
 import { GuestNavbar, UserNavbar, PrivateRoute } from './components';
 import styled, { ThemeProvider } from 'styled-components';
+import ogExercises from 'data/original-exercises';
+
+
 
 /* 
 Providers:
@@ -49,10 +52,19 @@ function App() {
    // Desktop will have a responsive side navbar
    // Mobile will have a responsive top navbar
    const isMobile = useMediaQuery({query: '(max-width: 748px)'});
+   const db = useDatabase()
+
 
    useEffect(() => {
       console.log("App", authCheck.user)
    });
+
+   const createOG = () => {
+      console.log('hello')
+      const ogRef = db.ref('original-exercises')
+   
+      ogRef.set(ogExercises)
+   }
 
    return (
       <ThemeProvider theme={{...draft_theme, isMobile: isMobile}}>
@@ -112,6 +124,9 @@ function App() {
                         <button onClick={() => auth.signOut()}>Sign Out</button>
                      </div>
                   } />
+                  <Route path='/dev/og'>
+                     <button onClick={createOG}>CREATE OG</button>
+                  </Route>
                </Switch>
             </Router>
          </AppWrapper>

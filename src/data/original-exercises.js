@@ -62,6 +62,14 @@ const ogExercises = [
 	{
 		name: 'Hip Machine',
 		measures: ['reps', 'weight']
+	},
+	{
+		name: 'Incline Situps with Ball',
+		measures: ['reps', 'weight']
+	},
+	{
+		name: 'Lat Pulldown',
+		measures: ['reps', 'weight']
 	}
 ]
 
