@@ -15,7 +15,6 @@ const SignIn = (props) => {
    // Functions
    const signIn = () => {
       signInWithEmailAndPassword(auth, email, password).then((user) => {
-         history.push("/")
       })
       .catch((err) => {
          setEmail('')

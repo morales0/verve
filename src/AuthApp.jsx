@@ -1,6 +1,7 @@
+import { onAuthStateChanged, updateProfile } from "@firebase/auth";
 import { UserNavbar } from "components";
 import { useEffect } from "react";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route, Link, Redirect } from "react-router-dom";
 import { useAuth, useUser } from "reactfire"
 import styled from "styled-components"
 
@@ -23,6 +24,15 @@ const AuthApp = (props) => {
    useEffect(() => {
       console.log("AuthApp", user)
    }, [JSON.stringify(user)]);
+
+   // Check is there is user data before rendering
+   if (!user.data) {
+      return (
+         <div>
+            Loading user...
+         </div>
+      )
+   }
 
    return (
       <AuthAppWrapper isMobile={props.isMobile}>
@@ -50,13 +60,21 @@ const AuthApp = (props) => {
                <Route path="/about">
                   <div>About</div>
                </Route>
-               <Route exact path="/">
+               <Route path="/user">
                   <div>
-                     <div>User Home</div>
+                     <div>{user.data.displayName}</div>
                      <button onClick={() => auth.signOut()}>
                         Sign Out
                      </button>
                   </div>
+               </Route>
+               <Route exact path="/">
+                  <div>
+                     <div>Welcome!</div>
+                  </div>
+               </Route>
+               <Route>
+                  <Redirect to="/" />
                </Route>
             </Switch>
          </Router>

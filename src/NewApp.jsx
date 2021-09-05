@@ -13,11 +13,10 @@ import UnauthApp from "UnauthApp";
 
 const NewApp = (props) => {
    const { status: authStatus, data: authData } = useSigninCheck()
-   const user = useUser()
    const isMobile = useMediaQuery({query: '(max-width: 748px)'});
 
-   // If user has not loaded, display loading screen
-   if (authStatus === 'loading' || (authData.signedIn && !user.data)) {
+   // Wait to see if a user is signed in
+   if (authStatus === 'loading') {
       return (
          <div>Loading screen...</div>
       )

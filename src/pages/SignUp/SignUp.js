@@ -35,8 +35,6 @@ const SignUp = (props) => {
          updateProfile(user.user, {
             displayName: username
          }).then(() => {
-            console.log("Finished signin up")
-            history.push("/")
          })
       })
          .catch((err) => {
