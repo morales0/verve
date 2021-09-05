@@ -1,32 +1,23 @@
+import { AuthForm, AuthPage, EmailInput, PasswordInput } from 'components/ui';
 import 'firebase/auth'
+import { signInWithEmailAndPassword } from 'firebase/auth';
 import { useState } from 'react';
-import { Link, useHistory, useLocation } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { useAuth } from 'reactfire';
-import styled from 'styled-components/macro'
-import { AuthForm } from '../../components';
 
 const SignIn = (props) => {
    const [email, setEmail] = useState('');
    const [password, setPassword] = useState('');
-   const [error, setError] = useState();
+   const [error, setError] = useState(null);
    const auth = useAuth()
    const history = useHistory()
-   const location = useLocation()
 
    // Functions
    const signIn = () => {
-      auth.signInWithEmailAndPassword(email, password).then((user) => {
-         console.log("User signed in!")
-         // If a user was redirected, send back to that page (stopped working)
-         /* console.log(location.state)
-         if (location.state.from) {
-            history.push(location.state.from.pathname)
-         } else {
-            history.push("/workout")
-         } */
+      signInWithEmailAndPassword(auth, email, password).then((user) => {
+         history.push("/")
       })
       .catch((err) => {
-         console.log("Error", err)
          setEmail('')
          setPassword('')
          setError(err)
@@ -34,23 +25,23 @@ const SignIn = (props) => {
    }
 
    return (
-      <div css={`
-         display: grid;
-         place-items: center;
-         height: 100%;
-      `}>
-         <div>
+      <AuthPage>
+         <div className="form_wrapper">
             {error && <div> {error.message} </div>}
-            <AuthForm>
-               <input placeholder="Email" type="email" value={email}
-                  onChange={(e) => setEmail(e.target.value)} />
-               <input placeholder="Password" type="password" value={password}
-                  onChange={(e) => setPassword(e.target.value)} />
-               <button onClick={signIn}>Sign In</button>
-               <button onClick={() => history.push("/signUp")}>Sign Up</button>
+            <AuthForm headerName="Sign In" submitName="Submit" onSubmit={signIn}>
+               <EmailInput
+                  id="signinEmailInput"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+               />
+               <PasswordInput
+                  id="siginPasswordInput"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+               />
             </AuthForm>
          </div>
-      </div>
+      </AuthPage>
    );
 }
 

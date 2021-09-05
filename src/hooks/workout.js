@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useDatabase, useFirebaseApp, useUser } from "reactfire"
-import firebase from 'firebase'
+import firebase from 'firebase/compat/app'
 import { useHistory } from "react-router-dom";
 
 const useWorkout = () => {
