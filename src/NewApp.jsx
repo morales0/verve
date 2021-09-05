@@ -1,6 +1,7 @@
 import AuthApp from "AuthApp";
 import React, { useEffect } from "react";
 import { useDatabase, useSigninCheck, useUser } from "reactfire";
+import { useMediaQuery } from "react-responsive"
 import styled, { ThemeProvider } from "styled-components";
 import UnauthApp from "UnauthApp";
 
@@ -13,14 +14,10 @@ import UnauthApp from "UnauthApp";
 const NewApp = (props) => {
    const { status: authStatus, data: authData } = useSigninCheck()
    const user = useUser()
-   const db = useDatabase()
+   const isMobile = useMediaQuery({query: '(max-width: 748px)'});
 
-   useEffect(() => {
-      console.log(authStatus, authData, user)
-   }, [authStatus, authData, user]);
-
-   // Loading screen
-   if (authStatus === 'loading') {
+   // If user has not loaded, display loading screen
+   if (authStatus === 'loading' || (authData.signedIn && !user.data)) {
       return (
          <div>Loading screen...</div>
       )
@@ -29,7 +26,7 @@ const NewApp = (props) => {
    // Return the app!
    return (
       <ThemeProvider theme={{}}>
-         {authData.signedIn ? <AuthApp /> : <UnauthApp />}
+         {authData.signedIn ? <AuthApp isMobile={isMobile}/> : <UnauthApp isMobile={isMobile}/>}
       </ThemeProvider>
    );
 }

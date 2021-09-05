@@ -14,7 +14,7 @@ const MobileNavbar = (props) => {
             <T.BrandLink className='brand_link' exact to="/" activeClassName="activeNavLink">Verve</T.BrandLink>
             <NavGroup>
                <T.UserLink to='/user'>
-                  <img src={UserIcon} height='20' />
+                  <img src={UserIcon} alt="desktop navbar toggle triangle" height='20' />
                </T.UserLink>
                <T.Hamburger />
             </NavGroup>

@@ -1,40 +1,23 @@
-import { SideNavbar } from 'components/ui';
 import MobileNavbar from './MobileNavbar';
 import DesktopNavbar from './DesktopNavbar'
-import { useAuthCheck } from 'context/auth';
-import { useState, useEffect } from 'react';
-import { useMediaQuery } from 'react-responsive';
-import { useDatabase, useUser } from 'reactfire';
-import Navbar from '../../ui/Navbar/Navbar'
+import { useUser } from 'reactfire';
+import { useWorkingOutCheck } from "services/firebase/index"
+import { useEffect } from 'react';
 
-
-const UserNavbar = (props) => {
+const UserNavbar = ({ isMobile }) => {
    // State, hooks
    const user = useUser()
-   const db = useDatabase()
-   const [isWorkout, setIsWorkout] = useState(false);
+   const isWorkingOut = useWorkingOutCheck()
 
-   // Constants, vars
-   const workoutRef = db.ref(`users/${user.data.uid}/isWorkingOut`)
-
-   // Lifecycle
    useEffect(() => {
-      workoutRef.on('value', snapshot => {
-         if (snapshot.exists()) {
-            setIsWorkout(snapshot.val())
-         } else {
-            setIsWorkout(false)
-         }
-      })
-
-      return () => workoutRef.off()
-   }, []);
+      console.log(user)
+   });
 
    // Render the appropriate navbar
-   if (props.isMobile) {
-      return <MobileNavbar username={user.data.email} isWorkout={isWorkout} />
+   if (isMobile) {
+      return <MobileNavbar username={user.data.email} isWorkout={isWorkingOut} />
    } else {
-      return <DesktopNavbar username={user.data.email} isWorkout={isWorkout} />
+      return <DesktopNavbar username={user.data.email} isWorkout={isWorkingOut} />
    }
 }
  
