@@ -3,8 +3,9 @@ import 'firebase/auth'
 import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useAuth, useDatabase } from 'reactfire';
-import { createUserWithEmailAndPassword } from '@firebase/auth';
+import { createUserWithEmailAndPassword, updateProfile } from '@firebase/auth';
 import { TextInput } from './styled-components';
+import { ref, set } from '@firebase/database';
 
 const SignUp = (props) => {
    const [name, setName] = useState('')
@@ -18,7 +19,9 @@ const SignUp = (props) => {
 
    // Functions
    const createUser = (uid, email, name, username) => {
-      db.ref('users/' + uid).set({
+      const userDataRef = ref(db, 'users/' + uid)
+      
+      set(userDataRef, {
          uid: uid,
          email: email,
          name: name,
@@ -28,8 +31,13 @@ const SignUp = (props) => {
 
    const signUp = () => {
       createUserWithEmailAndPassword(auth, email, password).then((user) => {
-         createUser(user.user.uid, user.email, name, username)
-         history.push("/")
+         createUser(user.user.uid, user.user.email, name, username)
+         updateProfile(user.user, {
+            displayName: username
+         }).then(() => {
+            console.log("Finished signin up")
+            history.push("/")
+         })
       })
          .catch((err) => {
             setEmail('')

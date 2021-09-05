@@ -6,7 +6,7 @@ const useNavbar = () => useContext(NavbarContext)
 
 // Navbar gateway component
 const Navbar = ({ children, className }) => {
-   const [open, setOpen] = useState(false);
+   const [open, setOpen] = useState(true);
 
    return (
       <NavbarContext.Provider value={{ open, setOpen }}>

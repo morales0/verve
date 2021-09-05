@@ -1,6 +1,7 @@
 import { UserNavbar } from "components";
+import { useEffect } from "react";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
-import { useAuth } from "reactfire"
+import { useAuth, useUser } from "reactfire"
 import styled from "styled-components"
 
 const AuthAppWrapper = styled.div`
@@ -17,6 +18,11 @@ const AuthAppWrapper = styled.div`
 
 const AuthApp = (props) => {
    const auth = useAuth()
+   const user = useUser()
+
+   useEffect(() => {
+      console.log("AuthApp", user)
+   }, [JSON.stringify(user)]);
 
    return (
       <AuthAppWrapper isMobile={props.isMobile}>

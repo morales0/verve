@@ -9,15 +9,11 @@ const UserNavbar = ({ isMobile }) => {
    const user = useUser()
    const isWorkingOut = useWorkingOutCheck()
 
-   useEffect(() => {
-      console.log(user)
-   });
-
    // Render the appropriate navbar
    if (isMobile) {
-      return <MobileNavbar username={user.data.email} isWorkout={isWorkingOut} />
+      return <MobileNavbar username={user.data.displayName} isWorkout={isWorkingOut} />
    } else {
-      return <DesktopNavbar username={user.data.email} isWorkout={isWorkingOut} />
+      return <DesktopNavbar username={user.data.displayName} isWorkout={isWorkingOut} />
    }
 }
  
