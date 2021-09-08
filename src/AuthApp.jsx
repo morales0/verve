@@ -1,5 +1,6 @@
 import { onAuthStateChanged, updateProfile } from "@firebase/auth";
 import { UserNavbar } from "components";
+import { Home } from "pages";
 import { useEffect } from "react";
 import { BrowserRouter as Router, Switch, Route, Link, Redirect } from "react-router-dom";
 import { useAuth, useUser } from "reactfire"
@@ -69,9 +70,7 @@ const AuthApp = (props) => {
                   </div>
                </Route>
                <Route exact path="/">
-                  <div>
-                     <div>Welcome!</div>
-                  </div>
+                  <Home />
                </Route>
                <Route>
                   <Redirect to="/" />
