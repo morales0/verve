@@ -1,22 +1,15 @@
 import React, { useEffect } from 'react'
 import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
-import { useAuth, useDatabase, useDatabaseObjectData, useUser } from 'reactfire';
-import { useMediaQuery } from 'react-responsive';
-import { About, Builder, Calculator, Data, Demo, History, Home, SignIn, SignUp, Workout } from 'pages';
-import { useAuthCheck } from './context/auth';
-import { GuestNavbar, UserNavbar, PrivateRoute } from './components';
 import styled, { ThemeProvider } from 'styled-components';
-import ogExercises from 'data/original-exercises';
 
+import { useMediaQuery } from 'react-responsive';
+import { useAuthCheck } from './context/auth';
 
+import { useAuth, useDatabase, useDatabaseObjectData, useUser } from 'reactfire';
 
-/* 
-Providers:
-Firebase: Auth, User, and Database
-Theme Provider
-*/
-
-const routes = ["/signIn", "/signUp", "./workouts", "/history", "/user"]
+// Pages & Components
+import { About, Builder, Calculator, Data, Demo, History, Home, SignIn, SignUp, Workout } from 'pages';
+import { GuestNavbar, UserNavbar, PrivateRoute } from './components';
 
 // This will be to test out themes and colors site wide
 const draft_theme = {
@@ -32,6 +25,7 @@ const draft_theme = {
    }
 }
 
+// Dynamic styling for App
 const AppWrapper = styled.div`
    display: flex;
    flex-direction: ${props => props.vertical || props.theme.isMobile ? 'column' : 'row'};
@@ -58,13 +52,6 @@ function App() {
    useEffect(() => {
       console.log("App", authCheck.user)
    });
-
-   const createOG = () => {
-      console.log('hello')
-      const ogRef = db.ref('original-exercises')
-   
-      ogRef.set(ogExercises)
-   }
 
    return (
       <ThemeProvider theme={{...draft_theme, isMobile: isMobile}}>
@@ -124,9 +111,6 @@ function App() {
                         <button onClick={() => auth.signOut()}>Sign Out</button>
                      </div>
                   } />
-                  <Route path='/dev/og'>
-                     <button onClick={createOG}>CREATE OG</button>
-                  </Route>
                </Switch>
             </Router>
          </AppWrapper>

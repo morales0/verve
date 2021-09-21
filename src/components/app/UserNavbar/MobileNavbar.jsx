@@ -14,7 +14,7 @@ const MobileNavbar = (props) => {
             <T.BrandLink className='brand_link' exact to="/" activeClassName="activeNavLink">Verve</T.BrandLink>
             <NavGroup>
                <T.UserLink to='/user'>
-                  <img src={UserIcon} height='20' />
+                  <img src={UserIcon} alt="desktop navbar toggle triangle" height='20' />
                </T.UserLink>
                <T.Hamburger />
             </NavGroup>
@@ -22,7 +22,7 @@ const MobileNavbar = (props) => {
 
          <CollapseNav>
             {
-               userLinks.filter(link => link.name !== 'Workout' || props.isWorkout).map((link, i) => {
+               userLinks.filter(link => link.name !== 'Workout' || (props.isWorkout.status === "success" && props.isWorkout.data)).map((link, i) => {
                   return (
                      <li key={`${link.name}-${i}`}>
                         <T.AppNavLink

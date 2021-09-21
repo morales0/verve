@@ -8,12 +8,13 @@ import DeleteIcon from '../../../../images/cancel.png'
 import './Exercise.scss'
 import Set from '../Set/Set'
 import { SetMeasureLabel } from './styled-components'
+import { useWorkout } from 'pages/Workout/WorkoutContainer'
 
 const Exercise = (props) => {
    // Destructure props
    // Connect to the exercise in firebase
 
-   const [exercise, setExercise] = useState();
+   const { api } = useWorkout()
 
 
 
@@ -25,10 +26,10 @@ const Exercise = (props) => {
                {props.name}
             </h4>
             <div className="exerciseControl_container">
-					<button onClick={() => props.removeExercise(props.name)}>
+					<button onClick={() => api.removeExercise(props.name)}>
                   <img src={DeleteIcon} height="10px"/>
                </button>
-					<button onClick={() => props.completeExercise(props.name)} disabled={!props.sets}>
+					<button onClick={() => api.completeExercise(props.name)} disabled={!props.sets}>
                   <img src={CompleteIcon} height="10px"/>
                </button>
 				</div>
@@ -38,10 +39,12 @@ const Exercise = (props) => {
          <Flex crossAxis='stretch' className="exercise_content">
             {/* Buttons to add sets */}
             <Flex box column item stretch className="setControl_container">
-               <button onClick={() => props.addSet(props.name)}>
+               <button 
+                  onClick={() => api.addSetToExercise(props.name, 
+                     props.sets ? props.sets.length : 0, props.measures)}>
                   +
                </button>
-               <button onClick={()=>props.removeSet(props.name)} disabled={!props.sets}>
+               <button onClick={()=> api.removeSetFromExercise(props.name, props.sets.length - 1)} disabled={!props.sets}>
                   -
                </button>
             </Flex>
@@ -61,7 +64,7 @@ const Exercise = (props) => {
                                  return (
                                     <Set key={`${props.name}${m}${j}`} 
                                        value={set[m]} 
-                                       onChange={(newVal) => props.updateSet(props.name, j, m, newVal)} 
+                                       onChange={(newVal) => api.updateSetInExercise(props.name, j, m, newVal)} 
                                        css={`
                                           margin-top: 20px;
                                           background: transparent;

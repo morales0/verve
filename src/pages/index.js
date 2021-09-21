@@ -7,7 +7,7 @@ import History from "./History/History"
 import Home from "./Home/Home"
 import SignIn from "./SignIn/SignIn"
 import SignUp from "./SignUp/SignUp"
-import Workout from "./Workout/Workout"
+import { WorkoutContainer as Workout } from "./Workout/WorkoutContainer"
 
 export {
    About,

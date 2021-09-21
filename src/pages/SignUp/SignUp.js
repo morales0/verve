@@ -1,24 +1,27 @@
+import { AuthForm, AuthPage, EmailInput, PasswordInput } from 'components/ui';
 import 'firebase/auth'
 import { useState } from 'react';
-import { Link, useHistory, useLocation } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { useAuth, useDatabase } from 'reactfire';
-import styled from 'styled-components/macro'
-import { AuthForm } from '../../components';
+import { createUserWithEmailAndPassword, updateProfile } from '@firebase/auth';
+import { TextInput } from './styled-components';
+import { ref, set } from '@firebase/database';
 
 const SignUp = (props) => {
    const [name, setName] = useState('')
    const [username, setUsername] = useState('');
    const [email, setEmail] = useState('');
    const [password, setPassword] = useState('');
-   const [error, setError] = useState();
+   const [error, setError] = useState(null);
    const auth = useAuth()
    const db = useDatabase()
    const history = useHistory()
-   const location = useLocation()
 
    // Functions
    const createUser = (uid, email, name, username) => {
-      db.ref('users/' + uid).set({
+      const userDataRef = ref(db, 'users/' + uid)
+      
+      set(userDataRef, {
          uid: uid,
          email: email,
          name: name,
@@ -27,18 +30,14 @@ const SignUp = (props) => {
    }
 
    const signUp = () => {
-      auth.createUserWithEmailAndPassword(email, password).then((user) => {
-         // If a user was redirected, send back to that page (stopped working)
-         /* if (location.state.from) {
-            history.push(location.state.from.pathname)
-         } else {
-            history.push("/workout")
-         } */
-         createUser(user.user.uid, user.email, name, username)
-         
+      createUserWithEmailAndPassword(auth, email, password).then((user) => {
+         createUser(user.user.uid, user.user.email, name, username)
+         updateProfile(user.user, {
+            displayName: username
+         }).then(() => {
+         })
       })
          .catch((err) => {
-            console.log("Error", err)
             setEmail('')
             setPassword('')
             setError(err)
@@ -46,27 +45,29 @@ const SignUp = (props) => {
    }
 
    return (
-      <div css={`
-         display: grid;
-         place-items: center;
-         height: 100%;
-      `}>
-         <div>
+      <AuthPage>
+         <div className="form_wrapper">
             {error && <div> {error.message} </div>}
-            <AuthForm>
-               <input placeholder="Full Name" type="text" value={name}
-                  onChange={(e) => setName(e.target.value)} />
-               <input placeholder="Username" type="text" value={username}
-                  onChange={(e) => setUsername(e.target.value)} />
-               <input placeholder="Email" type="email" value={email}
-                  onChange={(e) => setEmail(e.target.value)} />
-               <input placeholder="Password" type="password" value={password}
-                  onChange={(e) => setPassword(e.target.value)} />
-               <button onClick={signUp}>Sign Up</button>
-               <button onClick={() => history.push("/signIn")}>Sign In</button>
+            <AuthForm headerName="Sign Up" submitName="Submit" onSubmit={signUp}>
+               <TextInput label="Full Name" placeholder="Full Name" 
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+               />
+               <TextInput label="Username" placeholder="Username" 
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+               />
+               <EmailInput 
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+               />
+               <PasswordInput 
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+               />
             </AuthForm>
          </div>
-      </div>
+      </AuthPage>
    );
 }
 

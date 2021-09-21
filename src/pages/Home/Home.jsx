@@ -1,48 +1,35 @@
 import { PageHeader } from 'components';
 import { useAuthCheck } from 'context/auth';
-import React, {useState, useEffect} from 'react'
+import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom';
-import { useAuth, useDatabase } from 'reactfire';
+import { useUser } from 'reactfire';
+import { useWorkingOutCheck } from "services/firebase/index"
+import { WorkoutLink } from './components/styled-components';
 
 import './Home.scss';
 
-
-
 const Home = () => {
-   const auth = useAuth()
-   const authCheck = useAuthCheck()
-   const db = useDatabase()
-   const [isWorkout, setIsWorkout] = useState(false);
-
-   // Constants, vars
-   const workoutRef = db.ref(`users/${authCheck.userAuth.uid}/isWorkingOut`)
-
-   // Lifecycle
-   useEffect(() => {
-      workoutRef.on('value', snapshot => {
-         if (snapshot.exists()) {
-            setIsWorkout(snapshot.val())
-         } else {
-            setIsWorkout(false)
-         }
-      })
-
-      return () => workoutRef.off()
-   }, []);
+   const user = useUser()
+   const isWorkingOut = useWorkingOutCheck()
 
    return (
       <div className="Home_container">
          <PageHeader title="Home" />
-         <div>More coming soon! Stay tuned.</div>
-         <Link to="/workout">
-            {
-               isWorkout ? (
-                  'Continue workout'
-               ) : (
-                  'Start a new workout'
-               )
-            }
-         </Link>
+         <div>Hey {user.data.displayName}, stay tuned for more content!</div>
+         {
+            isWorkingOut.status === "success" &&
+            <WorkoutLink to="/workout">
+               {
+                  (
+                     isWorkingOut.data ? (
+                        'Continue workout'
+                     ) : (
+                        'Start a new workout'
+                     )
+                  )
+               }
+            </WorkoutLink>
+         }
       </div>
    )
 }

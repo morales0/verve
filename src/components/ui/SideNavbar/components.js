@@ -2,6 +2,7 @@ import { NavLink } from "react-router-dom"
 import ArrowsIcon from 'images/triple-right-arrows.png'
 import styled from "styled-components"
 import { useNavbar } from "../Navbar/Navbar"
+import { useUser } from "reactfire"
 
 // Nav Links
 const StyledAppNavLink = styled(NavLink)`
@@ -100,11 +101,12 @@ const StyledUserLink = styled(StyledAppNavLink)`
 
 const UserLink = ({ icon, username, ...rest }) => {
    const { open } = useNavbar() 
+   const user = useUser()
 
    return (
       <StyledUserLink {...rest}>
          <img src={icon} height='20' />
-         {open && <div className='navLinkTitle_text'>{username}</div>}
+         {open && <div className='navLinkTitle_text'>{user.data.displayName}</div>}
       </StyledUserLink>
    )
 }
