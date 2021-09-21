@@ -1,6 +1,6 @@
 import { onAuthStateChanged, updateProfile } from "@firebase/auth";
 import { UserNavbar } from "components";
-import { Home } from "pages";
+import { Home, Workout } from "pages";
 import { useEffect } from "react";
 import { BrowserRouter as Router, Switch, Route, Link, Redirect } from "react-router-dom";
 import { useAuth, useUser } from "reactfire"
@@ -37,6 +37,7 @@ const AuthApp = (props) => {
 
    return (
       <AuthAppWrapper isMobile={props.isMobile}>
+         
          <Router>
             {/* User navbar */}
             <UserNavbar isMobile={props.isMobile}/>
@@ -44,22 +45,22 @@ const AuthApp = (props) => {
             {/* Render the requested page */}
             <Switch>
                <Route path="/workout">
-                  <div>Workout</div>
+                  <Workout />
                </Route>
                <Route path="/history">
-                  <div>History</div>
+                  <div style={{padding: ".6rem"}}>History coming soon!</div>
                </Route>
                <Route path="/data">
-                  <div>Data</div>
+                  <div style={{padding: ".6rem"}}>Data coming soon!</div>
                </Route>
                <Route path="/builder">
-                  <div>Builder</div>
+                  <div style={{padding: ".6rem"}}>Builder coming soon!</div>
                </Route>
                <Route path="/calculator">
-                  <div>Calculator</div>
+                  <div style={{padding: ".6rem"}}>Calculator coming soon!</div>
                </Route>
                <Route path="/about">
-                  <div>About</div>
+                  <div style={{padding: ".6rem"}}>About coming soon!</div>
                </Route>
                <Route path="/user">
                   <div>

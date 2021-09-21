@@ -1,12 +1,14 @@
 import { useEffect, useState } from "react";
-import { useDatabase, useFirebaseApp, useUser } from "reactfire"
+import { useDatabase, useDatabaseList, useFirebaseApp, useUser, useDatabaseObject} from "reactfire"
 import firebase from 'firebase/compat/app'
 import { useHistory } from "react-router-dom";
+import { onValue, ref, set } from "@firebase/database";
 
-const useWorkout = () => {
+/* const useWorkoutOLD = () => {
    // State
    const [status, setStatus] = useState('loading'); // loading | ok | error
    const [data, setData] = useState(null)
+   const [availEx, setAvailEx] = useState([]);
 
    // Hooks
    const history = useHistory()
@@ -14,17 +16,18 @@ const useWorkout = () => {
    const db = useDatabase()
    
    // Variables
-   const workout = db.ref(`users/${user.data.uid}/workout`)
-   const exList = db.ref(`users/${user.data.uid}/workout/exercises`)
+   const workoutRef = ref(db, `users/${user.data.uid}/workout`)
+   const ogExRef = ref(db, "original-exercises")
+   const exList = ref(db, `users/${user.data.uid}/workout/exercises`)
 
    // Subscribe to the current workout
    useEffect(() => {
-      workout.on('value', snapshot => {
+      onValue(workoutRef, snapshot => {
          // Create a new workout if none is found
          if (!snapshot.exists()) {
             console.log("No workout found, add")
             // Add a workout
-            workout.set({
+            set(workoutRef, {
                dateStarted: new Date().toString(),
                numExInProgress: 0,
                numExCompleted: 0
@@ -159,6 +162,48 @@ const useWorkout = () => {
    }   
 
    return { status, data, api }
+} */
+
+const useWorkout = () => {
+   const db = useDatabase()
+   const user = useUser()
+   const workoutRef = ref(db, `users/${user.data.uid}/workout`)
+   const exercisesRef = ref(db, `users/${user.data.uid}/workout-exercises`)
+
+   // const { status: workoutStatus, data: workoutData } = useDatabaseList(workoutRef)
+   const workoutSub = useDatabaseObject(workoutRef)
+   const exercisesSub = useDatabaseList(exercisesRef)
+
+   useEffect(() => {
+      console.log("Workout", workoutSub)
+
+      if (workoutSub.status === "success") {
+         // Create a workout if none exists
+         if (!workoutSub.data.snapshot.exists()) {
+            console.log("Adding workout");
+            set(workoutRef, {
+               dateStarted: new Date().toString(),
+               numExInProgress: 0,
+               numExCompleted: 0
+            })
+
+            set(ref(db, `users/${user.data.uid}/isWorkingOut`), true)
+         } else {
+            console.log(workoutSub.data.snapshot.val())
+         }
+      }
+   }, [workoutSub]);
+
+   useEffect(() => {
+      console.log("Exercises", exercisesSub)
+      
+   }, [exercisesSub.status]);
+
+   return { 
+      status: workoutSub.status,
+      workout: workoutSub.data,
+      exercises: exercisesSub.data
+   }
 }
 
 const useExercise = (eid) => {

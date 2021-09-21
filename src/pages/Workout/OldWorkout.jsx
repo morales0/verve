@@ -17,6 +17,7 @@ import ExerciseToolbar from './components/ExerciseToolbar/ExerciseToolbar';
 import { useMediaQuery } from 'react-responsive';
 import { Button } from 'components';
 import PopUp from 'components/ui/PopUp/PopUp';
+import { WorkoutPage } from './styled-components';
 
 const Workout = () => {
 	// Hooks
@@ -28,7 +29,7 @@ const Workout = () => {
 	const [exPopUpOpen, setExPopUpOpen] = useState(false);
 	const db = useDatabase()
 	const ogExRef = db.ref('original-exercises')
-	
+
 
 	//// Lifecycle methods
 
@@ -66,7 +67,7 @@ const Workout = () => {
 
 	// Render
 	return (
-		<div className="Workout">
+		<WorkoutPage>
 			<PopUp isOpen={exPopUpOpen} close={() => setExPopUpOpen(false)} title='Add Exercise' >
 				<input type='text' placeholder='Search Exercises' />
 				<div>
@@ -78,6 +79,18 @@ const Workout = () => {
 				</div>
 			</PopUp>
 
+			<div className="exercises_container">
+				<CurrentExercises
+					status={workout.status}
+				/>
+				
+
+				<CompletedExercises 
+				
+				/>	
+			</div>
+
+
 			<Flex column css={`overflow-y: auto`}>
 				{/* Exercises in progress */}
 				<Flex column css={`flex-grow: 1;`}>
@@ -87,7 +100,6 @@ const Workout = () => {
 							<img src={HamburgerIcon} alt="toggle for exercise list" height="30px" />
 						</ToolbarToggle> */}
 					</WorkoutHeader>
-
 					<Flex row wrap={true} crossAxis="flex-start" css={`
 						padding: .2rem .75rem .75rem .75rem;
 						flex-grow: 1;
@@ -103,7 +115,7 @@ const Workout = () => {
 								})
 								// No exercises
 							) : (
-								<div style={{width: '100%'}}>
+								<div style={{ width: '100%' }}>
 									{
 										isMobile ? (
 											<p>Add some exercises below</p>
@@ -168,7 +180,7 @@ const Workout = () => {
 				handleAdd={workout.api.addExercise}
 				collapsed={isMobile}
 			/>
-		</div>
+		</WorkoutPage>
 	);
 };
 

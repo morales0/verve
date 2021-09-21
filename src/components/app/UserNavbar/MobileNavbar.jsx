@@ -22,7 +22,7 @@ const MobileNavbar = (props) => {
 
          <CollapseNav>
             {
-               userLinks.filter(link => link.name !== 'Workout' || props.isWorkout).map((link, i) => {
+               userLinks.filter(link => link.name !== 'Workout' || (props.isWorkout.status === "success" && props.isWorkout.data)).map((link, i) => {
                   return (
                      <li key={`${link.name}-${i}`}>
                         <T.AppNavLink

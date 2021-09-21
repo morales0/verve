@@ -6,7 +6,7 @@ import { useDatabase, useUser } from "reactfire";
 const useWorkingOutCheck = () => {
    const user = useUser()
    const db = useDatabase()
-   const [isWorkingOut, setIsWorkingOut] = useState(false);
+   const [isWorkingOut, setIsWorkingOut] = useState({status: "loading", data: null});
    
    // Lifecycle
    useEffect(() => {
@@ -14,9 +14,9 @@ const useWorkingOutCheck = () => {
          const workoutRef = ref(db, `users/${user.data.uid}/isWorkingOut`)
          const workoutListener = onValue(workoutRef, snapshot => {
             if (snapshot.exists()) {
-               setIsWorkingOut(snapshot.val())
+               setIsWorkingOut({status: "success", data: snapshot.val()})
             } else {
-               setIsWorkingOut(false)
+               setIsWorkingOut({stauts: "error", data: false})
             }
          })
 
