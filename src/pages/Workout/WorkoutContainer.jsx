@@ -141,11 +141,30 @@ const WorkoutContainer = (props) => {
          console.log("Workout -- Complete workout")
 
          setCompleting(true)
+         const endDate = new Date().toString()
 
          // Save workout in history
          const workoutHistory = ref(db, `users/${user.data.uid}/history`)
-         push(workoutHistory, {
-            dateEnded: new Date().toString()
+         let histRef = push(workoutHistory, {
+            dateEnded: endDate
+         })
+         const exerciseHistory = ref(db, `users/${user.data.uid}/exercise-history`)
+
+         get(ref(db, `users/${user.data.uid}/workout-exercises`)).then(snapshot => {
+            let exercises = snapshot.val()
+
+            Object.values(exercises).forEach(ex => {
+               let currExRef = ref(db, `users/${user.data.uid}/exercise-history/${ex.name}`)
+               let exRef = push(currExRef, {
+                  date: endDate,
+                  sets: ex.sets
+               })
+
+               // Save key in history object
+               console.log(histRef)
+               let currHistRef = ref(db, `users/${user.data.uid}/history/${histRef.key}/exercises/${ex.name}`)
+               set(currHistRef, exRef.key)
+            })
          })
 
          // Remove workout

@@ -1,6 +1,6 @@
-import { ref } from "@firebase/database";
+import { off, onValue, ref } from "@firebase/database";
 import { useWorkout } from "pages/Workout/WorkoutContainer";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDatabase, useDatabaseList, useUser } from "reactfire";
 import styled from "styled-components/macro";
 import ExerciseGrid from "../ExerciseGrid/ExerciseGrid";
@@ -9,11 +9,24 @@ const CompletedExercises = ({ ...rest }) => {
    const db = useDatabase()
    const user = useUser()
    const exercisesRef = ref(db, `users/${user.data.uid}/workout-exercises`)
-   const exercises = useDatabaseList(exercisesRef)
+   const [exercises, setExercises] = useState({status: "loading", data: null});
 
    const { api, workoutData } = useWorkout()
 
-   console.log("<CompletedExercises /> Re-render", workoutData)
+   // Subscribe to exercise changes
+   useEffect(() => {
+      onValue(exercisesRef, snapshot => {
+         if (snapshot.exists()) {
+            setExercises({status: "success", data: Object.values(snapshot.val())})
+         } else {
+            setExercises({status: "success", data: null})
+         }
+      })
+
+      return () => off(exercisesRef)
+   }, []);
+
+   console.log("--- <CompletedExercises /> Re-render")
 
    return (
       <CompletedExercisesContainer>
@@ -28,8 +41,7 @@ const CompletedExercises = ({ ...rest }) => {
          </Header>
          <ExerciseGrid 
             status={exercises.status}
-            exercises={exercises.data?.map(ex => ex.snapshot.val())
-               .filter(ex => ex.complete)}
+            exercises={exercises.data?.filter(ex => ex.complete)}
             emptyMessage="Finish some exercises!"
          />
       </CompletedExercisesContainer>

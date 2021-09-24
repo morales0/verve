@@ -1,6 +1,6 @@
-import { ref } from "@firebase/database";
+import { off, onValue, ref } from "@firebase/database";
 import { Button } from "components";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDatabase, useDatabaseList, useUser } from "reactfire";
 import styled from "styled-components/macro";
 import { useWorkout } from "../../WorkoutContainer";
@@ -11,23 +11,39 @@ const CurrentExercises = ({ openExPopUp }) => {
    const db = useDatabase()
    const user = useUser()
    const exercisesRef = ref(db, `users/${user.data.uid}/workout-exercises`)
-   const exercises = useDatabaseList(exercisesRef)
+   const [exercises, setExercises] = useState({status: "loading", data: null});
    const { api } = useWorkout()
 
-   console.log("<CurrentExercises /> Re-render", exercises)
+   // Subscribe to exercise changes
+   useEffect(() => {
+      onValue(exercisesRef, snapshot => {
+         if (snapshot.exists()) {
+            setExercises({status: "success", data: Object.values(snapshot.val())})
+         } else {
+            setExercises({status: "success", data: null})
+         }
+      })
+
+      return () => off(exercisesRef)
+   }, []);
+
+
+   console.log("--- <CurrentExercises /> Render")
+
+   // Functions
+   const cancelWorkout = () => api.cancelWorkout()
 
    return (
       <CurrentExercisesContainer>
          <Header>
             <h3>My Workout</h3>
-            <CancelWorkoutBtn onClick={api.cancelWorkout}>
+            <CancelWorkoutBtn onClick={cancelWorkout}>
                Cancel
             </CancelWorkoutBtn>
          </Header>
-         <ExerciseGrid 
+         <ExerciseGrid
             status={exercises.status}
-            exercises={exercises.data?.map(ex => ex.snapshot.val())
-               .filter(ex => !ex.complete)}
+            exercises={exercises.data?.filter(ex => !ex.complete)}
             emptyMessage="Add exercises below!"
          />
          <AddExerciseBtn onClick={openExPopUp}>
