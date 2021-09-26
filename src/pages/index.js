@@ -7,6 +7,7 @@ import History from "./History/History"
 import Home from "./Home/Home"
 import SignIn from "./SignIn/SignIn"
 import SignUp from "./SignUp/SignUp"
+import User from "./User/User"
 import { WorkoutContainer as Workout } from "./Workout/WorkoutContainer"
 
 export {
@@ -19,5 +20,6 @@ export {
    Home,
    SignIn,
    SignUp,
+   User,
    Workout
 }

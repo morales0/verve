@@ -12,14 +12,14 @@ import UnauthApp from "UnauthApp";
 // TODO: Create theme and global styles
 // This will be to test out themes and colors site wide
 const darkModeDRAFT = {
-   name: 'dark',
+   name: 'Dark',
    fg: '#fff', // Used for foreground white text
    bg: '#404040', // Used for background black
    gray: '#adadad',
 }
 
 const lightModeDRAFT = {
-   name: 'main',
+   name: 'Light',
    fg: '#333',
    bg: '#fefefe',
    gray: '#adadad',
@@ -28,7 +28,7 @@ const lightModeDRAFT = {
 const NewApp = (props) => {
    const { status: authStatus, data: authData } = useSigninCheck()
    const isMobile = useMediaQuery({query: '(max-width: 748px)'});
-   const [currTheme, setCurrTheme] = useState(lightModeDRAFT);
+   const [currTheme, setCurrTheme] = useState("light");
 
    // Wait to see if a user is signed in
    if (authStatus === 'loading') {
@@ -39,8 +39,8 @@ const NewApp = (props) => {
 
    // Return the app!
    return (
-      <ThemeProvider theme={currTheme}>
-         {authData.signedIn ? <AuthApp isMobile={isMobile}/> : <UnauthApp isMobile={isMobile}/>}
+      <ThemeProvider theme={currTheme === "light" ? lightModeDRAFT : darkModeDRAFT}>
+         {authData.signedIn ? <AuthApp isMobile={isMobile} setCurrTheme={setCurrTheme}/> : <UnauthApp isMobile={isMobile}/>}
       </ThemeProvider>
    );
 }

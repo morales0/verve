@@ -1,6 +1,6 @@
 import { onAuthStateChanged, updateProfile } from "@firebase/auth";
 import { UserNavbar } from "components";
-import { Home, Workout } from "pages";
+import { Home, User, Workout } from "pages";
 import { useEffect } from "react";
 import { BrowserRouter as Router, Switch, Route, Link, Redirect } from "react-router-dom";
 import { useAuth, useUser } from "reactfire"
@@ -63,12 +63,7 @@ const AuthApp = (props) => {
                   <div style={{padding: ".6rem"}}>About coming soon!</div>
                </Route>
                <Route path="/user">
-                  <div>
-                     <div>{user.data.displayName}</div>
-                     <button onClick={() => auth.signOut()}>
-                        Sign Out
-                     </button>
-                  </div>
+                  <User setCurrTheme={props.setCurrTheme}/>
                </Route>
                <Route exact path="/">
                   <Home />

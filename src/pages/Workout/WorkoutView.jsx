@@ -3,21 +3,15 @@ import { useMediaQuery } from 'react-responsive';
 import AddExercisePopUp from './components/AddExercisePopUp/AddExercisePopUp';
 import CompletedExercises from './components/CompletedExercises/CompletedExercises';
 import CurrentExercises from './components/CurrentExercises/CurrentExercises';
-import { WorkoutPage } from './styled-components';
+import { WorkoutPage } from './styles';
 
 const WorkoutView = () => {
-	// Hooks
-	const isMobile = useMediaQuery({ query: '(max-width: 600px)' })
 	const [exPopUpOpen, setExPopUpOpen] = useState(false);
 
 	const closeExPopUp = () => setExPopUpOpen(false)
 
-	// DEV
-	useEffect(() => {
-		console.log("<WorkoutView /> Re-render")
-	});
+	console.log("<WorkoutView /> Re-render")
 
-	// Render
 	return (
 		<WorkoutPage>
 			{/* PopUps for adding and creating exercises */}
@@ -35,7 +29,7 @@ const WorkoutView = () => {
 				<CompletedExercises />	
 			</div>
 
-			{/* Sidebar for adding and creating exercises */}
+			{/* Sidebar for adding and creating exercises? */}
 
 		</WorkoutPage>
 	);

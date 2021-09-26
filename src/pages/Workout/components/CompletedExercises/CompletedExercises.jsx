@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { useDatabase, useDatabaseList, useUser } from "reactfire";
 import styled from "styled-components/macro";
 import ExerciseGrid from "../ExerciseGrid/ExerciseGrid";
+import { CompletedExercisesContainer, Header } from "./styles";
 
 const CompletedExercises = ({ ...rest }) => {
    const db = useDatabase()
@@ -47,20 +48,5 @@ const CompletedExercises = ({ ...rest }) => {
       </CompletedExercisesContainer>
    );
 }
-
-const CompletedExercisesContainer = styled.div`
-   
-`
-
-const Header = styled.header`
-   display: flex;
-   justify-content: space-between;
-`
-
-const FinishBtn = styled.button`
-   padding: .5rem .6rem;
-   border: 1px solid #59b751;
-   background-color: #f9f9f9;
-`
  
 export default React.memo(CompletedExercises);

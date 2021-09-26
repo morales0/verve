@@ -29,9 +29,7 @@ const WorkoutContainer = (props) => {
 
    // Create exercise if one doesn't exist
    useEffect(() => {
-      console.log(isWorkingOut)
       if (!completing && (isWorkingOut.status === "success") && !(isWorkingOut.data)){
-         console.log("Adding workout");
          set(workoutRef, {
             dateStarted: new Date().toString(),
             numExInProgress: 0,
@@ -138,8 +136,6 @@ const WorkoutContainer = (props) => {
 
       // Workout functions
       completeWorkout: () => {
-         console.log("Workout -- Complete workout")
-
          setCompleting(true)
          const endDate = new Date().toString()
 
@@ -195,12 +191,6 @@ const WorkoutContainer = (props) => {
       updateWorkout: () => { alert("Not implemented yet") },
    }
 
-   // Workout Page Control
-   const pageControl = {
-      openExPopUp: () => setExPopUpOpen(true),
-      closeExPopUp: () => setExPopUpOpen(false),
-   }
-
    // If in the completion phase
    if (completing) {
       return (
@@ -211,7 +201,7 @@ const WorkoutContainer = (props) => {
    // Check if workout exists
    if (isWorkingOut.status === "loading"){
       return (
-         <div>Loading your workout...</div>
+         <div>Finding your workout...</div>
       )
    } else if (isWorkingOut.data === "false") {
       return (

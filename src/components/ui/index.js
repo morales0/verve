@@ -7,6 +7,7 @@ import * as SideNavbarComponents from "./SideNavbar/components"
 import TopNavbar from "./TopNavbar/TopNavbar"
 import * as TopNavbarComponents from "./TopNavbar/components"
 import TriangleToggle from "./TriangleToggle/TriangleToggle";
+import ThemeToggle from "./ThemeToggle/ThemeToggle"
 
 export {
    AuthPage,
@@ -17,5 +18,6 @@ export {
    SideNavbarComponents,
    TopNavbar,
    TopNavbarComponents,
-   TriangleToggle
+   TriangleToggle,
+   ThemeToggle
 }
