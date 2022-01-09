@@ -9,6 +9,7 @@ const StyledUserNavbar = styled.div`
    display: flex;
    justify-content: space-between;
    align-items: center;
+   flex-shrink: 0;
    padding: 0;
    border-bottom: 1px solid #bebebe;
    height: 40px;
