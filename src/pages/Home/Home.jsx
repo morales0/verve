@@ -12,6 +12,7 @@ import { HomeContainer, Calendar, Day } from './styles';
 const Home = () => {
    const user = useUser()
    const isWorkingOut = useWorkingOutCheck()
+   console.log(isWorkingOut)
 
    return (
       <HomeContainer>
@@ -19,24 +20,17 @@ const Home = () => {
             <Day>
                <header className="day_header">
                   <h2>Today</h2>
-                  {
-                     isWorkingOut.status === "success" &&
-                     <WorkoutLink to="/workout">
-                        {
-                           (
-                              isWorkingOut.data ? (
-                                 'Continue workout'
-                              ) : (
-                                 'Start a new workout'
-                              )
-                           )
-                        }
-                     </WorkoutLink>
-                  }
                </header>
 
                <div className="day_content">
-                  No workouts for today... yet
+                  {
+                     isWorkingOut.status === 'success' && !isWorkingOut.data && 
+                     (
+                        <WorkoutLink to="/workout">
+                           Start a new workout
+                        </WorkoutLink>
+                     )
+                  }
                </div>
             </Day>
          </Calendar>

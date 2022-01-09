@@ -18,7 +18,7 @@ import UnauthApp from "UnauthApp";
 const NewApp = () => {
    // Useful App global state
    const { status: authStatus, data: authData } = useSigninCheck()
-   const [theme, setTheme] = useState("light");
+   const [theme, setTheme] = useState("dark");
 
    // Wait to see if a user is signed in
    if (authStatus === 'loading') {

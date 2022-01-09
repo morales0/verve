@@ -20,7 +20,7 @@ const AuthAppWrapper = styled.div`
    flex-direction: column;
    height: 100%;
 
-   background-color: ${props => props.theme.bg};
+   background-color: ${props => props.theme.app_bg};
    color: ${props => props.theme.fg};
 
    & > div:nth-child(2) {
