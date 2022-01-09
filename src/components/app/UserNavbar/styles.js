@@ -28,8 +28,10 @@ const User = styled(NavLink)`
    display: flex;
    align-items: center;
    padding: 0 .5rem;
-   height: 100%;
+   height: 80%;
    background: lavender;
+   border-radius: 20%;
+   margin-right: 5px;
    text-decoration: none;
    color: inherit;
 `
@@ -55,7 +57,9 @@ const Nav = styled.nav`
 
 const StyledThemeButton = styled.button`
    display: flex;
-   padding: 0 .25rem;
+   align-items: center;
+   padding: 0 .5rem;
+   height: 100%;
 
    background-color: transparent;
    cursor: pointer;
@@ -71,17 +75,15 @@ const ThemeButton = ({ setTheme }) => {
    }
 
    return (
-      <StyledThemeButton>
+      <StyledThemeButton onClick={switchTheme}>
          {
             theme.name === 'light' ? (
                <img src={SunnyIcon} 
                   alt="theme switch" height='25px' 
-                  onClick={switchTheme}
                />
             ) : (
                <img src={MoonIcon} 
                   alt="theme switch" height='25px' 
-                  onClick={switchTheme}
                />
             )
          }

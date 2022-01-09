@@ -5,13 +5,23 @@ import { useEffect } from "react";
 import { useMediaQuery } from "react-responsive";
 import { BrowserRouter as Router, Redirect, Route, Switch } from "react-router-dom";
 import { useAuth, useUser } from "reactfire";
-import styled from "styled-components";
+import styled, { createGlobalStyle } from "styled-components";
+
+const GlobalStyle = createGlobalStyle`
+  body {
+   background-color: ${props => props.theme.bg};
+   color: ${props => props.theme.fg};
+  }
+`
 
 // Dynamic styling for Auth app
 const AuthAppWrapper = styled.div`
    display: flex;
    flex-direction: column;
    height: 100%;
+
+   background-color: ${props => props.theme.bg};
+   color: ${props => props.theme.fg};
 
    & > div:nth-child(2) {
       flex-grow: 1; /* Fill up space */
@@ -32,6 +42,8 @@ const AuthApp = (props) => {
    }
 
    return (
+      <>
+      <GlobalStyle />
       <AuthAppWrapper isMobile={isMobile}>
          <Router>
             {/* User navbar */}
@@ -76,6 +88,7 @@ const AuthApp = (props) => {
             </Switch>
          </Router>
       </AuthAppWrapper>
+      </>
    )
 }
 
