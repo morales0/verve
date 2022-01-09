@@ -1,6 +1,7 @@
 import { useWorkout } from "pages/Workout/WorkoutContainer";
 import { useEffect } from "react";
 import styled from "styled-components";
+import { ExerciseControlBtn, ExerciseStyle, Header, SetControlBtn } from "./styles";
 
 
 const Exercise = ({ name, sets, measures, complete, ...rest }) => {

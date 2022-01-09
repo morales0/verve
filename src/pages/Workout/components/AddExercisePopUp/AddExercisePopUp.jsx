@@ -2,6 +2,7 @@ import PopUp from "components/ui/PopUp/PopUp";
 import { useWorkout } from "pages/Workout/WorkoutContainer";
 import { useState } from "react";
 import { ExerciseInfo } from "../ExerciseToolbar/components";
+import CreateExerciseForm from "./CreateExerciseForm";
 
 const AddExercisePopUp = (props) => {
    const { api, pageState } = useWorkout()

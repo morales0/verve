@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { useDatabase, useDatabaseList, useUser } from "reactfire";
 import styled from "styled-components/macro";
 import ExerciseGrid from "../ExerciseGrid/ExerciseGrid";
-import { CompletedExercisesContainer, Header } from "./styles";
+import { CompletedExercisesContainer, FinishBtn, Header } from "./styles";
 
 const CompletedExercises = ({ ...rest }) => {
    const db = useDatabase()

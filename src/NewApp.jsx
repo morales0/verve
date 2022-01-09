@@ -1,48 +1,43 @@
+/**
+ * TODO:
+ * - Consider theme setter context maybe?
+ * - Integrate lazy load for performance
+ */
+
 import AuthApp from "AuthApp";
-import React, { useEffect, useState } from "react";
-import { useDatabase, useSigninCheck, useUser } from "reactfire";
-import { useMediaQuery } from "react-responsive"
-import styled, { ThemeProvider } from "styled-components";
+import React, { useState } from "react";
+import { useSigninCheck } from "reactfire";
+import { ThemeProvider } from "styled-components";
+import themes from "styles/themes";
 import UnauthApp from "UnauthApp";
 
 // Lazy load apps (need suspense)
 // const AuthApp = React.lazy(() => import('./AuthApp'))
 // const UnauthApp = React.lazy(() => import('./UnauthApp'))
 
-// TODO: Create theme and global styles
-// This will be to test out themes and colors site wide
-const darkModeDRAFT = {
-   name: 'Dark',
-   fg: '#fff', // Used for foreground white text
-   bg: '#404040', // Used for background black
-   gray: '#adadad',
-}
-
-const lightModeDRAFT = {
-   name: 'Light',
-   fg: '#333',
-   bg: '#fefefe',
-   gray: '#adadad',
-}
-
-const NewApp = (props) => {
+const NewApp = () => {
+   // Useful App global state
    const { status: authStatus, data: authData } = useSigninCheck()
-   const isMobile = useMediaQuery({query: '(max-width: 748px)'});
-   const [currTheme, setCurrTheme] = useState("light");
+   const [theme, setTheme] = useState("light");
 
    // Wait to see if a user is signed in
    if (authStatus === 'loading') {
       return (
-         <div>Loading screen...</div>
+         <div>Loading...</div>
       )
    }
 
    // Return the app!
    return (
-      <ThemeProvider theme={currTheme === "light" ? lightModeDRAFT : darkModeDRAFT}>
-         {authData.signedIn ? <AuthApp isMobile={isMobile} setCurrTheme={setCurrTheme}/> : <UnauthApp isMobile={isMobile}/>}
+      <ThemeProvider theme={themes[theme]}>
+         {
+            authData.signedIn ?
+               <AuthApp setTheme={setTheme} />
+            :
+               <UnauthApp />
+         }
       </ThemeProvider>
    );
 }
- 
+
 export default NewApp;

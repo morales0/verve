@@ -1,6 +1,6 @@
-import { GuestNavbar } from "components"
+import { GuestNavbar } from "components";
 import { SignIn, SignUp } from "pages";
-import { BrowserRouter as Router, Switch, Route, Link, Redirect } from "react-router-dom";
+import { BrowserRouter as Router, Redirect, Route, Switch } from "react-router-dom";
 import styled from "styled-components";
 
 const UnauthAppWrapper = styled.div`

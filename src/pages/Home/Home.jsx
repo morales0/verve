@@ -7,38 +7,40 @@ import { useWorkingOutCheck } from "services/firebase/index"
 import { WorkoutLink } from './components/styled-components';
 
 import './Home.scss';
+import { HomeContainer, Calendar, Day } from './styles';
 
 const Home = () => {
    const user = useUser()
    const isWorkingOut = useWorkingOutCheck()
 
    return (
-      <div className="Home_container">
-         <PageHeader title="Home" />
-         <div>Hey {user.data.displayName}, stay tuned for more content!</div>
-         {
-            isWorkingOut.status === "success" &&
-            <WorkoutLink to="/workout">
-               {
-                  (
-                     isWorkingOut.data ? (
-                        'Continue workout'
-                     ) : (
-                        'Start a new workout'
-                     )
-                  )
-               }
-            </WorkoutLink>
-         }
-      </div>
-   )
-}
+      <HomeContainer>
+         <Calendar>
+            <Day>
+               <header className="day_header">
+                  <h2>Today</h2>
+                  {
+                     isWorkingOut.status === "success" &&
+                     <WorkoutLink to="/workout">
+                        {
+                           (
+                              isWorkingOut.data ? (
+                                 'Continue workout'
+                              ) : (
+                                 'Start a new workout'
+                              )
+                           )
+                        }
+                     </WorkoutLink>
+                  }
+               </header>
 
-const DashboardCard = (props) => {
-   return (
-      <div className="DashboardCard">
-         {props.children}
-      </div>
+               <div className="day_content">
+                  No workouts for today... yet
+               </div>
+            </Day>
+         </Calendar>
+      </HomeContainer>
    )
 }
 

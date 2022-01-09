@@ -2,6 +2,8 @@
 * {
    padding: 0;
    margin: 0;
+	transition: color 0s;
+	transition: background-color .2s;
 }
 
 html {
@@ -24,9 +26,6 @@ body {
 
 #root {
 	height: 100%;
-}
-
-#root > div:first-of-type {
 }
 
 *,

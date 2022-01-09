@@ -1,7 +1,7 @@
 import { ThemeToggle } from "components/ui";
 import { useAuth, useUser } from "reactfire";
 
-const User = ({ setCurrTheme }) => {
+const UserPage = ({ setCurrTheme }) => {
    const user = useUser()
    const auth = useAuth()
 
@@ -11,9 +11,8 @@ const User = ({ setCurrTheme }) => {
          <button onClick={() => auth.signOut()}>
             Sign Out
          </button>
-         <ThemeToggle setCurrTheme={setCurrTheme}/>
       </div>
    );
 }
 
-export default User;
+export default UserPage;

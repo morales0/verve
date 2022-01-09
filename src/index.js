@@ -1,12 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App';
 
 import { FirebaseAppProvider } from 'reactfire';
 import { AuthProvider } from './context/auth';
-import NewApp from 'NewApp';
 import FirebaseProviders from 'context/firebaseProviders';
+
+import NewApp from 'NewApp';
 
 // Firebase config
 const firebaseConfig = {
@@ -24,7 +24,6 @@ const firebaseConfig = {
 ReactDOM.render(
   <React.StrictMode>
     <FirebaseAppProvider firebaseConfig={firebaseConfig}>
-      {/* <App /> */}
       <FirebaseProviders>
         <NewApp />
       </FirebaseProviders>

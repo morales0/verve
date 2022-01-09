@@ -1,20 +1,39 @@
-import MobileNavbar from './MobileNavbar';
-import DesktopNavbar from './DesktopNavbar'
+import UserIcon from 'images/user.png';
 import { useUser } from 'reactfire';
-import { useWorkingOutCheck } from "services/firebase/index"
-import { useEffect } from 'react';
+import { useWorkingOutCheck } from "services/firebase/index";
+import { Brand, Nav, StyledUserNavbar, User, UserNavLink, ThemeButton } from './styles';
 
-const UserNavbar = ({ isMobile }) => {
-   // State, hooks
+
+/* 
+TODO:
+* Add dropdown functionality
+*/
+const UserNavbar = ({ setTheme }) => {
    const user = useUser()
    const isWorkingOut = useWorkingOutCheck()
 
-   // Render the appropriate navbar
-   if (isMobile) {
-      return <MobileNavbar username={user.data.displayName} isWorkout={isWorkingOut} />
-   } else {
-      return <DesktopNavbar username={user.data.displayName} isWorkout={isWorkingOut} />
-   }
+   return (
+      <StyledUserNavbar>
+         <Brand exact to="/">Verve</Brand>
+
+         <Nav>
+            <UserNavLink exact to="/data">
+               Data
+            </UserNavLink>
+         </Nav>
+
+         <Nav>
+            <ThemeButton setTheme={setTheme}/>
+            
+            <UserNavLink exact to="/workout">
+               Workout
+            </UserNavLink>
+            <User exact to="/user">
+               <img src={UserIcon} alt="user icon" height='20' />
+            </User>
+         </Nav>
+      </StyledUserNavbar>
+   )
 }
  
 export default UserNavbar;

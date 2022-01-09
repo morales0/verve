@@ -8,6 +8,7 @@ import TopNavbar from "./TopNavbar/TopNavbar"
 import * as TopNavbarComponents from "./TopNavbar/components"
 import TriangleToggle from "./TriangleToggle/TriangleToggle";
 import ThemeToggle from "./ThemeToggle/ThemeToggle"
+import { TextInput } from "./Input/Input"
 
 export {
    AuthPage,
@@ -19,5 +20,6 @@ export {
    TopNavbar,
    TopNavbarComponents,
    TriangleToggle,
-   ThemeToggle
+   ThemeToggle,
+   TextInput
 }

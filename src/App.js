@@ -46,12 +46,6 @@ function App() {
    // Desktop will have a responsive side navbar
    // Mobile will have a responsive top navbar
    const isMobile = useMediaQuery({query: '(max-width: 748px)'});
-   const db = useDatabase()
-
-
-   useEffect(() => {
-      console.log("App", authCheck.user)
-   });
 
    return (
       <ThemeProvider theme={{...draft_theme, isMobile: isMobile}}>
