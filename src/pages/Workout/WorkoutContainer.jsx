@@ -1,4 +1,4 @@
-import { get, ref, set, update, increment, push, remove } from "@firebase/database";
+import { get, ref, set, update, increment, push, remove, onValue, off } from "@firebase/database";
 import React, { useState, useEffect, useContext } from "react";
 import { useHistory } from "react-router";
 import { useDatabase, useDatabaseList, useDatabaseObject, useUser } from "reactfire";
@@ -17,30 +17,51 @@ const WorkoutContainer = (props) => {
    const ogExRef = ref(db, 'original-exercises')
    const userRef = ref(db, `users/${user.data.uid}`)
    const workoutRef = ref(db, `users/${user.data.uid}/workout`)
-   const exercisesRef = ref(db, `users/${user.data.uid}/workout-exercises`)
-   const workoutData = useDatabaseObject(workoutRef)
-   const isWorkingOut = useWorkingOutCheck()
-   const [completing, setCompleting] = useState(false);
+   const exercisesRef = ref(db, `users/${user.data.uid}/workout/exercises`)
+   const [workoutData, setWorkoutData] = useState({status: 'loading', data: null})
 
    // Page state
+   const [completing, setCompleting] = useState(false);
    const [exPopUpOpen, setExPopUpOpen] = useState(false);
-   const [ogEx, setOgEx] = useState([]);
    const [exToAdd, setExToAdd] = useState([]);
 
-   // Create exercise if one doesn't exist
+   // Subscribe to workout ref
    useEffect(() => {
-      if (!completing && (isWorkingOut.status === "success") && !(isWorkingOut.data)){
-         set(workoutRef, {
-            dateStarted: new Date().toString(),
-            numExInProgress: 0,
-            numExCompleted: 0
-         }).then(() => {
-            set(ref(db, `users/${user.data.uid}/isWorkingOut`), true)
-         }).catch((err) => {
-            console.error("Adding workout failed", err)
-         })
-      }
-   }, [isWorkingOut]);
+      const workoutListener = onValue(workoutRef, snapshot => {
+         console.log("workoutData onvalue");
+         if (!snapshot.exists()) {
+            setWorkoutData({status: 'error', data: null})
+         }
+
+         let data = snapshot.val()
+
+         // Check if there is a current workout
+         let inProgress = data['inProgress']
+
+         // If not, set up parameters
+         if (!inProgress) {
+            setWorkoutData(curr => {return {...curr, status: 'creating'}})
+
+            let now = new Date()
+            let time = now.toLocaleTimeString('en-US', {hour: 'numeric', minute: '2-digit'});
+
+            set(workoutRef, {
+               dateStarted: new Date().toString(),
+               timeStarted: time,
+               numExInProgress: 0,
+               numExCompleted: 0,
+               inProgress: true
+            }).catch(err => {
+               console.error("Beginning a new workout failed", err)
+            })
+         // Update workout state
+         } else {
+            setWorkoutData({status: 'success', data: data})
+         }
+      })
+
+      return () => workoutListener()
+   }, []);
 
    // Populate current exercises
    useEffect(() => {
@@ -73,23 +94,23 @@ const WorkoutContainer = (props) => {
             }, {})
          )
 
-         updates[`/workout-exercises/${name}`] = {
+         updates[`/exercises/${name}`] = {
             name: name,
             complete: false,
             measures: measures,
             sets: starterSets
          };
-         updates['workout/numExInProgress'] = increment(1)
+         updates['/numExInProgress'] = increment(1)
 
-         update(userRef, updates)
+         update(workoutRef, updates)
       },
       removeExercise: (name) => {
          const updates = {}
 
-         updates[`/workout-exercises/${name}`] = null;
-         updates['/workout/numExInProgress'] = increment(-1)
+         updates[`/exercises/${name}`] = null;
+         updates['/numExInProgress'] = increment(-1)
 
-         update(userRef, updates)
+         update(workoutRef, updates)
       },
       completeExercise: (name) => {
          const updates = {}
@@ -176,13 +197,13 @@ const WorkoutContainer = (props) => {
       },
       cancelWorkout: () => {
          setCompleting(true)
-         
-         // Remove workout
-         remove(exercisesRef)
-         remove(workoutRef)
 
-         // Set user to not working out
-         set(ref(db, `users/${user.data.uid}/isWorkingOut`), false).then(() => {
+         // Close listener
+         off(workoutRef)
+
+         set(workoutRef, {
+            inProgress: false
+         }).then(() => {
             // Send user to a summary page, then to the home page
             history.push("/home")
          })
@@ -199,23 +220,24 @@ const WorkoutContainer = (props) => {
    }
 
    // Check if workout exists
-   if (isWorkingOut.status === "loading"){
+   if (workoutData.status === "loading"){
       return (
          <div>Finding your workout...</div>
       )
-   } else if (isWorkingOut.data === "false") {
+   } else if (workoutData.status === 'creating') {
       return (
-         <div>Creating workout...</div>
+         <div>Creating your workout...</div>
       )
    }
 
+   // Serve state and setters to the workout view
    return (
       <WorkoutContext.Provider value={{
          api: api,
          pageState: {
             exToAdd: exToAdd
          },
-         workoutData: workoutData.data?.snapshot.val()
+         workoutData: workoutData
       }}>
          <WorkoutView />
       </WorkoutContext.Provider>

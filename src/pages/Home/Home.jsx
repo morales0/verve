@@ -57,7 +57,7 @@ const Home = () => {
             {
                // Display the last three days
                [...Array(3)].map((_, i) => {
-                  // Calculate the current date
+                  // Calculate the ith date
                   let currDay = new Date()
                   currDay.setDate(today.getDate() - i)
 
@@ -65,7 +65,7 @@ const Home = () => {
                   let currWorkouts = []
 
                   return (
-                     <Day key={i}>
+                     <Day key={`day-${i}`}>
                         <header className="day_header">
                            <h2>{toDateString(currDay)}</h2>
                         </header>
@@ -74,13 +74,14 @@ const Home = () => {
                               // If today, check for current workout
                               i === 0 &&
                               currWorkout.status === 'success' && (
-                                 currWorkout.data ? (
+                                 currWorkout.data?.inProgress ? (
                                     <WorkoutCard to="/workout" completed={false} {...currWorkout.data} />
                                  ) : (
                                     <WorkoutLink to="/workout">
                                        Start a new workout
                                     </WorkoutLink>
-                                 ))
+                                 )
+                              )
 
                            }
                            {
@@ -88,7 +89,7 @@ const Home = () => {
                                  i !== 0 && <p>No data</p>
                               ) : (
                                  currWorkouts.map((w, j) => (
-                                    <WorkoutCard {...w} />
+                                    <WorkoutCard key={`day-${i}-workout-${j}`} {...w} />
                                  ))
                               )
                            }

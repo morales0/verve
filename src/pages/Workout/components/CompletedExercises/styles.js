@@ -12,7 +12,10 @@ const Header = styled.header`
 const FinishBtn = styled.button`
    padding: .5rem .6rem;
    border: 1px solid #59b751;
-   background-color: #f9f9f9;
+   box-shadow: 0 0 3px 1px rgba(0,0,0,15%);
+
+   background-color: ${props => props.theme.bg};
+   color: ${props => props.theme.fg};
 `
 
 export {

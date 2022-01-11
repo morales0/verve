@@ -1,17 +1,18 @@
 import styled from "styled-components";
 
-const WorkoutPage = styled.div`
+const StyledWorkoutView = styled.div`
 
+`
 
-   // Main section for exercises
-   & > .exercises_container {
-      display: flex;
-      flex-direction: column;
-      height: 100%;
-      padding: .5rem;
-   }
+const Body = styled.div`
+   display: flex;
+   flex-direction: column;
+   height: 100%;
+   padding: .5rem;
+   overflow-y: auto;
 `
 
 export {
-   WorkoutPage
+   StyledWorkoutView,
+   Body
 }

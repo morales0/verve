@@ -1,11 +1,11 @@
 import Exercise from "../Exercise/Exercise";
-import { ExerciseGridStyle } from "./styles";
+import { StyledExerciseGrid } from "./styles";
 
 const ExerciseGrid = ({ status, exercises, emptyMessage }) => {
-   console.log("<ExerciseGrid /> Re-render")
+   console.log("--- <ExerciseGrid />")
 
    return (
-      <ExerciseGridStyle>
+      <StyledExerciseGrid>
          {
             status === "loading" ? (
                <div>Loading exercises...</div>
@@ -21,7 +21,7 @@ const ExerciseGrid = ({ status, exercises, emptyMessage }) => {
                <div>Something went wrong...</div>
             )
          }
-      </ExerciseGridStyle>
+      </StyledExerciseGrid>
    );
 }
  

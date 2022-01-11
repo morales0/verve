@@ -9,25 +9,20 @@ import { CompletedExercisesContainer, FinishBtn, Header } from "./styles";
 const CompletedExercises = ({ ...rest }) => {
    const db = useDatabase()
    const user = useUser()
-   const exercisesRef = ref(db, `users/${user.data.uid}/workout-exercises`)
-   const [exercises, setExercises] = useState({status: "loading", data: null});
+   // const exercisesRef = ref(db, `users/${user.data.uid}/workout-exercises`)
+   // const [exercises, setExercises] = useState({status: "loading", data: null});
 
    const { api, workoutData } = useWorkout()
 
-   // Subscribe to exercise changes
-   useEffect(() => {
-      onValue(exercisesRef, snapshot => {
-         if (snapshot.exists()) {
-            setExercises({status: "success", data: Object.values(snapshot.val())})
-         } else {
-            setExercises({status: "success", data: null})
-         }
-      })
+   console.log("--- <CompletedExercises />")
 
-      return () => off(exercisesRef)
-   }, []);
+   const exercisesList = () => {
+      if (!workoutData.data || !workoutData.data.exercises) {
+         return []
+      }
 
-   console.log("--- <CompletedExercises /> Re-render")
+      return Object.values(workoutData.data.exercises)
+   }
 
    return (
       <CompletedExercisesContainer>
@@ -41,8 +36,8 @@ const CompletedExercises = ({ ...rest }) => {
             }
          </Header>
          <ExerciseGrid 
-            status={exercises.status}
-            exercises={exercises.data?.filter(ex => ex.complete)}
+            status={workoutData.status}
+            exercises={exercisesList().filter(ex => ex.complete)}
             emptyMessage="Finish some exercises!"
          />
       </CompletedExercisesContainer>

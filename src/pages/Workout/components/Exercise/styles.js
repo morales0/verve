@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-const ExerciseStyle = styled.div`
+const StyledExercise = styled.div`
    max-width: 400px;
    min-width: 200px;
    border: 1px solid #adadad;
@@ -10,6 +10,7 @@ const Header = styled.header`
    display: flex;
    justify-content: space-between;
    background-color: #dee3e6;
+   color: #333;
    border-bottom: 1px solid #adadad;
 
    & > h4 {
@@ -64,7 +65,7 @@ const ExerciseControlBtn = styled.button`
 `
 
 export {
-   ExerciseStyle,
+   StyledExercise,
    Header,
    SetControlBtn,
    ExerciseControlBtn

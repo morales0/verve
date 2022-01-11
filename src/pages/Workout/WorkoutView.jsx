@@ -3,17 +3,18 @@ import { useMediaQuery } from 'react-responsive';
 import AddExercisePopUp from './components/AddExercisePopUp/AddExercisePopUp';
 import CompletedExercises from './components/CompletedExercises/CompletedExercises';
 import CurrentExercises from './components/CurrentExercises/CurrentExercises';
-import { WorkoutPage } from './styles';
+import { StyledWorkoutView, Body } from './styles';
 
 const WorkoutView = () => {
 	const [exPopUpOpen, setExPopUpOpen] = useState(false);
 
+   console.log("--- <WorkoutView />")
+
+
 	const closeExPopUp = () => setExPopUpOpen(false)
 
-	console.log("<WorkoutView /> Re-render")
-
 	return (
-		<WorkoutPage>
+		<StyledWorkoutView>
 			{/* PopUps for adding and creating exercises */}
 			<AddExercisePopUp
 				isOpen={exPopUpOpen}
@@ -21,17 +22,17 @@ const WorkoutView = () => {
 			/>
 
 			{/* Section for main content */}
-			<div className="exercises_container">
+			<Body>
 				<CurrentExercises
 					openExPopUp={() => setExPopUpOpen(true)}
 				/>
 				
-				<CompletedExercises />	
-			</div>
+				<CompletedExercises />
+			</Body>
 
 			{/* Sidebar for adding and creating exercises? */}
 
-		</WorkoutPage>
+		</StyledWorkoutView>
 	);
 };
 

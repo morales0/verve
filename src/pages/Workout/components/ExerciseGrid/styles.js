@@ -1,6 +1,6 @@
 import styled from "styled-components"
 
-const ExerciseGridStyle = styled.div`
+const StyledExerciseGrid = styled.div`
    display: flex;
    flex-flow: row wrap;
    justify-content: flex-start;
@@ -12,10 +12,10 @@ const ExerciseGridStyle = styled.div`
    padding: .5rem;
 
    background-size: 21px 21px;
-   background-image: radial-gradient(circle, #bfbfbfab  1px, rgba(0, 0, 0, 0) 1px);
+   background-image: radial-gradient(circle, #cdcdcdab  1px, rgba(0, 0, 0, 0) 1px);
 
 `
 
 export {
-   ExerciseGridStyle
+   StyledExerciseGrid
 }

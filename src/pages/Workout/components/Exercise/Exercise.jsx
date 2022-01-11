@@ -1,7 +1,7 @@
 import { useWorkout } from "pages/Workout/WorkoutContainer";
 import { useEffect } from "react";
 import styled from "styled-components";
-import { ExerciseControlBtn, ExerciseStyle, Header, SetControlBtn } from "./styles";
+import { ExerciseControlBtn, Header, SetControlBtn, StyledExercise } from "./styles";
 
 
 const Exercise = ({ name, sets, measures, complete, ...rest }) => {
@@ -29,7 +29,7 @@ const Exercise = ({ name, sets, measures, complete, ...rest }) => {
    }
 
    return (
-      <ExerciseStyle>
+      <StyledExercise>
          <Header>
             <h4>{name}</h4>
 
@@ -105,14 +105,16 @@ const Exercise = ({ name, sets, measures, complete, ...rest }) => {
                )
             }
          </Body>
-      </ExerciseStyle>
+      </StyledExercise>
    );
 }
 
 // styles
 const Body = styled.div`
    display: flex;
-   background: white;
+
+   background-color: ${props => props.theme.bg};
+   color: ${props => props.theme.fg};
 
    & .control_container {
       display: flex;
@@ -127,7 +129,7 @@ const Body = styled.div`
       display: flex;
       flex-direction: column;
       border-left: 1px solid #adadad;
-      background-color: #f3eecd;
+      /* background-color: #f3eecd; */
       font-style: italic;
 
       > div {
@@ -191,6 +193,8 @@ const SetValueInputStyle = styled.input`
    border: none;
    font-size: 18px;
    color: #494949;
+   background-color: inherit;
+   color: inherit;
 `
 
 const SetValueInput = ({ ...rest }) => {
