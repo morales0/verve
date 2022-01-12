@@ -1,4 +1,5 @@
 import { set, ref } from "@firebase/database";
+import { TextInput } from "components/ui";
 import { useState } from "react";
 import { useDatabase, useUser } from "reactfire";
 import styled from "styled-components";
@@ -9,10 +10,36 @@ const CreateExerciseFormStyle = styled.form`
 
 `
 
-const CreateExerciseForm = ({ children, handleAdd, closePopUp }) => {
+const CheckboxOption = styled.div`
+   display: flex;
+   align-items: center;
+
+   cursor: pointer;
+   margin-bottom: .5rem;
+   
+
+`
+
+const CheckboxInput = styled.input.attrs({ type: "checkbox" })`
+
+   width: 25px;
+   height: 25px;
+
+   cursor: pointer;
+
+`
+
+const CheckboxLabel = styled.label`
+   padding: 0 .4rem;
+
+   cursor: pointer;
+
+`
+
+const CreateExerciseForm = ({ children, editExercise, handleAdd, close }) => {
    const user = useUser()
    const db = useDatabase()
-   const [name, setName] = useState("");
+   const [name, setName] = useState(editExercise || "");
    const [reps, setReps] = useState(false);
    const [weightSelected, setWeightSelected] = useState({selected: false, choice: "lbs"});
    const [timeSelected, setTimeSelected] = useState({selected: false, choice: "seconds"});
@@ -47,7 +74,7 @@ const CreateExerciseForm = ({ children, handleAdd, closePopUp }) => {
 
       // Add to the workout
       handleAdd(newExercise.name, newExercise.measures)
-      closePopUp()
+      close()
    }
 
    const updateWeightSelection = (e, value) => {
@@ -65,31 +92,32 @@ const CreateExerciseForm = ({ children, handleAdd, closePopUp }) => {
    return (
       <CreateExerciseFormStyle onSubmit={(e) => createExercise(e)}>
          <div>
-            <label htmlFor="customExerciseName">Name</label>
-            <input id="customExerciseName" type="text" value={name} onChange={(e) => setName(e.target.value)}/>
+            <label htmlFor="customExerciseName">Name:</label>
+            <TextInput id="customExerciseName" value={name} onChange={(e) => setName(e.target.value)}/>
          </div>
          <div>
             <h3>Measures</h3>
-            <div>
-               <div>
-                  <input
-                     type='checkbox'
+            <div >
+               <CheckboxOption>
+                  <CheckboxInput
                      id='exerciseMeasure-reps'
                      value="reps"
                      checked={reps}
                      onChange={(e) => setReps(e.target.checked)}
                   />
-                  <label htmlFor='exerciseMeasure-reps'>
+                  <CheckboxLabel htmlFor='exerciseMeasure-reps'>
                      Reps
-                  </label>
-               </div>
-               <div>
-                  <input type='checkbox' id='exerciseMeasure-weight' 
-                     onChange={(e) => setWeightSelected(prev => { return {...prev, selected: e.target.checked}})}/>
-                  <label htmlFor='exerciseMeasure-weight'>
+                  </CheckboxLabel>
+               </CheckboxOption>
+               <CheckboxOption>
+                  <CheckboxInput 
+                     type='checkbox' id='exerciseMeasure-weight' 
+                     onChange={(e) => setWeightSelected(prev => { return {...prev, selected: e.target.checked}})}
+                  />
+                  <CheckboxLabel htmlFor='exerciseMeasure-weight'>
                      Weight
-                  </label>
-               </div>
+                  </CheckboxLabel>
+               </CheckboxOption>
                <div style={{ marginLeft: ".7rem", display: weightSelected.selected ? "block" : "none"}}>
                   <h4>Units</h4>
                   <div style={{marginLeft: ".5rem"}}>
@@ -133,13 +161,13 @@ const CreateExerciseForm = ({ children, handleAdd, closePopUp }) => {
                      </div>
                   </div>
                </div>
-               <div>
-                  <input type='checkbox' id='exerciseMeasure-time' 
+               <CheckboxOption>
+                  <CheckboxInput type='checkbox' id='exerciseMeasure-time' 
                      onChange={(e) => setTimeSelected(prev => { return {...prev, selected: e.target.checked}})}/>
-                  <label htmlFor='exerciseMeasure-time'>
+                  <CheckboxLabel htmlFor='exerciseMeasure-time'>
                      Time
-                  </label>
-               </div>
+                  </CheckboxLabel>
+               </CheckboxOption>
                <div style={{ marginLeft: ".7rem", display: timeSelected.selected ? "block" : "none"}}>
                   <h4>Units</h4>
                   <div style={{marginLeft: ".5rem"}}>
@@ -177,13 +205,13 @@ const CreateExerciseForm = ({ children, handleAdd, closePopUp }) => {
                      </div>
                   </div>
                </div>
-               <div>
-                  <input type='checkbox' id='exerciseMeasure-distance' 
+               <CheckboxOption>
+                  <CheckboxInput type='checkbox' id='exerciseMeasure-distance' 
                      onChange={(e) => setDistanceSelected(prev => { return {...prev, selected: e.target.checked}})}/>
-                  <label htmlFor='exerciseMeasure-distance' >
+                  <CheckboxLabel htmlFor='exerciseMeasure-distance' >
                      Distance
-                  </label>
-               </div>
+                  </CheckboxLabel>
+               </CheckboxOption>
                <div style={{ marginLeft: ".7rem", display: distanceSelected.selected ? "block" : "none"}}>
                   <h4>Units</h4>
                   <div style={{marginLeft: ".5rem"}}>
@@ -219,11 +247,7 @@ const CreateExerciseForm = ({ children, handleAdd, closePopUp }) => {
          </div>
 
          <div>
-            <button>
-               Cancel
-            </button>
-
-            <button>
+            <button type="submit">
                Create and Add
             </button>
          </div>

@@ -9,7 +9,8 @@ const StyledAddExerciseScreen = styled.div`
    flex-direction: column;
    justify-content: space-between;
    flex-grow: 1;
-   background-color: #555;
+   margin-top: .3rem;
+   background-color: ${props => props.theme.name === 'light' ? '#f9f9f9' :  '#555'};
    border: 1px solid #ddd;
    overflow-y: hidden;
 
@@ -41,7 +42,7 @@ const StyledTab = styled.button`
    background: none;
    border: none;
    color: inherit;
-   border-bottom: 1px solid ${props => props.selected ? 'white' : 'transparent'};
+   border-bottom: 1px solid ${props => props.selected ? props.theme.fg : 'transparent'};
    cursor: pointer;
 `
 
@@ -76,14 +77,26 @@ const StyledControlBtn = styled.button`
 const AddExerciseScreen = ({ exercisesToAdd, close }) => {
    const { api, pageState } = useWorkout()
    const [currTab, setCurrTab] = useState(0);
+   const [editExercise, setEditExercise] = useState(null);
+
+   const handleEdit = (e) => {
+      console.log(e)
+      setEditExercise(e.name)
+      setCurrTab(1)
+   }
+
+   const switchTabTo = (ind) => {
+      setEditExercise(null)
+      setCurrTab(ind)
+   }
 
    return (
       <StyledAddExerciseScreen>
          <header>
-            <Tab selected={currTab === 0} onClick={() => setCurrTab(0)}>
+            <Tab selected={currTab === 0} onClick={() => switchTabTo(0)}>
                Add
             </Tab>
-            <Tab selected={currTab === 1} onClick={() => setCurrTab(1)}>
+            <Tab selected={currTab === 1} onClick={() => switchTabTo(1)}>
                Create
             </Tab>
          </header>
@@ -94,11 +107,14 @@ const AddExerciseScreen = ({ exercisesToAdd, close }) => {
                   <AddExerciseForm 
                      exercisesToAdd={pageState.exToAdd}
                      handleAdd={api.addExercise}
+                     handleEdit={handleEdit}
+                     close={close}
                   />
                ) : (
                   <CreateExerciseForm
-                     handleAdd={() => console.log("okay...")}
-                     closePopUp={() => console.log("okay...")}
+                     editExercise={editExercise}
+                     handleAdd={api.addExercise}
+                     close={close}
                   />
                )
             }
