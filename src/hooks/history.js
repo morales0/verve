@@ -1,23 +1,29 @@
 import { useEffect, useState } from "react";
 import { useDatabase, useUser } from "reactfire";
+import { get, ref, child, onValue } from "@firebase/database";
+
 // import firebase from 'firebase'
 
 
 const useHistory = () => {
    const db = useDatabase()
    const user = useUser()
-   const workoutHistoryRef = db.ref(`users/${user.data.uid}/history`)
+   const workoutHistoryRef = ref(db, `users/${user.data.uid}/history`)
    const [status, setStatus] = useState('loading');
-   const [workoutHistory, setWorkoutHistory] = useState(null);
+   const [workoutHistory, setWorkoutHistory] = useState({});
 
 
    // Get history once
    useEffect(() => {
-      workoutHistoryRef.once('value').then(snapshot => {
+      onValue(workoutHistoryRef, snapshot => {
          console.log(snapshot.val())
+         if (!snapshot.exists()) {
+            setStatus('success')
+            return
+         }
 
          setWorkoutHistory(snapshot.val())
-         setStatus('done')
+         setStatus('success')
       })
    }, []);
 

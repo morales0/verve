@@ -29,7 +29,7 @@ const CompletedExercises = ({ ...rest }) => {
          <Header>
             <h4>Completed</h4>
             {
-               workoutData && workoutData.numExCompleted > 0 && workoutData.numExInProgress === 0 &&
+               workoutData.data && workoutData.data.numExCompleted > 0 && workoutData.data.numExInProgress === 0 &&
                <FinishBtn onClick={api.completeWorkout}>
                   Finish
                </FinishBtn>

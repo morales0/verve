@@ -11,6 +11,7 @@ import useCurrentWorkout from 'hooks/workout.js'
 
 import './Home.scss';
 import { HomeContainer, Calendar, Day, WorkoutCard } from './styles';
+import { useHistory } from 'hooks/history';
 
 const mockCurrentWorkout = {
    completed: true,
@@ -32,8 +33,9 @@ const Home = () => {
    const user = useUser()
    const isWorkingOut = useWorkingOutCheck()
    const currWorkout = useCurrentWorkout()
+   const userHistory = useHistory()
 
-   console.log(currWorkout)
+   console.log(userHistory)
 
    const [today, setToday] = useState(new Date());
 
@@ -55,14 +57,24 @@ const Home = () => {
       <HomeContainer>
          <Calendar>
             {
+               userHistory.status === 'loading' ? (
+                  <div>Loading user history</div>
+               ) : (
                // Display the last three days
                [...Array(3)].map((_, i) => {
                   // Calculate the ith date
                   let currDay = new Date()
                   currDay.setDate(today.getDate() - i)
 
+                  // Create the unique key
+                  let dateKey = toDateKey(currDay)
+
                   // Retrieve the workouts for this day
                   let currWorkouts = []
+               
+                  if (userHistory.data[dateKey]) {
+                     currWorkouts = Object.values(userHistory.data[dateKey]).reverse()
+                  }
 
                   return (
                      <Day key={`day-${i}`}>
@@ -89,7 +101,7 @@ const Home = () => {
                                  i !== 0 && <p>No data</p>
                               ) : (
                                  currWorkouts.map((w, j) => (
-                                    <WorkoutCard key={`day-${i}-workout-${j}`} {...w} />
+                                    <WorkoutCard key={`day-${i}-workout-${j}`} {...w} to="#" />
                                  ))
                               )
                            }
@@ -97,6 +109,7 @@ const Home = () => {
                      </Day>
                   )
                })
+               )
             }
          </Calendar>
       </HomeContainer>

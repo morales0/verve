@@ -9,14 +9,16 @@ const areSameDay = (date1, date2) => {
       date1.getFullYear() === date2.getFullYear()
 }
 
-// converts a date into a normal string
+// converts a date into a unique date string per day
 const toDateKey = (date) => {
-   const day = dayOfWeek[date.getDay()]
-   const dateNum = date.getDate()
-   const month = date.getMonth() + 1
-   const year = date.getFullYear()
+   let day = dayOfWeek[date.getDay()]
+   let dateNum = date.getDate()
+   dateNum = dateNum < 10 ? '0' + dateNum : dateNum
+   let month = date.getMonth() + 1
+   month = month < 10 ? '0' + month : month
+   let year = date.getFullYear()
 
-   return `${day}, ${month}/${dateNum}/${year}`
+   return `${year}-${month}-${dateNum}`
 }
 
 // returns today, yesterday

@@ -3,6 +3,7 @@ import React, { useState, useEffect, useContext } from "react";
 import { useHistory } from "react-router";
 import { useDatabase, useDatabaseList, useDatabaseObject, useUser } from "reactfire";
 import { useWorkingOutCheck } from "services/firebase/index";
+import { toDateKey } from "util/date";
 import WorkoutView from "./WorkoutView";
 
 // Create context for workout
@@ -115,20 +116,20 @@ const WorkoutContainer = (props) => {
       completeExercise: (name) => {
          const updates = {}
 
-         updates[`/workout-exercises/${name}/complete`] = true;
-         updates['/workout/numExInProgress'] = increment(-1)
-         updates['/workout/numExCompleted'] = increment(1)
+         updates[`/exercises/${name}/complete`] = true;
+         updates['/numExInProgress'] = increment(-1)
+         updates['/numExCompleted'] = increment(1)
 
-         update(userRef, updates)
+         update(workoutRef, updates)
       },
       uncompleteExercise: (name) => {
          const updates = {}
 
-         updates[`/workout-exercises/${name}/complete`] = false;
-         updates['/workout/numExInProgress'] = increment(1)
-         updates['/workout/numExCompleted'] = increment(-1)
+         updates[`/exercises/${name}/complete`] = false;
+         updates['/numExInProgress'] = increment(1)
+         updates['/numExCompleted'] = increment(-1)
 
-         update(userRef, updates)
+         update(workoutRef, updates)
       },
 
       // Set functions
@@ -136,38 +137,54 @@ const WorkoutContainer = (props) => {
       addSetToExercise: (exName, index, oldSet) => {
          const updates = {}
 
-         updates[`/workout-exercises/${exName}/sets/${index}`] = oldSet
+         updates[`/exercises/${exName}/sets/${index}`] = oldSet
 
-         update(userRef, updates)
+         update(workoutRef, updates)
       },
       removeSetFromExercise: (exName, index) => {
          const updates = {}
 
-         updates[`/workout-exercises/${exName}/sets/${index}`] = null
+         updates[`/exercises/${exName}/sets/${index}`] = null
 
-         update(userRef, updates)
+         update(workoutRef, updates)
       },
       updateSetInExercise: (exName, index, measure, newVal) => {
          const updates = {}
 
-         updates[`/workout-exercises/${exName}/sets/${index}/${measure}`] = newVal
+         updates[`/exercises/${exName}/sets/${index}/${measure}`] = newVal
 
-         update(userRef, updates)
+         update(workoutRef, updates)
       },
 
       // Workout functions
       completeWorkout: () => {
          setCompleting(true)
-         const endDate = new Date().toString()
+         off(workoutRef)
+
+         const dateStarted = new Date(workoutData.data.dateStarted)
+         console.log(dateStarted.toLocaleTimeString());
+         const dateEnded = new Date()
+         const timeEnded = dateEnded.toLocaleTimeString('en-US', {hour: 'numeric', minute: '2-digit'});
+
+
+         // Create unique date key (by day)
+         let dateKey = toDateKey(dateStarted)
+
+         // Unique timekey within day
+         let timeKey = dateStarted.toLocaleTimeString()
 
          // Save workout in history
-         const workoutHistory = ref(db, `users/${user.data.uid}/history`)
-         let histRef = push(workoutHistory, {
-            dateEnded: endDate
+         set(ref(db, `users/${user.data.uid}/history/${dateKey}/${timeKey}`), {
+            ...workoutData.data,
+            dateEnded: dateEnded.toString(),
+            timeEnded: timeEnded,
+            inProgress: false
          })
-         const exerciseHistory = ref(db, `users/${user.data.uid}/exercise-history`)
 
-         get(ref(db, `users/${user.data.uid}/workout-exercises`)).then(snapshot => {
+
+         // const exerciseHistory = ref(db, `users/${user.data.uid}/exercise-history`)
+
+         /* get(ref(db, `users/${user.data.uid}/workout-exercises`)).then(snapshot => {
             let exercises = snapshot.val()
 
             Object.values(exercises).forEach(ex => {
@@ -182,18 +199,15 @@ const WorkoutContainer = (props) => {
                let currHistRef = ref(db, `users/${user.data.uid}/history/${histRef.key}/exercises/${ex.name}`)
                set(currHistRef, exRef.key)
             })
-         })
+         }) */
 
-         // Remove workout
-         remove(exercisesRef)
-         remove(workoutRef)
-
-         // Set user to not working out
-         set(ref(db, `users/${user.data.uid}/isWorkingOut`), false).then(() => {
+         // Reset workout
+         set(workoutRef, {
+            inProgress: false
+         }).then(() => {
             // Send user to a summary page, then to the home page
             history.push("/home")
          })
-
       },
       cancelWorkout: () => {
          setCompleting(true)

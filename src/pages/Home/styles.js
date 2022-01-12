@@ -49,7 +49,7 @@ const WorkoutSummary = ({ ex }) => {
 
          </header>
          <div>
-            
+
          </div>
       </WorkoutSummaryStyle>
    )
@@ -60,6 +60,7 @@ const StyledWorkoutCard = styled(Link)`
    justify-content: space-between;
    align-items: center;
    padding: .5rem;
+   margin-top: .4rem;
    border: 1px solid;
 
    color: inherit;
@@ -82,7 +83,7 @@ const StyledWorkoutCard = styled(Link)`
 
 `
 
-const WorkoutCard = ({ to, completed, inProgress, exercises, timeStarted, ...rest }) => {
+const WorkoutCard = ({ to, complete, inProgress, exercises, timeStarted, timeEnded, ...rest }) => {
    const exercisesList = () => {
       if (!exercises) {
          return []
@@ -94,7 +95,18 @@ const WorkoutCard = ({ to, completed, inProgress, exercises, timeStarted, ...res
    return (
       <StyledWorkoutCard to={to}>
          <div>
-            <p className='time'>Started at {timeStarted}</p>
+            {
+               inProgress ? (
+                  <p className='time'>
+                     Started at {timeStarted}
+                  </p>
+               ) : (
+                  <p className='time'>
+                     {timeStarted} - {timeEnded}
+                  </p>
+               )
+            }
+
             <div className='body'>
                {
                   exercisesList().map((ex, i) => <div key={`ex-${i}-${ex.name}`}>{ex.name}</div>)
@@ -106,10 +118,13 @@ const WorkoutCard = ({ to, completed, inProgress, exercises, timeStarted, ...res
                )
             }
          </div>
-         <div>
-            <img src={RightArrow} alt='right arrow' height={25}/>
-         </div>
-         
+         {
+            inProgress &&
+            <div>
+               <img src={RightArrow} alt='right arrow' height={25} />
+            </div>
+         }
+
       </StyledWorkoutCard>
    )
 }
