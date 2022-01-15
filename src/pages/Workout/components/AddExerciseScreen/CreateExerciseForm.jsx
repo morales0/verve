@@ -36,6 +36,17 @@ const CheckboxLabel = styled.label`
 
 `
 
+const StyledControlBtn = styled.button`
+   padding: 0.3rem 0.5rem;
+   border: none;
+   background-color: ${props => props.theme.bg};
+   color: inherit;
+   font-size: .7rem;
+   border: 1px solid steelblue;
+
+   cursor: pointer;
+`
+
 const CreateExerciseForm = ({ children, editExercise, handleAdd, close }) => {
    const user = useUser()
    const db = useDatabase()
@@ -247,9 +258,9 @@ const CreateExerciseForm = ({ children, editExercise, handleAdd, close }) => {
          </div>
 
          <div>
-            <button type="submit">
+            <StyledControlBtn type="submit">
                Create and Add
-            </button>
+            </StyledControlBtn>
          </div>
       </CreateExerciseFormStyle >
    )

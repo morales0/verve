@@ -64,9 +64,9 @@ const WorkoutContainer = (props) => {
       return () => workoutListener()
    }, []);
 
-   // Populate current exercises
+   // Populate exercises to add
    useEffect(() => {
-      get(ogExRef).then(snapshot => {
+      /* get(ogExRef).then(snapshot => {
          // Also get user's custom exercises
          const customExercisesRef = ref(db, `users/${user.data.uid}/custom-exercises/`)
          get(customExercisesRef).then(customSnapshot=>{
@@ -76,7 +76,17 @@ const WorkoutContainer = (props) => {
                setExToAdd(Object.values(snapshot.val()))
             }
          })
+      }) */
+
+      // Get exercises from user's list
+      const customExercisesRef = ref(db, `users/${user.data.uid}/custom-exercises/`)
+      const customExListener = onValue(customExercisesRef, customSnapshot=>{
+         if (customSnapshot.exists()){
+            setExToAdd([...Object.values(customSnapshot.val()).sort((a, b) => a.name.localeCompare(b.name))])
+         }
       })
+
+      return () => customExListener()
    }, []);
 
    // Workout API
