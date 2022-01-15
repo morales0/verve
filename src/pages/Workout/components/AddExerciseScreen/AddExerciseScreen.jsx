@@ -81,7 +81,7 @@ const AddExerciseScreen = ({ exercisesToAdd, close }) => {
 
    const handleEdit = (e) => {
       console.log(e)
-      setEditExercise(e.name)
+      setEditExercise(e)
       setCurrTab(1)
    }
 
@@ -115,6 +115,7 @@ const AddExerciseScreen = ({ exercisesToAdd, close }) => {
                      editExercise={editExercise}
                      handleAdd={api.addExercise}
                      close={close}
+                     switchTabTo={switchTabTo}
                   />
                )
             }

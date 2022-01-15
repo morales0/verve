@@ -1,4 +1,4 @@
-import { set, ref } from "@firebase/database";
+import { set, ref, push, update } from "@firebase/database";
 import { TextInput } from "components/ui";
 import { useState } from "react";
 import { useDatabase, useUser } from "reactfire";
@@ -47,14 +47,14 @@ const StyledControlBtn = styled.button`
    cursor: pointer;
 `
 
-const CreateExerciseForm = ({ children, editExercise, handleAdd, close }) => {
+const CreateExerciseForm = ({ children, editExercise, handleAdd, close, switchTabTo }) => {
    const user = useUser()
    const db = useDatabase()
-   const [name, setName] = useState(editExercise || "");
+   const [name, setName] = useState(editExercise?.name || "");
    const [reps, setReps] = useState(false);
-   const [weightSelected, setWeightSelected] = useState({selected: false, choice: "lbs"});
-   const [timeSelected, setTimeSelected] = useState({selected: false, choice: "seconds"});
-   const [distanceSelected, setDistanceSelected] = useState({selected: false, choice: "miles"});
+   const [weightSelected, setWeightSelected] = useState({ selected: false, choice: "lbs" });
+   const [timeSelected, setTimeSelected] = useState({ selected: false, choice: "seconds" });
+   const [distanceSelected, setDistanceSelected] = useState({ selected: false, choice: "miles" });
 
    const createExercise = (e) => {
       e.preventDefault()
@@ -79,17 +79,58 @@ const CreateExerciseForm = ({ children, editExercise, handleAdd, close }) => {
       }
 
       // Add to user's custom exercise data
-      const customExercisesRef = ref(db, `users/${user.data.uid}/custom-exercises/${name}`)
-      set(customExercisesRef, newExercise)
-      
+      const customExercisesRef = ref(db, `users/${user.data.uid}/custom-exercises/`)
+      const newExRef = push(customExercisesRef)
+      set(newExRef, { ...newExercise, id: newExRef.key })
+
 
       // Add to the workout
       handleAdd(newExercise.name, newExercise.measures)
       close()
    }
 
+   const updateExercise = (e) => {
+      e.preventDefault()
+
+      // Create exercise object
+      const newExercise = {
+         name: name,
+         measures: []
+      }
+
+      if (weightSelected.selected) {
+         newExercise.measures.push(weightSelected.choice)
+      }
+      if (timeSelected.selected) {
+         newExercise.measures.push(timeSelected.choice)
+      }
+      if (distanceSelected.selected) {
+         newExercise.measures.push(distanceSelected.choice)
+      }
+      if (reps) {
+         newExercise.measures.push("reps")
+      }
+
+      const currExRef = ref(db, `users/${user.data.uid}/custom-exercises/${editExercise.id}`)
+      // Set to new exercise
+      const updates = {}
+      updates['/name'] = newExercise.name
+      updates['/measures'] = newExercise.measures
+      update(currExRef, newExercise)
+      clearForm()
+      switchTabTo(0)
+   }
+
+   const clearForm = () => {
+      setName("")
+      setReps(false)
+      setWeightSelected({ selected: false, choice: "lbs" });
+      setTimeSelected({ selected: false, choice: "seconds" });
+      setDistanceSelected({ selected: false, choice: "miles" });
+   }
+
    const updateWeightSelection = (e, value) => {
-      
+
    }
 
    const updateTimeSelection = (e, value) => {
@@ -97,14 +138,14 @@ const CreateExerciseForm = ({ children, editExercise, handleAdd, close }) => {
    }
 
    const updateDistanceSelection = (e, value) => {
-      
+
    }
 
    return (
-      <CreateExerciseFormStyle onSubmit={(e) => createExercise(e)}>
+      <CreateExerciseFormStyle onSubmit={(e) => editExercise ? updateExercise(e) : createExercise(e)}>
          <div>
             <label htmlFor="customExerciseName">Name:</label>
-            <TextInput id="customExerciseName" value={name} onChange={(e) => setName(e.target.value)}/>
+            <TextInput id="customExerciseName" value={name} onChange={(e) => setName(e.target.value)} />
          </div>
          <div>
             <h3>Measures</h3>
@@ -121,27 +162,27 @@ const CreateExerciseForm = ({ children, editExercise, handleAdd, close }) => {
                   </CheckboxLabel>
                </CheckboxOption>
                <CheckboxOption>
-                  <CheckboxInput 
-                     type='checkbox' id='exerciseMeasure-weight' 
-                     onChange={(e) => setWeightSelected(prev => { return {...prev, selected: e.target.checked}})}
+                  <CheckboxInput
+                     type='checkbox' id='exerciseMeasure-weight'
+                     onChange={(e) => setWeightSelected(prev => { return { ...prev, selected: e.target.checked } })}
                   />
                   <CheckboxLabel htmlFor='exerciseMeasure-weight'>
                      Weight
                   </CheckboxLabel>
                </CheckboxOption>
-               <div style={{ marginLeft: ".7rem", display: weightSelected.selected ? "block" : "none"}}>
+               <div style={{ marginLeft: ".7rem", display: weightSelected.selected ? "block" : "none" }}>
                   <h4>Units</h4>
-                  <div style={{marginLeft: ".5rem"}}>
+                  <div style={{ marginLeft: ".5rem" }}>
                      <div>
-                        <input 
-                           type='radio' 
-                           name="weightUnits" 
-                           id='exerciseMeasure-weight-unit-lbs' 
+                        <input
+                           type='radio'
+                           name="weightUnits"
+                           id='exerciseMeasure-weight-unit-lbs'
                            value="lbs"
                            checked={weightSelected.choice === "lbs"}
                            onChange={(e) => setWeightSelected(prev => {
                               if (e.target.checked) {
-                                 return {...prev, choice: "lbs"}
+                                 return { ...prev, choice: "lbs" }
                               } else {
                                  return prev
                               }
@@ -152,15 +193,15 @@ const CreateExerciseForm = ({ children, editExercise, handleAdd, close }) => {
                         </label>
                      </div>
                      <div>
-                        <input 
-                           type='radio' 
-                           name="weightUnits" 
-                           id='exerciseMeasure-weight-unit-kg' 
+                        <input
+                           type='radio'
+                           name="weightUnits"
+                           id='exerciseMeasure-weight-unit-kg'
                            value="kg"
                            checked={weightSelected.choice === "kg"}
                            onChange={(e) => setWeightSelected(prev => {
                               if (e.target.checked) {
-                                 return {...prev, choice: "kg"}
+                                 return { ...prev, choice: "kg" }
                               } else {
                                  return prev
                               }
@@ -173,15 +214,15 @@ const CreateExerciseForm = ({ children, editExercise, handleAdd, close }) => {
                   </div>
                </div>
                <CheckboxOption>
-                  <CheckboxInput type='checkbox' id='exerciseMeasure-time' 
-                     onChange={(e) => setTimeSelected(prev => { return {...prev, selected: e.target.checked}})}/>
+                  <CheckboxInput type='checkbox' id='exerciseMeasure-time'
+                     onChange={(e) => setTimeSelected(prev => { return { ...prev, selected: e.target.checked } })} />
                   <CheckboxLabel htmlFor='exerciseMeasure-time'>
                      Time
                   </CheckboxLabel>
                </CheckboxOption>
-               <div style={{ marginLeft: ".7rem", display: timeSelected.selected ? "block" : "none"}}>
+               <div style={{ marginLeft: ".7rem", display: timeSelected.selected ? "block" : "none" }}>
                   <h4>Units</h4>
-                  <div style={{marginLeft: ".5rem"}}>
+                  <div style={{ marginLeft: ".5rem" }}>
                      <div>
                         <input
                            type='radio'
@@ -191,7 +232,7 @@ const CreateExerciseForm = ({ children, editExercise, handleAdd, close }) => {
                            checked={timeSelected.choice === "seconds"}
                            onChange={(e) => setTimeSelected(prev => {
                               if (e.target.checked) {
-                                 return {...prev, choice: "seconds"}
+                                 return { ...prev, choice: "seconds" }
                               } else {
                                  return prev
                               }
@@ -208,7 +249,7 @@ const CreateExerciseForm = ({ children, editExercise, handleAdd, close }) => {
                            id='exerciseMeasure-time-unit-minutes'
                            value="minutes"
                            checked={timeSelected.choice === "minutes"}
-                           onChange={() => setTimeSelected(prev => {return {...prev, choice: "minutes"}})}
+                           onChange={() => setTimeSelected(prev => { return { ...prev, choice: "minutes" } })}
                         />
                         <label htmlFor='exerciseMeasure-time-unit-minutes'>
                            minutes
@@ -217,15 +258,15 @@ const CreateExerciseForm = ({ children, editExercise, handleAdd, close }) => {
                   </div>
                </div>
                <CheckboxOption>
-                  <CheckboxInput type='checkbox' id='exerciseMeasure-distance' 
-                     onChange={(e) => setDistanceSelected(prev => { return {...prev, selected: e.target.checked}})}/>
+                  <CheckboxInput type='checkbox' id='exerciseMeasure-distance'
+                     onChange={(e) => setDistanceSelected(prev => { return { ...prev, selected: e.target.checked } })} />
                   <CheckboxLabel htmlFor='exerciseMeasure-distance' >
                      Distance
                   </CheckboxLabel>
                </CheckboxOption>
-               <div style={{ marginLeft: ".7rem", display: distanceSelected.selected ? "block" : "none"}}>
+               <div style={{ marginLeft: ".7rem", display: distanceSelected.selected ? "block" : "none" }}>
                   <h4>Units</h4>
-                  <div style={{marginLeft: ".5rem"}}>
+                  <div style={{ marginLeft: ".5rem" }}>
                      <div>
                         <input
                            type='radio'
@@ -233,7 +274,7 @@ const CreateExerciseForm = ({ children, editExercise, handleAdd, close }) => {
                            id='exerciseMeasure-dist-unit-mi'
                            value="miles"
                            checked={distanceSelected.choice === "miles"}
-                           onChange={() => setDistanceSelected(prev => {return {...prev, choice: "miles"}})}
+                           onChange={() => setDistanceSelected(prev => { return { ...prev, choice: "miles" } })}
                         />
                         <label htmlFor='exerciseMeasure-dist-unit-mi'>
                            miles
@@ -246,7 +287,7 @@ const CreateExerciseForm = ({ children, editExercise, handleAdd, close }) => {
                            id='ename="distUnits" xerciseMeasure-dist-unit-km'
                            value="km"
                            checked={distanceSelected.choice === "km"}
-                           onChange={() => setDistanceSelected(prev => {return {...prev, choice: "km"}})}
+                           onChange={() => setDistanceSelected(prev => { return { ...prev, choice: "km" } })}
                         />
                         <label htmlFor='exerciseMeasure-dist-unit-km'>
                            kilometers
@@ -259,7 +300,7 @@ const CreateExerciseForm = ({ children, editExercise, handleAdd, close }) => {
 
          <div>
             <StyledControlBtn type="submit">
-               Create and Add
+               {editExercise ? "Update Exercise" : "Create and Add"}
             </StyledControlBtn>
          </div>
       </CreateExerciseFormStyle >
