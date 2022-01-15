@@ -25,7 +25,10 @@ const SignUp = (props) => {
          uid: uid,
          email: email,
          name: name,
-         username: username
+         username: username,
+         workout: {
+            inProgress: false
+         }
       });
    }
 

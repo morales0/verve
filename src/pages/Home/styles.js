@@ -65,7 +65,7 @@ const StyledWorkoutCard = styled(Link)`
 
    color: inherit;
    text-decoration: none;
-   border-color: #eee;
+   border-color: #999;
 
    & .time {
       font-size: .85rem;

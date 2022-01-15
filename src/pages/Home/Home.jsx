@@ -35,8 +35,6 @@ const Home = () => {
    const currWorkout = useCurrentWorkout()
    const userHistory = useHistory()
 
-   console.log(userHistory)
-
    const [today, setToday] = useState(new Date());
 
    // fetch workouts list

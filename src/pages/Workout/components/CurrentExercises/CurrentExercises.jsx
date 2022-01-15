@@ -15,7 +15,6 @@ const CurrentExercises = ({ openExPopUp }) => {
    const [addExerciseFlag, setAddExerciseFlag] = useState(false);
 
    console.log("--- <CurrentExercises />")
-   console.log(workoutData);
 
 
    // Functions

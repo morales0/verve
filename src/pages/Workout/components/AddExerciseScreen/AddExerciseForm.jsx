@@ -85,19 +85,24 @@ const AddExerciseForm = ({ exercisesToAdd, handleAdd, handleEdit, close }) => {
          <TextInput placeholder="Search for exercise" value={filterQuery} onChange={e => setFilterQuery(e.target.value)} />
          <ExercisesContainer>
             {
-               filterExercises()?.map((e, i) => (
+               exercisesToAdd.length === 0 ? (
+                  <p>Maybe try creating some exercises</p>
+               ) : (
+                  filterExercises()?.map((e, i) => (
 
-                  <div className="exercise_info_container">
-                     <ExerciseAddBtn onClick={() => addExercise(e.name, e.measures)}>
-                        <div className="plus">+</div>
-                        <p className="name">{e.name}</p>
-                     </ExerciseAddBtn>
-                     <ExerciseEditBtn onClick={() => handleEdit(e)}>
-                        <img src={EditIcon} alt="edit icon" height={23} />
-                     </ExerciseEditBtn>
-                  </div>
-               ))
+                     <div className="exercise_info_container" key={`exToAdd-${e.name}-${i}`}>
+                        <ExerciseAddBtn onClick={() => addExercise(e.name, e.measures)}>
+                           <div className="plus">+</div>
+                           <p className="name">{e.name}</p>
+                        </ExerciseAddBtn>
+                        <ExerciseEditBtn onClick={() => handleEdit(e)}>
+                           <img src={EditIcon} alt="edit icon" height={23} />
+                        </ExerciseEditBtn>
+                     </div>
+                  ))
+               )
             }
+
          </ExercisesContainer>
       </StyledAddExerciseForm>
    );

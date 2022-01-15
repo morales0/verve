@@ -16,7 +16,6 @@ const useHistory = () => {
    // Get history once
    useEffect(() => {
       onValue(workoutHistoryRef, snapshot => {
-         console.log(snapshot.val())
          if (!snapshot.exists()) {
             setStatus('success')
             return
