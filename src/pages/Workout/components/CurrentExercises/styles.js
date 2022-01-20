@@ -7,6 +7,7 @@ const StyledCurrentExercises = styled.div`
    flex-grow: 1;
 
    ${props => props.addExerciseFlag && 'overflow-y: hidden'};
+   ${props => props.addExerciseFlag && 'flex-shrink: 0'};
 `
 
 const Header = styled.header`

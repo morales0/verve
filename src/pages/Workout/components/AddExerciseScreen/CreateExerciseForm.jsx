@@ -7,7 +7,7 @@ import styled from "styled-components";
 
 
 const CreateExerciseFormStyle = styled.form`
-
+   overflow-y: auto;
 `
 
 const CheckboxOption = styled.div`
