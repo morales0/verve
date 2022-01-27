@@ -58,7 +58,7 @@ const Home = () => {
                      }
 
                      return (
-                        <Day key={`day-${i}`} hasData={currWorkouts.length > 0}>
+                        <Day key={`day-${i}`} hasData={currWorkouts.length > 0 || i === 0}>
                            <header className="day_header">
                               <h2>{toDateString(currDay)}</h2>
                            </header>
