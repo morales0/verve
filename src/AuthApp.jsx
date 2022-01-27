@@ -7,6 +7,9 @@ import { BrowserRouter as Router, Redirect, Route, Switch } from "react-router-d
 import { useAuth, useUser } from "reactfire";
 import styled, { createGlobalStyle } from "styled-components";
 
+
+// Dynamic styling for app
+
 const GlobalStyle = createGlobalStyle`
   body {
    background-color: ${props => props.theme.bg};
@@ -14,7 +17,6 @@ const GlobalStyle = createGlobalStyle`
   }
 `
 
-// Dynamic styling for Auth app
 const AuthAppWrapper = styled.div`
    display: flex;
    flex-direction: column;
@@ -62,8 +64,11 @@ const AuthApp = (props) => {
                <Route path="/history">
                   <div style={{padding: ".6rem"}}>History coming soon!</div>
                </Route>
-               <Route path="/data">
-                  <div style={{padding: ".6rem"}}>Data coming soon!</div>
+               <Route path="/data/:date/:time">
+                  <div style={{padding: ".6rem"}}>Workout data coming soon</div>
+               </Route>
+               <Route path="/data/:date">
+                  <div style={{padding: ".6rem"}}>History coming soon</div>
                </Route>
                <Route path="/builder">
                   <div style={{padding: ".6rem"}}>Builder coming soon!</div>
@@ -82,7 +87,7 @@ const AuthApp = (props) => {
                </Route>
 
                {/* Not found page -> redirect home */}
-               <Route>
+               <Route path="*">
                   <Redirect to="/" />
                </Route>
             </Switch>

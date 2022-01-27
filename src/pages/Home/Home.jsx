@@ -1,56 +1,20 @@
-import { PageHeader } from 'components';
-import { useAuthCheck } from 'context/auth';
-import React, { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom';
-import { useUser } from 'reactfire';
-import { useWorkingOutCheck } from "services/firebase/index"
+import { useHistory } from 'hooks/history';
+import useCurrentWorkout from 'hooks/workout.js';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { toDateKey, toDateString } from 'util/date';
 import { WorkoutLink } from './components/styled-components';
-import useCurrentWorkout from 'hooks/workout.js'
+import { Calendar, Day, HomeContainer, WorkoutCard } from './styles';
 
-import { HomeContainer, Calendar, Day, WorkoutCard } from './styles';
-import { useHistory } from 'hooks/history';
-
-const mockCurrentWorkout = {
-   completed: true,
-   exercises: [
-      {
-         name: 'Bench Press'
-      },
-      {
-         name: 'Squat'
-      }
-   ]
-}
-
-const mockWorkout = {
-
-}
 
 const Home = () => {
-   const user = useUser()
-   const isWorkingOut = useWorkingOutCheck()
-   const currWorkout = useCurrentWorkout()
-   const userHistory = useHistory()
-
    const [today, setToday] = useState(new Date());
    const [calendarControl, setCalendarControl] = useState({amount: 3, type: 'days'});
+   
+   const userHistory = useHistory(calendarControl.amount)
+   const currWorkout = useCurrentWorkout()
 
-   // fetch workouts list
-   //const workouts = useWorkoutHistory()
-
-   // workout by date state
-   const [workoutsMap, setWorkoutsMap] = useState({
-
-   });
-
-   const workoutsToMap = (workoutsObj) => {
-      let wMap = {}
-
-      return wMap
-   }
-
+   /* Functions */
    const updateCalendarControl = (e) => {
       setCalendarControl({
          ...calendarControl,
@@ -62,22 +26,23 @@ const Home = () => {
       <HomeContainer>
          <CalendarControl>
             <p>Last</p>
-            <select name="amount" id="last-amount" value={calendarControl.amount} onChange={(e) => updateCalendarControl(e)}>
+            <CalendarSelect name="amount" id="last-amount" value={calendarControl.amount} onChange={(e) => updateCalendarControl(e)}>
                <option value="3" >3</option>
                <option value="7">7</option>
-               <option value="all">All</option>
-            </select>
-            <select name="type" id="last-type" value={calendarControl.type} onChange={(e) => updateCalendarControl(e)}>
+               <option value="30">30</option>
+            </CalendarSelect>
+            <p>days</p>
+            {/* <CalendarSelect name="type" id="last-type" value={calendarControl.type} onChange={(e) => updateCalendarControl(e)}>
                <option value="days">days</option>
                <option value="exercises">exercises</option>
-            </select>
+            </CalendarSelect> */}
          </CalendarControl>
          <Calendar>
             {
                userHistory.status === 'loading' ? (
                   <div>Loading user history</div>
                ) : (
-                  // Display the last three days
+                  // Display the amount of days based on state
                   [...Array(calendarControl.amount)].map((_, i) => {
                      // Calculate the ith date
                      let currDay = new Date()
@@ -88,13 +53,12 @@ const Home = () => {
 
                      // Retrieve the workouts for this day
                      let currWorkouts = []
-
                      if (userHistory.data[dateKey]) {
                         currWorkouts = Object.values(userHistory.data[dateKey]).reverse()
                      }
 
                      return (
-                        <Day key={`day-${i}`}>
+                        <Day key={`day-${i}`} hasData={currWorkouts.length > 0}>
                            <header className="day_header">
                               <h2>{toDateString(currDay)}</h2>
                            </header>
@@ -104,9 +68,15 @@ const Home = () => {
                                  i === 0 &&
                                  currWorkout.status === 'success' && (
                                     currWorkout.data?.inProgress ? (
-                                       <WorkoutCard to="/workout" completed={false} {...currWorkout.data} />
+                                       <WorkoutCard
+                                          to="/workout"
+                                          completed={false}
+                                          {...currWorkout.data}
+                                       />
                                     ) : (
-                                       <WorkoutLink to="/workout">
+                                       <WorkoutLink
+                                          to="/workout"
+                                       >
                                           Start a new workout
                                        </WorkoutLink>
                                     )
@@ -114,11 +84,16 @@ const Home = () => {
 
                               }
                               {
+                                 // Output data for this day
                                  currWorkouts.length === 0 ? (
-                                    i !== 0 && <p>No data</p>
+                                    i !== 0 && <p className='no-data'>No data</p>
                                  ) : (
                                     currWorkouts.map((w, j) => (
-                                       <WorkoutCard key={`day-${i}-workout-${j}`} {...w} to="#" />
+                                       <WorkoutCard 
+                                          key={`day-${i}-workout-${j}`} 
+                                          {...w} 
+                                          to={`/data/${w.dateKey}/${w.timeKey}`} 
+                                       />
                                     ))
                                  )
                               }
@@ -139,7 +114,8 @@ const CalendarControl = styled.div`
    flex-direction: row;
    align-items: center;
    gap: .5rem;
-   padding: 1rem 1rem 0 1rem;
+   padding: 1rem 1rem .5rem 1rem;
+   border-bottom: 1px solid #a9a9a9;
 
    & > select {
       font-size: .85rem;
@@ -148,7 +124,10 @@ const CalendarControl = styled.div`
 `
 
 const CalendarSelect = styled.select`
-   
+   border: 1px solid #ddd;
+   border-radius: 2px;
+   background-color: ${props => props.theme.bg};
+   color: ${props => props.theme.name === 'light' ? 'black' : 'white'};
 `
 
 export default Home

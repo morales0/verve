@@ -5,34 +5,39 @@ import { Link } from "react-router-dom"
 
 // Home layout styles
 const HomeContainer = styled.div`
-
+   display: flex;
+   flex-direction: column;
 `
 
 // Calendar styles/components
 const Calendar = styled.div`
    padding: 1rem;
-   height: 100%;
    overflow-y: auto;
 `
 
 const Day = styled.div`
-
    margin-bottom: .7rem;
-   
-
-   /* border: 1px solid #a2a2a2;
-   border-radius: 2px; */
+   opacity: ${props => props.hasData ? '1' : '.6'};
 
    & > header {
       display: flex;
       justify-content: space-between;
       align-items: flex-end;
-      padding: .5rem;
-      border-bottom: 1px solid #b9b9b9;
+      padding: .3rem;
+      width: 75%;
+      border-bottom: 1px solid ${props => props.hasData ? '#83cfab' : '#b9b9b9'};
+   }
+
+   & > header h2 {
+      font-size: 1.2rem;
    }
 
    & > .day_content {
       padding: 0.5rem;
+   }
+
+   & p.no-data {
+      font-size: .8rem;
    }
 
 `

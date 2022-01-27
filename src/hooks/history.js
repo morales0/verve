@@ -1,38 +1,47 @@
+import { onValue, query, ref, or, orderByKey, limitToFirst, limitToLast } from "firebase/database";
 import { useEffect, useState } from "react";
 import { useDatabase, useUser } from "reactfire";
-import { get, ref, child, onValue } from "@firebase/database";
 
-// import firebase from 'firebase'
-
-
-const useHistory = () => {
+const useHistory = (dayLimit) => {
    const db = useDatabase()
    const user = useUser()
-   const workoutHistoryRef = ref(db, `users/${user.data.uid}/history`)
    const [status, setStatus] = useState('loading');
-   const [workoutHistory, setWorkoutHistory] = useState({});
+   const [data, setData] = useState({});
+   
+   const workoutHistoryRef = ref(db, `users/${user.data.uid}/history`)
 
-
-   // Get history once
+   // Subscribe to history data
    useEffect(() => {
-      onValue(workoutHistoryRef, snapshot => {
+      setStatus('loading')
+      const historyListener = onValue(query(workoutHistoryRef, limitToLast(dayLimit)), snapshot => {
          if (!snapshot.exists()) {
             setStatus('success')
             return
          }
 
-         setWorkoutHistory(snapshot.val())
+         let workoutHistory = snapshot.val()
+
+         // Process snashot
+         let count = 0
+         snapshot.forEach(workout => {
+            //console.log(workout.val());
+            count++
+         })
+
+         setData(workoutHistory)
          setStatus('success')
       })
-   }, []);
 
+      return () => historyListener()
+      
+   }, [dayLimit]);
 
    // Create api for history data
    const api = {
       removeWorkout: () => {}
    }
 
-   return { status, data: workoutHistory, api }
+   return { status, data, api }
 }
 
 export {

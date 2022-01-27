@@ -188,6 +188,8 @@ const WorkoutContainer = (props) => {
             ...workoutData.data,
             dateEnded: dateEnded.toString(),
             timeEnded: timeEnded,
+            dateKey: dateKey,
+            timeKey: timeKey,
             inProgress: false
          })
 
