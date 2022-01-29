@@ -2,7 +2,8 @@ const themes = {
    "light": {
       name: 'light',
       fg: '#333',
-      bg: '#fefefe',
+      bg: '#85a0bb',
+      app_bg: '#fefefe',
       gray: '#adadad',
       buttons: {
          base: {

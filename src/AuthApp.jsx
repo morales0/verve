@@ -1,6 +1,6 @@
 import { UserNavbar } from "components";
 import { TestCanvas } from "components/util";
-import { Home, UserPage, Workout } from "pages";
+import { Data, Home, UserPage, Workout } from "pages";
 import { useEffect } from "react";
 import { useMediaQuery } from "react-responsive";
 import { BrowserRouter as Router, Redirect, Route, Switch } from "react-router-dom";
@@ -65,10 +65,10 @@ const AuthApp = (props) => {
                   <div style={{padding: ".6rem"}}>History coming soon!</div>
                </Route>
                <Route path="/data/:date/:time">
-                  <div style={{padding: ".6rem"}}>Workout data coming soon</div>
+                  <Data />
                </Route>
-               <Route path="/data/:date">
-                  <div style={{padding: ".6rem"}}>History coming soon</div>
+               <Route path="/data/">
+                  <Data />
                </Route>
                <Route path="/builder">
                   <div style={{padding: ".6rem"}}>Builder coming soon!</div>

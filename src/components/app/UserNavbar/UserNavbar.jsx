@@ -18,12 +18,6 @@ const UserNavbar = ({ setTheme }) => {
          <Brand exact to="/">Verve</Brand>
 
          <Nav>
-            <UserNavLink exact to="/data">
-               Data
-            </UserNavLink>
-         </Nav>
-
-         <Nav>
             <ThemeButton setTheme={setTheme}/>
             
             <UserNavLink exact to="/workout">

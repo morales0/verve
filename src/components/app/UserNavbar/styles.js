@@ -11,11 +11,11 @@ const StyledUserNavbar = styled.div`
    align-items: center;
    flex-shrink: 0;
    padding: 0;
-   border-bottom: 1px solid #bebebe;
+   border-bottom: 1px solid #797f85;
    height: 40px;
 
-   background-color: ${ props => props.theme.name === 'light' ? '#f1f5f9' : '#333'};
-   color: ${ props => props.theme.name === 'light' ? '#333' : '#fafafa'};
+   background-color: ${ props => props.theme.name === 'light' ? '#85a0bb' : '#333'};
+   color: ${ props => props.theme.name === 'light' ? '#fafafa' : '#fafafa'};
 `
 
 const Brand = styled(NavLink)`

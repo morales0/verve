@@ -127,7 +127,7 @@ const CalendarSelect = styled.select`
    border: 1px solid #ddd;
    border-radius: 2px;
    background-color: ${props => props.theme.bg};
-   color: ${props => props.theme.name === 'light' ? 'black' : 'white'};
+   color: white;
 `
 
 export default Home
