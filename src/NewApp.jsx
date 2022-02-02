@@ -1,6 +1,5 @@
 /**
  * TODO:
- * - Consider theme setter context maybe?
  * - Integrate lazy load for performance
  */
 
@@ -16,7 +15,6 @@ import UnauthApp from "UnauthApp";
 // const UnauthApp = React.lazy(() => import('./UnauthApp'))
 
 const NewApp = () => {
-   // Useful App global state
    const { status: authStatus, data: authData } = useSigninCheck()
    const [theme, setTheme] = useState("dark");
 
@@ -30,12 +28,7 @@ const NewApp = () => {
    // Return the app!
    return (
       <ThemeProvider theme={themes[theme]}>
-         {
-            authData.signedIn ?
-               <AuthApp setTheme={setTheme} />
-            :
-               <UnauthApp />
-         }
+         { authData.signedIn ? <AuthApp setTheme={setTheme} /> : <UnauthApp /> }
       </ThemeProvider>
    );
 }

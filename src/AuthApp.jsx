@@ -25,9 +25,10 @@ const AuthAppWrapper = styled.div`
    background-color: ${props => props.theme.app_bg};
    color: ${props => props.theme.fg};
 
+   /* Let page fill screen and handle scroll */
    & > div:nth-child(2) {
-      flex-grow: 1; /* Fill up space */
-      overflow-y: hidden; /* Don't grow off screen, components decide scroll */
+      flex-grow: 1;
+      overflow-y: hidden;
    }
 `
 
@@ -45,54 +46,54 @@ const AuthApp = (props) => {
 
    return (
       <>
-      <GlobalStyle />
-      <AuthAppWrapper isMobile={isMobile}>
-         <Router>
-            {/* User navbar */}
-            <UserNavbar isMobile={isMobile} setTheme={ props.setTheme }/>
+         <GlobalStyle />
+         <AuthAppWrapper isMobile={isMobile}>
+            <Router>
+               {/* User navbar */}
+               <UserNavbar isMobile={isMobile} setTheme={props.setTheme} />
 
-            {/* Render the requested page */}
-            <Switch>
-               {/* DEV */}
-               <Route path="/test">
-                  <TestCanvas />
-               </Route>
+               {/* Render the requested page */}
+               <Switch>
+                  {/* DEV */}
+                  <Route path="/test">
+                     <TestCanvas />
+                  </Route>
 
-               <Route path="/workout">
-                  <Workout />
-               </Route>
-               <Route path="/history">
-                  <div style={{padding: ".6rem"}}>History coming soon!</div>
-               </Route>
-               <Route path="/data/:date/:time">
-                  <Data />
-               </Route>
-               <Route path="/data/">
-                  <Data />
-               </Route>
-               <Route path="/builder">
-                  <div style={{padding: ".6rem"}}>Builder coming soon!</div>
-               </Route>
-               <Route path="/calculator">
-                  <div style={{padding: ".6rem"}}>Calculator coming soon!</div>
-               </Route>
-               <Route path="/about">
-                  <div style={{padding: ".6rem"}}>About coming soon!</div>
-               </Route>
-               <Route path="/user">
-                  <UserPage setCurrTheme={props.setTheme}/>
-               </Route>
-               <Route exact path="/">
-                  <Home />
-               </Route>
+                  <Route path="/workout">
+                     <Workout />
+                  </Route>
+                  <Route path="/history">
+                     <div style={{ padding: ".6rem" }}>History coming soon!</div>
+                  </Route>
+                  <Route path="/data/:date/:time">
+                     <Data />
+                  </Route>
+                  {/* <Route path="/data/">
+                     <Data />
+                  </Route> */}
+                  <Route path="/builder">
+                     <div style={{ padding: ".6rem" }}>Builder coming soon!</div>
+                  </Route>
+                  <Route path="/calculator">
+                     <div style={{ padding: ".6rem" }}>Calculator coming soon!</div>
+                  </Route>
+                  <Route path="/about">
+                     <div style={{ padding: ".6rem" }}>About coming soon!</div>
+                  </Route>
+                  <Route path="/user">
+                     <UserPage setCurrTheme={props.setTheme} />
+                  </Route>
+                  <Route exact path="/">
+                     <Home />
+                  </Route>
 
-               {/* Not found page -> redirect home */}
-               <Route path="*">
-                  <Redirect to="/" />
-               </Route>
-            </Switch>
-         </Router>
-      </AuthAppWrapper>
+                  {/* Not found page -> redirect home */}
+                  <Route path="*">
+                     <Redirect to="/" />
+                  </Route>
+               </Switch>
+            </Router>
+         </AuthAppWrapper>
       </>
    )
 }

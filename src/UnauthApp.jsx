@@ -22,12 +22,8 @@ const UnauthApp = (props) => {
                <Route path="/signup">
                   <SignUp />
                </Route>
-               <Route exact path="/">
-                  {/* <div>Guest home</div> */}
+               <Route path="*">
                   <Redirect to="/signin" />
-               </Route>
-               <Route>
-                  <Redirect to="/" />
                </Route>
             </Switch>
          </Router>
