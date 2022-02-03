@@ -1,98 +1,50 @@
-import { PageHeader } from "components";
-import { useState, useEffect } from "react";
-import { CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
-import { VictoryChart, VictoryLine } from "victory";
-import { DataPageHeader, ExerciseBar, DataContainer } from "./components/styled-components";
+import { ExerciseView } from "components/app";
+import { useParams } from "react-router-dom";
+import { toDateString } from 'util/date';
+import { Body, Header, StyledData } from "./styles";
+import useDataPage from "./useDataPage";
 
-import './Data.scss'
-import exerciseData from "./test-data";
+const Data = () => {
+   const { date, time } = useParams()
+   const { status, data } = useDataPage(date, time)
 
-const exercises = [
-   {
-      name: 'Pushups',
-      data: exerciseData
-   },
-   {
-      name: 'Pullups',
-      data: [
-         { x: 1, y: 2 },
-         { x: 2, y: 3 },
-         { x: 3, y: 5 },
-         { x: 4, y: 4 },
-         { x: 5, y: 7 }
-      ]
-   },
-   {
-      name: 'Bench Press',
-      data: [
-         { x: 1, y: 2 },
-         { x: 2, y: 3 },
-         { x: 3, y: 5 },
-         { x: 4, y: 4 },
-         { x: 5, y: 7 }
-      ]
-   },
-   {
-      name: 'Squats',
-      data: [
-         { x: 1, y: 2 },
-         { x: 2, y: 3 },
-         { x: 3, y: 5 },
-         { x: 4, y: 4 },
-         { x: 5, y: 7 }
-      ]
-   },
-]
+   const dateString = () => {
+      const dateObj = new Date()
+      dateObj.setFullYear(date.slice(0,4))
+      dateObj.setMonth(parseInt(date.slice(5,7)) - 1)
+      dateObj.setDate(date.slice(8, 10))
 
-const Data = (props) => {
-   const [currentExercise, setCurrentExercise] = useState(null);
+      return toDateString(dateObj)
+   }
 
    return (
-      <div style={{padding: '1rem'}}>
-         Exercise Data coming soon!
-      </div>
-   )
-
-   return (
-      <div className='Data_page'>
-         <DataPageHeader
-            title='Exercise Data'
-         />
-
-         <ExerciseBar exercises={exercises} setExercise={setCurrentExercise} />
-
-         <DataContainer>
-            {
-               currentExercise ? (
-                  
-                     <LineChart
-                        data={currentExercise.data}
-                        height={300}
-                        width={500}
-                     >
-                        <CartesianGrid strokeDasharray="3 3"/>
-                        <XAxis 
-                           dataKey='x'
-                           type='number'
-                           ticks={[1, 5, 10, 15, 20]}
-                           domain={['dataMin', 'dataMax']}
+      <StyledData>
+         <Header>
+            <h2>{dateString()}</h2>
+         </Header>
+         {
+            status === 'success' ? (
+               <Body>
+                  {
+                     Object.values(data.exercises).map((e, i) => (
+                        <ExerciseView
+                           key={`${e.name}-${i}`}
+                           {...e}
                         />
-                        <YAxis 
-                           dataKey='y'
-                           domain={['auto', 'auto']}
-                        />
-                        <Tooltip />
-                        <Line type="monotone" dataKey='y' stroke="#8884d8" activeDot={{ r: 8 }} />
-                     </LineChart>
-               ) : (
-                  <div>
-                     Choose an exercise from the exercise bar to view data for
-                  </div>
-               )
-            }
-         </DataContainer>
-      </div>
-
+                     ))
+                  }
+               </Body>
+            ) : status === 'loading' ? (
+               <div>
+                  Loading data...
+               </div>
+            ) : (
+               <div>
+                  Something went wrong.
+               </div>
+            )
+         }
+      </StyledData>
    );
 }
 
