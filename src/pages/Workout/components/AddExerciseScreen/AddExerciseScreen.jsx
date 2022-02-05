@@ -9,9 +9,8 @@ const StyledAddExerciseScreen = styled.div`
    flex-direction: column;
    justify-content: space-between;
    flex-grow: 1;
-   margin-top: .3rem;
-   background-color: ${props => props.theme.name === 'light' ? '#f9f9f9' :  '#555'};
-   border: 1px solid #ddd;
+   margin-top: 50px;
+
    overflow-y: hidden;
 
    & > * {
@@ -27,6 +26,7 @@ const StyledAddExerciseScreen = styled.div`
       display: flex;
       flex-direction: column;
       flex-grow: 1;
+      padding: .5rem 1rem;
       overflow-y: hidden;
    }
 
@@ -34,7 +34,6 @@ const StyledAddExerciseScreen = styled.div`
       display: flex;
       justify-content: flex-end;
       padding: .3rem 1rem;
-      border-top: 1px solid #aaa;
    }
 `
 
@@ -74,7 +73,7 @@ const StyledControlBtn = styled.button`
    cursor: pointer;
 `
 
-const AddExerciseScreen = ({ exercisesToAdd, close }) => {
+const AddExerciseScreen = ({ exercisesToAdd, onAdd }) => {
    const { api, pageState } = useWorkout()
    const [currTab, setCurrTab] = useState(0);
    const [editExercise, setEditExercise] = useState(null);
@@ -108,20 +107,17 @@ const AddExerciseScreen = ({ exercisesToAdd, close }) => {
                      exercisesToAdd={pageState.exToAdd}
                      handleAdd={api.addExercise}
                      handleEdit={handleEdit}
-                     close={close}
+                     onAdd={onAdd}
                   />
                ) : (
                   <CreateExerciseForm
                      editExercise={editExercise}
                      handleAdd={api.addExercise}
-                     close={close}
                      switchTabTo={switchTabTo}
+                     onAdd={onAdd}
                   />
                )
             }
-         </div>
-         <div className='footer'>
-            <StyledControlBtn type='cancel' onClick={close}>Close</StyledControlBtn>
          </div>
       </StyledAddExerciseScreen>
    )

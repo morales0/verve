@@ -47,7 +47,7 @@ const StyledControlBtn = styled.button`
    cursor: pointer;
 `
 
-const CreateExerciseForm = ({ children, editExercise, handleAdd, close, switchTabTo }) => {
+const CreateExerciseForm = ({ children, editExercise, handleAdd, onAdd, switchTabTo }) => {
    const user = useUser()
    const db = useDatabase()
    const [name, setName] = useState(editExercise?.name || "");
@@ -86,7 +86,7 @@ const CreateExerciseForm = ({ children, editExercise, handleAdd, close, switchTa
 
       // Add to the workout
       handleAdd(newExercise.name, newExercise.measures)
-      close()
+      onAdd()
    }
 
    const updateExercise = (e) => {

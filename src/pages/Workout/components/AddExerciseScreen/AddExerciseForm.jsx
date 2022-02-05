@@ -64,7 +64,7 @@ const ExerciseEditBtn = styled.button`
 
 `
 
-const AddExerciseForm = ({ exercisesToAdd, handleAdd, handleEdit, close }) => {
+const AddExerciseForm = ({ exercisesToAdd, handleAdd, handleEdit, onAdd }) => {
    const [filterQuery, setFilterQuery] = useState('');
 
    const filterExercises = () => {
@@ -77,7 +77,7 @@ const AddExerciseForm = ({ exercisesToAdd, handleAdd, handleEdit, close }) => {
 
    const addExercise = (name, measures) => {
       handleAdd(name, measures)
-      close()
+      onAdd()
    }
 
    return (
