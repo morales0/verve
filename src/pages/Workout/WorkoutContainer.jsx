@@ -25,6 +25,7 @@ const WorkoutContainer = (props) => {
    const [completing, setCompleting] = useState(false);
    const [exPopUpOpen, setExPopUpOpen] = useState(false);
    const [exToAdd, setExToAdd] = useState([]);
+   const [currScreen, setCurrScreen] = useState('loading');
 
    // Subscribe to workout ref
    useEffect(() => {
@@ -42,6 +43,7 @@ const WorkoutContainer = (props) => {
          // If not, set up parameters
          if (!inProgress) {
             setWorkoutData(curr => {return {...curr, status: 'creating'}})
+            setCurrScreen('add')
 
             let now = new Date()
             let time = now.toLocaleTimeString('en-US', {hour: 'numeric', minute: '2-digit'});
@@ -58,6 +60,12 @@ const WorkoutContainer = (props) => {
          // Update workout state
          } else {
             setWorkoutData({status: 'success', data: data})
+            
+            if (data['current-exercise']) {
+               setCurrScreen('exercise')
+            } else {
+               setCurrScreen('add')
+            }
          }
       })
 
@@ -100,35 +108,32 @@ const WorkoutContainer = (props) => {
          const starterSets = []
          starterSets.push(
             measures.reduce((acc, val) => {
-               acc[val] = 0
+               acc[val] = ""
                return acc
             }, {})
          )
 
-         updates[`/exercises/${name}`] = {
+         // Create current-exercise
+         updates[`/current-exercise/`] = {
             name: name,
-            complete: false,
             measures: measures,
             sets: starterSets
          };
-         updates['/numExInProgress'] = increment(1)
 
          update(workoutRef, updates)
       },
-      removeExercise: (name) => {
+      removeExercise: () => {
          const updates = {}
 
-         updates[`/exercises/${name}`] = null;
-         updates['/numExInProgress'] = increment(-1)
+         updates[`/current-exercise/`] = null;
 
          update(workoutRef, updates)
       },
-      completeExercise: (name) => {
+      completeExercise: (name, sets) => {
          const updates = {}
 
-         updates[`/exercises/${name}/complete`] = true;
-         updates['/numExInProgress'] = increment(-1)
-         updates['/numExCompleted'] = increment(1)
+         updates[`/completed-exercises/${name}/`] = sets
+         updates['/current-exercise/'] = null
 
          update(workoutRef, updates)
       },
@@ -261,7 +266,9 @@ const WorkoutContainer = (props) => {
       <WorkoutContext.Provider value={{
          api: api,
          pageState: {
-            exToAdd: exToAdd
+            exToAdd: exToAdd,
+            currScreen: currScreen,
+            setCurrScreen: setCurrScreen
          },
          workoutData: workoutData
       }}>

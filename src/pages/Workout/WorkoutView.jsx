@@ -6,16 +6,29 @@ import AddExerciseScreen from './components/AddExerciseScreen/AddExerciseScreen'
 import CompletedExercises from './components/CompletedExercises/CompletedExercises';
 import CompletedScreen from './components/CompletedScreen/CompletedScreen';
 import CurrentExercises from './components/CurrentExercises/CurrentExercises';
+import CurrentExerciseScreen from './components/CurrentExerciseScreen/CurrentExerciseScreen';
 import { StyledWorkoutView, Body } from './styles';
+import { useWorkout } from './WorkoutContainer';
 
 const WorkoutView = () => {
 	const [exPopUpOpen, setExPopUpOpen] = useState(false);
-	const [pageState, setPageState] = useState("add");
+	const { workoutData, pageState: { currScreen, setCurrScreen}, api } = useWorkout()
+
+	const currExercise = workoutData.data['current-exercise']
 
    console.log("--- <WorkoutView />")
 
 
 	const closeExPopUp = () => setExPopUpOpen(false)
+
+	useEffect(() => {
+		if (currExercise) {
+			setCurrScreen("exercise")
+		} else {
+			setCurrScreen("add")
+		}
+
+	}, [currExercise, setCurrScreen]);
 
 	// return (
 	// 	<StyledWorkoutView>
@@ -41,16 +54,24 @@ const WorkoutView = () => {
 
 	return (
 		<StyledWorkoutView>
-			<CompletedScreen />
+			<CompletedScreen 
+				exercises={workoutData.data["completed-exercises"]}
+				cancelWorkout={api.cancelWorkout}
+				completeWorkout={api.completeWorkout}
+			/>
 			{
-				pageState === "add" ? (
+				currScreen === "add" ? (
 					<AddExerciseScreen 
-						onAdd={() => setPageState("exercise")}
+						onAdd={() => setCurrScreen("exercise")}
 					/>
-				) : pageState === "exercise" ? (
-					<div>Exercise</div>
-				) : pageState === "completed" ? (
-					<div>Completed screen</div>
+				) : currScreen === "exercise" && currExercise ? (
+					<CurrentExerciseScreen 
+						name={currExercise?.name}
+						measures={currExercise?.measures}
+						starterSets={currExercise?.sets}
+					/>
+				) : currScreen === "loading" ? (
+					<div>Loading workout</div>
 				) : (
 					<div>Summary</div>
 				)

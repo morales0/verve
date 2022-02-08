@@ -9,10 +9,12 @@ import * as TopNavbarComponents from "./TopNavbar/components"
 import TriangleToggle from "./TriangleToggle/TriangleToggle";
 import ThemeToggle from "./ThemeToggle/ThemeToggle"
 import { TextInput } from "./Input/Input"
+import Button from "./Button/Button";
 
 export {
    AuthPage,
    AuthForm,
+   Button,
    EmailInput,
    PasswordInput,
    SideNavbar,

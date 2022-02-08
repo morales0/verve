@@ -1,17 +1,35 @@
+import { ExerciseView } from 'components/app';
 import { useState } from 'react'
 import { StyledCompletedScreen } from './styles';
+import { Button } from 'components/ui'
 
-const CompletedScreen = () => {
+const CompletedScreen = ({ exercises, cancelWorkout, completeWorkout }) => {
 	const [open, setOpen] = useState(false);
 
 	return (
 		<StyledCompletedScreen open={open}>
 			<header onClick={() => setOpen(!open)}>
-				Completed (count)
-				<div>Expand</div>
+				<p>Completed: {exercises ? Object.keys(exercises).length : 0}</p>
+				<div>Click to {open ? 'close' : 'open'}</div>
 			</header>
 			<div className='body'>
-				Finish some exercises!
+				{
+					exercises && Object.entries(exercises).map(([name, sets], i) => {
+						console.log(sets, Object.keys(sets[0]));
+
+						return (
+							<ExerciseView
+								name={name}
+								sets={sets}
+								measures={Object.keys(sets[0])}
+							/>
+						)
+					})
+				}
+			</div>
+			<div className='footer'>
+				<Button btnStyle={"danger"} onClick={cancelWorkout}>Cancel Workout</Button>
+				<Button btnStyle={"success"} onClick={completeWorkout}>Complete Workout</Button>
 			</div>
 		</StyledCompletedScreen>
 	)

@@ -2,7 +2,7 @@ import styled, { css } from "styled-components";
 
 const sizebtnStyles = {
    small: css`
-      padding: .5rem;
+      padding: .2rem .6rem;
       margin: .5rem;
       font-size: .8rem;
    `,

@@ -14,7 +14,7 @@ const StyledCompletedScreen = styled.div`
 
 
 	overflow-y: hidden;
-	transition: height .5s;
+	//transition: height .5s;
 
 	& > header {
 		display: flex;
@@ -30,7 +30,15 @@ const StyledCompletedScreen = styled.div`
 	}
 
 	& > .body {
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
+		padding: 1rem;
 		overflow-y: auto;
+	}
+
+	& > .footer {
+		margin: auto auto 0 auto;
 	}
 `
 
