@@ -8,7 +8,7 @@ const useHistory = (dayLimit) => {
    const [status, setStatus] = useState('loading');
    const [data, setData] = useState({});
    
-   const workoutHistoryRef = ref(db, `users/${user.data.uid}/history`)
+   const workoutHistoryRef = ref(db, `users/${user.data.uid}/workoutHistory`)
 
    // Subscribe to history data
    useEffect(() => {
@@ -21,7 +21,7 @@ const useHistory = (dayLimit) => {
 
          let workoutHistory = snapshot.val()
 
-         // Process snashot
+         // Process snapshot
          let count = 0
          snapshot.forEach(workout => {
             //console.log(workout.val());

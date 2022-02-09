@@ -15,10 +15,9 @@ const CompletedScreen = ({ exercises, cancelWorkout, completeWorkout }) => {
 			<div className='body'>
 				{
 					exercises && Object.entries(exercises).map(([name, sets], i) => {
-						console.log(sets, Object.keys(sets[0]));
-
 						return (
 							<ExerciseView
+								key={`exview-${i}`}
 								name={name}
 								sets={sets}
 								measures={Object.keys(sets[0])}

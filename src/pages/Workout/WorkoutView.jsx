@@ -11,15 +11,8 @@ import { StyledWorkoutView, Body } from './styles';
 import { useWorkout } from './WorkoutContainer';
 
 const WorkoutView = () => {
-	const [exPopUpOpen, setExPopUpOpen] = useState(false);
 	const { workoutData, pageState: { currScreen, setCurrScreen}, api } = useWorkout()
-
-	const currExercise = workoutData.data['current-exercise']
-
-   console.log("--- <WorkoutView />")
-
-
-	const closeExPopUp = () => setExPopUpOpen(false)
+	const currExercise = workoutData.data['currentExercise']
 
 	useEffect(() => {
 		if (currExercise) {
@@ -30,32 +23,10 @@ const WorkoutView = () => {
 
 	}, [currExercise, setCurrScreen]);
 
-	// return (
-	// 	<StyledWorkoutView>
-	// 		{/* PopUps for adding and creating exercises */}
-	// 		<AddExercisePopUp
-	// 			isOpen={exPopUpOpen}
-	// 			close={closeExPopUp}
-	// 		/>
-
-	// 		{/* Section for main content */}
-	// 		<Body>
-	// 			<CurrentExercises
-	// 				openExPopUp={() => setExPopUpOpen(true)}
-	// 			/>
-				
-	// 			<CompletedExercises />
-	// 		</Body>
-
-	// 		{/* Sidebar for adding and creating exercises? */}
-
-	// 	</StyledWorkoutView>
-	// );
-
 	return (
 		<StyledWorkoutView>
 			<CompletedScreen 
-				exercises={workoutData.data["completed-exercises"]}
+				exercises={workoutData.data["completedExercises"]}
 				cancelWorkout={api.cancelWorkout}
 				completeWorkout={api.completeWorkout}
 			/>

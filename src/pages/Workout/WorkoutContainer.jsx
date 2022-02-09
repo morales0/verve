@@ -1,4 +1,4 @@
-import { get, ref, set, update, increment, push, remove, onValue, off } from "@firebase/database";
+import { get, ref, set, update, increment, push, remove, onValue, off, query, limitToLast } from "firebase/database";
 import React, { useState, useEffect, useContext } from "react";
 import { useHistory } from "react-router";
 import { useDatabase, useDatabaseList, useDatabaseObject, useUser } from "reactfire";
@@ -15,24 +15,19 @@ const WorkoutContainer = (props) => {
    // Firebase state
    const db = useDatabase()
    const user = useUser()
-   const ogExRef = ref(db, 'original-exercises')
-   const userRef = ref(db, `users/${user.data.uid}`)
    const workoutRef = ref(db, `users/${user.data.uid}/workout`)
-   const exercisesRef = ref(db, `users/${user.data.uid}/workout/exercises`)
-   const [workoutData, setWorkoutData] = useState({status: 'loading', data: null})
+   const [workoutData, setWorkoutData] = useState({ status: 'loading', data: null })
 
    // Page state
    const [completing, setCompleting] = useState(false);
-   const [exPopUpOpen, setExPopUpOpen] = useState(false);
    const [exToAdd, setExToAdd] = useState([]);
    const [currScreen, setCurrScreen] = useState('loading');
 
    // Subscribe to workout ref
    useEffect(() => {
       const workoutListener = onValue(workoutRef, snapshot => {
-         console.log("workoutData onvalue");
          if (!snapshot.exists()) {
-            setWorkoutData({status: 'error', data: null})
+            setWorkoutData({ status: 'error', data: null })
          }
 
          let data = snapshot.val()
@@ -40,28 +35,39 @@ const WorkoutContainer = (props) => {
          // Check if there is a current workout
          let inProgress = data['inProgress']
 
+         // Check status of workout
+         let workoutStatus = data['status']
+
+         if (workoutStatus === 'new') {
+            // Create a new workout
+         } else if (workoutStatus === 'finalizing') {
+            // Turn listener off, save data, send to home, set to finished
+         } else if (workoutStatus === 'finished') {
+            // Send to home and set to new?
+         }
+
          // If not, set up parameters
          if (!inProgress) {
-            setWorkoutData(curr => {return {...curr, status: 'creating'}})
+            setWorkoutData(curr => { return { ...curr, status: 'creating' } })
             setCurrScreen('add')
 
             let now = new Date()
-            let time = now.toLocaleTimeString('en-US', {hour: 'numeric', minute: '2-digit'});
+            let time = now.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
 
             set(workoutRef, {
                dateStarted: new Date().toString(),
                timeStarted: time,
-               numExInProgress: 0,
-               numExCompleted: 0,
+               screen: "add",
+               status: "new",
                inProgress: true
             }).catch(err => {
                console.error("Beginning a new workout failed", err)
             })
-         // Update workout state
+            // Update workout state as it changes
          } else {
-            setWorkoutData({status: 'success', data: data})
-            
-            if (data['current-exercise']) {
+            setWorkoutData({ status: 'success', data: data })
+
+            if (data['currentExercise']) {
                setCurrScreen('exercise')
             } else {
                setCurrScreen('add')
@@ -88,8 +94,8 @@ const WorkoutContainer = (props) => {
 
       // Get exercises from user's list
       const customExercisesRef = ref(db, `users/${user.data.uid}/custom-exercises/`)
-      const customExListener = onValue(customExercisesRef, customSnapshot=>{
-         if (customSnapshot.exists()){
+      const customExListener = onValue(customExercisesRef, customSnapshot => {
+         if (customSnapshot.exists()) {
             setExToAdd([...Object.values(customSnapshot.val()).sort((a, b) => a.name.localeCompare(b.name))])
          }
       })
@@ -100,40 +106,48 @@ const WorkoutContainer = (props) => {
    // Workout API
    const api = {
       // Exercise functions
-      // TODO: Filter ex to add when adding and removing exercises
       addExercise: (name, measures) => {
          const updates = {}
 
-         // Create starting sets
-         const starterSets = []
-         starterSets.push(
-            measures.reduce((acc, val) => {
-               acc[val] = ""
-               return acc
-            }, {})
-         )
+         let starterSets = []
+         // Check if the history for this exercise exists
+         const newExHistoryRef = ref(db, `users/${user.data.uid}/exerciseHistory/${name}/`)
+         get(query(newExHistoryRef, limitToLast(1))).then(snapshot => {
+            if (snapshot.exists()) {
+               let data = Object.values(snapshot.val())
+               starterSets = data[0]
+            } else {
+               // Create blank starting sets
+               starterSets.push(
+                  measures.reduce((acc, val) => {
+                     acc[val] = ""
+                     return acc
+                  }, {})
+               )
+            }
 
-         // Create current-exercise
-         updates[`/current-exercise/`] = {
-            name: name,
-            measures: measures,
-            sets: starterSets
-         };
+            // Create current exercise
+            updates[`/currentExercise/`] = {
+               name: name,
+               measures: measures,
+               sets: starterSets
+            };
 
-         update(workoutRef, updates)
+            update(workoutRef, updates)
+         })
       },
       removeExercise: () => {
          const updates = {}
 
-         updates[`/current-exercise/`] = null;
+         updates[`/currentExercise/`] = null;
 
          update(workoutRef, updates)
       },
       completeExercise: (name, sets) => {
          const updates = {}
 
-         updates[`/completed-exercises/${name}/`] = sets
-         updates['/current-exercise/'] = null
+         updates[`/completedExercises/${name}/`] = sets
+         updates['/currentExercise/'] = null
 
          update(workoutRef, updates)
       },
@@ -141,32 +155,6 @@ const WorkoutContainer = (props) => {
          const updates = {}
 
          updates[`/exercises/${name}/complete`] = false;
-         updates['/numExInProgress'] = increment(1)
-         updates['/numExCompleted'] = increment(-1)
-
-         update(workoutRef, updates)
-      },
-
-      // Set functions
-      // TODO: Initialize set to last recorded set value
-      addSetToExercise: (exName, index, oldSet) => {
-         const updates = {}
-
-         updates[`/exercises/${exName}/sets/${index}`] = oldSet
-
-         update(workoutRef, updates)
-      },
-      removeSetFromExercise: (exName, index) => {
-         const updates = {}
-
-         updates[`/exercises/${exName}/sets/${index}`] = null
-
-         update(workoutRef, updates)
-      },
-      updateSetInExercise: (exName, index, measure, newVal) => {
-         const updates = {}
-
-         updates[`/exercises/${exName}/sets/${index}/${measure}`] = newVal
 
          update(workoutRef, updates)
       },
@@ -177,10 +165,8 @@ const WorkoutContainer = (props) => {
          off(workoutRef)
 
          const dateStarted = new Date(workoutData.data.dateStarted)
-         console.log(dateStarted.toLocaleTimeString());
          const dateEnded = new Date()
-         const timeEnded = dateEnded.toLocaleTimeString('en-US', {hour: 'numeric', minute: '2-digit'});
-
+         const timeEnded = dateEnded.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })
 
          // Create unique date key (by day)
          let dateKey = toDateKey(dateStarted)
@@ -188,8 +174,8 @@ const WorkoutContainer = (props) => {
          // Unique timekey within day
          let timeKey = dateStarted.toLocaleTimeString()
 
-         // Save workout in history
-         set(ref(db, `users/${user.data.uid}/history/${dateKey}/${timeKey}`), {
+         // Save workout history
+         set(ref(db, `users/${user.data.uid}/workoutHistory/${dateKey}/${timeKey}`), {
             ...workoutData.data,
             dateEnded: dateEnded.toString(),
             timeEnded: timeEnded,
@@ -198,25 +184,10 @@ const WorkoutContainer = (props) => {
             inProgress: false
          })
 
-
-         // const exerciseHistory = ref(db, `users/${user.data.uid}/exercise-history`)
-
-         /* get(ref(db, `users/${user.data.uid}/workout-exercises`)).then(snapshot => {
-            let exercises = snapshot.val()
-
-            Object.values(exercises).forEach(ex => {
-               let currExRef = ref(db, `users/${user.data.uid}/exercise-history/${ex.name}`)
-               let exRef = push(currExRef, {
-                  date: endDate,
-                  sets: ex.sets
-               })
-
-               // Save key in history object
-               console.log(histRef)
-               let currHistRef = ref(db, `users/${user.data.uid}/history/${histRef.key}/exercises/${ex.name}`)
-               set(currHistRef, exRef.key)
-            })
-         }) */
+         // Save each exercise history
+         Object.entries(workoutData.data['completedExercises']).forEach(([name, sets]) => {
+            set(ref(db, `users/${user.data.uid}/exerciseHistory/${name}/${dateKey}-${timeKey}`), sets)
+         })
 
          // Reset workout
          set(workoutRef, {
@@ -251,7 +222,7 @@ const WorkoutContainer = (props) => {
    }
 
    // Check if workout exists
-   if (workoutData.status === "loading"){
+   if (workoutData.status === "loading") {
       return (
          <div>Finding your workout...</div>
       )
