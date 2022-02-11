@@ -10,7 +10,7 @@ const useDataPage = (date, time) => {
    const [workoutData, setWorkoutData] = useState({status: 'loading', data: {}});
    
    useEffect(() => {
-      const workoutRef = ref(db, `users/${user.data.uid}/history/${date}/${time}`)
+      const workoutRef = ref(db, `users/${user.data.uid}/workoutHistory/${date}/${time}`)
       onValue(workoutRef, snapshot => {
          if (!snapshot.exists()){
             setWorkoutData({status: 'error', data: {}})

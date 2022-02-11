@@ -26,7 +26,7 @@ const themes = {
          },
          success: {
             color: 'white',
-            bgColor: '#97d192',
+            bgColor: '#6cb366',
             bgColorHover: '#97d192',
             bgColorFocus: '#97d192',
             borderColor: 'transparent',
@@ -43,7 +43,7 @@ const themes = {
       gray: '#adadad',
       buttons: {
          base: {
-            color: '#4a4242',
+            color: 'white',
             bgColor: 'transparent',
             bgColorHover: '#d7d7e733',
             bgColorFocus: '#d7d7e733',
@@ -62,7 +62,8 @@ const themes = {
          },
          success: {
             color: 'white',
-            bgColor: '#97d192',
+            //bgColor: '#97d192',
+            bgColor: '#6cb366',
             bgColorHover: '#97d192',
             bgColorFocus: '#97d192',
             borderColor: 'transparent',

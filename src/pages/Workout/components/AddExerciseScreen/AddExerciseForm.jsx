@@ -64,7 +64,7 @@ const ExerciseEditBtn = styled.button`
 
 `
 
-const AddExerciseForm = ({ exercisesToAdd, handleAdd, handleEdit, close }) => {
+const AddExerciseForm = ({ exercisesToAdd, handleAdd, handleEdit, onAdd }) => {
    const [filterQuery, setFilterQuery] = useState('');
 
    const filterExercises = () => {
@@ -75,9 +75,9 @@ const AddExerciseForm = ({ exercisesToAdd, handleAdd, handleEdit, close }) => {
       )
    }
 
-   const addExercise = (name, measures) => {
-      handleAdd(name, measures)
-      close()
+   const addExercise = (e) => {
+      handleAdd(e)
+      onAdd()
    }
 
    return (
@@ -91,7 +91,7 @@ const AddExerciseForm = ({ exercisesToAdd, handleAdd, handleEdit, close }) => {
                   filterExercises()?.map((e, i) => (
 
                      <div className="exercise_info_container" key={`exToAdd-${e.name}-${i}`}>
-                        <ExerciseAddBtn onClick={() => addExercise(e.name, e.measures)}>
+                        <ExerciseAddBtn onClick={() => addExercise(e)}>
                            <div className="plus">+</div>
                            <p className="name">{e.name}</p>
                         </ExerciseAddBtn>

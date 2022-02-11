@@ -88,13 +88,13 @@ const StyledWorkoutCard = styled(Link)`
 
 `
 
-const WorkoutCard = ({ to, complete, inProgress, exercises, timeStarted, timeEnded, ...rest }) => {
+const WorkoutCard = ({ to, complete, inProgress, completedExercises, currentExercises, timeStarted, timeEnded, ...rest }) => {
    const exercisesList = () => {
-      if (!exercises) {
+      if (!completedExercises) {
          return []
       }
 
-      return Object.values(exercises)
+      return Object.entries(completedExercises)
    }
 
    return (
@@ -114,7 +114,7 @@ const WorkoutCard = ({ to, complete, inProgress, exercises, timeStarted, timeEnd
 
             <div className='body'>
                {
-                  exercisesList().map((ex, i) => <div key={`ex-${i}-${ex.name}`}>{ex.name}</div>)
+                  exercisesList().map(([name, sets], i) => <div key={`ex-${i}-${name}`}>{name}</div>)
                }
             </div>
             {

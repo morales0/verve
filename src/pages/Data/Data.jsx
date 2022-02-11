@@ -26,10 +26,12 @@ const Data = () => {
             status === 'success' ? (
                <Body>
                   {
-                     Object.values(data.exercises).map((e, i) => (
+                     Object.entries(data.completedExercises).map(([name, sets], i) => (
                         <ExerciseView
-                           key={`${e.name}-${i}`}
-                           {...e}
+                           key={`${name}-${i}`}
+                           name={name}
+                           sets={sets}
+                           measures={Object.keys(sets[0])}
                         />
                      ))
                   }

@@ -3,6 +3,7 @@ import styled from 'styled-components'
 const StyledExerciseView = styled.div`
    border: 1px solid #d1d1d1;
    max-width: 100%;
+   width: fit-content;
 `
 
 const Header = styled.h4`
