@@ -1,6 +1,7 @@
 import styled from "styled-components"
 import RightArrow from 'images/right-arrow.png'
 import { Link } from "react-router-dom"
+import useCustomExercises from "hooks/customExercises"
 
 
 // Home layout styles
@@ -89,12 +90,23 @@ const StyledWorkoutCard = styled(Link)`
 `
 
 const WorkoutCard = ({ to, complete, inProgress, completedExercises, currentExercises, timeStarted, timeEnded, ...rest }) => {
+   const customExercises = useCustomExercises()
+
    const exercisesList = () => {
       if (!completedExercises) {
          return []
       }
 
-      return Object.entries(completedExercises)
+      return Object.entries(completedExercises).map(([eid, data]) => {
+         let name = customExercises.data[eid]?.name
+         let sets = data
+
+         return [name, sets]
+      })
+   }
+
+   if (customExercises.status === 'loading') {
+      return null
    }
 
    return (

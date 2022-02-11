@@ -99,7 +99,7 @@ const WorkoutContainer = (props) => {
 
          let starterSets = []
          // Check if the history for this exercise exists
-         const newExHistoryRef = ref(db, `users/${user.data.uid}/exerciseHistory/${e.name}/`)
+         const newExHistoryRef = ref(db, `users/${user.data.uid}/exerciseHistory/${e.id}/`)
          get(query(newExHistoryRef, limitToLast(1))).then(snapshot => {
             if (snapshot.exists()) {
                let data = Object.values(snapshot.val())
@@ -135,7 +135,7 @@ const WorkoutContainer = (props) => {
       completeExercise: (e) => {
          const updates = {}
 
-         updates[`/completedExercises/${e.name}/`] = e.sets
+         updates[`/completedExercises/${e.id}/`] = e.sets
          updates['/currentExercise/'] = null
 
          update(workoutRef, updates)
@@ -174,8 +174,8 @@ const WorkoutContainer = (props) => {
          })
 
          // Save each exercise history
-         Object.entries(workoutData.data['completedExercises']).forEach(([name, sets]) => {
-            set(ref(db, `users/${user.data.uid}/exerciseHistory/${name}/${dateKey}-${timeKey}`), sets)
+         Object.entries(workoutData.data['completedExercises']).forEach(([id, sets]) => {
+            set(ref(db, `users/${user.data.uid}/exerciseHistory/${id}/${dateKey}-${timeKey}`), sets)
          })
 
          // Reset workout

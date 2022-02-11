@@ -2,9 +2,17 @@ import { ExerciseView } from 'components/app';
 import { useState } from 'react'
 import { StyledCompletedScreen } from './styles';
 import { Button } from 'components/ui'
+import useCustomExercises from 'hooks/customExercises'
 
 const CompletedScreen = ({ exercises, cancelWorkout, completeWorkout }) => {
 	const [open, setOpen] = useState(false);
+	const customExercises = useCustomExercises()
+
+	console.log(exercises);
+
+	if (customExercises.status === 'loading') {
+		return null
+	}
 
 	return (
 		<StyledCompletedScreen open={open}>
@@ -14,11 +22,11 @@ const CompletedScreen = ({ exercises, cancelWorkout, completeWorkout }) => {
 			</header>
 			<div className='body'>
 				{
-					exercises && Object.entries(exercises).map(([name, sets], i) => {
+					exercises && Object.entries(exercises).map(([id, sets], i) => {
 						return (
 							<ExerciseView
 								key={`exview-${i}`}
-								name={name}
+								name={customExercises.data[id].name}
 								sets={sets}
 								measures={Object.keys(sets[0])}
 							/>

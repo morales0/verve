@@ -85,7 +85,7 @@ const CreateExerciseForm = ({ children, editExercise, handleAdd, onAdd, switchTa
 
 
       // Add to the workout
-      handleAdd(newExercise)
+      handleAdd({ ...newExercise, id: newExRef.key })
       onAdd()
    }
 

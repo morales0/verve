@@ -3,10 +3,12 @@ import { useParams } from "react-router-dom";
 import { toDateString } from 'util/date';
 import { Body, Header, StyledData } from "./styles";
 import useDataPage from "./useDataPage";
+import useCustomExercises from 'hooks/customExercises'
 
 const Data = () => {
    const { date, time } = useParams()
    const { status, data } = useDataPage(date, time)
+   const customExercises = useCustomExercises()
 
    const dateString = () => {
       const dateObj = new Date()
@@ -15,6 +17,10 @@ const Data = () => {
       dateObj.setDate(date.slice(8, 10))
 
       return toDateString(dateObj)
+   }
+
+   if (customExercises.status === 'loading') {
+      return null
    }
 
    return (
@@ -26,10 +32,10 @@ const Data = () => {
             status === 'success' ? (
                <Body>
                   {
-                     Object.entries(data.completedExercises).map(([name, sets], i) => (
+                     Object.entries(data.completedExercises).map(([id, sets], i) => (
                         <ExerciseView
-                           key={`${name}-${i}`}
-                           name={name}
+                           key={`${id}-${i}`}
+                           name={customExercises.data[id].name}
                            sets={sets}
                            measures={Object.keys(sets[0])}
                         />

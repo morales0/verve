@@ -1,3 +1,4 @@
+import useCustomExercises from 'hooks/customExercises';
 import { useHistory } from 'hooks/history';
 import useCurrentWorkout from 'hooks/workout.js';
 import React, { useState } from 'react';
