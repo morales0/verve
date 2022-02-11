@@ -79,13 +79,13 @@ const CreateExerciseForm = ({ children, editExercise, handleAdd, onAdd, switchTa
       }
 
       // Add to user's custom exercise data
-      const customExercisesRef = ref(db, `users/${user.data.uid}/custom-exercises/`)
+      const customExercisesRef = ref(db, `users/${user.data.uid}/customExercises/`)
       const newExRef = push(customExercisesRef)
       set(newExRef, { ...newExercise, id: newExRef.key })
 
 
       // Add to the workout
-      handleAdd(newExercise.name, newExercise.measures)
+      handleAdd(newExercise)
       onAdd()
    }
 
@@ -111,7 +111,7 @@ const CreateExerciseForm = ({ children, editExercise, handleAdd, onAdd, switchTa
          newExercise.measures.push("reps")
       }
 
-      const currExRef = ref(db, `users/${user.data.uid}/custom-exercises/${editExercise.id}`)
+      const currExRef = ref(db, `users/${user.data.uid}/customExercises/${editExercise.id}`)
       // Set to new exercise
       const updates = {}
       updates['/name'] = newExercise.name

@@ -80,20 +80,8 @@ const WorkoutContainer = (props) => {
 
    // Populate exercises to add
    useEffect(() => {
-      /* get(ogExRef).then(snapshot => {
-         // Also get user's custom exercises
-         const customExercisesRef = ref(db, `users/${user.data.uid}/custom-exercises/`)
-         get(customExercisesRef).then(customSnapshot=>{
-            if (customSnapshot.exists()){
-               setExToAdd([...Object.values(snapshot.val()), ...Object.values(customSnapshot.val())])
-            } else {
-               setExToAdd(Object.values(snapshot.val()))
-            }
-         })
-      }) */
-
       // Get exercises from user's list
-      const customExercisesRef = ref(db, `users/${user.data.uid}/custom-exercises/`)
+      const customExercisesRef = ref(db, `users/${user.data.uid}/customExercises/`)
       const customExListener = onValue(customExercisesRef, customSnapshot => {
          if (customSnapshot.exists()) {
             setExToAdd([...Object.values(customSnapshot.val()).sort((a, b) => a.name.localeCompare(b.name))])
@@ -106,12 +94,12 @@ const WorkoutContainer = (props) => {
    // Workout API
    const api = {
       // Exercise functions
-      addExercise: (name, measures) => {
+      addExercise: (e) => {
          const updates = {}
 
          let starterSets = []
          // Check if the history for this exercise exists
-         const newExHistoryRef = ref(db, `users/${user.data.uid}/exerciseHistory/${name}/`)
+         const newExHistoryRef = ref(db, `users/${user.data.uid}/exerciseHistory/${e.name}/`)
          get(query(newExHistoryRef, limitToLast(1))).then(snapshot => {
             if (snapshot.exists()) {
                let data = Object.values(snapshot.val())
@@ -119,7 +107,7 @@ const WorkoutContainer = (props) => {
             } else {
                // Create blank starting sets
                starterSets.push(
-                  measures.reduce((acc, val) => {
+                  e.measures.reduce((acc, val) => {
                      acc[val] = ""
                      return acc
                   }, {})
@@ -128,9 +116,10 @@ const WorkoutContainer = (props) => {
 
             // Create current exercise
             updates[`/currentExercise/`] = {
-               name: name,
-               measures: measures,
-               sets: starterSets
+               id: e.id,
+               name: e.name,
+               measures: e.measures,
+               starterSets: starterSets
             };
 
             update(workoutRef, updates)
@@ -143,18 +132,18 @@ const WorkoutContainer = (props) => {
 
          update(workoutRef, updates)
       },
-      completeExercise: (name, sets) => {
+      completeExercise: (e) => {
          const updates = {}
 
-         updates[`/completedExercises/${name}/`] = sets
+         updates[`/completedExercises/${e.name}/`] = e.sets
          updates['/currentExercise/'] = null
 
          update(workoutRef, updates)
       },
-      uncompleteExercise: (name) => {
+      uncompleteExercise: (e) => {
          const updates = {}
 
-         updates[`/exercises/${name}/complete`] = false;
+         updates[`/completedExercises/${e.id}/`] = null;
 
          update(workoutRef, updates)
       },

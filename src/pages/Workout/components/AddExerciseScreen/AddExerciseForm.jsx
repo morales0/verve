@@ -75,8 +75,8 @@ const AddExerciseForm = ({ exercisesToAdd, handleAdd, handleEdit, onAdd }) => {
       )
    }
 
-   const addExercise = (name, measures) => {
-      handleAdd(name, measures)
+   const addExercise = (e) => {
+      handleAdd(e)
       onAdd()
    }
 
@@ -91,7 +91,7 @@ const AddExerciseForm = ({ exercisesToAdd, handleAdd, handleEdit, onAdd }) => {
                   filterExercises()?.map((e, i) => (
 
                      <div className="exercise_info_container" key={`exToAdd-${e.name}-${i}`}>
-                        <ExerciseAddBtn onClick={() => addExercise(e.name, e.measures)}>
+                        <ExerciseAddBtn onClick={() => addExercise(e)}>
                            <div className="plus">+</div>
                            <p className="name">{e.name}</p>
                         </ExerciseAddBtn>

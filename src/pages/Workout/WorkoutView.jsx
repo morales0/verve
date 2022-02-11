@@ -37,9 +37,7 @@ const WorkoutView = () => {
 					/>
 				) : currScreen === "exercise" && currExercise ? (
 					<CurrentExerciseScreen 
-						name={currExercise?.name}
-						measures={currExercise?.measures}
-						starterSets={currExercise?.sets}
+						{...currExercise}
 					/>
 				) : currScreen === "loading" ? (
 					<div>Loading workout</div>

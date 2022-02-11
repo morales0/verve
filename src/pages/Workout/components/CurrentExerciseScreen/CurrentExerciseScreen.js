@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { Button } from 'components/ui'
 import { AddSetButton, Body, ControlGroup, Header, LabelContainer, MeasureLabel, RemoveSetButton, SetGrid, SetRow, SetValInput, StyledCurrentExerciseScreen } from './styles.js'
 
-const CurrentExerciseScreen = ({ name, measures, starterSets }) => {
+const CurrentExerciseScreen = ({ name, measures, starterSets, id }) => {
    const { api } = useWorkout()
 
    const [sets, setSets] = useState(starterSets);
@@ -43,7 +43,7 @@ const CurrentExerciseScreen = ({ name, measures, starterSets }) => {
          })
       })
       
-      api.completeExercise(name, sets)
+      api.completeExercise({name, sets, id})
    }
 
    return (

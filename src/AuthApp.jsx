@@ -6,6 +6,7 @@ import { useMediaQuery } from "react-responsive";
 import { BrowserRouter as Router, Redirect, Route, Switch } from "react-router-dom";
 import { useAuth, useUser } from "reactfire";
 import styled, { createGlobalStyle } from "styled-components";
+import useUpdates from 'hooks/updates'
 
 
 // Dynamic styling for app
@@ -36,13 +37,9 @@ const AuthApp = (props) => {
    const auth = useAuth()
    const user = useUser()
    const isMobile = useMediaQuery({ query: '(max-width: 748px)' });
+   const updates = useUpdates()
 
-   // Check if there is user data before rendering
-   if (!user.data) {
-      return (
-         <div>Loading user...</div>
-      )
-   }
+   // Run updates first
 
    return (
       <>

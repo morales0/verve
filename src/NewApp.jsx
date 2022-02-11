@@ -5,7 +5,7 @@
 
 import AuthApp from "AuthApp";
 import React, { useState } from "react";
-import { useSigninCheck } from "reactfire";
+import { useSigninCheck, useUser } from "reactfire";
 import { ThemeProvider } from "styled-components";
 import themes from "styles/themes";
 import UnauthApp from "UnauthApp";
@@ -16,12 +16,20 @@ import UnauthApp from "UnauthApp";
 
 const NewApp = () => {
    const { status: authStatus, data: authData } = useSigninCheck()
+   const user = useUser()
    const [theme, setTheme] = useState("dark");
 
-   // Wait to see if a user is signed in
+   // Wait for auth status
    if (authStatus === 'loading') {
       return (
-         <div>Loading...</div>
+         <div>Loading Verve...</div>
+      )
+   }
+
+   // Wait for user data to load
+   if (authData.signedIn && !user.data) {
+      return (
+         <div>Loading your account...</div>
       )
    }
 
