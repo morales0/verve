@@ -8,8 +8,6 @@ const CompletedScreen = ({ exercises, cancelWorkout, completeWorkout }) => {
 	const [open, setOpen] = useState(false);
 	const customExercises = useCustomExercises()
 
-	console.log(exercises);
-
 	if (customExercises.status === 'loading') {
 		return null
 	}

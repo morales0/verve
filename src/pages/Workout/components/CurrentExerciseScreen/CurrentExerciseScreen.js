@@ -10,7 +10,7 @@ const CurrentExerciseScreen = ({ name, measures, starterSets, id }) => {
 
    const updateSetVal = (set, measure, newVal) => {
       let updatedSets = [...sets]
-      updatedSets[set][measures[measure]] = newVal
+      updatedSets[set][measure] = newVal
 
       setSets(updatedSets)
    }
@@ -42,8 +42,8 @@ const CurrentExerciseScreen = ({ name, measures, starterSets, id }) => {
             finalSets[i][m] = set[m]
          })
       })
-      
-      api.completeExercise({name, sets, id})
+
+      api.completeExercise({ name, sets, id })
    }
 
    return (
@@ -65,12 +65,12 @@ const CurrentExerciseScreen = ({ name, measures, starterSets, id }) => {
                   sets?.map((set, i) => (
                      <SetRow key={`setRow-${i}`}>
                         {
-                           Object.values(set).map((val, j) => (
+                           Object.entries(set).map(([m, val], j) => (
                               <SetValInput
                                  key={`${i}-${j}`}
                                  type="number"
                                  value={val}
-                                 onChange={(e) => updateSetVal(i, j, e.target.value)}
+                                 onChange={(e) => updateSetVal(i, m, e.target.value)}
                                  onFocus={(e) => e.target.select()}
                               />
                            ))
