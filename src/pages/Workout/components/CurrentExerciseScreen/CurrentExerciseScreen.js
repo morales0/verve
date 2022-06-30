@@ -2,6 +2,7 @@ import { useWorkout } from 'pages/Workout/WorkoutContainer.jsx';
 import { useState } from 'react';
 import { Button } from 'components/ui'
 import { AddSetButton, Body, ControlGroup, Header, LabelContainer, MeasureLabel, RemoveSetButton, SetGrid, SetRow, SetValInput, StyledCurrentExerciseScreen } from './styles.js'
+import WeightInput from './WeightInput.jsx';
 
 const CurrentExerciseScreen = ({ name, measures, starterSets, id }) => {
    const { api } = useWorkout()
@@ -66,6 +67,11 @@ const CurrentExerciseScreen = ({ name, measures, starterSets, id }) => {
                      <SetRow key={`setRow-${i}`}>
                         {
                            Object.entries(set).map(([m, val], j) => (
+                              m === 'lbsLATER' ? (
+                              <WeightInput
+                                 givenValue={val}
+                              />
+                              ) : (
                               <SetValInput
                                  key={`${i}-${j}`}
                                  type="number"
@@ -73,6 +79,7 @@ const CurrentExerciseScreen = ({ name, measures, starterSets, id }) => {
                                  onChange={(e) => updateSetVal(i, m, e.target.value)}
                                  onFocus={(e) => e.target.select()}
                               />
+                              )
                            ))
                         }
                         {
