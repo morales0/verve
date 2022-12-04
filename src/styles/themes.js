@@ -39,7 +39,7 @@ const themes = {
       name: 'dark',
       fg: '#fff', // Used for foreground white text
       bg: '#333', // Used for background black
-      app_bg: '#434343',
+      app_bg: '#474550',
       gray: '#adadad',
       buttons: {
          base: {

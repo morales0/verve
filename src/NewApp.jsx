@@ -4,6 +4,7 @@
  */
 
 import AuthApp from "AuthApp";
+import { LoadingScreen } from "components/app";
 import React, { useState } from "react";
 import { useSigninCheck, useUser } from "reactfire";
 import { ThemeProvider } from "styled-components";
@@ -22,23 +23,30 @@ const NewApp = () => {
    // Wait for auth status
    if (authStatus === 'loading') {
       return (
-         <div>Loading Verve...</div>
+         null
       )
    }
 
-   // Wait for user data to load
-   if (authData.signedIn && !user.data) {
+   // Return auth app once data loads
+   if (authData.signedIn) {
+      if (user.data) {
+         return (
+            <ThemeProvider theme={themes[theme]}>
+               <AuthApp setTheme={setTheme} />
+            </ThemeProvider>
+         )
+      }
+   // Return the unauth app
+   } else {
       return (
-         <div>Loading your account...</div>
+         <ThemeProvider theme={themes[theme]}>
+            <UnauthApp />
+         </ThemeProvider>
       )
    }
 
-   // Return the app!
-   return (
-      <ThemeProvider theme={themes[theme]}>
-         { authData.signedIn ? <AuthApp setTheme={setTheme} /> : <UnauthApp /> }
-      </ThemeProvider>
-   );
+   // Catch all
+   return null
 }
 
 export default NewApp;
