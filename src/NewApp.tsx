@@ -3,13 +3,12 @@
  * - Integrate lazy load for performance
  */
 
-import AuthApp from "AuthApp";
-import { LoadingScreen } from "components/app";
+import AuthApp from "./AuthApp";
 import React, { useState } from "react";
 import { useSigninCheck, useUser } from "reactfire";
 import { ThemeProvider } from "styled-components";
-import themes from "styles/themes";
-import UnauthApp from "UnauthApp";
+import themes from "./styles/themes";
+import UnauthApp from "./UnauthApp";
 
 // Lazy load apps (need suspense)
 // const AuthApp = React.lazy(() => import('./AuthApp'))
@@ -19,6 +18,12 @@ const NewApp = () => {
    const { status: authStatus, data: authData } = useSigninCheck()
    const user = useUser()
    const [theme, setTheme] = useState("dark");
+
+   return (
+      <div>New App!</div>
+   )
+
+   /*
 
    // Wait for auth status
    if (authStatus === 'loading') {
@@ -47,6 +52,8 @@ const NewApp = () => {
 
    // Catch all
    return null
+
+   */
 }
 
 export default NewApp;

@@ -4,9 +4,9 @@ import './index.css';
 
 import { FirebaseAppProvider } from 'reactfire';
 import { AuthProvider } from './context/auth';
-import FirebaseProviders from 'context/firebaseProviders';
+import FirebaseProviders from './context/firebaseProviders';
 
-import NewApp from 'NewApp';
+import NewApp from './NewApp';
 
 // Firebase config
 const firebaseConfig = {
