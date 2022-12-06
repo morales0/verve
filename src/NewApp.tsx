@@ -15,15 +15,13 @@ import UnauthApp from "./UnauthApp";
 // const UnauthApp = React.lazy(() => import('./UnauthApp'))
 
 const NewApp = () => {
-   const { status: authStatus, data: authData } = useSigninCheck()
-   const user = useUser()
-   const [theme, setTheme] = useState("dark");
+  const { status: authStatus, data: authData } = useSigninCheck();
+  const user = useUser();
+  const [theme, setTheme] = useState("dark");
 
-   return (
-      <div>New App!</div>
-   )
+  return <div>New App!</div>;
 
-   /*
+  /*
 
    // Wait for auth status
    if (authStatus === 'loading') {
@@ -54,6 +52,6 @@ const NewApp = () => {
    return null
 
    */
-}
+};
 
 export default NewApp;

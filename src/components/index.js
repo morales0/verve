@@ -5,12 +5,4 @@ import Button from "./ui/Button/Button";
 import UserNavbar from "./app/UserNavbar/UserNavbar";
 import { PageHeader } from "./ui/Text/Text";
 
-
-export {
-   Exercise,
-   UserNavbar,
-   GuestNavbar,
-   PrivateRoute,
-   Button,
-   PageHeader
-}
+export { Exercise, UserNavbar, GuestNavbar, PrivateRoute, Button, PageHeader };

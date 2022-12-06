@@ -1,9 +1,3 @@
-import {Flex, flexRow, flexCol, flexCenter } from "./Flex/Flex"
+import { Flex, flexRow, flexCol, flexCenter } from "./Flex/Flex";
 
-
-export {
-   Flex,
-   flexRow,
-   flexCenter,
-   flexCol
-}
+export { Flex, flexRow, flexCenter, flexCol };

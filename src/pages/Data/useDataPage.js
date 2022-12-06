@@ -1,28 +1,33 @@
-import { onValue, ref } from 'firebase/database';
-import { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom';
-import { useDatabase, useUser } from 'reactfire';
-
+import { onValue, ref } from "firebase/database";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { useDatabase, useUser } from "reactfire";
 
 const useDataPage = (date, time) => {
-   const db = useDatabase()
-   const user = useUser()
-   const [workoutData, setWorkoutData] = useState({status: 'loading', data: {}});
-   
-   useEffect(() => {
-      const workoutRef = ref(db, `users/${user.data.uid}/workoutHistory/${date}/${time}`)
-      onValue(workoutRef, snapshot => {
-         if (!snapshot.exists()){
-            setWorkoutData({status: 'error', data: {}})
-            return
-         }
+  const db = useDatabase();
+  const user = useUser();
+  const [workoutData, setWorkoutData] = useState({
+    status: "loading",
+    data: {},
+  });
 
-         let data = snapshot.val()
-         setWorkoutData({status: 'success', data: data})
-      })
-   }, []);
+  useEffect(() => {
+    const workoutRef = ref(
+      db,
+      `users/${user.data.uid}/workoutHistory/${date}/${time}`
+    );
+    onValue(workoutRef, (snapshot) => {
+      if (!snapshot.exists()) {
+        setWorkoutData({ status: "error", data: {} });
+        return;
+      }
 
-   return workoutData
-}
+      let data = snapshot.val();
+      setWorkoutData({ status: "success", data: data });
+    });
+  }, []);
 
-export default useDataPage
+  return workoutData;
+};
+
+export default useDataPage;

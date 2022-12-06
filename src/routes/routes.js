@@ -1,3 +1,1 @@
-const routes = {
-   
-}
+const routes = {};

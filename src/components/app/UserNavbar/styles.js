@@ -1,103 +1,90 @@
-import styled from 'styled-components'
-import { NavLink } from 'react-router-dom'
-import SunnyIcon from 'images/sunny.png'
-import MoonIcon from 'images/moon.png'
-import { useState } from 'react';
-import { useTheme } from 'styled-components';
+import styled from "styled-components";
+import { NavLink } from "react-router-dom";
+import SunnyIcon from "images/sunny.png";
+import MoonIcon from "images/moon.png";
+import { useState } from "react";
+import { useTheme } from "styled-components";
 
 const StyledUserNavbar = styled.div`
-   display: flex;
-   justify-content: space-between;
-   align-items: center;
-   flex-shrink: 0;
-   padding: 0;
-   border-bottom: 1px solid #797f85;
-   height: 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-shrink: 0;
+  padding: 0;
+  border-bottom: 1px solid #797f85;
+  height: 40px;
 
-   background-color: ${ props => props.theme.name === 'light' ? '#85a0bb' : '#333'};
-   color: ${ props => props.theme.name === 'light' ? '#fafafa' : '#fafafa'};
-`
+  background-color: ${(props) =>
+    props.theme.name === "light" ? "#85a0bb" : "#333"};
+  color: ${(props) => (props.theme.name === "light" ? "#fafafa" : "#fafafa")};
+`;
 
 const Brand = styled(NavLink)`
-   padding: 0 1rem;
-   font-size: 1.25rem;
-   text-decoration: none;
-   color: inherit;
-`
+  padding: 0 1rem;
+  font-size: 1.25rem;
+  text-decoration: none;
+  color: inherit;
+`;
 
 const User = styled(NavLink)`
-   display: flex;
-   align-items: center;
-   padding: 0 .5rem;
-   height: 80%;
-   background: lavender;
-   border-radius: 20%;
-   margin-right: 5px;
-   text-decoration: none;
-   color: inherit;
-`
+  display: flex;
+  align-items: center;
+  padding: 0 0.5rem;
+  height: 80%;
+  background: lavender;
+  border-radius: 20%;
+  margin-right: 5px;
+  text-decoration: none;
+  color: inherit;
+`;
 
 const UserNavLink = styled(NavLink)`
-   display: flex;
-   align-items: center;
-   padding: 0 .5rem;
-   height: 100%;
-   text-decoration: none;
-   color: inherit;
+  display: flex;
+  align-items: center;
+  padding: 0 0.5rem;
+  height: 100%;
+  text-decoration: none;
+  color: inherit;
 
-   &:hover {
-      background-color: #dadada;
-   }
-`
+  &:hover {
+    background-color: #dadada;
+  }
+`;
 
 const Nav = styled.nav`
-   display: flex;
-   align-items: center;
-   height: 100%;
-`
+  display: flex;
+  align-items: center;
+  height: 100%;
+`;
 
 const StyledThemeButton = styled.button`
-   display: flex;
-   align-items: center;
-   padding: 0 .5rem;
-   height: 100%;
+  display: flex;
+  align-items: center;
+  padding: 0 0.5rem;
+  height: 100%;
 
-   background-color: transparent;
-   cursor: pointer;
+  background-color: transparent;
+  cursor: pointer;
 
-   border: none;
-`
+  border: none;
+`;
 
 const ThemeButton = ({ setTheme }) => {
-   const theme = useTheme()
+  const theme = useTheme();
 
-   const switchTheme = () => {
-      setTheme(theme.name === 'light' ? 'dark' : 'light')
-   }
+  const switchTheme = () => {
+    setTheme(theme.name === "light" ? "dark" : "light");
+  };
 
-   return (
-      <StyledThemeButton onClick={switchTheme}>
-         {
-            theme.name === 'light' ? (
-               <img src={SunnyIcon} 
-                  alt="theme switch" height='25px' 
-               />
-            ) : (
-               <img src={MoonIcon} 
-                  alt="theme switch" height='25px' 
-               />
-            )
-         }
-         
-      </StyledThemeButton>
-   )
-}
+  return (
+    <StyledThemeButton onClick={switchTheme}>
+      {theme.name === "light" ? (
+        <img src={SunnyIcon} alt="theme switch" height="25px" />
+      ) : (
+        <img src={MoonIcon} alt="theme switch" height="25px" />
+      )}
+    </StyledThemeButton>
+  );
+};
 
-export {
-   StyledUserNavbar,
-   Brand,
-   User,
-   UserNavLink,
-   Nav,
-   ThemeButton
-}
+export { StyledUserNavbar, Brand, User, UserNavLink, Nav, ThemeButton };

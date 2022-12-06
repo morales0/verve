@@ -1,6 +1,6 @@
 const user = {
-   uid: Number,
-   name: String,
-   workoutIDs: Array,
-   customExercises: Array
-}
+  uid: Number,
+  name: String,
+  workoutIDs: Array,
+  customExercises: Array,
+};

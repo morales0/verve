@@ -1,5 +1,3 @@
-import ExerciseView from './ExerciseView/ExerciseView'
+import ExerciseView from "./ExerciseView/ExerciseView";
 
-export {
-   ExerciseView
-}
+export { ExerciseView };

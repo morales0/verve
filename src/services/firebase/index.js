@@ -1,5 +1,3 @@
-import useWorkingOutCheck from "./useWorkingOutCheck"
+import useWorkingOutCheck from "./useWorkingOutCheck";
 
-export {
-   useWorkingOutCheck
-}
+export { useWorkingOutCheck };

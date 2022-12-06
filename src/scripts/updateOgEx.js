@@ -14,7 +14,7 @@ const firebaseConfig = {
   storageBucket: "workout-app-37a10.appspot.com",
   messagingSenderId: "645282706661",
   appId: "1:645282706661:web:ad9a702c2c012dc54bd00c",
-  measurementId: "G-26WXTMBPLN"
+  measurementId: "G-26WXTMBPLN",
 };
 
 // Initialize Firebase

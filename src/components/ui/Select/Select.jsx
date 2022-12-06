@@ -1,9 +1,5 @@
 const Select = (props) => {
-   return (
-      <select>
-         
-      </select>
-   );
-}
- 
+  return <select></select>;
+};
+
 export default Select;

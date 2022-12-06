@@ -1,9 +1,5 @@
-import styled from "styled-components"
+import styled from "styled-components";
 
-const CreateExerciseFormStyle = styled.form`
+const CreateExerciseFormStyle = styled.form``;
 
-`
-
-export {
-   CreateExerciseFormStyle
-}
+export { CreateExerciseFormStyle };

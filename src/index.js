@@ -1,12 +1,12 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
+import React from "react";
+import ReactDOM from "react-dom";
+import "./index.css";
 
-import { FirebaseAppProvider } from 'reactfire';
-import { AuthProvider } from './context/auth';
-import FirebaseProviders from './context/firebaseProviders';
+import { FirebaseAppProvider } from "reactfire";
+import { AuthProvider } from "./context/auth";
+import FirebaseProviders from "./context/firebaseProviders";
 
-import NewApp from './NewApp';
+import NewApp from "./NewApp";
 
 // Firebase config
 const firebaseConfig = {
@@ -17,7 +17,7 @@ const firebaseConfig = {
   storageBucket: "workout-app-37a10.appspot.com",
   messagingSenderId: "645282706661",
   appId: "1:645282706661:web:ad9a702c2c012dc54bd00c",
-  measurementId: "G-26WXTMBPLN"
+  measurementId: "G-26WXTMBPLN",
 };
 
 // Root render
@@ -29,7 +29,7 @@ ReactDOM.render(
       </FirebaseProviders>
     </FirebaseAppProvider>
   </React.StrictMode>,
-  document.getElementById('root')
+  document.getElementById("root")
 );
 
 // If you want to start measuring performance in your app, pass a function

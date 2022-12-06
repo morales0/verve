@@ -4,29 +4,31 @@ import { useDatabase, useUser } from "reactfire";
 
 /* Subscribes to changes to the boolean 'isWorkingOut' */
 const useWorkingOutCheck = () => {
-   const user = useUser()
-   const db = useDatabase()
-   const [isWorkingOut, setIsWorkingOut] = useState({status: "loading", data: null});
-   
-   // Lifecycle
-   useEffect(() => {
-      if (user.data){
-         const workoutRef = ref(db, `users/${user.data.uid}/isWorkingOut`)
-         const workoutListener = onValue(workoutRef, snapshot => {
-            if (snapshot.exists()) {
-               setIsWorkingOut({status: "success", data: snapshot.val()})
-            } else {
-               setIsWorkingOut({stauts: "error", data: false})
-            }
-         })
+  const user = useUser();
+  const db = useDatabase();
+  const [isWorkingOut, setIsWorkingOut] = useState({
+    status: "loading",
+    data: null,
+  });
 
-         // This is the unsubscribe function provided by firebase
-         return () => workoutListener()
-      }
-      
-   }, [user.data, db]);
+  // Lifecycle
+  useEffect(() => {
+    if (user.data) {
+      const workoutRef = ref(db, `users/${user.data.uid}/isWorkingOut`);
+      const workoutListener = onValue(workoutRef, (snapshot) => {
+        if (snapshot.exists()) {
+          setIsWorkingOut({ status: "success", data: snapshot.val() });
+        } else {
+          setIsWorkingOut({ stauts: "error", data: false });
+        }
+      });
 
-   return isWorkingOut
-}
+      // This is the unsubscribe function provided by firebase
+      return () => workoutListener();
+    }
+  }, [user.data, db]);
 
-export default useWorkingOutCheck
+  return isWorkingOut;
+};
+
+export default useWorkingOutCheck;

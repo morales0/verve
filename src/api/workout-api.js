@@ -1,5 +1,3 @@
-const workoutApi = {
+const workoutApi = {};
 
-}
-
-export default workoutApi
+export default workoutApi;

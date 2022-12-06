@@ -1,5 +1,3 @@
-import TestCanvas from "./TestCanvas/TestCanvas"
+import TestCanvas from "./TestCanvas/TestCanvas";
 
-export {
-   TestCanvas
-}
+export { TestCanvas };

@@ -1,49 +1,57 @@
-import { onValue, query, ref, or, orderByKey, limitToFirst, limitToLast } from "firebase/database";
+import {
+  onValue,
+  query,
+  ref,
+  or,
+  orderByKey,
+  limitToFirst,
+  limitToLast,
+} from "firebase/database";
 import { useEffect, useState } from "react";
 import { useDatabase, useUser } from "reactfire";
 
 const useHistory = (dayLimit) => {
-   const db = useDatabase()
-   const user = useUser()
-   const [status, setStatus] = useState('loading');
-   const [data, setData] = useState({});
-   
-   const workoutHistoryRef = ref(db, `users/${user.data.uid}/workoutHistory`)
+  const db = useDatabase();
+  const user = useUser();
+  const [status, setStatus] = useState("loading");
+  const [data, setData] = useState({});
 
-   // Subscribe to history data
-   useEffect(() => {
-      setStatus('loading')
-      const historyListener = onValue(query(workoutHistoryRef, limitToLast(dayLimit)), snapshot => {
-         if (!snapshot.exists()) {
-            setStatus('success')
-            return
-         }
+  const workoutHistoryRef = ref(db, `users/${user.data.uid}/workoutHistory`);
 
-         let workoutHistory = snapshot.val()
+  // Subscribe to history data
+  useEffect(() => {
+    setStatus("loading");
+    const historyListener = onValue(
+      query(workoutHistoryRef, limitToLast(dayLimit)),
+      (snapshot) => {
+        if (!snapshot.exists()) {
+          setStatus("success");
+          return;
+        }
 
-         // Process snapshot
-         let count = 0
-         snapshot.forEach(workout => {
-            //console.log(workout.val());
-            count++
-         })
+        let workoutHistory = snapshot.val();
 
-         setData(workoutHistory)
-         setStatus('success')
-      })
+        // Process snapshot
+        let count = 0;
+        snapshot.forEach((workout) => {
+          //console.log(workout.val());
+          count++;
+        });
 
-      return () => historyListener()
-      
-   }, [dayLimit]);
+        setData(workoutHistory);
+        setStatus("success");
+      }
+    );
 
-   // Create api for history data
-   const api = {
-      removeWorkout: () => {}
-   }
+    return () => historyListener();
+  }, [dayLimit]);
 
-   return { status, data, api }
-}
+  // Create api for history data
+  const api = {
+    removeWorkout: () => {},
+  };
 
-export {
-   useHistory
-}
+  return { status, data, api };
+};
+
+export { useHistory };
