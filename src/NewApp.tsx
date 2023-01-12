@@ -9,6 +9,7 @@ import { useSigninCheck, useUser } from "reactfire";
 import { ThemeProvider } from "styled-components";
 import themes from "./styles/themes";
 import UnauthApp from "./UnauthApp";
+import { TestAuthForm } from "./TestAuthForm";
 
 // Lazy load apps (need suspense)
 // const AuthApp = React.lazy(() => import('./AuthApp'))
@@ -19,7 +20,7 @@ const NewApp = () => {
   const user = useUser();
   const [theme, setTheme] = useState("dark");
 
-  return <div>New App!</div>;
+  return <TestAuthForm />
 
   /*
 
