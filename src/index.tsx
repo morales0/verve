@@ -6,7 +6,7 @@ import { FirebaseAppProvider } from "reactfire";
 import { AuthProvider } from "./context/auth";
 import FirebaseProviders from "./context/firebaseProviders";
 
-import NewApp from "./NewApp";
+import App from "./app/App";
 
 // Firebase config
 const firebaseConfig = {
@@ -23,11 +23,7 @@ const firebaseConfig = {
 // Root render
 ReactDOM.render(
   <React.StrictMode>
-    <FirebaseAppProvider firebaseConfig={firebaseConfig}>
-      <FirebaseProviders>
-        <NewApp />
-      </FirebaseProviders>
-    </FirebaseAppProvider>
+    <App />
   </React.StrictMode>,
   document.getElementById("root")
 );

@@ -92,7 +92,7 @@ export function TestAuthForm(props: PaperProps) {
           >
             {type === 'register'
               ? 'Already have an account? Login'
-              : "Don't have an account? Register"}
+              : "Register for an account here"}
           </Anchor>
           <Button type="submit">{upperFirst(type)}</Button>
         </Group>
