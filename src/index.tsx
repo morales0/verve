@@ -7,7 +7,7 @@ import { AuthProvider } from "./context/auth";
 import FirebaseProviders from "./context/firebaseProviders";
 
 import App from "./app/App";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { BrowserRouter, createBrowserRouter, RouterProvider } from "react-router-dom";
 
 // Firebase config
 const firebaseConfig = {
@@ -21,6 +21,7 @@ const firebaseConfig = {
   measurementId: "G-26WXTMBPLN",
 };
 
+// explore this method later?
 const router = createBrowserRouter([
   {
     path: "/",
@@ -30,7 +31,10 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    {/* <RouterProvider router={router} /> */}
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
   </React.StrictMode>
 );
 const root = createRoot(document.getElementById("root")!)
