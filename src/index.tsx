@@ -1,12 +1,13 @@
 import React from "react";
-import ReactDOM from "react-dom";
+import { createRoot } from "react-dom/client"
 import "./index.css";
 
 import { FirebaseAppProvider } from "reactfire";
 import { AuthProvider } from "./context/auth";
 import FirebaseProviders from "./context/firebaseProviders";
 
-import NewApp from "./NewApp";
+import App from "./app/App";
+import { BrowserRouter, createBrowserRouter, RouterProvider } from "react-router-dom";
 
 // Firebase config
 const firebaseConfig = {
@@ -20,17 +21,24 @@ const firebaseConfig = {
   measurementId: "G-26WXTMBPLN",
 };
 
-// Root render
-ReactDOM.render(
+// explore this method later?
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <App />,
+  },
+]);
+
+createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <FirebaseAppProvider firebaseConfig={firebaseConfig}>
-      <FirebaseProviders>
-        <NewApp />
-      </FirebaseProviders>
-    </FirebaseAppProvider>
-  </React.StrictMode>,
-  document.getElementById("root")
+    {/* <RouterProvider router={router} /> */}
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
+  </React.StrictMode>
 );
+const root = createRoot(document.getElementById("root")!)
+root.render(<App />)
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
