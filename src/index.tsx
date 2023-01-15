@@ -37,8 +37,8 @@ createRoot(document.getElementById("root")!).render(
     </BrowserRouter>
   </React.StrictMode>
 );
-const root = createRoot(document.getElementById("root")!)
-root.render(<App />)
+//const root = createRoot(document.getElementById("root")!)
+//root.render(<App />)
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))

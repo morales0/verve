@@ -19,6 +19,9 @@ const AuthApp = ({}: Props) => {
       >
         <Routes>
           <Route path="/" element={<div>Home</div>} />
+          <Route path="/exercises" element={<div>Exercises</div>} />
+          <Route path="/history" element={<div>History</div>} />
+          <Route path="/data" element={<div>Data</div>} />
         </Routes>
       </Box>
     </Flex>
