@@ -1,4 +1,4 @@
-import { ActionIcon, Flex, Group, Header, Title, useMantineColorScheme, createStyles } from "@mantine/core"
+import { ActionIcon, Flex, Group, Header, Title, useMantineColorScheme, createStyles, Burger } from "@mantine/core"
 import { Icon } from '@iconify/react';
 import { Link, NavLink } from "react-router-dom";
 
@@ -22,6 +22,15 @@ const useStyles = createStyles(theme => ({
 
     '&.active': {
       textDecoration: 'underline'
+    },
+
+    [theme.fn.smallerThan('sm')]: {
+      display: 'none'
+    }
+  },
+  burger: {
+    [theme.fn.largerThan('sm')]:{
+      display: 'none'
     }
   }
 }))
@@ -37,6 +46,7 @@ const UserNavbar = ({ }: Props) => {
       <Flex
         direction={"row"}
         justify={"space-between"}
+        align={'center'}
         px={"md"}
         py={"sm"}
       > 
@@ -53,6 +63,7 @@ const UserNavbar = ({ }: Props) => {
         </Group>
 
         <Group>
+          <Burger opened={false} className={classes.burger} />
           <ActionIcon size="lg" title="Theme switcher" onClick={() => toggleColorScheme()}>
             <Icon icon="mdi:theme-light-dark" height={25} />
           </ActionIcon>

@@ -4,8 +4,8 @@ import useCurrentWorkout from "hooks/workout.js";
 import React, { useState } from "react";
 import styled from "styled-components";
 import { toDateKey, toDateString } from "util/date";
-import { WorkoutLink } from "./components/styled-components";
-import { Calendar, Day, HomeContainer, WorkoutCard } from "./styles";
+import { WorkoutLink } from "./styled-components";
+import { Calendar, Day, HomeContainer, WorkoutCard } from "../styles";
 
 const Home = () => {
   const [today, setToday] = useState(new Date());
