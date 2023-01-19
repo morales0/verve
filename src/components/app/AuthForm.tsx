@@ -1,12 +1,20 @@
 import { Anchor, Button, Group, Paper, PasswordInput, Stack, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { upperFirst, useToggle } from "@mantine/hooks";
+import { UserCredential } from "firebase/auth";
 
 type Props = {
-  login: () => void
+  signIn: (email: string, password: string) => Promise<UserCredential>
+  signInGoogle: () => Promise<UserCredential>
 }
 
-const AuthForm = ({ login }: Props) => {
+type FormValues = {
+  email: string;
+  name: string;
+  password: string;
+}
+
+const AuthForm = ({ signIn, signInGoogle }: Props) => {
   const [type, toggle] = useToggle(['login', 'register']);
   const form = useForm({
     initialValues: {
@@ -21,10 +29,17 @@ const AuthForm = ({ login }: Props) => {
     },
   });
 
+  const submitAuthForm = ({email, password, name}: FormValues) => {
+    signIn(email, password).catch((e) => {
+      console.log("Error logging in: ", e);
+    })
+  }
+
   return (
     <Paper radius="sm" p="lg" withBorder >
-      <form onSubmit={form.onSubmit(login)}>
+      <form onSubmit={form.onSubmit(submitAuthForm)}>
         <Stack>
+          <Button onClick={signInGoogle}>Google</Button>
           {type === 'register' && (
             <TextInput
               label="Name"

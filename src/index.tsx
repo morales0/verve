@@ -2,12 +2,10 @@ import React from "react";
 import { createRoot } from "react-dom/client"
 import "./index.css";
 
-import { FirebaseAppProvider } from "reactfire";
-import { AuthProvider } from "./context/auth";
-import FirebaseProviders from "./context/firebaseProviders";
-
 import App from "./app/App";
-import { BrowserRouter, createBrowserRouter, RouterProvider } from "react-router-dom";
+import { BrowserRouter, createBrowserRouter } from "react-router-dom";
+import { AuthProvider } from "./context/auth";
+import { initializeApp } from "firebase/app";
 
 // Firebase config
 const firebaseConfig = {
@@ -18,8 +16,10 @@ const firebaseConfig = {
   storageBucket: "workout-app-37a10.appspot.com",
   messagingSenderId: "645282706661",
   appId: "1:645282706661:web:ad9a702c2c012dc54bd00c",
-  measurementId: "G-26WXTMBPLN",
+  measurementId: "G-26WXTMBPLN"
 };
+
+const app = initializeApp(firebaseConfig)
 
 // explore this method later?
 const router = createBrowserRouter([
@@ -32,9 +32,11 @@ const router = createBrowserRouter([
 createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     {/* <RouterProvider router={router} /> */}
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
+    <AuthProvider app={app}>
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    </AuthProvider>
   </React.StrictMode>
 );
 //const root = createRoot(document.getElementById("root")!)

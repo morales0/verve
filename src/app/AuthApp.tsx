@@ -8,7 +8,7 @@ import Workout from "../pages/Workout/Workout"
 type Props = {}
 
 const AuthApp = () => {
-  const [workingOut, setIsWorkingOut] = useState(true)
+  const [workingOut, setIsWorkingOut] = useState(false)
 
   return (
     <Flex direction="column" h={"100%"}>
