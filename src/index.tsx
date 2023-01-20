@@ -1,11 +1,11 @@
 import React from "react";
-import { createRoot } from "react-dom/client"
+import { createRoot } from "react-dom/client";
 import "./index.css";
 
-import App from "./app/App";
-import { BrowserRouter, createBrowserRouter } from "react-router-dom";
-import { AuthProvider } from "./context/auth";
 import { initializeApp } from "firebase/app";
+import { BrowserRouter, createBrowserRouter } from "react-router-dom";
+import App from "./app/App";
+import FirebaseProviders from "./context/firebase";
 
 // Firebase config
 const firebaseConfig = {
@@ -22,23 +22,26 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig)
 
 // explore this method later?
+/*
 const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
   },
 ]);
+*/
 
 createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     {/* <RouterProvider router={router} /> */}
-    <AuthProvider app={app}>
+    <FirebaseProviders app={app}>
       <BrowserRouter>
         <App />
       </BrowserRouter>
-    </AuthProvider>
+    </FirebaseProviders>
   </React.StrictMode>
 );
+
 //const root = createRoot(document.getElementById("root")!)
 //root.render(<App />)
 

@@ -1,22 +1,19 @@
 /**
  * TODO:
- * - Integrate lazy load for performance
+ * Integrate lazy load for performance
  */
 
-// import AuthApp from "./AuthApp";
-import { useState } from "react";
-// import UnauthApp from "./UnauthApp";
 import { ColorScheme, ColorSchemeProvider, MantineProvider } from "@mantine/core";
+import { useState } from "react";
+import { useAuth } from "../context/auth";
 import AuthApp from "./AuthApp";
 import UnauthApp from "./UnauthApp";
-import { useAuth } from "../context/auth";
 
 // Lazy load apps (need suspense)
 // const AuthApp = React.lazy(() => import('./AuthApp'))
 // const UnauthApp = React.lazy(() => import('./UnauthApp'))
 
 const App = () => {
-  // const [authStatus, setAuthStatus] = useState("authenticated")
   const { status: authStatus } = useAuth()
   const [colorScheme, setColorScheme] = useState<ColorScheme>('dark');
   const toggleColorScheme = (value?: ColorScheme) =>

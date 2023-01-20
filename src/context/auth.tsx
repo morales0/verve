@@ -1,9 +1,9 @@
 import { FirebaseApp } from "firebase/app";
-import { Auth, getAuth, onAuthStateChanged, signInWithEmailAndPassword } from "firebase/auth";
+import { Auth, getAuth, onAuthStateChanged, User } from "firebase/auth";
 import { createContext, useContext, useEffect, useState } from "react";
 
 type AuthContextType = {
-  user: any,
+  user: User | null,
   status: string,
   data: any,
   auth: Auth
@@ -16,8 +16,8 @@ type Props = {
   children: React.ReactNode
 }
 
-export function AuthProvider({ app, children }: Props) {
-  const [user, setUser] = useState<any>(null)
+export default function AuthProvider({ app, children }: Props) {
+  const [user, setUser] = useState<User | null>(null)
   const [status, setStatus] = useState<string>("loading")
   const [data, setData] = useState<any>(null)
 
