@@ -1,17 +1,17 @@
-import { Badge } from "@mantine/core"
+import { Badge } from "@mantine/core";
 
 type MuscleGroupTagProps = {
-  group: { name: string, days: number }
-}
+  group: { name: string; days: number };
+};
 
 const MuscleGroupTag = ({ group }: MuscleGroupTagProps) => {
-  const color = group.days <= 3 ? 'red' : group.days <= 6 ? 'violet' : 'gray'
+  const color = group.days <= 3 ? "red" : group.days <= 6 ? "violet" : "gray";
 
   return (
-    <Badge color={color} variant={'filled'} radius={'md'} size={'lg'}>
+    <Badge color={color} variant={"filled"} radius={"md"} size={"lg"}>
       {group.name}
     </Badge>
-  )
-}
+  );
+};
 
-export default MuscleGroupTag
+export default MuscleGroupTag;

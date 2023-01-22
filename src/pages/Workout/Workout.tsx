@@ -1,10 +1,7 @@
-
-type Props = {}
+type Props = {};
 
 const Workout = (props: Props) => {
-  return (
-    <div>Workout</div>
-  )
-}
+  return <div>Workout</div>;
+};
 
-export default Workout
+export default Workout;

@@ -1,73 +1,90 @@
-import { Stack, Title, Divider, Group, Card } from '@mantine/core'
-import React from 'react'
+import { Icon } from "@iconify/react";
+import {
+  Stack,
+  Title,
+  Divider,
+  Group,
+  Card,
+  Box,
+  Text,
+  Collapse,
+  UnstyledButton,
+} from "@mantine/core";
+import React, { useState } from "react";
+import { WorkoutHistoryType } from "../../../hooks/workoutHistory";
 
-type Props = {}
+type Props = {
+  workouts: WorkoutHistoryType;
+};
 
-const HistorySection = (props: Props) => {
+const HistorySection = ({ workouts }: Props) => {
   return (
-    <Stack>
-      <Stack mb={'1.5rem'}>
-        <Title order={3}>
-          Today
-        </Title>
-        <Divider />
-        <Group>
-          <Card withBorder>
-            Workout 1
-          </Card>
-          <Card withBorder>
-            Workout 1
-          </Card>
-        </Group>
-      </Stack>
-      <Stack mb={'1.5rem'}>
-        <Title order={3}>
-          Yesterday
-        </Title>
-        <Divider />
-        <Group>
-          <Card withBorder>
-            Workout 1
-          </Card>
-          <Card withBorder>
-            Workout 1
-          </Card>
-        </Group>
-      </Stack>
+    <Stack mb={"1.5rem"}>
+      {Object.entries(workouts)
+        .reverse()
+        .map(([day, times], i) => {
+          return (
+            <Stack key={day}>
+              <Title order={4}>{day}</Title>
 
-      <Stack mb={'1.5rem'}>
-        <Title order={3}>
-          Sunday, 1/15/2022
-        </Title>
-        <Divider />
-        <Group>
-          <Card withBorder>
-            Workout 1
-          </Card>
-          <Card withBorder>
-            Workout 1
-          </Card>
-        </Group>
-      </Stack>
+              <Group align={"flex-start"}>
+                {Object.entries(times).map(([time, workout]) => (
+                  <Card key={day + time} withBorder maw={"250px"}>
+                    <Text c="dimmed" fz={"xs"} fs={"italic"}>
+                      {workout.timeStarted} - {workout.timeEnded}
+                    </Text>
+                    <Divider mb={"md"} />
 
-      <Stack mb={'1.5rem'}>
-        <Title order={3}>
-          Saturday, 1/14/2022
-        </Title>
-        <Divider />
-        <Group>
-          <Card withBorder>
-            Workout 1
-          </Card>
-          <Card withBorder>
-            Workout 1
-          </Card>
-        </Group>
-      </Stack>
-
-
+                    <Stack>
+                      {Object.entries(workout.completedExercises).map(
+                        ([name, sets]) => (
+                          <ExerciseDropdownInfo name={name} sets={sets} />
+                        )
+                      )}
+                    </Stack>
+                  </Card>
+                ))}
+              </Group>
+            </Stack>
+          );
+        })}
     </Stack>
-  )
-}
+  );
+};
 
-export default HistorySection
+type ExerciseDropdownInfoProps = {
+  name: string;
+  sets: object;
+};
+
+const ExerciseDropdownInfo = ({ name, sets }: ExerciseDropdownInfoProps) => {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <>
+      <UnstyledButton onClick={() => setOpen((o) => !o)}>
+        <Group
+          align={"center"}
+          position={"apart"}
+          sx={{
+            "& .iconify.open": {
+              transform: "rotate(45deg)",
+            },
+          }}
+        >
+          <Text>{name}</Text>
+          <Icon icon="material-symbols:add" className={open ? "open" : ""} />
+        </Group>
+      </UnstyledButton>
+      <Collapse
+        in={open}
+        transitionDuration={80}
+        transitionTimingFunction={"linear"}
+      >
+        sets
+      </Collapse>
+    </>
+  );
+};
+
+export default HistorySection;

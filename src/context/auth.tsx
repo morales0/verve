@@ -3,64 +3,61 @@ import { Auth, getAuth, onAuthStateChanged, User } from "firebase/auth";
 import { createContext, useContext, useEffect, useState } from "react";
 
 type AuthContextType = {
-  user: User | null,
-  status: string,
-  data: any,
-  auth: Auth
-}
+  user: User | null;
+  status: string;
+  data: any;
+  auth: Auth;
+};
 
-const AuthContext = createContext<AuthContextType | null>(null)
+const AuthContext = createContext<AuthContextType | null>(null);
 
 type Props = {
-  app: FirebaseApp,
-  children: React.ReactNode
-}
+  app: FirebaseApp;
+  children: React.ReactNode;
+};
 
 export default function AuthProvider({ app, children }: Props) {
-  const [user, setUser] = useState<User | null>(null)
-  const [status, setStatus] = useState<string>("loading")
-  const [data, setData] = useState<any>(null)
+  const [user, setUser] = useState<User | null>(null);
+  const [status, setStatus] = useState<string>("loading");
+  const [data, setData] = useState<any>(null);
 
-  const auth = getAuth(app)
+  const auth = getAuth(app);
 
   // Listen to auth changes
   useEffect(() => {
-    onAuthStateChanged(auth, user => {
-      console.log(user);
+    onAuthStateChanged(auth, (user) => {
+      // console.log(user);
 
       if (user) {
-
-        setUser(user)
-        setStatus("authenticated")
-
-
+        setUser(user);
+        setStatus("authenticated");
       } else {
-        setUser(null)
-        setData(null)
-        setStatus("unauthenticated")
+        setUser(null);
+        setData(null);
+        setStatus("unauthenticated");
       }
-    })
-  }, [auth])
+    });
+  }, [auth]);
 
   // Auth functions
 
   if (status === "loading") {
-    return null
+    return null;
   }
 
   return (
-    <AuthContext.Provider value={{ user, status, data, auth }} >
+    <AuthContext.Provider value={{ user, status, data, auth }}>
       {children}
-    </AuthContext.Provider >
-  )
+    </AuthContext.Provider>
+  );
 }
 
 export function useAuth(): AuthContextType {
-  const consumeAuthContext = useContext(AuthContext)
+  const consumeAuthContext = useContext(AuthContext);
 
   if (consumeAuthContext === null) {
     throw new Error("auth context must be used within auth provider");
   }
 
-  return useContext(AuthContext) as AuthContextType
+  return consumeAuthContext as AuthContextType;
 }

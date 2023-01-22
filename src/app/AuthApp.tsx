@@ -1,16 +1,16 @@
-import { Box, Flex, ScrollArea } from "@mantine/core"
-import { useState } from "react"
-import { Route, Routes } from "react-router-dom"
-import UserNavbar from "../components/app/UserNavbar"
-import { useIsWorkingOut } from "../hooks/is-working-out-hook"
-import Home from "../pages/Home/Home"
-import Workout from "../pages/Workout/Workout"
+import { Box, Flex, ScrollArea } from "@mantine/core";
+import { useState } from "react";
+import { Route, Routes } from "react-router-dom";
+import UserNavbar from "../components/app/UserNavbar";
+import { useIsWorkingOut } from "../hooks/is-working-out-hook";
+import Home from "../pages/Home/Home";
+import Workout from "../pages/Workout/Workout";
 
 const AuthApp = () => {
-  const { isWorkingOut, status } = useIsWorkingOut()
+  const { isWorkingOut, status } = useIsWorkingOut();
 
   if (status === "loading") {
-    return <Box>Loading data</Box>
+    return <Box>Loading data</Box>;
   }
 
   return (
@@ -20,7 +20,6 @@ const AuthApp = () => {
         component={ScrollArea}
         px={"lg"}
         py={"lg"}
-
         sx={{
           flexGrow: 1,
         }}
@@ -33,7 +32,7 @@ const AuthApp = () => {
         </Routes>
       </Box>
     </Flex>
-  )
-}
+  );
+};
 
-export default AuthApp
+export default AuthApp;

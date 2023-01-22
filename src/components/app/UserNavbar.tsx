@@ -1,70 +1,91 @@
-import { ActionIcon, Flex, Group, Header, Title, useMantineColorScheme, createStyles, Burger } from "@mantine/core"
-import { Icon } from '@iconify/react';
+import {
+  ActionIcon,
+  Flex,
+  Group,
+  Header,
+  Title,
+  useMantineColorScheme,
+  createStyles,
+  Burger,
+} from "@mantine/core";
+import { Icon } from "@iconify/react";
 import { Link, NavLink } from "react-router-dom";
 
-const useStyles = createStyles(theme => ({
-  brand: {
-
-  },
+const useStyles = createStyles((theme) => ({
+  brand: {},
   link: {
-    display: 'block',
+    display: "block",
     lineHeight: 1,
-    padding: '.5rem .75rem',
+    padding: ".5rem .75rem",
     borderRadius: theme.radius.sm,
-    textDecoration: 'none',
-    color: theme.colorScheme === 'dark' ? theme.colors.dark[0] : theme.colors.gray[7],
+    textDecoration: "none",
+    color:
+      theme.colorScheme === "dark"
+        ? theme.colors.dark[0]
+        : theme.colors.gray[7],
     fontSize: theme.fontSizes.md,
     fontWeight: 500,
 
-    '&:hover': {
-      backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[6] : theme.colors.gray[0],
+    "&:hover": {
+      backgroundColor:
+        theme.colorScheme === "dark"
+          ? theme.colors.dark[6]
+          : theme.colors.gray[0],
     },
 
-    '&.active': {
-      textDecoration: 'underline'
+    "&.active": {
+      textDecoration: "underline",
     },
 
-    [theme.fn.smallerThan('sm')]: {
-      display: 'none'
-    }
+    [theme.fn.smallerThan("sm")]: {
+      display: "none",
+    },
   },
   burger: {
-    [theme.fn.largerThan('sm')]:{
-      display: 'none'
-    }
-  }
-}))
+    [theme.fn.largerThan("sm")]: {
+      display: "none",
+    },
+  },
+}));
 
-type Props = {}
+type Props = {};
 
-const UserNavbar = ({ }: Props) => {
+const UserNavbar = ({}: Props) => {
   const { toggleColorScheme } = useMantineColorScheme();
-  const { classes } = useStyles()
+  const { classes } = useStyles();
 
   return (
     <Header height={"auto"}>
       <Flex
         direction={"row"}
         justify={"space-between"}
-        align={'center'}
+        align={"center"}
         px={"md"}
         py={"sm"}
-      > 
+      >
         <Link className={classes.brand} to="/">
-          <Title order={1}>
-            Verve
-          </Title>
+          <Title order={1}>Verve</Title>
         </Link>
 
         <Group>
-          <NavLink className={classes.link} to="/exercises">Exercises</NavLink>
-          <NavLink className={classes.link} to="/data">Data</NavLink>
-          <NavLink className={classes.link} to="history">History</NavLink>
+          <NavLink className={classes.link} to="/exercises">
+            Exercises
+          </NavLink>
+          <NavLink className={classes.link} to="/data">
+            Data
+          </NavLink>
+          <NavLink className={classes.link} to="history">
+            History
+          </NavLink>
         </Group>
 
         <Group>
           <Burger opened={false} className={classes.burger} />
-          <ActionIcon size="lg" title="Theme switcher" onClick={() => toggleColorScheme()}>
+          <ActionIcon
+            size="lg"
+            title="Theme switcher"
+            onClick={() => toggleColorScheme()}
+          >
             <Icon icon="mdi:theme-light-dark" height={25} />
           </ActionIcon>
           <ActionIcon size="lg" title="Settings">
@@ -74,10 +95,9 @@ const UserNavbar = ({ }: Props) => {
             <Icon icon="mdi:user" height={25} />
           </ActionIcon>
         </Group>
-
       </Flex>
     </Header>
-  )
-}
+  );
+};
 
-export default UserNavbar
+export default UserNavbar;

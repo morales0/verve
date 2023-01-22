@@ -1,10 +1,7 @@
-
-type Props = {}
+type Props = {};
 
 const AddExerciseScren = (props: Props) => {
-  return (
-    <div>AddExerciseScren</div>
-  )
-}
+  return <div>AddExerciseScren</div>;
+};
 
-export default AddExerciseScren
+export default AddExerciseScren;
