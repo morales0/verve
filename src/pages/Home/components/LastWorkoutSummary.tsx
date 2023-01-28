@@ -5,20 +5,17 @@ import { useAuth } from "../../../context/auth";
 import { useDatabase } from "../../../context/database";
 import { useIsWorkingOut } from "../../../hooks/is-working-out-hook";
 
-type Props = {};
+type Props = {
+  startNewWorkoutAndNavigate: () => void
+};
 
-const LastWorkoutSection = (props: Props) => {
-  const { setIsWorkingOut } = useIsWorkingOut();
-
-  const startNewWorkout = () => {
-    setIsWorkingOut(true);
-  };
+const LastWorkoutSummary = ({ startNewWorkoutAndNavigate }: Props) => {
 
   return (
     <Stack mb={"2rem"}>
       <Group position="apart">
         <Title order={2}>Last Workout</Title>
-        <Button color={"teal"} onClick={startNewWorkout}>
+        <Button color={"teal"} onClick={startNewWorkoutAndNavigate}>
           + New Workout
         </Button>
       </Group>
@@ -30,4 +27,4 @@ const LastWorkoutSection = (props: Props) => {
   );
 };
 
-export default LastWorkoutSection;
+export default LastWorkoutSummary;

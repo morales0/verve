@@ -1,17 +1,39 @@
 import { onValue, ref, set } from "firebase/database";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/auth";
 import { useDatabase } from "../context/database";
 
 export function useIsWorkingOut() {
-  const { database: db } = useDatabase();
+  const { db } = useDatabase();
   const { user } = useAuth();
 
   const [isWorkingOut, setIsWorkingOut] = useState(false);
   const [status, setStatus] = useState("loading");
 
   const updateIsWorkingOut = (val: boolean) => {
-    set(ref(db, "users/" + user?.uid + "/meta/isWorkingOut"), val);
+    return set(ref(db, "users/" + user?.uid + "/meta/isWorkingOut"), val);
+  };
+
+  const startWorkout = () => {
+    // Create workout first
+    let now = new Date();
+    let time = now.toLocaleTimeString("en-US", {
+      hour: "numeric",
+      minute: "2-digit",
+    });
+
+    return set(ref(db, "users/" + user?.uid + "/currentWorkout"), {
+      dateStarted: now.toString(),
+      timeStarted: time,
+      inProgress: true,
+    }).then(() => {
+      return updateIsWorkingOut(true);
+    })
+  };
+
+  const endWorkout = () => {
+    return updateIsWorkingOut(false);
   };
 
   useEffect(() => {
@@ -29,5 +51,5 @@ export function useIsWorkingOut() {
     });
   });
 
-  return { isWorkingOut, setIsWorkingOut: updateIsWorkingOut, status };
+  return { isWorkingOut, startWorkout, endWorkout, status };
 }

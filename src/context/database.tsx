@@ -3,7 +3,7 @@ import { Database, getDatabase } from "firebase/database";
 import { createContext, useContext } from "react";
 
 type DatabaseContextType = {
-  database: Database;
+  db: Database;
 };
 
 const DatabaseContext = createContext<DatabaseContextType | null>(null);
@@ -17,7 +17,7 @@ function DatabaseProvider({ app, children }: Props) {
   const db = getDatabase(app);
 
   return (
-    <DatabaseContext.Provider value={{ database: db }}>
+    <DatabaseContext.Provider value={{ db: db }}>
       {children}
     </DatabaseContext.Provider>
   );

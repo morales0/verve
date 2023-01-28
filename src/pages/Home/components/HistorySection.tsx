@@ -19,7 +19,7 @@ type Props = {
 
 const HistorySection = ({ workouts }: Props) => {
   return (
-    <Stack mb={"1.5rem"}>
+    <Group mb={"1.5rem"} align={"flex-start"}>
       {Object.entries(workouts)
         .reverse()
         .map(([day, times], i) => {
@@ -48,7 +48,7 @@ const HistorySection = ({ workouts }: Props) => {
             </Stack>
           );
         })}
-    </Stack>
+    </Group>
   );
 };
 

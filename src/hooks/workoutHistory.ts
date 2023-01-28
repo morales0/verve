@@ -30,7 +30,7 @@ export type WorkoutHistoryType = {
 
 const useWorkoutHistory = () => {
   const { user } = useAuth();
-  const { database } = useDatabase();
+  const { db } = useDatabase();
   const [workouts, setWorkouts] = useState<WorkoutHistoryType>({});
   const [limit, setLimit] = useState(5);
   const [historyType, setHistoryType] = useState<HistoryType>(
@@ -41,7 +41,7 @@ const useWorkoutHistory = () => {
     if (!user) return;
 
     const historyQuery = query(
-      ref(database, `users/${user.uid}/workoutHistory`),
+      ref(db, `users/${user.uid}/workoutHistory`),
       limitToLast(limit),
       orderByKey()
     );
@@ -52,7 +52,7 @@ const useWorkoutHistory = () => {
     });
 
     return () => off(historyQuery);
-  }, [user, database, limit]);
+  }, [user, db, limit]);
 
   return {
     workouts,
