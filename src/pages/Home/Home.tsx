@@ -11,25 +11,37 @@ import MuscleGroupsSection from "./components/MuscleGroupsSection";
 
 const Home = () => {
   const { auth } = useAuth();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const { workouts, setLimit, setHistoryType } = useWorkoutHistory();
-  const { isWorkingOut, startWorkout, status: workingOutStatus } = useIsWorkingOut();
+  const {
+    isWorkingOut,
+    startWorkout,
+    status: workingOutStatus,
+  } = useIsWorkingOut();
 
   const startNewWorkoutAndNavigate = () => {
-    startWorkout().then(()=> {
-      navigate("/workout")
-    })
+    console.log("Home return");
+
+    return startWorkout().then(() => {
+      navigate("/workout");
+    });
   };
 
   if (workingOutStatus === "loading") {
-    return <Text>Loading data...</Text>
+    return <Text>Loading data...</Text>;
   }
 
   return (
     <Stack>
       <Button onClick={() => signOut(auth)}>Sign Out</Button>
       <MuscleGroupsSection />
-      {isWorkingOut ? <CurrentWorkoutSummary /> : <LastWorkoutSummary startNewWorkoutAndNavigate={startNewWorkoutAndNavigate} />}
+      {isWorkingOut ? (
+        <CurrentWorkoutSummary />
+      ) : (
+        <LastWorkoutSummary
+          startNewWorkoutAndNavigate={startNewWorkoutAndNavigate}
+        />
+      )}
       <HistorySection workouts={workouts} />
     </Stack>
   );

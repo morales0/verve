@@ -1,8 +1,6 @@
 import { Box, Flex, ScrollArea } from "@mantine/core";
-import { useState } from "react";
-import { Route, Routes, Navigate } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import UserNavbar from "../components/app/UserNavbar";
-import { useIsWorkingOut } from "../hooks/is-working-out-hook";
 import Home from "../pages/Home/Home";
 import Workout from "../pages/Workout/Workout";
 

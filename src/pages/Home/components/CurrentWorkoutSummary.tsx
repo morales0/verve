@@ -1,10 +1,24 @@
+import { Group, Paper, Stack, Title } from "@mantine/core";
+import { Link } from "react-router-dom";
 
-type Props = {}
+type Props = {
+  workout?: object;
+};
 
-const CurrentWorkoutSummary = (props: Props) => {
+const CurrentWorkoutSummary = ({ workout }: Props) => {
   return (
-    <div>WorkoutSummary</div>
-  )
-}
+    <Stack mb={"2rem"}>
+      <Group position="center">
+        <Title order={3}>Current Workout</Title>
+      </Group>
 
-export default CurrentWorkoutSummary
+      <Link to="/workout">
+        <Paper shadow="xs" radius="sm" p="lg" withBorder>
+          Current workout
+        </Paper>
+      </Link>
+    </Stack>
+  );
+};
+
+export default CurrentWorkoutSummary;

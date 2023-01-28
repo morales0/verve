@@ -1,10 +1,8 @@
 import { Center } from "@mantine/core";
 import {
-  AuthProvider,
   GoogleAuthProvider,
   signInWithEmailAndPassword,
   signInWithPopup,
-  signInWithRedirect,
 } from "firebase/auth";
 import AuthForm from "../components/app/AuthForm";
 import { useAuth } from "../context/auth";

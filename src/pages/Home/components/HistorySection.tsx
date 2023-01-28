@@ -37,8 +37,12 @@ const HistorySection = ({ workouts }: Props) => {
 
                     <Stack>
                       {Object.entries(workout.completedExercises).map(
-                        ([name, sets]) => (
-                          <ExerciseDropdownInfo name={name} sets={sets} />
+                        ([name, sets], i) => (
+                          <ExerciseDropdownInfo
+                            key={`exercise-${name}-${i}`}
+                            name={name}
+                            sets={sets}
+                          />
                         )
                       )}
                     </Stack>

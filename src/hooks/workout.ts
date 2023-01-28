@@ -30,7 +30,7 @@ const useWorkout = () => {
       }
     });
 
-    return () => off(workoutRef)
+    return () => off(workoutRef);
   }, [db, user]);
 
   /*

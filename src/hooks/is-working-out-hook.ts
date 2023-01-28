@@ -15,10 +15,12 @@ export function useIsWorkingOut() {
     return set(ref(db, "users/" + user?.uid + "/meta/isWorkingOut"), val);
   };
 
-  const startWorkout = () => {
+  const startWorkout = async () => {
+    console.log("In Start");
+
     // Create workout first
-    let now = new Date();
-    let time = now.toLocaleTimeString("en-US", {
+    const now = new Date();
+    const time = now.toLocaleTimeString("en-US", {
       hour: "numeric",
       minute: "2-digit",
     });
@@ -27,9 +29,17 @@ export function useIsWorkingOut() {
       dateStarted: now.toString(),
       timeStarted: time,
       inProgress: true,
-    }).then(() => {
-      return updateIsWorkingOut(true);
     })
+      .then(() => {
+        console.log("set resolved");
+
+        return new Promise((res) => setTimeout(res, 3000));
+      })
+      .then(() => {
+        console.log("wait resolved, updating meta");
+
+        updateIsWorkingOut(true);
+      });
   };
 
   const endWorkout = () => {

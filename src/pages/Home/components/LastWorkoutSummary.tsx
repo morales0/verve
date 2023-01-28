@@ -1,22 +1,35 @@
-import { Stack, Group, Title, Button, Paper } from "@mantine/core";
-import { ref, set } from "firebase/database";
-import React from "react";
-import { useAuth } from "../../../context/auth";
-import { useDatabase } from "../../../context/database";
-import { useIsWorkingOut } from "../../../hooks/is-working-out-hook";
+import { Button, Group, Paper, Stack, Title } from "@mantine/core";
+import { useState } from "react";
 
 type Props = {
-  startNewWorkoutAndNavigate: () => void
+  startNewWorkoutAndNavigate: () => Promise<void>;
 };
 
 const LastWorkoutSummary = ({ startNewWorkoutAndNavigate }: Props) => {
+  const [isCreating, setIsCreating] = useState(false);
+
+  const handleStartWorkout = () => {
+    console.log("Handle start");
+
+    setIsCreating(true);
+
+    startNewWorkoutAndNavigate().catch((e) => {
+      console.log("Error creating workout, tell user to try again");
+    });
+
+    console.log("Handle done");
+  };
 
   return (
     <Stack mb={"2rem"}>
       <Group position="apart">
         <Title order={2}>Last Workout</Title>
-        <Button color={"teal"} onClick={startNewWorkoutAndNavigate}>
-          + New Workout
+        <Button
+          color={"teal"}
+          onClick={handleStartWorkout}
+          disabled={isCreating}
+        >
+          {isCreating ? "Creating workout..." : "+ New Workout"}
         </Button>
       </Group>
 
