@@ -6,17 +6,20 @@ import { useDatabase } from "../context/database";
 interface IExercise {
   name: string;
   complete: boolean;
-  sets: Array<any>;
+  sets: Array<object>;
 }
 
 interface IWorkout {
-  exercises: Array<IExercise>;
+  exercises?: Array<IExercise>;
+  dateStarted?: string;
+  timeStarted?: string;
+  inProgress?: boolean;
 }
 
 const useWorkout = () => {
   const { user } = useAuth();
   const { db } = useDatabase();
-  const [workout, setWorkout] = useState<IWorkout>({ exercises: [] });
+  const [workout, setWorkout] = useState<IWorkout>({});
 
   useEffect(() => {
     if (!user) return;

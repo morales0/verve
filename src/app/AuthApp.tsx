@@ -9,7 +9,7 @@ const AuthApp = () => {
     <Flex direction="column" h={"100%"}>
       <UserNavbar />
       <Box
-        component={ScrollArea}
+        // component={ScrollArea}
         px={"lg"}
         py={"lg"}
         sx={{

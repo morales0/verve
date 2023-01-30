@@ -27,7 +27,7 @@ const LastWorkoutSummary = ({ startNewWorkoutAndNavigate }: Props) => {
         <Button
           color={"teal"}
           onClick={handleStartWorkout}
-          disabled={isCreating}
+          loading={isCreating}
         >
           {isCreating ? "Creating workout..." : "+ New Workout"}
         </Button>

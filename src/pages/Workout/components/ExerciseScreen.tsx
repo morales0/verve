@@ -1,6 +1,9 @@
-type Props = {};
+type Props = {
+  name: string;
+  sets: object[];
+};
 
-const ExerciseScreen = (props: Props) => {
+const ExerciseScreen = ({ name, sets }: Props) => {
   return <div>ExerciseScreen</div>;
 };
 

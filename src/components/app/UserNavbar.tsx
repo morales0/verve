@@ -55,7 +55,7 @@ const UserNavbar = ({}: Props) => {
   const { classes } = useStyles();
 
   return (
-    <Header height={"auto"}>
+    <Header height={"auto"} pos="sticky">
       <Flex
         direction={"row"}
         justify={"space-between"}
