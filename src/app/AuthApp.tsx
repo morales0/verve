@@ -9,11 +9,9 @@ const AuthApp = () => {
     <Flex direction="column" h={"100%"}>
       <UserNavbar />
       <Box
-        // component={ScrollArea}
-        px={"lg"}
-        py={"lg"}
-        sx={{
+        style={{
           flexGrow: 1,
+          overflow: "hidden",
         }}
       >
         <Routes>

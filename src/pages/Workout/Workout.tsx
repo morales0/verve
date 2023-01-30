@@ -40,7 +40,7 @@ const Workout = () => {
   }
 
   return (
-    <Stack h="100%">
+    <Stack h="100%" p="1rem" sx={{ overflow: "hidden" }}>
       <StatusBar timeStarted={workout.timeStarted || "Time missing"} />
       <Tabs
         variant="default"
@@ -51,8 +51,10 @@ const Workout = () => {
             display: "flex",
             flexDirection: "column",
             flexGrow: 1,
+            overflow: "hidden",
             "& .mantine-Tabs-panel": {
               flexGrow: 1,
+              overflow: "hidden",
             },
           },
         })}
@@ -71,10 +73,9 @@ const Workout = () => {
         </Tabs.Panel>
 
         <Tabs.Panel value="summary">
-          <Stack justify={"space-between"} h="100%">
-            <Box>
-              <CompletedExercises />
-            </Box>
+          <Stack justify={"space-between"} h="100%" sx={{ overflow: "hidden" }}>
+            <CompletedExercises />
+
             <Group w="100%" align={"center"} position="center" grow>
               <Button variant="outline" color="red">
                 Cancel

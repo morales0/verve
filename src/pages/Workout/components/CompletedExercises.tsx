@@ -1,13 +1,15 @@
-import { Title } from "@mantine/core";
+import { ScrollArea, Stack, Title } from "@mantine/core";
 
 type Props = {};
 
 const CompletedExercises = (props: Props) => {
   return (
-    <div>
-      <Title>Filler</Title>
-      <Title>Filler</Title>
-    </div>
+    <Stack h="100%" sx={{ overflow: "hidden" }}>
+      <ScrollArea>
+        <Title>Filler</Title>
+        <Title>Filler</Title>
+      </ScrollArea>
+    </Stack>
   );
 };
 

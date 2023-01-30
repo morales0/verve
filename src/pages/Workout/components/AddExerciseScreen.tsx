@@ -199,7 +199,7 @@ const AddExerciseScreen = ({ addExercise }: Props) => {
   };
 
   return (
-    <Stack py="lg">
+    <Stack h="100%" py="lg" sx={{ overflow: "hidden" }}>
       <Group align="flex-start">
         <TextInput placeholder="Search" sx={{ flexGrow: 1 }} />
         <Button color="teal" sx={{ flexGrow: 0 }}>
