@@ -7,158 +7,38 @@ import {
   Text,
   TextInput,
 } from "@mantine/core";
-import { useState } from "react";
-
-type ExerciseInfo = {
-  name: string;
-  type?: string;
-  musclegroups?: string;
-};
-
-const mockdata: ExerciseInfo[] = [
-  {
-    name: "Pushups",
-    type: "Bodyweight",
-    musclegroups: "Chest, Arms",
-  },
-  {
-    name: "Pullups",
-    type: "Bodyweight",
-    musclegroups: "Lats, Arms",
-  },
-  {
-    name: "Pullups",
-    type: "Bodyweight",
-    musclegroups: "Lats, Arms",
-  },
-  {
-    name: "Pullups",
-    type: "Bodyweight",
-    musclegroups: "Lats, Arms",
-  },
-  {
-    name: "Pullups",
-    type: "Bodyweight",
-    musclegroups: "Lats, Arms",
-  },
-  {
-    name: "Pullups",
-    type: "Bodyweight",
-    musclegroups: "Lats, Arms",
-  },
-  {
-    name: "Pullups",
-    type: "Bodyweight",
-    musclegroups: "Lats, Arms",
-  },
-  {
-    name: "Pullups",
-    type: "Bodyweight",
-    musclegroups: "Lats, Arms",
-  },
-  {
-    name: "Pullups",
-    type: "Bodyweight",
-    musclegroups: "Lats, Arms",
-  },
-  {
-    name: "Pullups",
-    type: "Bodyweight",
-    musclegroups: "Lats, Arms",
-  },
-  {
-    name: "Pullups",
-    type: "Bodyweight",
-    musclegroups: "Lats, Arms",
-  },
-  {
-    name: "Pullups",
-    type: "Bodyweight",
-    musclegroups: "Lats, Arms",
-  },
-  {
-    name: "Pullups",
-    type: "Bodyweight",
-    musclegroups: "Lats, Arms",
-  },
-  {
-    name: "Pullups",
-    type: "Bodyweight",
-    musclegroups: "Lats, Arms",
-  },
-  {
-    name: "Pullups",
-    type: "Bodyweight",
-    musclegroups: "Lats, Arms",
-  },
-  {
-    name: "Pullups",
-    type: "Bodyweight",
-    musclegroups: "Lats, Arms",
-  },
-  {
-    name: "Pullups",
-    type: "Bodyweight",
-    musclegroups: "Lats, Arms",
-  },
-  {
-    name: "Pullups",
-    type: "Bodyweight",
-    musclegroups: "Lats, Arms",
-  },
-  {
-    name: "Pullups",
-    type: "Bodyweight",
-    musclegroups: "Lats, Arms",
-  },
-  {
-    name: "Pullups",
-    type: "Bodyweight",
-    musclegroups: "Lats, Arms",
-  },
-  {
-    name: "Pullups",
-    type: "Bodyweight",
-    musclegroups: "Lats, Arms",
-  },
-  {
-    name: "Pullups",
-    type: "Bodyweight",
-    musclegroups: "Lats, Arms",
-  },
-  {
-    name: "Pullups",
-    type: "Bodyweight",
-    musclegroups: "Lats, Arms",
-  },
-  {
-    name: "Pullups",
-    type: "Bodyweight",
-    musclegroups: "Lats, Arms",
-  },
-  {
-    name: "Pullups",
-    type: "Bodyweight",
-    musclegroups: "Lats, Arms",
-  },
-  {
-    name: "Pullups",
-    type: "Bodyweight",
-    musclegroups: "Lats, Arms",
-  },
-  {
-    name: "Pullups",
-    type: "Bodyweight",
-    musclegroups: "Lats, Arms",
-  },
-];
+import { useEffect, useState } from "react";
+import useDatabaseList from "../../../hooks/databaseList.hook";
+import { STATUS } from "../../../types/util";
+import { UserExercise } from "../../../types/workout";
+import NewExerciseForm from "./NewExerciseForm";
 
 type Props = {
-  addExercise: (name: string) => void;
+  addExercise: (ex: UserExercise) => void;
 };
 
 const AddExerciseScreen = ({ addExercise }: Props) => {
-  const [data, setData] = useState<ExerciseInfo[]>(mockdata);
+  const {
+    status,
+    data: userExercises,
+    api,
+  } = useDatabaseList<UserExercise>("userExercises");
+  const [data, setData] = useState<UserExercise[]>([]);
+  const [tab, setTab] = useState("adding");
+
+  useEffect(() => {
+    if (status === STATUS.SUCCESS) {
+      setData(userExercises);
+    }
+  }, [status, userExercises]);
+
+  const createExercise = async (data: UserExercise) => {
+    return api.addChild(data, data.name);
+  };
+
+  if (status === STATUS.LOADING) {
+    return <Text italic>Loading your exercises...</Text>;
+  }
 
   const Header = () => {
     return (
@@ -175,45 +55,76 @@ const AddExerciseScreen = ({ addExercise }: Props) => {
   const Body = () => {
     return (
       <tbody>
-        {data.map((ex, i) => (
-          <tr key={`ex-info-${ex.name}-${i}`}>
-            <td>{ex.name}</td>
-            <td style={{ textAlign: "center" }}>
-              {ex.type || (
-                <Text color="dimmed" fz="sm" italic>
-                  None specified
-                </Text>
-              )}
-            </td>
-            <td style={{ textAlign: "center" }}>
-              {ex.musclegroups || (
-                <Text color="dimmed" fz="sm" italic>
-                  None specified
-                </Text>
-              )}
+        {data.length === 0 ? (
+          <tr>
+            <td colSpan={3} style={{ textAlign: "center" }}>
+              <Text>Found no exercises. Make a new one up there!</Text>
             </td>
           </tr>
-        ))}
+        ) : (
+          data.map((ex, i) => (
+            <tr
+              key={`ex-info-${ex.name}-${i}`}
+              style={{ cursor: "pointer" }}
+              onClick={() => addExercise(ex)}
+            >
+              <td>{ex.name}</td>
+              <td style={{ textAlign: "center" }}>
+                {ex.type || (
+                  <Text color="dimmed" fz="sm" italic>
+                    None specified
+                  </Text>
+                )}
+              </td>
+              <td style={{ textAlign: "center" }}>
+                {ex.muscleGroups ? (
+                  <Text>{Object.values(ex.muscleGroups).toString()}</Text>
+                ) : (
+                  <Text color="dimmed" fz="sm" italic>
+                    None specified
+                  </Text>
+                )}
+              </td>
+            </tr>
+          ))
+        )}
       </tbody>
     );
   };
 
   return (
-    <Stack h="100%" py="lg" sx={{ overflow: "hidden" }}>
-      <Group align="flex-start">
-        <TextInput placeholder="Search" sx={{ flexGrow: 1 }} />
-        <Button color="teal" sx={{ flexGrow: 0 }}>
-          + New Exercise
-        </Button>
-      </Group>
+    <>
+      {tab === "creating" ? (
+        <NewExerciseForm
+          cancel={() => setTab("adding")}
+          createExercise={createExercise}
+        />
+      ) : (
+        <Stack h="100%" py="lg" sx={{ overflow: "hidden" }}>
+          <Group align="flex-start">
+            <TextInput placeholder="Search" sx={{ flexGrow: 1 }} />
+            <Button
+              color="teal"
+              sx={{ flexGrow: 0 }}
+              onClick={() => setTab("creating")}
+            >
+              + New Exercise
+            </Button>
+          </Group>
 
-      <ScrollArea>
-        <Table>
-          <Header />
-          <Body />
-        </Table>
-      </ScrollArea>
-    </Stack>
+          <Text color="dimmed" italic fz="sm">
+            Click on row to start exercise
+          </Text>
+
+          <ScrollArea>
+            <Table highlightOnHover>
+              <Header />
+              <Body />
+            </Table>
+          </ScrollArea>
+        </Stack>
+      )}
+    </>
   );
 };
 

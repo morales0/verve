@@ -1,16 +1,9 @@
-import {
-  Box,
-  Button,
-  Group,
-  ScrollArea,
-  Stack,
-  Tabs,
-  Text,
-} from "@mantine/core";
+import { Button, Group, Stack, Tabs, Text } from "@mantine/core";
 import { useState } from "react";
 import { Navigate } from "react-router-dom";
 import { useIsWorkingOut } from "../../hooks/is-working-out-hook";
 import useWorkout from "../../hooks/workout";
+import { UserExercise } from "../../types/workout";
 import AddExerciseScreen from "./components/AddExerciseScreen";
 import CompletedExercises from "./components/CompletedExercises";
 import ExerciseScreen from "./components/ExerciseScreen";
@@ -18,19 +11,30 @@ import { StatusBar } from "./components/StatusBar";
 
 type Exercise = {
   name: string;
+  units: string[];
   sets: object[];
 };
 
 const Workout = () => {
+  // server
   const { workout, ...api } = useWorkout();
   const { isWorkingOut, status: isWorkingOutStatus } = useIsWorkingOut();
-  const [activeTab, setActiveTab] = useState<string | null>("exercise");
-  const [currentExercise, setCurrentExercise] = useState<null | Exercise>(null);
 
-  const addExercise = (name: string) => {
-    console.log(name);
+  // ui state
+  const [activeTab, setActiveTab] = useState<string | null>("exercise");
+  const [currentExercise, setCurrentExercise] = useState<Exercise | null>(null);
+
+  // functions
+  const addExercise = (ex: UserExercise) => {
+    console.log(ex);
+    setCurrentExercise({
+      name: ex.name,
+      units: Object.values(ex.units),
+      sets: [],
+    });
   };
 
+  // render
   if (isWorkingOutStatus === "loading") {
     return <Text>Checking for workout...</Text>;
   }
