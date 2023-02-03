@@ -1,12 +1,4 @@
-import {
-  Button,
-  Group,
-  MultiSelect,
-  ScrollArea,
-  Stack,
-  TextInput,
-  Title,
-} from "@mantine/core";
+import { Button, Group, MultiSelect, ScrollArea, Stack, TextInput, Title } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { UserExercise } from "../../../types/workout";
 
@@ -34,10 +26,7 @@ const NewExerciseForm = ({ cancel, createExercise }: Props) => {
   const handleSubmit = form.onSubmit((values) => {
     const newExercise: UserExercise = {
       name: values.name,
-      units: values.units.reduce<Record<string, string>>(
-        (obj, m, i) => ((obj[i] = m), obj),
-        {}
-      ),
+      units: values.units,
       type: values.type,
     };
     console.log("Creating");
@@ -61,10 +50,7 @@ const NewExerciseForm = ({ cancel, createExercise }: Props) => {
         <ScrollArea sx={{ flexGrow: 1 }}>
           <Group grow>
             <TextInput label="Name" required {...form.getInputProps("name")} />
-            <TextInput
-              label="Type of exercise"
-              {...form.getInputProps("type")}
-            />
+            <TextInput label="Type of exercise" {...form.getInputProps("type")} />
           </Group>
           <MultiSelect
             data={unitOptions}

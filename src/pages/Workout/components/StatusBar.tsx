@@ -10,8 +10,6 @@ export function StatusBar({ timeStarted }: StatusBarProps) {
       <Text color="dimmed" size="xs" italic weight="bold">
         Started: {timeStarted}
       </Text>
-  
-
     </Box>
   );
 }

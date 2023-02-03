@@ -1,36 +1,32 @@
 import { Button, Group, Stack, Tabs, Text } from "@mantine/core";
 import { useState } from "react";
 import { Navigate } from "react-router-dom";
-import { useIsWorkingOut } from "../../hooks/is-working-out-hook";
-import useWorkout from "../../hooks/workout";
-import { UserExercise } from "../../types/workout";
+import { useIsWorkingOut } from "../../hooks/isWorkingOut.hook";
+import useWorkout from "../../hooks/workout.hook";
+import { STATUS } from "../../types/util";
+import { UserExercise, WorkoutExercise } from "../../types/workout";
 import AddExerciseScreen from "./components/AddExerciseScreen";
 import CompletedExercises from "./components/CompletedExercises";
 import ExerciseScreen from "./components/ExerciseScreen";
 import { StatusBar } from "./components/StatusBar";
 
-type Exercise = {
-  name: string;
-  units: string[];
-  sets: object[];
-};
-
 const Workout = () => {
   // server
-  const { workout, ...api } = useWorkout();
   const { isWorkingOut, status: isWorkingOutStatus } = useIsWorkingOut();
+  const { status, workout, api } = useWorkout();
 
   // ui state
   const [activeTab, setActiveTab] = useState<string | null>("exercise");
-  const [currentExercise, setCurrentExercise] = useState<Exercise | null>(null);
+  const [currentExercise, setCurrentExercise] = useState<WorkoutExercise | null>(null);
 
   // functions
   const addExercise = (ex: UserExercise) => {
     console.log(ex);
     setCurrentExercise({
       name: ex.name,
-      units: Object.values(ex.units),
+      units: ex.units,
       sets: [],
+      complete: false,
     });
   };
 
@@ -41,6 +37,10 @@ const Workout = () => {
 
   if (!isWorkingOut) {
     return <Navigate to="/" replace />;
+  }
+
+  if (status === STATUS.LOADING) {
+    return <Text>Loading your workout!</Text>;
   }
 
   return (
@@ -69,11 +69,7 @@ const Workout = () => {
         </Tabs.List>
 
         <Tabs.Panel value="exercise">
-          {currentExercise ? (
-            <ExerciseScreen {...currentExercise} />
-          ) : (
-            <AddExerciseScreen addExercise={addExercise} />
-          )}
+          {currentExercise ? <ExerciseScreen {...currentExercise} /> : <AddExerciseScreen addExercise={addExercise} />}
         </Tabs.Panel>
 
         <Tabs.Panel value="summary">

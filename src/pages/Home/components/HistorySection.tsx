@@ -1,17 +1,7 @@
 import { Icon } from "@iconify/react";
-import {
-  Stack,
-  Title,
-  Divider,
-  Group,
-  Card,
-  Box,
-  Text,
-  Collapse,
-  UnstyledButton,
-} from "@mantine/core";
+import { Stack, Title, Divider, Group, Card, Box, Text, Collapse, UnstyledButton } from "@mantine/core";
 import React, { useState } from "react";
-import { WorkoutHistoryType } from "../../../hooks/workoutHistory";
+import { WorkoutHistoryType } from "../../../hooks/workoutHistory.hook";
 
 type Props = {
   workouts: WorkoutHistoryType;
@@ -36,15 +26,9 @@ const HistorySection = ({ workouts }: Props) => {
                     <Divider mb={"md"} />
 
                     <Stack>
-                      {Object.entries(workout.completedExercises).map(
-                        ([name, sets], i) => (
-                          <ExerciseDropdownInfo
-                            key={`exercise-${name}-${i}`}
-                            name={name}
-                            sets={sets}
-                          />
-                        )
-                      )}
+                      {Object.entries(workout.completedExercises).map(([name, sets], i) => (
+                        <ExerciseDropdownInfo key={`exercise-${name}-${i}`} name={name} sets={sets} />
+                      ))}
                     </Stack>
                   </Card>
                 ))}
@@ -80,11 +64,7 @@ const ExerciseDropdownInfo = ({ name, sets }: ExerciseDropdownInfoProps) => {
           <Icon icon="material-symbols:add" className={open ? "open" : ""} />
         </Group>
       </UnstyledButton>
-      <Collapse
-        in={open}
-        transitionDuration={80}
-        transitionTimingFunction={"linear"}
-      >
+      <Collapse in={open} transitionDuration={80} transitionTimingFunction={"linear"}>
         sets
       </Collapse>
     </>

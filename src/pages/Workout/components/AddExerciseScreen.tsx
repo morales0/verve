@@ -1,12 +1,4 @@
-import {
-  Button,
-  Group,
-  ScrollArea,
-  Stack,
-  Table,
-  Text,
-  TextInput,
-} from "@mantine/core";
+import { Button, Group, ScrollArea, Stack, Table, Text, TextInput } from "@mantine/core";
 import { useEffect, useState } from "react";
 import useDatabaseList from "../../../hooks/databaseList.hook";
 import { STATUS } from "../../../types/util";
@@ -18,16 +10,14 @@ type Props = {
 };
 
 const AddExerciseScreen = ({ addExercise }: Props) => {
-  const {
-    status,
-    data: userExercises,
-    api,
-  } = useDatabaseList<UserExercise>("userExercises");
+  const { status, data: userExercises, api } = useDatabaseList<UserExercise>("userExercises");
   const [data, setData] = useState<UserExercise[]>([]);
   const [tab, setTab] = useState("adding");
 
   useEffect(() => {
     if (status === STATUS.SUCCESS) {
+      console.log(userExercises);
+
       setData(userExercises);
     }
   }, [status, userExercises]);
@@ -63,11 +53,7 @@ const AddExerciseScreen = ({ addExercise }: Props) => {
           </tr>
         ) : (
           data.map((ex, i) => (
-            <tr
-              key={`ex-info-${ex.name}-${i}`}
-              style={{ cursor: "pointer" }}
-              onClick={() => addExercise(ex)}
-            >
+            <tr key={`ex-info-${ex.name}-${i}`} style={{ cursor: "pointer" }} onClick={() => addExercise(ex)}>
               <td>{ex.name}</td>
               <td style={{ textAlign: "center" }}>
                 {ex.type || (
@@ -95,19 +81,12 @@ const AddExerciseScreen = ({ addExercise }: Props) => {
   return (
     <>
       {tab === "creating" ? (
-        <NewExerciseForm
-          cancel={() => setTab("adding")}
-          createExercise={createExercise}
-        />
+        <NewExerciseForm cancel={() => setTab("adding")} createExercise={createExercise} />
       ) : (
         <Stack h="100%" py="lg" sx={{ overflow: "hidden" }}>
           <Group align="flex-start">
             <TextInput placeholder="Search" sx={{ flexGrow: 1 }} />
-            <Button
-              color="teal"
-              sx={{ flexGrow: 0 }}
-              onClick={() => setTab("creating")}
-            >
+            <Button color="teal" sx={{ flexGrow: 0 }} onClick={() => setTab("creating")}>
               + New Exercise
             </Button>
           </Group>

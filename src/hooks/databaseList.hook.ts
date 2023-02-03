@@ -1,12 +1,4 @@
-import {
-  off,
-  onValue,
-  push,
-  ref,
-  remove,
-  set,
-  update,
-} from "firebase/database";
+import { off, onValue, push, ref, remove, set, update } from "firebase/database";
 import { useEffect, useState } from "react";
 import { useAuth } from "../context/auth";
 import { useDatabase } from "../context/database";
@@ -39,7 +31,7 @@ const useDatabaseList = <T>(dbRefString: string) => {
 
   const addChild = async (child: T, key?: string) => {
     if (key) {
-      if (key in idList) throw new Error("Key already exists");
+      if (idList.includes(key)) throw new Error("Key already exists");
       return set(ref(db, `${dbRefTemplate}/${key}`), child);
     } else {
       const newRef = push(ref(db, dbRefTemplate));
@@ -47,12 +39,12 @@ const useDatabaseList = <T>(dbRefString: string) => {
     }
   };
 
-  const removeChild = (key: string) => {
-    remove(ref(db, `${dbRefTemplate}/${key}`));
+  const removeChild = async (key: string) => {
+    return remove(ref(db, `${dbRefTemplate}/${key}`));
   };
 
-  const updateChild = (key: string, updates: { [refs: string]: any }) => {
-    update(ref(db, `${dbRefTemplate}/${key}`), updates);
+  const updateChild = async (key: string, updates: Partial<T>) => {
+    return update(ref(db, `${dbRefTemplate}/${key}`), updates);
   };
 
   return {
