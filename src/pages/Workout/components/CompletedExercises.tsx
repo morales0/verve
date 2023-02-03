@@ -1,6 +1,6 @@
 import { ScrollArea, Stack, Title } from "@mantine/core";
 
-type Props = {};
+type Props = any;
 
 const CompletedExercises = (props: Props) => {
   return (

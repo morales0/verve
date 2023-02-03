@@ -1,6 +1,5 @@
 import { onValue, ref, set } from "firebase/database";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/auth";
 import { useDatabase } from "../context/database";
 

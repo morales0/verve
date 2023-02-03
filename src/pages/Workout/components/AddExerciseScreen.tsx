@@ -23,7 +23,7 @@ const AddExerciseScreen = ({ addExercise }: Props) => {
   }, [status, userExercises]);
 
   const createExercise = async (data: UserExercise) => {
-    return api.addChild(data, data.name);
+    return api.addChild(data);
   };
 
   if (status === STATUS.LOADING) {

@@ -25,7 +25,7 @@ const Workout = () => {
     setCurrentExercise({
       name: ex.name,
       units: ex.units,
-      sets: [],
+      sets: [ex.units.reduce<Record<string, number>>((obj, unit) => ((obj[unit] = 0), obj), {})],
       complete: false,
     });
   };

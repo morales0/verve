@@ -36,7 +36,7 @@ const groups = [
   },
 ];
 
-type Props = {};
+type Props = any;
 
 const MuscleGroupsSection = (props: Props) => {
   return (

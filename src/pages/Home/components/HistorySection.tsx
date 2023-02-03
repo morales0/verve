@@ -1,6 +1,6 @@
 import { Icon } from "@iconify/react";
-import { Stack, Title, Divider, Group, Card, Box, Text, Collapse, UnstyledButton } from "@mantine/core";
-import React, { useState } from "react";
+import { Card, Collapse, Divider, Group, Stack, Text, Title, UnstyledButton } from "@mantine/core";
+import { useState } from "react";
 import { WorkoutHistoryType } from "../../../hooks/workoutHistory.hook";
 
 type Props = {

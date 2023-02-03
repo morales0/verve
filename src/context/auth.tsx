@@ -45,11 +45,7 @@ export default function AuthProvider({ app, children }: Props) {
     return null;
   }
 
-  return (
-    <AuthContext.Provider value={{ user, status, data, auth }}>
-      {children}
-    </AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={{ user, status, data, auth }}>{children}</AuthContext.Provider>;
 }
 
 export function useAuth(): AuthContextType {

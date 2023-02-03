@@ -24,11 +24,7 @@ const LastWorkoutSummary = ({ startNewWorkoutAndNavigate }: Props) => {
     <Stack mb={"2rem"}>
       <Group position="apart">
         <Title order={2}>Last Workout</Title>
-        <Button
-          color={"teal"}
-          onClick={handleStartWorkout}
-          loading={isCreating}
-        >
+        <Button color={"teal"} onClick={handleStartWorkout} loading={isCreating}>
           {isCreating ? "Creating workout..." : "+ New Workout"}
         </Button>
       </Group>

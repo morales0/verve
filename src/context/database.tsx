@@ -16,11 +16,7 @@ type Props = {
 function DatabaseProvider({ app, children }: Props) {
   const db = getDatabase(app);
 
-  return (
-    <DatabaseContext.Provider value={{ db: db }}>
-      {children}
-    </DatabaseContext.Provider>
-  );
+  return <DatabaseContext.Provider value={{ db: db }}>{children}</DatabaseContext.Provider>;
 }
 
 export default DatabaseProvider;
@@ -29,9 +25,7 @@ export function useDatabase(): DatabaseContextType {
   const databaseContext = useContext(DatabaseContext);
 
   if (databaseContext == null) {
-    throw new Error(
-      "useDatabase must be used within a DatabaseProvider component"
-    );
+    throw new Error("useDatabase must be used within a DatabaseProvider component");
   }
 
   return databaseContext as DatabaseContextType;

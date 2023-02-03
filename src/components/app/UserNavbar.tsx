@@ -1,13 +1,4 @@
-import {
-  ActionIcon,
-  Flex,
-  Group,
-  Header,
-  Title,
-  useMantineColorScheme,
-  createStyles,
-  Burger,
-} from "@mantine/core";
+import { ActionIcon, Flex, Group, Header, Title, useMantineColorScheme, createStyles, Burger } from "@mantine/core";
 import { Icon } from "@iconify/react";
 import { Link, NavLink } from "react-router-dom";
 
@@ -19,18 +10,12 @@ const useStyles = createStyles((theme) => ({
     padding: ".5rem .75rem",
     borderRadius: theme.radius.sm,
     textDecoration: "none",
-    color:
-      theme.colorScheme === "dark"
-        ? theme.colors.dark[0]
-        : theme.colors.gray[7],
+    color: theme.colorScheme === "dark" ? theme.colors.dark[0] : theme.colors.gray[7],
     fontSize: theme.fontSizes.md,
     fontWeight: 500,
 
     "&:hover": {
-      backgroundColor:
-        theme.colorScheme === "dark"
-          ? theme.colors.dark[6]
-          : theme.colors.gray[0],
+      backgroundColor: theme.colorScheme === "dark" ? theme.colors.dark[6] : theme.colors.gray[0],
     },
 
     "&.active": {
@@ -48,21 +33,13 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-type Props = {};
-
-const UserNavbar = ({}: Props) => {
+const UserNavbar = () => {
   const { toggleColorScheme } = useMantineColorScheme();
   const { classes } = useStyles();
 
   return (
     <Header height={"auto"} pos="sticky">
-      <Flex
-        direction={"row"}
-        justify={"space-between"}
-        align={"center"}
-        px={"md"}
-        py={"sm"}
-      >
+      <Flex direction={"row"} justify={"space-between"} align={"center"} px={"md"} py={"sm"}>
         <Link className={classes.brand} to="/">
           <Title order={1}>Verve</Title>
         </Link>
@@ -81,11 +58,7 @@ const UserNavbar = ({}: Props) => {
 
         <Group>
           <Burger opened={false} className={classes.burger} />
-          <ActionIcon
-            size="lg"
-            title="Theme switcher"
-            onClick={() => toggleColorScheme()}
-          >
+          <ActionIcon size="lg" title="Theme switcher" onClick={() => toggleColorScheme()}>
             <Icon icon="mdi:theme-light-dark" height={25} />
           </ActionIcon>
           <ActionIcon size="lg" title="Settings">

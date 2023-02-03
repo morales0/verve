@@ -1,4 +1,4 @@
-import { Box, Flex, ScrollArea } from "@mantine/core";
+import { Box, Flex } from "@mantine/core";
 import { Route, Routes } from "react-router-dom";
 import UserNavbar from "../components/app/UserNavbar";
 import Home from "../pages/Home/Home";
