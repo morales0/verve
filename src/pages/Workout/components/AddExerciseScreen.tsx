@@ -1,18 +1,24 @@
 import { Button, Group, ScrollArea, Stack, Table, Text, TextInput } from "@mantine/core";
+import { useMediaQuery } from "@mantine/hooks";
 import { useEffect, useState } from "react";
 import useDatabaseList from "../../../hooks/databaseList.hook";
 import { STATUS } from "../../../types/util";
 import { UserExercise } from "../../../types/workout";
-import NewExerciseForm from "./NewExerciseForm";
+import ExerciseForm from "./ExerciseForm";
 
 type Props = {
-  addExercise: (ex: UserExercise) => void;
+  onAdd: (ex: UserExercise) => void;
+  currentExerciseIds: string[] | undefined;
 };
 
-const AddExerciseScreen = ({ addExercise }: Props) => {
+const AddExerciseScreen = ({ onAdd, currentExerciseIds }: Props) => {
   const { status, data: userExercises, api } = useDatabaseList<UserExercise>("userExercises");
   const [data, setData] = useState<UserExercise[]>([]);
   const [tab, setTab] = useState("adding");
+  // const [editData, setEditData] = useState<UserExercise | null>(null);
+  // const largeScreen = useMediaQuery("(min-width: 900px)");
+
+  const filteredData = data.filter((ex) => !currentExerciseIds?.includes(ex.id || ""));
 
   useEffect(() => {
     if (status === STATUS.SUCCESS) {
@@ -23,6 +29,8 @@ const AddExerciseScreen = ({ addExercise }: Props) => {
   }, [status, userExercises]);
 
   const createExercise = async (data: UserExercise) => {
+    console.log(data);
+
     return api.addChild(data);
   };
 
@@ -34,9 +42,8 @@ const AddExerciseScreen = ({ addExercise }: Props) => {
     return (
       <thead>
         <tr>
-          <th style={{ width: "40%" }}>Name</th>
-          <th style={{ textAlign: "center" }}>Type</th>
-          <th style={{ textAlign: "center" }}>Muscle Groups</th>
+          <th style={{ width: "60%" }}>Name</th>
+          <th style={{ textAlign: "center" }}>Primary Muscle Groups</th>
         </tr>
       </thead>
     );
@@ -45,7 +52,7 @@ const AddExerciseScreen = ({ addExercise }: Props) => {
   const Body = () => {
     return (
       <tbody>
-        {data.length === 0 ? (
+        {filteredData.length === 0 ? (
           <tr>
             <td colSpan={3} style={{ textAlign: "center" }}>
               <Text>Found no exercises. Make a new one up there!</Text>
@@ -53,18 +60,16 @@ const AddExerciseScreen = ({ addExercise }: Props) => {
           </tr>
         ) : (
           data.map((ex, i) => (
-            <tr key={`ex-info-${ex.name}-${i}`} style={{ cursor: "pointer" }} onClick={() => addExercise(ex)}>
-              <td>{ex.name}</td>
-              <td style={{ textAlign: "center" }}>
-                {ex.type || (
-                  <Text color="dimmed" fz="sm" italic>
-                    None specified
-                  </Text>
-                )}
+            <tr key={`ex-info-${ex.name}-${i}`} style={{ cursor: "pointer" }} onClick={() => onAdd(ex)}>
+              <td>
+                {ex.name}{" "}
+                <Text fz="xs" color="dimmed" italic>
+                  {ex.weightType}
+                </Text>
               </td>
               <td style={{ textAlign: "center" }}>
-                {ex.muscleGroups ? (
-                  <Text>{Object.values(ex.muscleGroups).toString()}</Text>
+                {ex.primaryMuscleGroups ? (
+                  <Text>{Object.values(ex.primaryMuscleGroups).toString()}</Text>
                 ) : (
                   <Text color="dimmed" fz="sm" italic>
                     None specified
@@ -81,7 +86,7 @@ const AddExerciseScreen = ({ addExercise }: Props) => {
   return (
     <>
       {tab === "creating" ? (
-        <NewExerciseForm cancel={() => setTab("adding")} createExercise={createExercise} />
+        <ExerciseForm cancel={() => setTab("adding")} submitExercise={createExercise} />
       ) : (
         <Stack h="100%" py="lg" sx={{ overflow: "hidden" }}>
           <Group align="flex-start">

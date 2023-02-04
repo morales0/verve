@@ -1,13 +1,19 @@
 export type UserExercise = {
   name: string;
+  id?: string;
   units: string[];
-  muscleGroups?: string[];
-  type?: string;
+  primaryMuscleGroups?: string[];
+  secondaryMuscleGroups?: string[];
+  weightType?: string;
 };
 
-export type WorkoutExercise = {
-  name: string;
-  units: string[];
+export type WorkoutExercise = UserExercise & {
+  workoutId?: string;
   sets: object[];
-  complete: boolean;
+};
+
+export type Workout = {
+  exercises?: WorkoutExercise[];
+  dateStarted?: string;
+  timeStarted?: string;
 };

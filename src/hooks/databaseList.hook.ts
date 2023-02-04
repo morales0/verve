@@ -35,7 +35,10 @@ const useDatabaseList = <T>(dbRefString: string) => {
       return set(ref(db, `${dbRefTemplate}/${key}`), child);
     } else {
       const newRef = push(ref(db, dbRefTemplate));
-      return set(newRef, child);
+      return set(newRef, {
+        ...child,
+        id: newRef.key,
+      });
     }
   };
 

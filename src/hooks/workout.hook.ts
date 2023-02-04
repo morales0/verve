@@ -3,15 +3,7 @@ import { useEffect, useState } from "react";
 import { useAuth } from "../context/auth";
 import { useDatabase } from "../context/database";
 import { STATUS } from "../types/util";
-import { WorkoutExercise } from "../types/workout";
-
-type Workout = {
-  exercises?: {
-    [id: string]: WorkoutExercise;
-  };
-  dateStarted?: string;
-  timeStarted?: string;
-};
+import { Workout, WorkoutExercise } from "../types/workout";
 
 const useWorkout = () => {
   const { user } = useAuth();
@@ -26,9 +18,14 @@ const useWorkout = () => {
     const workoutRef = ref(db, refString);
     onValue(workoutRef, (snapshot) => {
       if (snapshot.exists()) {
-        setWorkout(snapshot.val());
-      } else {
-        console.log("workout doesn't exist");
+        // exercises comes in as an object, lets make it an array, and cast it
+        const data = snapshot.val();
+        if (data.exercises) {
+          const listExercises: WorkoutExercise[] = Object.values(data.exercises);
+          data.exercises = listExercises;
+        }
+
+        setWorkout(data as Workout);
       }
 
       setStatus(STATUS.SUCCESS);
@@ -38,12 +35,15 @@ const useWorkout = () => {
   }, [db, user]);
 
   const addExercise = async (exercise: WorkoutExercise) => {
-    const newRef = push(ref(db, refString + "/exercises"), exercise);
-    return set(newRef, exercise);
+    const newRef = push(ref(db, refString + "/exercises"));
+    return set(newRef, {
+      ...exercise,
+      workoutId: newRef.key,
+    });
   };
 
-  const removeExercise = async (exerciseId: string) => {
-    return remove(ref(db, refString + "/exercises" + exerciseId));
+  const removeExercise = async (id: string) => {
+    return remove(ref(db, refString + `/exercises/${id}`));
   };
 
   return {

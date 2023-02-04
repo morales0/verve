@@ -15,8 +15,6 @@ export function useIsWorkingOut() {
   };
 
   const startWorkout = async () => {
-    console.log("In Start");
-
     // Create workout first
     const now = new Date();
     const time = now.toLocaleTimeString("en-US", {
@@ -28,17 +26,9 @@ export function useIsWorkingOut() {
       dateStarted: now.toString(),
       timeStarted: time,
       inProgress: true,
-    })
-      .then(() => {
-        console.log("set resolved");
-
-        return new Promise((res) => setTimeout(res, 3000));
-      })
-      .then(() => {
-        console.log("wait resolved, updating meta");
-
-        updateIsWorkingOut(true);
-      });
+    }).then(() => {
+      updateIsWorkingOut(true);
+    });
   };
 
   const endWorkout = () => {
@@ -47,8 +37,6 @@ export function useIsWorkingOut() {
 
   useEffect(() => {
     onValue(ref(db, `users/${user?.uid}/meta/isWorkingOut`), (snapshot) => {
-      // console.log(snapshot.val());
-
       if (snapshot.exists()) {
         const data = snapshot.val();
         setIsWorkingOut(data);

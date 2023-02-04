@@ -16,8 +16,6 @@ const Home = () => {
   const { isWorkingOut, startWorkout, status: workingOutStatus } = useIsWorkingOut();
 
   const startNewWorkoutAndNavigate = () => {
-    console.log("Home return");
-
     return startWorkout().then(() => {
       navigate("/workout");
     });

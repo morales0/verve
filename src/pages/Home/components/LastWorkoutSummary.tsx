@@ -9,15 +9,11 @@ const LastWorkoutSummary = ({ startNewWorkoutAndNavigate }: Props) => {
   const [isCreating, setIsCreating] = useState(false);
 
   const handleStartWorkout = () => {
-    console.log("Handle start");
-
     setIsCreating(true);
 
     startNewWorkoutAndNavigate().catch((e) => {
       console.log("Error creating workout, tell user to try again");
     });
-
-    console.log("Handle done");
   };
 
   return (

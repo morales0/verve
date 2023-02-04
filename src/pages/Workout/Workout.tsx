@@ -1,4 +1,4 @@
-import { Button, Group, Stack, Tabs, Text } from "@mantine/core";
+import { Stack, Tabs, Text } from "@mantine/core";
 import { useState } from "react";
 import { Navigate } from "react-router-dom";
 import { useIsWorkingOut } from "../../hooks/isWorkingOut.hook";
@@ -6,27 +6,50 @@ import useWorkout from "../../hooks/workout.hook";
 import { STATUS } from "../../types/util";
 import { UserExercise, WorkoutExercise } from "../../types/workout";
 import AddExerciseScreen from "./components/AddExerciseScreen";
-import CompletedExercises from "./components/CompletedExercises";
 import ExerciseScreen from "./components/ExerciseScreen";
 import { StatusBar } from "./components/StatusBar";
+import SummaryScreen from "./components/SummaryScreen";
 
 const Workout = () => {
   // server
   const { isWorkingOut, status: isWorkingOutStatus } = useIsWorkingOut();
-  const { status, workout, api } = useWorkout();
+  const { status: workoutStatus, workout, api } = useWorkout();
 
   // ui state
   const [activeTab, setActiveTab] = useState<string | null>("exercise");
   const [currentExercise, setCurrentExercise] = useState<WorkoutExercise | null>(null);
 
   // functions
-  const addExercise = (ex: UserExercise) => {
+  const startExercise = (ex: UserExercise) => {
     console.log(ex);
     setCurrentExercise({
-      name: ex.name,
-      units: ex.units,
+      ...ex,
       sets: [ex.units.reduce<Record<string, number>>((obj, unit) => ((obj[unit] = 0), obj), {})],
-      complete: false,
+    });
+  };
+
+  const finishExercise = async () => {
+    if (currentExercise) {
+      return api.addExercise(currentExercise).then(() => {
+        setCurrentExercise(null);
+      });
+    }
+  };
+
+  const cancelExercise = () => {
+    setCurrentExercise(null);
+  };
+
+  const updateExercise = (updates: Partial<WorkoutExercise>) => {
+    setCurrentExercise((prevState) => {
+      if (prevState) {
+        return {
+          ...prevState,
+          ...updates,
+        };
+      } else {
+        return prevState;
+      }
     });
   };
 
@@ -39,7 +62,7 @@ const Workout = () => {
     return <Navigate to="/" replace />;
   }
 
-  if (status === STATUS.LOADING) {
+  if (workoutStatus === STATUS.LOADING) {
     return <Text>Loading your workout!</Text>;
   }
 
@@ -50,16 +73,12 @@ const Workout = () => {
         variant="default"
         value={activeTab}
         onTabChange={setActiveTab}
-        styles={(theme) => ({
+        styles={() => ({
           root: {
             display: "flex",
             flexDirection: "column",
             flexGrow: 1,
             overflow: "hidden",
-            "& .mantine-Tabs-panel": {
-              flexGrow: 1,
-              overflow: "hidden",
-            },
           },
         })}
       >
@@ -68,23 +87,21 @@ const Workout = () => {
           <Tabs.Tab value="summary">Summary</Tabs.Tab>
         </Tabs.List>
 
-        <Tabs.Panel value="exercise">
-          {currentExercise ? <ExerciseScreen {...currentExercise} /> : <AddExerciseScreen addExercise={addExercise} />}
+        <Tabs.Panel value="exercise" sx={{ flexGrow: 1, overflow: "hidden" }}>
+          {currentExercise ? (
+            <ExerciseScreen
+              exercise={currentExercise}
+              onFinish={finishExercise}
+              onCancel={cancelExercise}
+              updateExercise={updateExercise}
+            />
+          ) : (
+            <AddExerciseScreen onAdd={startExercise} currentExerciseIds={workout.exercises?.map((e) => e.id || "")} />
+          )}
         </Tabs.Panel>
 
-        <Tabs.Panel value="summary">
-          <Stack justify={"space-between"} h="100%" sx={{ overflow: "hidden" }}>
-            <CompletedExercises />
-
-            <Group w="100%" align={"center"} position="center" grow>
-              <Button variant="outline" color="red">
-                Cancel
-              </Button>
-              <Button variant="light" color="green">
-                Complete
-              </Button>
-            </Group>
-          </Stack>
+        <Tabs.Panel value="summary" sx={{ flexGrow: 1, overflow: "hidden" }}>
+          <SummaryScreen exercises={workout.exercises} />
         </Tabs.Panel>
       </Tabs>
     </Stack>
