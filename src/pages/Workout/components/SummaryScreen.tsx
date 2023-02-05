@@ -3,9 +3,11 @@ import { WorkoutExercise } from "../../../types/workout";
 
 type Props = {
   exercises?: WorkoutExercise[];
+  onCancel: () => void;
+  onComplete: () => void;
 };
 
-const SummaryScreen = ({ exercises }: Props) => {
+const SummaryScreen = ({ exercises, onCancel, onComplete }: Props) => {
   return (
     <Stack justify={"space-between"} h="100%" sx={{ overflow: "hidden" }}>
       <Stack h="100%" py="lg" sx={{ overflow: "hidden" }}>
@@ -17,10 +19,10 @@ const SummaryScreen = ({ exercises }: Props) => {
       </Stack>
 
       <Group w="100%" align={"center"} position="center" grow>
-        <Button variant="outline" color="red">
+        <Button variant="outline" color="red" onClick={onCancel}>
           Cancel
         </Button>
-        <Button variant="light" color="green">
+        <Button variant="light" color="green" onClick={onComplete}>
           Complete
         </Button>
       </Group>

@@ -12,7 +12,7 @@ import SummaryScreen from "./components/SummaryScreen";
 
 const Workout = () => {
   // server
-  const { isWorkingOut, status: isWorkingOutStatus } = useIsWorkingOut();
+  const { isWorkingOut, status: isWorkingOutStatus, endWorkout } = useIsWorkingOut();
   const { status: workoutStatus, workout, api } = useWorkout();
 
   // ui state
@@ -53,7 +53,15 @@ const Workout = () => {
     });
   };
 
-  // render
+  const completeWorkout = () => {
+    api.completeWorkout().then(() => endWorkout());
+  };
+
+  const cancelWorkout = () => {
+    api.cancelWorkout().then(() => endWorkout());
+  };
+
+  // status checks
   if (isWorkingOutStatus === "loading") {
     return <Text>Checking for workout...</Text>;
   }
@@ -66,6 +74,15 @@ const Workout = () => {
     return <Text>Loading your workout!</Text>;
   }
 
+  if (workoutStatus === STATUS.DELETING) {
+    return <Text>Deleting your workout...</Text>;
+  }
+
+  if (workoutStatus === STATUS.COMPLETING) {
+    return <Text>Completing your workout...</Text>;
+  }
+
+  // render page
   return (
     <Stack h="100%" p="1rem" sx={{ overflow: "hidden" }}>
       <StatusBar timeStarted={workout.timeStarted || "Time missing"} />
@@ -101,7 +118,7 @@ const Workout = () => {
         </Tabs.Panel>
 
         <Tabs.Panel value="summary" sx={{ flexGrow: 1, overflow: "hidden" }}>
-          <SummaryScreen exercises={workout.exercises} />
+          <SummaryScreen exercises={workout.exercises} onCancel={cancelWorkout} onComplete={completeWorkout} />
         </Tabs.Panel>
       </Tabs>
     </Stack>

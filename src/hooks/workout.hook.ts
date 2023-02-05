@@ -1,4 +1,4 @@
-import { off, onValue, push, ref, remove, set } from "firebase/database";
+import { off, onValue, push, ref, remove, set, update } from "firebase/database";
 import { useEffect, useState } from "react";
 import { useAuth } from "../context/auth";
 import { useDatabase } from "../context/database";
@@ -46,12 +46,42 @@ const useWorkout = () => {
     return remove(ref(db, refString + `/exercises/${id}`));
   };
 
+  const cancelWorkout = () => {
+    setStatus(STATUS.DELETING);
+
+    return remove(ref(db, refString));
+  };
+
+  const completeWorkout = async () => {
+    setStatus(STATUS.COMPLETING);
+
+    const now = new Date();
+    const time = now.toLocaleTimeString("en-US", {
+      hour: "numeric",
+      minute: "2-digit",
+    });
+
+    // we want to move this workout to workoutHistory
+    const historyRef = ref(db, `users/${user?.uid}/history`);
+    const newRef = push(historyRef);
+    return set(newRef, {
+      ...workout,
+      dateEnded: now.toString(),
+      timeEnded: time,
+    }).then(() => {
+      // finally, delete workout
+      remove(ref(db, refString));
+    });
+  };
+
   return {
     status,
     workout,
     api: {
       addExercise,
       removeExercise,
+      cancelWorkout,
+      completeWorkout,
     },
   };
 };
