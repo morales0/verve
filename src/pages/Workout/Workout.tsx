@@ -6,7 +6,7 @@ import useWorkout from "../../hooks/workout.hook";
 import { STATUS } from "../../types/util";
 import { UserExercise, WorkoutExercise } from "../../types/workout";
 import AddExerciseScreen from "./components/AddExerciseScreen";
-import ExerciseScreen from "./components/ExerciseScreen";
+import ExerciseScreen from "./components/ExerciseScreen/ExerciseScreen";
 import { StatusBar } from "./components/StatusBar";
 import SummaryScreen from "./components/SummaryScreen";
 

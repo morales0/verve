@@ -2,97 +2,29 @@ import { Icon } from "@iconify/react";
 import {
   ActionIcon,
   Box,
-  Button,
   Center,
   Collapse,
-  Divider,
   Group,
   NumberInput,
   NumberInputHandlers,
-  ScrollArea,
   Stack,
   Text,
-  Title,
   UnstyledButton,
 } from "@mantine/core";
 import { useEffect, useRef, useState } from "react";
-import { WorkoutExercise } from "../../../types/workout";
 
 type Props = {
-  exercise: WorkoutExercise;
-  onFinish: () => Promise<void>;
-  onCancel: () => void;
-  updateExercise: (updates: Partial<WorkoutExercise>) => void;
-};
-
-const ExerciseScreen = ({ exercise, onFinish, onCancel, updateExercise }: Props) => {
-  const addSet = () => {
-    updateExercise({
-      sets: [
-        ...exercise.sets,
-        exercise.units.reduce<Record<string, number>>((obj, unit) => ((obj[unit] = 0), obj), {}),
-      ],
-    });
-  };
-  const removeSet = () => {
-    updateExercise({
-      sets: exercise.sets.slice(0, -1),
-    });
-  };
-  const updateSetValue = (index: number, unit: string, value: number) => {
-    updateExercise({
-      sets: exercise.sets.map((set, i) => (i === index ? { ...set, [unit]: value } : set)),
-    });
-  };
-
-  return (
-    <Stack h="100%" sx={{ overflow: "hidden" }} align="flex-start" spacing={0}>
-      <Group align="center" py="sm">
-        <Title order={3}>{exercise.name}</Title>
-        <Group>
-          <Button variant="outline" color="gray" onClick={removeSet} size="xs">
-            -
-          </Button>
-          <Button variant="outline" color="gray" onClick={addSet} size="xs">
-            +
-          </Button>
-        </Group>
-      </Group>
-      {/* <Group px="lg">
-        {exercise.units.map((unit) => (
-          <Title key={`unit-${unit}`} order={4}>
-            {unit}
-          </Title>
-        ))}
-      </Group> */}
-      <ScrollArea w="100%" pr="sm" sx={{ flexGrow: 1 }}>
-        <Sets sets={exercise.sets} weightType={exercise.weightType} onChange={updateSetValue} />
-      </ScrollArea>
-      <Group w="100%" align={"center"} position="center" grow mt={"auto"}>
-        <Button variant="outline" color="red" onClick={onCancel} size="xs">
-          Cancel
-        </Button>
-        <Button variant="light" color="green" onClick={onFinish} size="xs">
-          Finish
-        </Button>
-      </Group>
-    </Stack>
-  );
-};
-
-const Sets = ({
-  sets,
-  weightType,
-  onChange,
-}: {
   sets: object[];
   weightType: string | undefined;
   onChange: (index: number, unit: string, value: number) => void;
-}) => {
+};
+
+const Sets = ({ sets, weightType, onChange }: Props) => {
   return (
     <>
       {sets.map((set, i) => {
         const updateSet = (unit: string, value: number) => onChange(i, unit, value);
+
         if (weightType === "Barbell") {
           return <BarbellSet key={`set-${i}`} set={set} onChange={updateSet} />;
         } else {
@@ -257,4 +189,4 @@ const BarbellSet = ({ set, onChange }: { set: object; onChange: (unit: string, v
   );
 };
 
-export default ExerciseScreen;
+export default Sets;
