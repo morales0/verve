@@ -1,6 +1,7 @@
 import { ActionIcon, Flex, Group, Header, Title, useMantineColorScheme, createStyles, Burger } from "@mantine/core";
 import { Icon } from "@iconify/react";
 import { Link, NavLink } from "react-router-dom";
+import { useMediaQuery } from "@mantine/hooks";
 
 const useStyles = createStyles((theme) => ({
   brand: {},
@@ -36,12 +37,13 @@ const useStyles = createStyles((theme) => ({
 const UserNavbar = () => {
   const { toggleColorScheme } = useMantineColorScheme();
   const { classes } = useStyles();
+  const largeScreen = useMediaQuery("(min-width: 1200px)");
 
   return (
     <Header height={"auto"} pos="sticky">
       <Flex direction={"row"} justify={"space-between"} align={"center"} px={"md"} py={"sm"}>
         <Link className={classes.brand} to="/">
-          <Title order={1}>Verve</Title>
+          <Title order={largeScreen ? 1 : 3}>Verve</Title>
         </Link>
 
         <Group>

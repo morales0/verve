@@ -84,8 +84,8 @@ const Workout = () => {
 
   // render page
   return (
-    <Stack h="100%" p="1rem" sx={{ overflow: "hidden" }}>
-      <StatusBar timeStarted={workout.timeStarted || "Time missing"} />
+    <Stack h="100%" px="1rem" sx={{ overflow: "hidden" }}>
+      {!currentExercise && <StatusBar timeStarted={workout.timeStarted || "Time missing"} />}
       <Tabs
         variant="default"
         value={activeTab}
