@@ -25,7 +25,8 @@
     "eject": "react-scripts eject",
     "lint": "eslint src/**/*.{ts,tsx,json,md} --cache",
     "lint:fix": "yarn lint --fix",
-    "format": "prettier --write src/**/*.{ts,tsx,json,md} && yarn lint:fix"
+    "format": "prettier --write src/**/*.{ts,tsx,json,md} && yarn lint:fix",
+    "deploy:dev": "firebase deploy --only hosting:dev"
   },
   "browserslist": {
     "production": [
