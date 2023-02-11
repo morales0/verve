@@ -1,51 +1,79 @@
 import { Icon } from "@iconify/react";
-import { Card, Collapse, Divider, Group, Stack, Text, Title, UnstyledButton } from "@mantine/core";
+import { Card, Collapse, Divider, Group, Paper, Stack, Text, Title, UnstyledButton } from "@mantine/core";
 import { useState } from "react";
-import { WorkoutHistoryType } from "../../../hooks/workoutHistory.hook";
+import useWorkoutHistory from "../../../hooks/workoutHistory.hook";
+import { STATUS } from "../../../types/util";
 
-type Props = {
-  workouts: WorkoutHistoryType;
-};
+const HistorySection = () => {
+  const { status, data: workouts } = useWorkoutHistory();
 
-const HistorySection = ({ workouts }: Props) => {
+  if (status === STATUS.LOADING) {
+    return <Text>Loading history...</Text>;
+  }
+
   return (
-    <Group mb={"1.5rem"} align={"flex-start"}>
-      {Object.entries(workouts)
-        .reverse()
-        .map(([day, times], i) => {
+    <Stack>
+      <Title order={3}>Latest Workouts</Title>
+      <Group mb={"1.5rem"} align={"flex-start"}>
+        {[...workouts].reverse().map((workout, i) => {
+          const dateStarted = new Date(workout.dateStarted || "");
+
           return (
-            <Stack key={day}>
-              <Title order={4}>{day}</Title>
-
-              <Group align={"flex-start"}>
-                {Object.entries(times).map(([time, workout]) => (
-                  <Card key={day + time} withBorder maw={"250px"}>
-                    <Text c="dimmed" fz={"xs"} fs={"italic"}>
-                      {workout.timeStarted} - {workout.timeEnded}
-                    </Text>
-                    <Divider mb={"md"} />
-
-                    <Stack>
-                      {Object.entries(workout.completedExercises).map(([name, sets], i) => (
-                        <ExerciseDropdownInfo key={`exercise-${name}-${i}`} name={name} sets={sets} />
-                      ))}
-                    </Stack>
-                  </Card>
+            <Card key={workout.historyId || `workout-${i}`}>
+              <Text fz={"s"}>{dateStarted.toDateString()}</Text>
+              <Text c="dimmed" fz={"xs"} fs={"italic"}>
+                {workout.timeStarted} - {workout.timeEnded}
+              </Text>
+              <Divider mb={"md"} />
+              <Stack>
+                {workout.exercises?.map((exercise, i) => (
+                  <ExerciseDropdownInfo
+                    key={`exercise-${exercise.name}-${i}`}
+                    name={exercise.name}
+                    sets={exercise.sets}
+                    units={exercise.units}
+                  />
                 ))}
-              </Group>
-            </Stack>
+              </Stack>
+            </Card>
           );
         })}
-    </Group>
+        {/*Object.entries(workouts)
+          .reverse()
+          .map(([day, times], i) => {
+            return (
+              <Stack key={day}>
+                <Title order={4}>{day}</Title>
+                <Group align={"flex-start"}>
+                  {Object.entries(times).map(([time, workout]) => (
+                    <Card key={day + time} withBorder maw={"250px"}>
+                      <Text c="dimmed" fz={"xs"} fs={"italic"}>
+                        {workout.timeStarted} - {workout.timeEnded}
+                      </Text>
+                      <Divider mb={"md"} />
+                      <Stack>
+                        {Object.entries(workout.completedExercises).map(([name, sets], i) => (
+                          <ExerciseDropdownInfo key={`exercise-${name}-${i}`} name={name} sets={sets} />
+                        ))}
+                      </Stack>
+                    </Card>
+                  ))}
+                </Group>
+              </Stack>
+            );
+          })*/}
+      </Group>
+    </Stack>
   );
 };
 
 type ExerciseDropdownInfoProps = {
   name: string;
-  sets: object;
+  sets: Record<string, number>[];
+  units: string[];
 };
 
-const ExerciseDropdownInfo = ({ name, sets }: ExerciseDropdownInfoProps) => {
+const ExerciseDropdownInfo = ({ name, sets, units }: ExerciseDropdownInfoProps) => {
   const [open, setOpen] = useState(false);
 
   return (
@@ -65,7 +93,24 @@ const ExerciseDropdownInfo = ({ name, sets }: ExerciseDropdownInfoProps) => {
         </Group>
       </UnstyledButton>
       <Collapse in={open} transitionDuration={80} transitionTimingFunction={"linear"}>
-        sets
+        <Group>
+          <Stack>
+            {units.map((unit) => (
+              <Text key={`${name}-${unit}`} fw="bold" fz="sm">
+                {unit}
+              </Text>
+            ))}
+          </Stack>
+          {sets.map((set, i) => {
+            return (
+              <Stack key={`${name}-set-${i}`}>
+                {units.map((unit) => (
+                  <Text key={`${name}-${unit}-set-${i}-val`}>{set[unit]}</Text>
+                ))}
+              </Stack>
+            );
+          })}
+        </Group>
       </Collapse>
     </>
   );

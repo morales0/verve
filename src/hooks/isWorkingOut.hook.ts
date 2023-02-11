@@ -25,7 +25,6 @@ export function useIsWorkingOut() {
     return set(ref(db, "users/" + user?.uid + "/currentWorkout"), {
       dateStarted: now.toString(),
       timeStarted: time,
-      inProgress: true,
     }).then(() => {
       updateIsWorkingOut(true);
     });

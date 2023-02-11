@@ -2,46 +2,27 @@ import { limitToLast, off, onValue, orderByKey, query, ref } from "firebase/data
 import { useEffect, useState } from "react";
 import { useAuth } from "../context/auth";
 import { useDatabase } from "../context/database";
+import { WorkoutHistory } from "../types/workout";
+import useDatabaseList from "./databaseList.hook";
 
 enum HistoryType {
   Days = "days",
   Workouts = "workouts",
 }
 
-export type WorkoutHistoryType = {
-  [day: string]: {
-    [time: string]: {
-      completedExercises: { [name: string]: object };
-      dateEnded: string;
-      dateStarted: string;
-      timeEnded: string;
-      timeStarted: string;
-    };
-  };
-};
-
 const useWorkoutHistory = () => {
   const { user } = useAuth();
   const { db } = useDatabase();
-  const [workouts, setWorkouts] = useState<WorkoutHistoryType>({});
   const [limit, setLimit] = useState(5);
   const [historyType, setHistoryType] = useState<HistoryType>(HistoryType.Workouts);
 
-  useEffect(() => {
-    if (!user) return;
-
-    const historyQuery = query(ref(db, `users/${user.uid}/workoutHistory`), limitToLast(limit), orderByKey());
-
-    onValue(historyQuery, (snapshot) => {
-      const data = snapshot.val() as WorkoutHistoryType;
-      setWorkouts(data);
-    });
-
-    return () => off(historyQuery);
-  }, [user, db, limit]);
+  const historyRef = ref(db, `users/${user?.uid}/history`);
+  const historyQuery = query(historyRef, limitToLast(limit));
+  const { status, data } = useDatabaseList<WorkoutHistory>(historyQuery);
 
   return {
-    workouts,
+    status,
+    data: data,
     setLimit,
     setHistoryType,
   };

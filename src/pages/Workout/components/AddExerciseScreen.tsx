@@ -2,6 +2,7 @@ import { Button, Group, ScrollArea, Stack, Table, Text, TextInput } from "@manti
 import { useMediaQuery } from "@mantine/hooks";
 import { useEffect, useState } from "react";
 import useDatabaseList from "../../../hooks/databaseList.hook";
+import useUserExercises from "../../../hooks/userExercises.hook";
 import { STATUS } from "../../../types/util";
 import { UserExercise } from "../../../types/workout";
 import ExerciseForm from "./ExerciseForm";
@@ -12,7 +13,7 @@ type Props = {
 };
 
 const AddExerciseScreen = ({ onAdd, currentExerciseIds }: Props) => {
-  const { status, data: userExercises, api } = useDatabaseList<UserExercise>("userExercises");
+  const { status, data: userExercises, api } = useUserExercises();
   const [data, setData] = useState<UserExercise[]>([]);
   const [tab, setTab] = useState("adding");
   // const [editData, setEditData] = useState<UserExercise | null>(null);

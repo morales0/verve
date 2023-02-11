@@ -9,11 +9,17 @@ export type UserExercise = {
 
 export type WorkoutExercise = UserExercise & {
   workoutId?: string;
-  sets: object[];
+  sets: Record<string, number>[];
 };
 
 export type Workout = {
   exercises?: WorkoutExercise[];
   dateStarted?: string;
   timeStarted?: string;
+};
+
+export type WorkoutHistory = Workout & {
+  historyId?: string;
+  dateEnded?: string;
+  timeEnded?: string;
 };

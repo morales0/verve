@@ -12,7 +12,6 @@ import MuscleGroupsSection from "./components/MuscleGroupsSection";
 const Home = () => {
   const { auth } = useAuth();
   const navigate = useNavigate();
-  const { workouts, setLimit, setHistoryType } = useWorkoutHistory();
   const { isWorkingOut, startWorkout, status: workingOutStatus } = useIsWorkingOut();
 
   const startNewWorkoutAndNavigate = () => {
@@ -26,15 +25,14 @@ const Home = () => {
   }
 
   return (
-    <Stack>
-      <Button onClick={() => signOut(auth)}>Sign Out</Button>
+    <Stack p="1rem">
       <MuscleGroupsSection />
       {isWorkingOut ? (
         <CurrentWorkoutSummary />
       ) : (
         <LastWorkoutSummary startNewWorkoutAndNavigate={startNewWorkoutAndNavigate} />
       )}
-      <HistorySection workouts={workouts} />
+      <HistorySection />
     </Stack>
   );
 };

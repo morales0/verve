@@ -1,7 +1,19 @@
-import { ActionIcon, Flex, Group, Header, Title, useMantineColorScheme, createStyles, Burger } from "@mantine/core";
+import {
+  ActionIcon,
+  Flex,
+  Group,
+  Header,
+  Title,
+  useMantineColorScheme,
+  createStyles,
+  Burger,
+  Menu,
+} from "@mantine/core";
 import { Icon } from "@iconify/react";
 import { Link, NavLink } from "react-router-dom";
 import { useMediaQuery } from "@mantine/hooks";
+import { signOut } from "firebase/auth";
+import { useAuth } from "../../context/auth";
 
 const useStyles = createStyles((theme) => ({
   brand: {},
@@ -35,6 +47,7 @@ const useStyles = createStyles((theme) => ({
 }));
 
 const UserNavbar = () => {
+  const { auth } = useAuth();
   const { toggleColorScheme } = useMantineColorScheme();
   const { classes } = useStyles();
   const largeScreen = useMediaQuery("(min-width: 1200px)");
@@ -46,7 +59,7 @@ const UserNavbar = () => {
           <Title order={largeScreen ? 1 : 3}>Verve</Title>
         </Link>
 
-        <Group>
+        {/* <Group>
           <NavLink className={classes.link} to="/exercises">
             Exercises
           </NavLink>
@@ -56,7 +69,7 @@ const UserNavbar = () => {
           <NavLink className={classes.link} to="history">
             History
           </NavLink>
-        </Group>
+        </Group> */}
 
         <Group>
           <Burger opened={false} className={classes.burger} />
@@ -66,9 +79,20 @@ const UserNavbar = () => {
           <ActionIcon size="lg" title="Settings">
             <Icon icon="ph:gear" height={25} />
           </ActionIcon>
-          <ActionIcon size="lg" title="User">
-            <Icon icon="mdi:user" height={25} />
-          </ActionIcon>
+          <Menu position="bottom-end" shadow="md" width={200}>
+            <Menu.Target>
+              <ActionIcon size="lg" title="User">
+                <Icon icon="mdi:user" height={25} />
+              </ActionIcon>
+            </Menu.Target>
+
+            <Menu.Dropdown>
+              <Menu.Divider />
+              <Menu.Item color="yellow" onClick={() => signOut(auth)}>
+                Sign out
+              </Menu.Item>
+            </Menu.Dropdown>
+          </Menu>
         </Group>
       </Flex>
     </Header>
