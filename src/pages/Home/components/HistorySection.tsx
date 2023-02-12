@@ -1,5 +1,17 @@
 import { Icon } from "@iconify/react";
-import { Button, Card, Collapse, Divider, Group, Paper, Stack, Text, Title, UnstyledButton } from "@mantine/core";
+import {
+  Button,
+  Card,
+  Collapse,
+  Divider,
+  Group,
+  Paper,
+  ScrollArea,
+  Stack,
+  Text,
+  Title,
+  UnstyledButton,
+} from "@mantine/core";
 import { useState } from "react";
 import useWorkoutHistory from "../../../hooks/workoutHistory.hook";
 import { STATUS } from "../../../types/util";
@@ -26,7 +38,7 @@ const HistorySection = ({ startNewWorkoutAndNavigate, isWorkingOut }: Props) => 
   }
 
   return (
-    <Stack>
+    <Stack h="100%" sx={{ overflow: "hidden" }}>
       <Group position="apart">
         <Title order={3}>Workouts</Title>
         {!isWorkingOut && (
@@ -35,31 +47,32 @@ const HistorySection = ({ startNewWorkoutAndNavigate, isWorkingOut }: Props) => 
           </Button>
         )}
       </Group>
-      <Group mb={"1.5rem"} align={"flex-start"} grow>
-        {[...workouts].reverse().map((workout, i) => {
-          const dateStarted = new Date(workout.dateStarted || "");
+      <ScrollArea py="md">
+        <Group mb={"1.5rem"} align={"flex-start"} grow>
+          {[...workouts].reverse().map((workout, i) => {
+            const dateStarted = new Date(workout.dateStarted || "");
 
-          return (
-            <Card key={workout.historyId || `workout-${i}`} style={{ minWidth: "300px" }}>
-              <Text fz={"s"}>{dateStarted.toDateString()}</Text>
-              <Text c="dimmed" fz={"xs"} fs={"italic"}>
-                {workout.timeStarted} - {workout.timeEnded}
-              </Text>
-              <Divider mb={"md"} />
-              <Stack>
-                {workout.exercises?.map((exercise, i) => (
-                  <ExerciseDropdownInfo
-                    key={`exercise-${exercise.name}-${i}`}
-                    name={exercise.name}
-                    sets={exercise.sets}
-                    units={exercise.units}
-                  />
-                ))}
-              </Stack>
-            </Card>
-          );
-        })}
-        {/*Object.entries(workouts)
+            return (
+              <Card key={workout.historyId || `workout-${i}`} style={{ minWidth: "300px" }}>
+                <Text fz={"s"}>{dateStarted.toDateString()}</Text>
+                <Text c="dimmed" fz={"xs"} fs={"italic"}>
+                  {workout.timeStarted} - {workout.timeEnded}
+                </Text>
+                <Divider mb={"md"} />
+                <Stack>
+                  {workout.exercises?.map((exercise, i) => (
+                    <ExerciseDropdownInfo
+                      key={`exercise-${exercise.name}-${i}`}
+                      name={exercise.name}
+                      sets={exercise.sets}
+                      units={exercise.units}
+                    />
+                  ))}
+                </Stack>
+              </Card>
+            );
+          })}
+          {/*Object.entries(workouts)
           .reverse()
           .map(([day, times], i) => {
             return (
@@ -83,7 +96,8 @@ const HistorySection = ({ startNewWorkoutAndNavigate, isWorkingOut }: Props) => 
               </Stack>
             );
           })*/}
-      </Group>
+        </Group>
+      </ScrollArea>
     </Stack>
   );
 };
