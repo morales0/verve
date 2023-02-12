@@ -1,4 +1,6 @@
-import { Group, Divider } from "@mantine/core";
+import { Group, Divider, Text } from "@mantine/core";
+import useMuscleGroups from "../../../hooks/muscleGroups.hook";
+import { STATUS } from "../../../types/util";
 import MuscleGroupTag from "./MuscleGroupTag";
 
 const groups = [
@@ -39,6 +41,16 @@ const groups = [
 type Props = any;
 
 const MuscleGroupsSection = (props: Props) => {
+  const { status, data: groups } = useMuscleGroups();
+
+  if (status === STATUS.LOADING) {
+    return <Text>Loading muscle groups</Text>;
+  }
+
+  if (groups.length === 0) {
+    return <Text>You have no muscle groups defined</Text>;
+  }
+
   return (
     <>
       <Group position="center" spacing={"sm"}>
@@ -46,7 +58,6 @@ const MuscleGroupsSection = (props: Props) => {
           <MuscleGroupTag key={`group-${i}`} group={group} />
         ))}
       </Group>
-      <Divider mb={"1rem"} />
     </>
   );
 };

@@ -1,11 +1,25 @@
 import { Icon } from "@iconify/react";
-import { Card, Collapse, Divider, Group, Paper, Stack, Text, Title, UnstyledButton } from "@mantine/core";
+import { Button, Card, Collapse, Divider, Group, Paper, Stack, Text, Title, UnstyledButton } from "@mantine/core";
 import { useState } from "react";
 import useWorkoutHistory from "../../../hooks/workoutHistory.hook";
 import { STATUS } from "../../../types/util";
 
-const HistorySection = () => {
+type Props = {
+  startNewWorkoutAndNavigate: () => Promise<void>;
+  isWorkingOut: boolean;
+};
+
+const HistorySection = ({ startNewWorkoutAndNavigate, isWorkingOut }: Props) => {
   const { status, data: workouts } = useWorkoutHistory();
+  const [isCreating, setIsCreating] = useState(false);
+
+  const handleStartWorkout = () => {
+    setIsCreating(true);
+
+    startNewWorkoutAndNavigate().catch((e) => {
+      console.log("Error creating workout, tell user to try again");
+    });
+  };
 
   if (status === STATUS.LOADING) {
     return <Text>Loading history...</Text>;
@@ -13,13 +27,20 @@ const HistorySection = () => {
 
   return (
     <Stack>
-      <Title order={3}>Latest Workouts</Title>
-      <Group mb={"1.5rem"} align={"flex-start"}>
+      <Group position="apart">
+        <Title order={3}>Workouts</Title>
+        {!isWorkingOut && (
+          <Button color={"teal"} onClick={handleStartWorkout} loading={isCreating}>
+            {isCreating ? "Creating workout..." : "+ New Workout"}
+          </Button>
+        )}
+      </Group>
+      <Group mb={"1.5rem"} align={"flex-start"} grow>
         {[...workouts].reverse().map((workout, i) => {
           const dateStarted = new Date(workout.dateStarted || "");
 
           return (
-            <Card key={workout.historyId || `workout-${i}`}>
+            <Card key={workout.historyId || `workout-${i}`} style={{ minWidth: "300px" }}>
               <Text fz={"s"}>{dateStarted.toDateString()}</Text>
               <Text c="dimmed" fz={"xs"} fs={"italic"}>
                 {workout.timeStarted} - {workout.timeEnded}

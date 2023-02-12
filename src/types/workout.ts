@@ -1,3 +1,8 @@
+export type MuscleGroup = {
+  name: string;
+  dateLastUsed?: string;
+};
+
 export type UserExercise = {
   name: string;
   id?: string;
@@ -16,6 +21,7 @@ export type Workout = {
   exercises?: WorkoutExercise[];
   dateStarted?: string;
   timeStarted?: string;
+  dateLastUpdated?: string;
 };
 
 export type WorkoutHistory = Workout & {

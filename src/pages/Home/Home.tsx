@@ -1,9 +1,7 @@
-import { Button, Stack, Text } from "@mantine/core";
-import { signOut } from "firebase/auth";
+import { Divider, Stack, Text } from "@mantine/core";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/auth";
 import { useIsWorkingOut } from "../../hooks/isWorkingOut.hook";
-import useWorkoutHistory from "../../hooks/workoutHistory.hook";
 import CurrentWorkoutSummary from "./components/CurrentWorkoutSummary";
 import HistorySection from "./components/HistorySection";
 import LastWorkoutSummary from "./components/LastWorkoutSummary";
@@ -27,12 +25,9 @@ const Home = () => {
   return (
     <Stack p="1rem">
       <MuscleGroupsSection />
-      {isWorkingOut ? (
-        <CurrentWorkoutSummary />
-      ) : (
-        <LastWorkoutSummary startNewWorkoutAndNavigate={startNewWorkoutAndNavigate} />
-      )}
-      <HistorySection />
+      <Divider mb={"1rem"} />
+      {isWorkingOut && <CurrentWorkoutSummary />}
+      <HistorySection startNewWorkoutAndNavigate={startNewWorkoutAndNavigate} isWorkingOut={isWorkingOut} />
     </Stack>
   );
 };

@@ -1,4 +1,4 @@
-import { off, onValue, push, ref, remove, set, update } from "firebase/database";
+import { child, off, onValue, push, ref, remove, set, update } from "firebase/database";
 import { useEffect, useState } from "react";
 import { useAuth } from "../context/auth";
 import { useDatabase } from "../context/database";
@@ -68,10 +68,23 @@ const useWorkout = () => {
       ...workout,
       dateEnded: now.toString(),
       timeEnded: time,
-    }).then(() => {
-      // finally, delete workout
-      remove(ref(db, refString));
-    });
+    })
+      .then(() => {
+        // update muscle groups
+        const muscleGroupsRef = ref(db, `users/${user?.uid}/muscleGroups`);
+        workout.exercises?.forEach((ex) => {
+          ex.primaryMuscleGroups?.forEach((group) => {
+            set(child(muscleGroupsRef, group + "/dateLastUsed"), now.toDateString());
+          });
+          ex.secondaryMuscleGroups?.forEach((group) => {
+            set(child(muscleGroupsRef, group + "/dateLastUsed"), now.toDateString());
+          });
+        });
+      })
+      .then(() => {
+        // finally, delete workout
+        remove(ref(db, refString));
+      });
   };
 
   return {
