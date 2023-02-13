@@ -1,42 +1,8 @@
-import { Group, Divider, Text } from "@mantine/core";
+import { Icon } from "@iconify/react";
+import { Group, Divider, Text, Popover, Button, ActionIcon, Indicator } from "@mantine/core";
 import useMuscleGroups from "../../../hooks/muscleGroups.hook";
 import { STATUS } from "../../../types/util";
 import MuscleGroupTag from "./MuscleGroupTag";
-
-const groups = [
-  {
-    name: "Shoulders",
-    days: 1,
-  },
-  {
-    name: "Triceps",
-    days: 4,
-  },
-  {
-    name: "Biceps",
-    days: 1,
-  },
-  {
-    name: "Back",
-    days: 15,
-  },
-  {
-    name: "Legs",
-    days: 1,
-  },
-  {
-    name: "Chest",
-    days: 15,
-  },
-  {
-    name: "Glutes",
-    days: 6,
-  },
-  {
-    name: "Core",
-    days: 3,
-  },
-];
 
 type Props = any;
 
@@ -53,10 +19,39 @@ const MuscleGroupsSection = (props: Props) => {
 
   return (
     <>
-      <Group position="center" spacing={"sm"}>
+      <Group position="center" spacing={"sm"} pos="relative" px="35px">
         {groups.map((group, i) => (
           <MuscleGroupTag key={`group-${i}`} group={group} />
         ))}
+        <Popover width={200} position="bottom" withArrow shadow="md">
+          <Popover.Target>
+            <ActionIcon size={26} radius="xl" variant="filled" color="cyan" pos="absolute" top="0" right="0">
+              <Icon icon="bi:info" />
+            </ActionIcon>
+          </Popover.Target>
+          <Popover.Dropdown>
+            <Indicator color="teal" position="middle-end">
+              <Text size="sm" color="dimmed">
+                Last 4 days
+              </Text>
+            </Indicator>
+            <Indicator color="blue" position="middle-end">
+              <Text size="sm" color="dimmed">
+                Last 6 days
+              </Text>
+            </Indicator>
+            <Indicator color="violet" position="middle-end">
+              <Text size="sm" color="dimmed">
+                Last 8 days
+              </Text>
+            </Indicator>
+            <Indicator color="gray" position="middle-end">
+              <Text size="sm" color="dimmed">
+                More than 8 days
+              </Text>
+            </Indicator>
+          </Popover.Dropdown>
+        </Popover>
       </Group>
     </>
   );

@@ -43,8 +43,15 @@ const AddExerciseScreen = ({ onAdd, currentExerciseIds }: Props) => {
     return (
       <thead>
         <tr>
+          <th style={{ border: "none", padding: 0 }}></th>
+          <th style={{ textAlign: "center", border: "none", padding: 0 }} colSpan={2}>
+            Muscle Groups
+          </th>
+        </tr>
+        <tr>
           <th style={{ width: "60%" }}>Name</th>
-          <th style={{ textAlign: "center" }}>Primary Muscle Groups</th>
+          <th style={{ textAlign: "center" }}>Primary</th>
+          <th style={{ textAlign: "center" }}>Secondary</th>
         </tr>
       </thead>
     );
@@ -77,6 +84,15 @@ const AddExerciseScreen = ({ onAdd, currentExerciseIds }: Props) => {
                   </Text>
                 )}
               </td>
+              <td style={{ textAlign: "center" }}>
+                {ex.secondaryMuscleGroups ? (
+                  <Text>{Object.values(ex.secondaryMuscleGroups).toString()}</Text>
+                ) : (
+                  <Text color="dimmed" fz="sm" italic>
+                    None specified
+                  </Text>
+                )}
+              </td>
             </tr>
           ))
         )}
@@ -89,7 +105,7 @@ const AddExerciseScreen = ({ onAdd, currentExerciseIds }: Props) => {
       {tab === "creating" ? (
         <ExerciseForm cancel={() => setTab("adding")} submitExercise={createExercise} />
       ) : (
-        <Stack h="100%" py="lg" sx={{ overflow: "hidden" }}>
+        <Stack h="100%" py="lg" sx={{ overflow: "hidden" }} spacing={0}>
           <Group align="flex-start">
             <TextInput placeholder="Search" sx={{ flexGrow: 1 }} />
             <Button color="teal" sx={{ flexGrow: 0 }} onClick={() => setTab("creating")}>
@@ -97,7 +113,7 @@ const AddExerciseScreen = ({ onAdd, currentExerciseIds }: Props) => {
             </Button>
           </Group>
 
-          <Text color="dimmed" italic fz="sm">
+          <Text color="dimmed" italic fz="sm" align="center" py="xs">
             Click on row to start exercise
           </Text>
 

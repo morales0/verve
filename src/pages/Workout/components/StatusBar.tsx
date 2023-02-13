@@ -6,7 +6,7 @@ type StatusBarProps = {
 
 export function StatusBar({ timeStarted }: StatusBarProps) {
   return (
-    <Box>
+    <Box py="sm">
       <Text color="dimmed" size="xs" italic weight="bold">
         Started: {timeStarted}
       </Text>

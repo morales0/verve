@@ -7,6 +7,7 @@ import {
   Group,
   NumberInput,
   NumberInputHandlers,
+  ScrollArea,
   Stack,
   Text,
   UnstyledButton,
@@ -90,11 +91,21 @@ const BarbellSet = ({ set, onChange }: { set: object; onChange: (unit: string, v
         borderLeft: plates.length === 0 ? "1px solid" : "none",
         borderRight: plates.length === 0 ? "1px solid" : "none",
         borderColor: "gray",
+        margin: "1rem 0",
       })}
     >
-      <Text fz="xs" fw="bold" color="dimmed" sx={{ position: "relative", bottom: "15px" }}>
+      <Text fz="xs" fw="bold" color="dimmed" sx={{ position: "absolute", bottom: "15px" }}>
         {weight}
       </Text>
+      <Icon
+        icon="material-symbols:keyboard-arrow-down-rounded"
+        width="30px"
+        height="30px"
+        style={{
+          position: "absolute",
+          top: "12px",
+        }}
+      />
     </Box>
   );
 
@@ -118,38 +129,35 @@ const BarbellSet = ({ set, onChange }: { set: object; onChange: (unit: string, v
   );
 
   return (
-    <Stack>
-      <Group position="left" align="center" spacing="lg">
-        <Group>
-          {Object.entries(set).map(([unit, val], j) => (
-            <NumberInput
-              key={`set-${unit}-${j}`}
-              label={unit}
-              labelProps={{ sx: { fontStyle: "italic", color: "#bbb", fontSize: ".7rem" } }}
-              hideControls
-              value={val}
-              onChange={(newVal) => onChange(unit, newVal || 0)}
-              min={0}
-              styles={{ input: { width: 60, height: 60, textAlign: "center", fontSize: "1.4rem" } }}
-            />
-          ))}
-        </Group>
+    <Stack align="stretch" spacing="md" mb="md">
+      <Group sx={{ justifyContent: "space-evenly" }} align="center">
+        {Object.entries(set).map(([unit, val], j) => (
+          <NumberInput
+            key={`set-${unit}-${j}`}
+            label={unit}
+            labelProps={{ sx: { fontStyle: "italic", color: "#bbb", fontSize: ".7rem" } }}
+            hideControls
+            value={val}
+            onChange={(newVal) => onChange(unit, newVal || 0)}
+            min={0}
+            styles={{ input: { width: 60, height: 60, textAlign: "center", fontSize: "1.4rem" } }}
+          />
+        ))}
+      </Group>
 
+      <Center>
         <UnstyledButton onClick={() => setOpen((o) => !o)}>
-          <Group align="center" spacing={10}>
-            <Group position="center" spacing={0} align="center">
-              {plates.map((weight, i) => (
-                <Plate key={`left-weight-${weight}-${i}`} weight={weight} />
-              ))}
-              <Bar weight={bar} />
-              {plates.reverse().map((weight, i) => (
-                <Plate key={`left-weight-${weight}-${i}`} weight={weight} />
-              ))}
-            </Group>
-            <Icon icon="material-symbols:keyboard-arrow-down-rounded" width="30px" height="30px" />
+          <Group position="center" spacing={0} align="center" noWrap>
+            {plates.map((weight, i) => (
+              <Plate key={`left-weight-${weight}-${i}`} weight={weight} />
+            ))}
+            <Bar weight={bar} />
+            {plates.reverse().map((weight, i) => (
+              <Plate key={`left-weight-${weight}-${i}`} weight={weight} />
+            ))}
           </Group>
         </UnstyledButton>
-      </Group>
+      </Center>
 
       <Collapse
         in={open}

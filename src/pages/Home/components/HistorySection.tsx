@@ -40,7 +40,7 @@ const HistorySection = ({ startNewWorkoutAndNavigate, isWorkingOut }: Props) => 
   return (
     <Stack h="100%" sx={{ overflow: "hidden" }}>
       <Group position="apart">
-        <Title order={3}>Workouts</Title>
+        <Title order={3}>Workout History</Title>
         {!isWorkingOut && (
           <Button color={"teal"} onClick={handleStartWorkout} loading={isCreating}>
             {isCreating ? "Creating workout..." : "+ New Workout"}
