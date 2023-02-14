@@ -1,4 +1,4 @@
-import { Box, Button, Group, MultiSelect, ScrollArea, Select, Stack, TextInput, Title } from "@mantine/core";
+import { Box, Button, Group, MultiSelect, Select, Stack, TextInput, Title } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { UserExercise } from "../../../types/workout";
 

@@ -7,7 +7,6 @@ import {
   Group,
   NumberInput,
   NumberInputHandlers,
-  ScrollArea,
   Stack,
   Text,
   UnstyledButton,

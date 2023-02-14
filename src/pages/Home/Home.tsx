@@ -4,7 +4,6 @@ import { useAuth } from "../../context/auth";
 import { useIsWorkingOut } from "../../hooks/isWorkingOut.hook";
 import CurrentWorkoutSummary from "./components/CurrentWorkoutSummary";
 import HistorySection from "./components/HistorySection";
-import LastWorkoutSummary from "./components/LastWorkoutSummary";
 import MuscleGroupsSection from "./components/MuscleGroupsSection";
 
 const Home = () => {

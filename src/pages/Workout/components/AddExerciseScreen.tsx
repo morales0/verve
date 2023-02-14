@@ -1,7 +1,5 @@
 import { Button, Group, ScrollArea, Stack, Table, Text, TextInput } from "@mantine/core";
-import { useMediaQuery } from "@mantine/hooks";
 import { useEffect, useState } from "react";
-import useDatabaseList from "../../../hooks/databaseList.hook";
 import useUserExercises from "../../../hooks/userExercises.hook";
 import { STATUS } from "../../../types/util";
 import { UserExercise } from "../../../types/workout";

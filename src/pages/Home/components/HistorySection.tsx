@@ -1,17 +1,5 @@
 import { Icon } from "@iconify/react";
-import {
-  Button,
-  Card,
-  Collapse,
-  Divider,
-  Group,
-  Paper,
-  ScrollArea,
-  Stack,
-  Text,
-  Title,
-  UnstyledButton,
-} from "@mantine/core";
+import { Button, Card, Collapse, Divider, Group, ScrollArea, Stack, Text, Title, UnstyledButton } from "@mantine/core";
 import { useState } from "react";
 import useWorkoutHistory from "../../../hooks/workoutHistory.hook";
 import { STATUS } from "../../../types/util";

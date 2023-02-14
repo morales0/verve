@@ -1,18 +1,8 @@
-import {
-  ActionIcon,
-  Flex,
-  Group,
-  Header,
-  Title,
-  useMantineColorScheme,
-  createStyles,
-  Burger,
-  Menu,
-} from "@mantine/core";
 import { Icon } from "@iconify/react";
-import { Link, NavLink } from "react-router-dom";
+import { ActionIcon, createStyles, Flex, Group, Header, Menu, Title, useMantineColorScheme } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
 import { signOut } from "firebase/auth";
+import { Link } from "react-router-dom";
 import { useAuth } from "../../context/auth";
 
 const useStyles = createStyles((theme) => ({

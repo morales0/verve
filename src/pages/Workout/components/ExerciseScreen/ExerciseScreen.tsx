@@ -1,4 +1,4 @@
-import { Box, Button, Group, ScrollArea, Stack, Title } from "@mantine/core";
+import { Button, Group, Stack, Title } from "@mantine/core";
 import { WorkoutExercise } from "../../../../types/workout";
 import Sets from "./Sets";
 

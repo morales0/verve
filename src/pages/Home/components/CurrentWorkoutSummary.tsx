@@ -1,4 +1,4 @@
-import { Group, Paper, Stack, Title } from "@mantine/core";
+import { Paper, Stack } from "@mantine/core";
 import { Link } from "react-router-dom";
 
 type Props = {

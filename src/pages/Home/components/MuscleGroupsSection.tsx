@@ -1,5 +1,5 @@
 import { Icon } from "@iconify/react";
-import { Group, Divider, Text, Popover, Button, ActionIcon, Indicator } from "@mantine/core";
+import { ActionIcon, Group, Indicator, Popover, Text } from "@mantine/core";
 import useMuscleGroups from "../../../hooks/muscleGroups.hook";
 import { STATUS } from "../../../types/util";
 import MuscleGroupTag from "./MuscleGroupTag";
