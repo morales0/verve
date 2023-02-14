@@ -23,7 +23,7 @@ const Home = () => {
   }
 
   return (
-    <Stack p="1rem" h="100%" sx={{ overflow: "hidden" }}>
+    <Stack p="1rem" h="100%" sx={{ overflow: "hidden" }} spacing="sm">
       <MuscleGroupsSection />
       <Divider mb={"1rem"} />
       {isWorkingOut && <CurrentWorkoutSummary />}

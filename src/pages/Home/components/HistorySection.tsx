@@ -38,8 +38,8 @@ const HistorySection = ({ startNewWorkoutAndNavigate, isWorkingOut }: Props) => 
   }
 
   return (
-    <Stack h="100%" sx={{ overflow: "hidden" }}>
-      <Group position="apart">
+    <Stack h="100%" sx={{ overflow: "hidden" }} spacing={0}>
+      <Group position="apart" py="md">
         <Title order={3}>Workout History</Title>
         {!isWorkingOut && (
           <Button color={"teal"} onClick={handleStartWorkout} loading={isCreating}>
@@ -47,7 +47,7 @@ const HistorySection = ({ startNewWorkoutAndNavigate, isWorkingOut }: Props) => 
           </Button>
         )}
       </Group>
-      <ScrollArea py="md">
+      <ScrollArea>
         <Group mb={"1.5rem"} align={"flex-start"} grow>
           {[...workouts].reverse().map((workout, i) => {
             const dateStarted = new Date(workout.dateStarted || "");

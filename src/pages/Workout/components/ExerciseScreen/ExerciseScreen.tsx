@@ -1,4 +1,4 @@
-import { Button, Group, ScrollArea, Stack, Title } from "@mantine/core";
+import { Box, Button, Group, ScrollArea, Stack, Title } from "@mantine/core";
 import { WorkoutExercise } from "../../../../types/workout";
 import Sets from "./Sets";
 
@@ -42,14 +42,14 @@ const ExerciseScreen = ({ exercise, onFinish, onCancel, updateExercise }: Props)
           </Button>
         </Group>
       </Group>
-      <ScrollArea w="100%" pr="sm" pb="sm" sx={{ flexGrow: 1 }}>
+      <Stack w="100%" pr="sm" pb="sm" sx={{ flexGrow: 1, overflowY: "auto", overflowX: "hidden" }}>
         <Sets sets={exercise.sets} weightType={exercise.weightType} onChange={updateSetValue} />
-      </ScrollArea>
-      <Group w="100%" p="sm" align="center" position="center" grow mt={"auto"}>
-        <Button variant="outline" color="red" onClick={onCancel} size="xs">
+      </Stack>
+      <Group w="100%" p="sm" align="center" position="apart" grow mt={"auto"}>
+        <Button maw="200px" variant="outline" color="red" onClick={onCancel} size="xs">
           Cancel
         </Button>
-        <Button variant="light" color="green" onClick={onFinish} size="xs">
+        <Button maw="200px" variant="light" color="green" onClick={onFinish} size="xs">
           Finish
         </Button>
       </Group>

@@ -7,14 +7,10 @@ type Props = {
 
 const CurrentWorkoutSummary = ({ workout }: Props) => {
   return (
-    <Stack mb={"2rem"}>
-      <Group position="center">
-        <Title order={3}>Current Workout</Title>
-      </Group>
-
+    <Stack>
       <Link to="/workout">
         <Paper shadow="xs" radius="sm" p="lg" withBorder>
-          Current workout
+          Click to continue workout
         </Paper>
       </Link>
     </Stack>

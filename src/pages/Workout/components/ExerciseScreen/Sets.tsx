@@ -30,11 +30,18 @@ const Sets = ({ sets, weightType, onChange }: Props) => {
           return <BarbellSet key={`set-${i}`} set={set} onChange={updateSet} />;
         } else {
           return (
-            <Group key={`set-${i}`}>
+            <Group key={`set-${i}`} sx={{ justifyContent: "space-evenly" }} align="center">
               {Object.entries(set).map(([unit, val], j) => (
-                <Text key={`set-${unit}-${j}`}>
-                  {unit}: {val}
-                </Text>
+                <NumberInput
+                  key={`set-${unit}-${j}`}
+                  label={unit}
+                  labelProps={{ sx: { fontStyle: "italic", color: "#bbb", fontSize: ".7rem" } }}
+                  hideControls
+                  value={val}
+                  onChange={(newVal) => updateSet(unit, newVal || 0)}
+                  min={0}
+                  styles={{ input: { width: 60, height: 60, textAlign: "center", fontSize: "1.4rem" } }}
+                />
               ))}
             </Group>
           );
@@ -94,7 +101,7 @@ const BarbellSet = ({ set, onChange }: { set: object; onChange: (unit: string, v
         margin: "1rem 0",
       })}
     >
-      <Text fz="xs" fw="bold" color="dimmed" sx={{ position: "absolute", bottom: "15px" }}>
+      <Text fz="xs" fw="bold" color="dimmed" sx={{ position: "absolute", bottom: "12px" }}>
         {weight}
       </Text>
       <Icon
@@ -103,7 +110,7 @@ const BarbellSet = ({ set, onChange }: { set: object; onChange: (unit: string, v
         height="30px"
         style={{
           position: "absolute",
-          top: "12px",
+          top: "8px",
         }}
       />
     </Box>
@@ -147,7 +154,7 @@ const BarbellSet = ({ set, onChange }: { set: object; onChange: (unit: string, v
 
       <Center>
         <UnstyledButton onClick={() => setOpen((o) => !o)}>
-          <Group position="center" spacing={0} align="center" noWrap>
+          <Group position="center" spacing={0} align="center" noWrap py="1rem">
             {plates.map((weight, i) => (
               <Plate key={`left-weight-${weight}-${i}`} weight={weight} />
             ))}
@@ -163,7 +170,6 @@ const BarbellSet = ({ set, onChange }: { set: object; onChange: (unit: string, v
         in={open}
         p="sm"
         pb="lg"
-        maw="600px"
         sx={() => ({
           borderBottom: "1px solid #444",
         })}

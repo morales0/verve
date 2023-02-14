@@ -1,4 +1,4 @@
-import { Button, Group, MultiSelect, ScrollArea, Select, Stack, TextInput, Title } from "@mantine/core";
+import { Box, Button, Group, MultiSelect, ScrollArea, Select, Stack, TextInput, Title } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { UserExercise } from "../../../types/workout";
 
@@ -66,7 +66,7 @@ const ExerciseForm = ({ cancel, submitExercise }: Props) => {
         onSubmit={handleSubmit}
       >
         <Title order={3}>Exercise Form</Title>
-        <ScrollArea sx={{ flexGrow: 1 }}>
+        <Box py="sm" sx={{ flexGrow: 1, overflow: "auto" }}>
           <Stack spacing="md">
             <TextInput label="Name" required {...form.getInputProps("name")} />
             <MultiSelect
@@ -89,7 +89,9 @@ const ExerciseForm = ({ cancel, submitExercise }: Props) => {
                 data={muscleGroups}
                 label="Primary Muscle Groups"
                 placeholder="Select as many as you need"
-                dropdownPosition="top"
+                dropdownPosition="bottom"
+                searchable
+                nothingFound="Nothing found"
                 required
                 {...form.getInputProps("primaryMuscleGroups")}
               />
@@ -97,12 +99,14 @@ const ExerciseForm = ({ cancel, submitExercise }: Props) => {
                 data={muscleGroups}
                 label="Secondary Muscle Groups"
                 placeholder="Select as many as you need"
-                dropdownPosition="top"
+                dropdownPosition="bottom"
+                searchable
+                nothingFound="Nothing found"
                 {...form.getInputProps("secondaryMuscleGroups")}
               />
             </Group>
           </Stack>
-        </ScrollArea>
+        </Box>
         <Group w="100%" align={"center"} position="center" grow mt={"auto"}>
           <Button variant="outline" color="red" onClick={cancel}>
             Cancel

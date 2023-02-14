@@ -67,7 +67,7 @@ const AddExerciseScreen = ({ onAdd, currentExerciseIds }: Props) => {
             </td>
           </tr>
         ) : (
-          data.map((ex, i) => (
+          filteredData.map((ex, i) => (
             <tr key={`ex-info-${ex.name}-${i}`} style={{ cursor: "pointer" }} onClick={() => onAdd(ex)}>
               <td>
                 {ex.name}{" "}
@@ -86,7 +86,7 @@ const AddExerciseScreen = ({ onAdd, currentExerciseIds }: Props) => {
               </td>
               <td style={{ textAlign: "center" }}>
                 {ex.secondaryMuscleGroups ? (
-                  <Text>{Object.values(ex.secondaryMuscleGroups).toString()}</Text>
+                  <Text color="dimmed">{Object.values(ex.secondaryMuscleGroups).toString()}</Text>
                 ) : (
                   <Text color="dimmed" fz="sm" italic>
                     None specified

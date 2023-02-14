@@ -72,7 +72,7 @@ const UserNavbar = () => {
         </Group> */}
 
         <Group>
-          <Burger opened={false} className={classes.burger} />
+          {/* <Burger opened={false} className={classes.burger} /> */}
           <ActionIcon size="lg" title="Theme switcher" onClick={() => toggleColorScheme()}>
             <Icon icon="mdi:theme-light-dark" height={25} />
           </ActionIcon>

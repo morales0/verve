@@ -18,11 +18,11 @@ const SummaryScreen = ({ exercises, onCancel, onComplete }: Props) => {
         </ScrollArea>
       </Stack>
 
-      <Group w="100%" align={"center"} position="center" grow>
-        <Button variant="outline" color="red" onClick={onCancel}>
+      <Group w="100%" p="sm" align={"center"} position="apart" grow>
+        <Button size="xs" maw="200px" variant="outline" color="red" onClick={onCancel}>
           Cancel
         </Button>
-        <Button variant="light" color="green" onClick={onComplete}>
+        <Button size="xs" maw="200px" variant="light" color="green" onClick={onComplete}>
           Complete
         </Button>
       </Group>

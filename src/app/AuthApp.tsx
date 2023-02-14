@@ -1,4 +1,4 @@
-import { Box, Flex } from "@mantine/core";
+import { Box, Flex, Stack } from "@mantine/core";
 import { Route, Routes } from "react-router-dom";
 import UserNavbar from "../components/app/UserNavbar";
 import Home from "../pages/Home/Home";
@@ -6,10 +6,10 @@ import Workout from "../pages/Workout/Workout";
 
 const AuthApp = () => {
   return (
-    <Flex direction="column" h={"100%"}>
+    <Stack h={"100%"} spacing={0}>
       <UserNavbar />
       <Box
-        style={{
+        sx={{
           flexGrow: 1,
           overflow: "hidden",
         }}
@@ -22,7 +22,7 @@ const AuthApp = () => {
           <Route path="/data" element={<div>Data</div>} />
         </Routes>
       </Box>
-    </Flex>
+    </Stack>
   );
 };
 
