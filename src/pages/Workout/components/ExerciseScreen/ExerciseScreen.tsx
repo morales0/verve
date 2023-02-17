@@ -45,7 +45,7 @@ const ExerciseScreen = ({ exercise, onFinish, onCancel, updateExercise }: Props)
           </Button>
         </Group>
       </Group>
-      <Stack w="100%" pr="sm" pb="sm" sx={{ flexGrow: 1, overflowY: "auto", overflowX: "hidden" }}>
+      <Stack w="100%" pr="sm" pb="sm" sx={{ flexGrow: 1, overflowY: "auto", overflowX: "hidden" }} spacing={5}>
         {exercise.sets.map((set, i) => {
           const updateUnitValue = (unit: string, value: number) => updateSetValue(i, unit, value);
 
@@ -58,10 +58,17 @@ const ExerciseScreen = ({ exercise, onFinish, onCancel, updateExercise }: Props)
         {/* <Sets sets={exercise.sets} weightType={exercise.weightType} onChange={updateSetValue} /> */}
       </Stack>
       <Group w="100%" p="sm" align="center" position="apart" grow mt={"auto"}>
-        <Button maw="200px" variant="outline" color="red" onClick={onCancel} size="xs">
+        <Button maw="200px" variant="light" color="red" onClick={onCancel} size="xs">
           Cancel
         </Button>
-        <Button maw="200px" variant="light" color="green" onClick={onFinish} size="xs">
+        <Button
+          maw="200px"
+          variant="gradient"
+          gradient={{ from: "teal", to: "green", deg: 105 }}
+          color="green"
+          onClick={onFinish}
+          size="xs"
+        >
           Finish
         </Button>
       </Group>

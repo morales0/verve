@@ -17,7 +17,7 @@ const MuscleGroupTag = ({ group }: { group: MuscleGroup }) => {
   };
 
   return (
-    <Badge color={calcColor()} variant={"light"} radius={"md"} size={largeScreen ? "lg" : "sm"}>
+    <Badge color={calcColor()} variant={"light"} radius={"md"} size={largeScreen ? "lg" : "md"}>
       {group.name}
     </Badge>
   );

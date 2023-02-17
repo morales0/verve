@@ -53,7 +53,7 @@ const BarbellSet = ({ set, onUnitChange }: Props) => {
   }, [plateCount, bar]);
 
   return (
-    <Stack align="stretch" spacing="md" mb="md">
+    <Stack align="stretch" spacing="sm" mb="xs">
       <Group sx={{ justifyContent: "space-evenly" }} align="center">
         {Object.entries(set).map(([unit, val], j) => (
           <SetInput
