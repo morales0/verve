@@ -1,6 +1,7 @@
 import { Button, Group, Stack, Title } from "@mantine/core";
 import { WorkoutExercise } from "../../../../types/workout";
-import Sets from "./Sets";
+import BarbellSet from "./BarbellSet";
+import Set from "./Set";
 
 type Props = {
   exercise: WorkoutExercise;
@@ -10,6 +11,7 @@ type Props = {
 };
 
 const ExerciseScreen = ({ exercise, onFinish, onCancel, updateExercise }: Props) => {
+  // functions
   const addSet = () => {
     updateExercise({
       sets: [
@@ -29,6 +31,7 @@ const ExerciseScreen = ({ exercise, onFinish, onCancel, updateExercise }: Props)
     });
   };
 
+  // render
   return (
     <Stack h="100%" sx={{ overflow: "hidden" }} align="flex-start" spacing={0}>
       <Group align="center" py="sm">
@@ -43,7 +46,16 @@ const ExerciseScreen = ({ exercise, onFinish, onCancel, updateExercise }: Props)
         </Group>
       </Group>
       <Stack w="100%" pr="sm" pb="sm" sx={{ flexGrow: 1, overflowY: "auto", overflowX: "hidden" }}>
-        <Sets sets={exercise.sets} weightType={exercise.weightType} onChange={updateSetValue} />
+        {exercise.sets.map((set, i) => {
+          const updateUnitValue = (unit: string, value: number) => updateSetValue(i, unit, value);
+
+          if (exercise.weightType === "Barbell") {
+            return <BarbellSet key={`set-${i}`} set={set} onUnitChange={updateUnitValue} />;
+          } else {
+            return <Set key={`set-${i}`} set={set} onUnitChange={updateUnitValue} />;
+          }
+        })}
+        {/* <Sets sets={exercise.sets} weightType={exercise.weightType} onChange={updateSetValue} /> */}
       </Stack>
       <Group w="100%" p="sm" align="center" position="apart" grow mt={"auto"}>
         <Button maw="200px" variant="outline" color="red" onClick={onCancel} size="xs">

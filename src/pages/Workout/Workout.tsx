@@ -90,13 +90,11 @@ const Workout = () => {
         variant="default"
         value={activeTab}
         onTabChange={setActiveTab}
-        styles={() => ({
-          root: {
-            display: "flex",
-            flexDirection: "column",
-            flexGrow: 1,
-            overflow: "hidden",
-          },
+        sx={() => ({
+          display: "flex",
+          flexDirection: "column",
+          flexGrow: 1,
+          overflow: "hidden",
         })}
       >
         <Tabs.List grow>
