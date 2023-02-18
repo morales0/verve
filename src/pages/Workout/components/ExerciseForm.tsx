@@ -1,4 +1,4 @@
-import { Box, Button, Group, MultiSelect, Select, Stack, TextInput, Title } from "@mantine/core";
+import { Box, Button, Divider, Group, MultiSelect, Select, Stack, TextInput, Title } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { UserExercise } from "../../../types/workout";
 
@@ -32,16 +32,19 @@ const muscleGroups = [
 ];
 
 type Props = {
+  exerciseToEdit?: UserExercise;
   cancel: () => void;
   submitExercise: (data: UserExercise) => Promise<void>;
 };
 
-const ExerciseForm = ({ cancel, submitExercise }: Props) => {
+const ExerciseForm = ({ cancel, submitExercise, exerciseToEdit }: Props) => {
   const form = useForm({
     initialValues: {
-      name: "",
-      units: [],
-      primaryMuscleGroups: [],
+      name: exerciseToEdit?.name || "",
+      units: exerciseToEdit?.units || [],
+      primaryMuscleGroups: exerciseToEdit?.primaryMuscleGroups || [],
+      secondaryMuscleGroups: exerciseToEdit?.secondaryMuscleGroups || [],
+      weightType: exerciseToEdit?.weightType || "",
     },
   });
 
@@ -49,13 +52,18 @@ const ExerciseForm = ({ cancel, submitExercise }: Props) => {
     const newExercise: UserExercise = {
       ...values,
     };
+
+    if (exerciseToEdit) {
+      newExercise.id = exerciseToEdit.id;
+    }
+
     submitExercise(newExercise).then(() => {
       cancel();
     });
   });
 
   return (
-    <Stack h="100%" py="lg" sx={{ overflow: "hidden" }}>
+    <Stack h="100%" p="sm" sx={{ overflow: "hidden" }} spacing={0}>
       <form
         style={{
           height: "100%",
@@ -65,7 +73,10 @@ const ExerciseForm = ({ cancel, submitExercise }: Props) => {
         }}
         onSubmit={handleSubmit}
       >
-        <Title order={3}>Exercise Form</Title>
+        <Title order={3} pb="xs">
+          Exercise Form
+        </Title>
+        <Divider />
         <Box py="sm" sx={{ flexGrow: 1, overflow: "auto" }}>
           <Stack spacing="md">
             <TextInput label="Name" required {...form.getInputProps("name")} />
@@ -107,12 +118,13 @@ const ExerciseForm = ({ cancel, submitExercise }: Props) => {
             </Group>
           </Stack>
         </Box>
-        <Group w="100%" align={"center"} position="center" grow mt={"auto"}>
-          <Button variant="outline" color="red" onClick={cancel}>
+        <Divider />
+        <Group w="100%" align="center" position="apart" grow mt={"auto"} py="md">
+          <Button size="sm" variant="light" color="red" onClick={cancel}>
             Cancel
           </Button>
-          <Button variant="light" color="green" type="submit">
-            Create
+          <Button size="sm" color={exerciseToEdit ? "cyan" : "teal"} type="submit">
+            {exerciseToEdit ? "Update" : "Create"}
           </Button>
         </Group>
       </form>

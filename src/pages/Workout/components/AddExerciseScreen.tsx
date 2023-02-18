@@ -1,4 +1,5 @@
-import { Button, Group, ScrollArea, Stack, Table, Text, TextInput } from "@mantine/core";
+import { Icon } from "@iconify/react";
+import { ActionIcon, Button, Center, Divider, Group, ScrollArea, Stack, Table, Text, TextInput } from "@mantine/core";
 import { useEffect, useState } from "react";
 import useUserExercises from "../../../hooks/userExercises.hook";
 import { STATUS } from "../../../types/util";
@@ -6,18 +7,24 @@ import { UserExercise } from "../../../types/workout";
 import ExerciseForm from "./ExerciseForm";
 
 type Props = {
-  onAdd: (ex: UserExercise) => void;
+  onStart: (ex: UserExercise) => void;
+  onEdit: (ex: UserExercise) => void;
+  onCreate: () => void;
   currentExerciseIds: string[] | undefined;
 };
 
-const AddExerciseScreen = ({ onAdd, currentExerciseIds }: Props) => {
+const AddExerciseScreen = ({ onStart, onEdit, onCreate, currentExerciseIds }: Props) => {
   const { status, data: userExercises, api } = useUserExercises();
   const [data, setData] = useState<UserExercise[]>([]);
-  const [tab, setTab] = useState("adding");
+  const [query, setQuery] = useState("");
   // const [editData, setEditData] = useState<UserExercise | null>(null);
   // const largeScreen = useMediaQuery("(min-width: 900px)");
 
-  const filteredData = data.filter((ex) => !currentExerciseIds?.includes(ex.id || ""));
+  const filteredData = data.filter(
+    (ex) =>
+      !currentExerciseIds?.includes(ex.id || "") &&
+      (query === "" || ex.name.toLowerCase().includes(query.toLowerCase()))
+  );
 
   useEffect(() => {
     if (status === STATUS.SUCCESS) {
@@ -27,12 +34,6 @@ const AddExerciseScreen = ({ onAdd, currentExerciseIds }: Props) => {
     }
   }, [status, userExercises]);
 
-  const createExercise = async (data: UserExercise) => {
-    console.log(data);
-
-    return api.addChild(data);
-  };
-
   if (status === STATUS.LOADING) {
     return <Text italic>Loading your exercises...</Text>;
   }
@@ -41,15 +42,16 @@ const AddExerciseScreen = ({ onAdd, currentExerciseIds }: Props) => {
     return (
       <thead>
         <tr>
-          <th style={{ border: "none", padding: 0 }}></th>
-          <th style={{ textAlign: "center", border: "none", padding: 0 }} colSpan={2}>
-            Muscle Groups
+          <th colSpan={3} style={{ border: "none", paddingBottom: 0 }}>
+            <Text color="dimmed" italic fz="sm" align="left" py="xs">
+              Click on name to start exercise
+            </Text>
           </th>
         </tr>
         <tr>
           <th style={{ width: "60%" }}>Name</th>
-          <th style={{ textAlign: "center" }}>Primary</th>
-          <th style={{ textAlign: "center" }}>Secondary</th>
+          <th style={{ textAlign: "center" }}>Muscle Groups</th>
+          <th></th>
         </tr>
       </thead>
     );
@@ -66,30 +68,27 @@ const AddExerciseScreen = ({ onAdd, currentExerciseIds }: Props) => {
           </tr>
         ) : (
           filteredData.map((ex, i) => (
-            <tr key={`ex-info-${ex.name}-${i}`} style={{ cursor: "pointer" }} onClick={() => onAdd(ex)}>
-              <td>
+            <tr key={`ex-info-${ex.name}-${i}`}>
+              <td style={{ cursor: "pointer" }} onClick={() => onStart(ex)}>
                 {ex.name}{" "}
                 <Text fz="xs" color="dimmed" italic>
                   {ex.weightType}
                 </Text>
               </td>
               <td style={{ textAlign: "center" }}>
-                {ex.primaryMuscleGroups ? (
-                  <Text>{Object.values(ex.primaryMuscleGroups).toString()}</Text>
-                ) : (
-                  <Text color="dimmed" fz="sm" italic>
-                    None specified
-                  </Text>
-                )}
+                <Stack justify="center" spacing={0}>
+                  {ex.primaryMuscleGroups && <Text>{Object.values(ex.primaryMuscleGroups).join(", ")}</Text>}
+                  {ex.secondaryMuscleGroups && (
+                    <Text color="dimmed" size="xs">
+                      {Object.values(ex.secondaryMuscleGroups).join(", ")}
+                    </Text>
+                  )}
+                </Stack>
               </td>
-              <td style={{ textAlign: "center" }}>
-                {ex.secondaryMuscleGroups ? (
-                  <Text color="dimmed">{Object.values(ex.secondaryMuscleGroups).toString()}</Text>
-                ) : (
-                  <Text color="dimmed" fz="sm" italic>
-                    None specified
-                  </Text>
-                )}
+              <td>
+                <ActionIcon color="indigo" variant="light" onClick={() => onEdit(ex)}>
+                  <Icon icon="material-symbols:edit" />
+                </ActionIcon>
               </td>
             </tr>
           ))
@@ -99,31 +98,28 @@ const AddExerciseScreen = ({ onAdd, currentExerciseIds }: Props) => {
   };
 
   return (
-    <>
-      {tab === "creating" ? (
-        <ExerciseForm cancel={() => setTab("adding")} submitExercise={createExercise} />
-      ) : (
-        <Stack h="100%" py="lg" sx={{ overflow: "hidden" }} spacing={0}>
-          <Group align="flex-start">
-            <TextInput placeholder="Search" sx={{ flexGrow: 1 }} />
-            <Button color="teal" sx={{ flexGrow: 0 }} onClick={() => setTab("creating")}>
-              + New Exercise
-            </Button>
-          </Group>
+    <Stack h="100%" py="lg" sx={{ overflow: "hidden" }} spacing={0}>
+      <Group align="flex-start" pb="sm">
+        <TextInput
+          placeholder="Search"
+          sx={{ flexGrow: 1 }}
+          value={query}
+          onChange={(e) => setQuery(e.currentTarget.value)}
+        />
+        <Button color="teal" sx={{ flexGrow: 0 }} onClick={onCreate}>
+          + New Exercise
+        </Button>
+      </Group>
 
-          <Text color="dimmed" italic fz="sm" align="center" py="xs">
-            Click on row to start exercise
-          </Text>
+      <Divider />
 
-          <ScrollArea>
-            <Table highlightOnHover>
-              <Header />
-              <Body />
-            </Table>
-          </ScrollArea>
-        </Stack>
-      )}
-    </>
+      <ScrollArea>
+        <Table>
+          <Header />
+          <Body />
+        </Table>
+      </ScrollArea>
+    </Stack>
   );
 };
 

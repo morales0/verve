@@ -2,10 +2,12 @@ import { Stack, Tabs, Text } from "@mantine/core";
 import { useState } from "react";
 import { Navigate } from "react-router-dom";
 import { useIsWorkingOut } from "../../hooks/isWorkingOut.hook";
+import useUserExercises from "../../hooks/userExercises.hook";
 import useWorkout from "../../hooks/workout.hook";
 import { STATUS } from "../../types/util";
 import { UserExercise, WorkoutExercise } from "../../types/workout";
 import AddExerciseScreen from "./components/AddExerciseScreen";
+import ExerciseForm from "./components/ExerciseForm";
 import ExerciseScreen from "./components/ExerciseScreen/ExerciseScreen";
 import { StatusBar } from "./components/StatusBar";
 import SummaryScreen from "./components/SummaryScreen";
@@ -14,9 +16,11 @@ const Workout = () => {
   // server
   const { isWorkingOut, status: isWorkingOutStatus, endWorkout } = useIsWorkingOut();
   const { status: workoutStatus, workout, api } = useWorkout();
+  const { api: userExercisesApi } = useUserExercises();
 
   // ui state
   const [activeTab, setActiveTab] = useState<string | null>("exercise");
+  const [exerciseToEdit, setExerciseToEdit] = useState<UserExercise | null>(null);
   const [currentExercise, setCurrentExercise] = useState<WorkoutExercise | null>(null);
 
   // functions
@@ -82,9 +86,29 @@ const Workout = () => {
     return <Text>Completing your workout...</Text>;
   }
 
+  const createExercise = async (data: UserExercise) => {
+    return userExercisesApi.addChild(data).finally(() => setExerciseToEdit(null));
+  };
+
+  const editExercise = async (data: UserExercise) => {
+    console.log(data);
+
+    if (data.id) return userExercisesApi.updateChild(data.id, data).finally(() => setExerciseToEdit(null));
+  };
+
   // render page
+  if (activeTab === "edit") {
+    return (
+      <ExerciseForm
+        exerciseToEdit={exerciseToEdit || undefined}
+        cancel={() => setActiveTab("exercise")}
+        submitExercise={exerciseToEdit ? editExercise : createExercise}
+      />
+    );
+  }
+
   return (
-    <Stack h="100%" px="1rem" pb="sm" sx={{ overflow: "hidden" }} spacing={0}>
+    <Stack h="100%" px="sm" pb="sm" sx={{ overflow: "hidden" }} spacing={0}>
       {!currentExercise && <StatusBar timeStarted={workout.timeStarted || "Time missing"} />}
       <Tabs
         variant="default"
@@ -111,7 +135,15 @@ const Workout = () => {
               updateExercise={updateExercise}
             />
           ) : (
-            <AddExerciseScreen onAdd={startExercise} currentExerciseIds={workout.exercises?.map((e) => e.id || "")} />
+            <AddExerciseScreen
+              onStart={startExercise}
+              onEdit={(ex) => {
+                setExerciseToEdit(ex);
+                setActiveTab("edit");
+              }}
+              onCreate={() => setActiveTab("edit")}
+              currentExerciseIds={workout.exercises?.map((e) => e.id || "")}
+            />
           )}
         </Tabs.Panel>
 

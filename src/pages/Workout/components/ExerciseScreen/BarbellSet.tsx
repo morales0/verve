@@ -7,13 +7,15 @@ import {
   Group,
   NumberInput,
   NumberInputHandlers,
+  Paper,
   Stack,
   Text,
   UnstyledButton,
 } from "@mantine/core";
 import { useEffect, useRef, useState } from "react";
+import themes from "../../../../styles/themes";
 
-const weights = [2.5, 5, 10, 20, 25, 35, 45];
+const weights = [10, 25, 35, 45, 2.5, 5, 20];
 
 type Props = {
   set: object;
@@ -71,7 +73,7 @@ const BarbellSet = ({ set, onUnitChange }: Props) => {
             {plates.map((weight, i) => (
               <Plate key={`left-weight-${weight}-${i}`} weight={weight} />
             ))}
-            <Bar weight={bar} empty={plates.length === 0} />
+            <Bar weight={bar} empty={plates.length === 0} open={open} />
             {plates.reverse().map((weight, i) => (
               <Plate key={`left-weight-${weight}-${i}`} weight={weight} />
             ))}
@@ -79,47 +81,49 @@ const BarbellSet = ({ set, onUnitChange }: Props) => {
         </UnstyledButton>
       </Center>
 
-      <Collapse
-        in={open}
-        p="sm"
-        pb="lg"
-        sx={() => ({
-          borderBottom: "1px solid #444",
-        })}
-      >
-        <Group position="apart">
-          {weights.map((weight, i) => (
-            <PlateInput
-              key={`plate-input-${i}-${weight}`}
-              weight={weight}
-              val={plateCount[weight]}
-              onChange={(newVal) =>
-                setPlateCount((currPlateCount) => ({
-                  ...currPlateCount,
-                  [weight]: newVal,
-                }))
-              }
-            />
-          ))}
-        </Group>
+      <Collapse in={open} p="sm" pb="lg">
+        <Paper
+          withBorder
+          p="sm"
+          shadow="lg"
+          sx={(theme) => ({
+            backgroundColor: theme.colorScheme === "light" ? theme.colors.gray[2] : theme.colors.gray[9],
+          })}
+        >
+          <Group position="apart">
+            {weights.map((weight, i) => (
+              <PlateInput
+                key={`plate-input-${i}-${weight}`}
+                weight={weight}
+                val={plateCount[weight]}
+                onChange={(newVal) =>
+                  setPlateCount((currPlateCount) => ({
+                    ...currPlateCount,
+                    [weight]: newVal,
+                  }))
+                }
+              />
+            ))}
+          </Group>
+        </Paper>
       </Collapse>
     </Stack>
   );
 };
 
-const Bar = ({ weight, empty }: { weight: number; empty?: boolean }) => (
+const Bar = ({ weight, empty, open }: { weight: number; empty?: boolean; open: boolean }) => (
   <Box
     component={Center}
     h="10px"
     w="80px"
-    sx={() => ({
+    sx={(theme) => ({
       position: "relative",
-      backgroundColor: "#2b2a2a",
+      backgroundColor: theme.colors.gray[7],
       borderTop: "1px solid",
       borderBottom: "1px solid",
       borderLeft: empty ? "1px solid" : "none",
       borderRight: empty ? "1px solid" : "none",
-      borderColor: "gray",
+      borderColor: theme.colors.gray[5],
       margin: "1rem 0",
     })}
   >
@@ -133,6 +137,8 @@ const Bar = ({ weight, empty }: { weight: number; empty?: boolean }) => (
       style={{
         position: "absolute",
         top: "8px",
+        transform: open ? "rotate(180deg)" : "unset",
+        color: "#444",
       }}
     />
   </Box>
@@ -161,8 +167,22 @@ const PlateInput = ({ weight, val, onChange }: { weight: number; val: number; on
   const handlers = useRef<NumberInputHandlers>();
 
   return (
-    <Stack align="center">
-      <Group spacing={8}>
+    <Stack align="center" spacing="xs">
+      <Box
+        component={Center}
+        sx={(theme) => ({
+          width: "65px",
+          height: "65px",
+          textAlign: "center",
+          borderRadius: "50%",
+          color: theme.colors.gray[0],
+          backgroundColor: theme.colorScheme === "light" ? theme.colors.gray[5] : theme.colors.gray[8],
+          border: `1px solid ${theme.colorScheme === "light" ? theme.colors.gray[6] : theme.colors.gray[6]}`,
+        })}
+      >
+        <Text>{weight}</Text>
+      </Box>
+      <Group align="center" spacing={8}>
         <ActionIcon size={30} variant="default" onClick={() => handlers.current?.decrement()}>
           –
         </ActionIcon>
@@ -173,13 +193,18 @@ const PlateInput = ({ weight, val, onChange }: { weight: number; val: number; on
           hideControls
           min={0}
           step={2}
-          styles={{ input: { width: 65, height: 65, textAlign: "center", borderRadius: "50%" } }}
+          styles={{
+            input: {
+              textAlign: "center",
+              width: "40px",
+              marginBottom: "0!important",
+            },
+          }}
         />
         <ActionIcon size={30} variant="default" onClick={() => handlers.current?.increment()}>
           +
         </ActionIcon>
       </Group>
-      <Text>{weight}</Text>
     </Stack>
   );
 };

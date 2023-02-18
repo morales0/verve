@@ -1,4 +1,4 @@
-import { Button, Group, Stack, Title } from "@mantine/core";
+import { Button, Divider, Group, Stack, Title } from "@mantine/core";
 import { WorkoutExercise } from "../../../../types/workout";
 import BarbellSet from "./BarbellSet";
 import Set from "./Set";
@@ -33,19 +33,20 @@ const ExerciseScreen = ({ exercise, onFinish, onCancel, updateExercise }: Props)
 
   // render
   return (
-    <Stack h="100%" sx={{ overflow: "hidden" }} align="flex-start" spacing={0}>
-      <Group align="center" py="sm">
+    <Stack justify="space-between" h="100%" sx={{ overflow: "hidden" }} spacing={0}>
+      <Group align="center" position="apart" py="sm">
         <Title order={3}>{exercise.name}</Title>
-        <Group>
-          <Button variant="outline" color="gray" onClick={removeSet} size="xs">
+        <Group align="stretch">
+          <Button variant="default" color="gray" onClick={removeSet} size="xs" h="25px" w="36px">
             -
           </Button>
-          <Button variant="outline" color="gray" onClick={addSet} size="xs">
+          <Button variant="default" color="gray" onClick={addSet} size="xs" h="25px" w="36px">
             +
           </Button>
         </Group>
       </Group>
-      <Stack w="100%" pr="sm" pb="sm" sx={{ flexGrow: 1, overflowY: "auto", overflowX: "hidden" }} spacing={5}>
+      <Divider />
+      <Stack w="100%" pr="sm" py="sm" sx={{ flexGrow: 1, overflowY: "auto", overflowX: "hidden" }} spacing={5}>
         {exercise.sets.map((set, i) => {
           const updateUnitValue = (unit: string, value: number) => updateSetValue(i, unit, value);
 
@@ -55,20 +56,13 @@ const ExerciseScreen = ({ exercise, onFinish, onCancel, updateExercise }: Props)
             return <Set key={`set-${i}`} set={set} onUnitChange={updateUnitValue} />;
           }
         })}
-        {/* <Sets sets={exercise.sets} weightType={exercise.weightType} onChange={updateSetValue} /> */}
       </Stack>
-      <Group w="100%" p="sm" align="center" position="apart" grow mt={"auto"}>
-        <Button maw="200px" variant="light" color="red" onClick={onCancel} size="xs">
+      <Divider />
+      <Group w="100%" py="md" align="center" position="apart" grow mt="auto">
+        <Button variant="light" color="red" onClick={onCancel} size="sm">
           Cancel
         </Button>
-        <Button
-          maw="200px"
-          variant="gradient"
-          gradient={{ from: "teal", to: "green", deg: 105 }}
-          color="green"
-          onClick={onFinish}
-          size="xs"
-        >
+        <Button gradient={{ from: "teal", to: "green", deg: 105 }} color="teal" onClick={onFinish} size="sm">
           Finish
         </Button>
       </Group>
