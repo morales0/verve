@@ -13,7 +13,6 @@ import {
   UnstyledButton,
 } from "@mantine/core";
 import { useEffect, useRef, useState } from "react";
-import themes from "../../../../styles/themes";
 
 const weights = [10, 25, 35, 45, 2.5, 5, 20];
 

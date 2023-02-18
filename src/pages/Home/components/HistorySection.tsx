@@ -44,6 +44,8 @@ const HistorySection = ({ startNewWorkoutAndNavigate, isWorkingOut }: Props) => 
               key={workout.historyId || `workout-${i}`}
               maw="600px"
               style={{ minWidth: "300px", overflow: "unset" }}
+              withBorder
+              shadow="sm"
             >
               <Text fz={"s"}>{dateStarted.toDateString()}</Text>
               <Text c="dimmed" fz={"xs"} fs={"italic"}>

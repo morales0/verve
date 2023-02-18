@@ -9,11 +9,12 @@ import ExerciseForm from "./ExerciseForm";
 type Props = {
   onStart: (ex: UserExercise) => void;
   onEdit: (ex: UserExercise) => void;
+  onDelete: (ex: UserExercise) => void;
   onCreate: () => void;
   currentExerciseIds: string[] | undefined;
 };
 
-const AddExerciseScreen = ({ onStart, onEdit, onCreate, currentExerciseIds }: Props) => {
+const AddExerciseScreen = ({ onStart, onEdit, onCreate, onDelete, currentExerciseIds }: Props) => {
   const { status, data: userExercises, api } = useUserExercises();
   const [data, setData] = useState<UserExercise[]>([]);
   const [query, setQuery] = useState("");
@@ -70,14 +71,14 @@ const AddExerciseScreen = ({ onStart, onEdit, onCreate, currentExerciseIds }: Pr
           filteredData.map((ex, i) => (
             <tr key={`ex-info-${ex.name}-${i}`}>
               <td style={{ cursor: "pointer" }} onClick={() => onStart(ex)}>
-                {ex.name}{" "}
+                <Text fz="md">{ex.name}</Text>
                 <Text fz="xs" color="dimmed" italic>
                   {ex.weightType}
                 </Text>
               </td>
               <td style={{ textAlign: "center" }}>
                 <Stack justify="center" spacing={0}>
-                  {ex.primaryMuscleGroups && <Text>{Object.values(ex.primaryMuscleGroups).join(", ")}</Text>}
+                  {ex.primaryMuscleGroups && <Text size="sm">{Object.values(ex.primaryMuscleGroups).join(", ")}</Text>}
                   {ex.secondaryMuscleGroups && (
                     <Text color="dimmed" size="xs">
                       {Object.values(ex.secondaryMuscleGroups).join(", ")}
@@ -86,9 +87,14 @@ const AddExerciseScreen = ({ onStart, onEdit, onCreate, currentExerciseIds }: Pr
                 </Stack>
               </td>
               <td>
-                <ActionIcon color="indigo" variant="light" onClick={() => onEdit(ex)}>
-                  <Icon icon="material-symbols:edit" />
-                </ActionIcon>
+                <Group noWrap spacing="xs">
+                  <ActionIcon color="indigo" variant="light" onClick={() => onEdit(ex)}>
+                    <Icon icon="material-symbols:edit" />
+                  </ActionIcon>
+                  <ActionIcon color="red" variant="light" onClick={() => onDelete(ex)}>
+                    <Icon icon="ic:baseline-delete-forever" />
+                  </ActionIcon>
+                </Group>
               </td>
             </tr>
           ))
@@ -101,7 +107,7 @@ const AddExerciseScreen = ({ onStart, onEdit, onCreate, currentExerciseIds }: Pr
     <Stack h="100%" py="lg" sx={{ overflow: "hidden" }} spacing={0}>
       <Group align="flex-start" pb="sm">
         <TextInput
-          placeholder="Search"
+          placeholder="Search by name"
           sx={{ flexGrow: 1 }}
           value={query}
           onChange={(e) => setQuery(e.currentTarget.value)}

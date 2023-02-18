@@ -1,5 +1,5 @@
-import { Stack, Tabs, Text } from "@mantine/core";
-import { useState } from "react";
+import { Button, Group, Modal, Stack, Tabs, Text } from "@mantine/core";
+import { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
 import { useIsWorkingOut } from "../../hooks/isWorkingOut.hook";
 import useUserExercises from "../../hooks/userExercises.hook";
@@ -19,6 +19,7 @@ const Workout = () => {
   const { api: userExercisesApi } = useUserExercises();
 
   // ui state
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<string | null>("exercise");
   const [exerciseToEdit, setExerciseToEdit] = useState<UserExercise | null>(null);
   const [currentExercise, setCurrentExercise] = useState<WorkoutExercise | null>(null);
@@ -96,12 +97,19 @@ const Workout = () => {
     if (data.id) return userExercisesApi.updateChild(data.id, data).finally(() => setExerciseToEdit(null));
   };
 
+  const deleteExercise = async (data?: UserExercise) => {
+    if (data?.id) return userExercisesApi.removeChild(data.id);
+  };
+
   // render page
   if (activeTab === "edit") {
     return (
       <ExerciseForm
         exerciseToEdit={exerciseToEdit || undefined}
-        cancel={() => setActiveTab("exercise")}
+        cancel={() => {
+          setExerciseToEdit(null);
+          setActiveTab("exercise");
+        }}
         submitExercise={exerciseToEdit ? editExercise : createExercise}
       />
     );
@@ -109,6 +117,32 @@ const Workout = () => {
 
   return (
     <Stack h="100%" px="sm" pb="sm" sx={{ overflow: "hidden" }} spacing={0}>
+      <Modal
+        centered
+        opened={deleteModalOpen}
+        onClose={() => {
+          setExerciseToEdit(null);
+          setDeleteModalOpen(false);
+        }}
+        title="Are you sure?"
+      >
+        <Text mb="md">Deleting: {exerciseToEdit?.name}</Text>
+        <Group position="apart">
+          <Button
+            variant="default"
+            color="teal"
+            onClick={() => {
+              setExerciseToEdit(null);
+              setDeleteModalOpen(false);
+            }}
+          >
+            No, go back
+          </Button>
+          <Button variant="light" color="red" onClick={() => deleteExercise(exerciseToEdit || undefined)}>
+            Yes, I want to delete
+          </Button>
+        </Group>
+      </Modal>
       {!currentExercise && <StatusBar timeStarted={workout.timeStarted || "Time missing"} />}
       <Tabs
         variant="default"
@@ -140,6 +174,10 @@ const Workout = () => {
               onEdit={(ex) => {
                 setExerciseToEdit(ex);
                 setActiveTab("edit");
+              }}
+              onDelete={(ex) => {
+                setExerciseToEdit(ex);
+                setDeleteModalOpen(true);
               }}
               onCreate={() => setActiveTab("edit")}
               currentExerciseIds={workout.exercises?.map((e) => e.id || "")}
