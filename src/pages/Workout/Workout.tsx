@@ -58,6 +58,16 @@ const Workout = () => {
     });
   };
 
+  const removeWorkoutExercise = (id?: string) => {
+    if (id) api.removeExercise(id);
+  };
+
+  const editWorkoutExercise = (ex: WorkoutExercise) => {
+    setCurrentExercise(ex);
+    setActiveTab("exercise");
+    if (ex.workoutId) api.removeExercise(ex.workoutId);
+  };
+
   const completeWorkout = () => {
     api.completeWorkout().then(() => endWorkout());
   };
@@ -186,7 +196,14 @@ const Workout = () => {
         </Tabs.Panel>
 
         <Tabs.Panel value="summary" sx={{ flexGrow: 1, overflow: "hidden" }}>
-          <SummaryScreen exercises={workout.exercises} onCancel={cancelWorkout} onComplete={completeWorkout} />
+          <SummaryScreen
+            exercises={workout.exercises}
+            canEditExercise={!currentExercise}
+            onEditExercise={(ex) => editWorkoutExercise(ex)}
+            onRemoveExercise={(ex) => removeWorkoutExercise(ex.workoutId)}
+            onCancel={cancelWorkout}
+            onComplete={completeWorkout}
+          />
         </Tabs.Panel>
       </Tabs>
     </Stack>

@@ -1,5 +1,18 @@
 import { Icon } from "@iconify/react";
-import { Button, Card, Collapse, Divider, Group, ScrollArea, Stack, Text, Title, UnstyledButton } from "@mantine/core";
+import {
+  Box,
+  Button,
+  Card,
+  Collapse,
+  Container,
+  Divider,
+  Group,
+  ScrollArea,
+  Stack,
+  Text,
+  Title,
+  UnstyledButton,
+} from "@mantine/core";
 import { useState } from "react";
 import useWorkoutHistory from "../../../hooks/workoutHistory.hook";
 import { STATUS } from "../../../types/util";
@@ -35,7 +48,8 @@ const HistorySection = ({ startNewWorkoutAndNavigate, isWorkingOut }: Props) => 
           </Button>
         )}
       </Group>
-      <Stack pr="sm" sx={{ overflowY: "auto" }}>
+      <Divider />
+      <Stack py="md" pr="sm" sx={{ overflowY: "auto" }}>
         {[...workouts].reverse().map((workout, i) => {
           const dateStarted = new Date(workout.dateStarted || "");
 

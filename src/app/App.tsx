@@ -15,7 +15,7 @@ import UnauthApp from "./UnauthApp";
 
 const App = () => {
   const { status: authStatus } = useAuth();
-  const [colorScheme, setColorScheme] = useState<ColorScheme>("dark");
+  const [colorScheme, setColorScheme] = useState<ColorScheme>("light");
   const toggleColorScheme = (value?: ColorScheme) =>
     setColorScheme(value || (colorScheme === "dark" ? "light" : "dark"));
 

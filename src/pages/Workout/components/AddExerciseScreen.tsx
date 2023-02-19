@@ -50,8 +50,8 @@ const AddExerciseScreen = ({ onStart, onEdit, onCreate, onDelete, currentExercis
           </th>
         </tr>
         <tr>
-          <th style={{ width: "60%" }}>Name</th>
-          <th style={{ textAlign: "center" }}>Muscle Groups</th>
+          <th style={{ width: "100%" }}>Name</th>
+          <th style={{ textAlign: "center", minWidth: "150px" }}>Muscle Groups</th>
           <th></th>
         </tr>
       </thead>
@@ -86,8 +86,8 @@ const AddExerciseScreen = ({ onStart, onEdit, onCreate, onDelete, currentExercis
                   )}
                 </Stack>
               </td>
-              <td>
-                <Group noWrap spacing="xs">
+              <td style={{ textAlign: "center" }}>
+                <Group noWrap spacing="xs" position="center">
                   <ActionIcon color="indigo" variant="light" onClick={() => onEdit(ex)}>
                     <Icon icon="material-symbols:edit" />
                   </ActionIcon>
