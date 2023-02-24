@@ -6,6 +6,7 @@
 import { ColorScheme, ColorSchemeProvider, MantineProvider } from "@mantine/core";
 import { useState } from "react";
 import { useAuth } from "../context/auth";
+import UserProvider from "../context/user";
 import AuthApp from "./AuthApp";
 import UnauthApp from "./UnauthApp";
 
@@ -14,7 +15,7 @@ import UnauthApp from "./UnauthApp";
 // const UnauthApp = React.lazy(() => import('./UnauthApp'))
 
 const App = () => {
-  const { status: authStatus } = useAuth();
+  const { user, status: authStatus } = useAuth();
   const [colorScheme, setColorScheme] = useState<ColorScheme>("light");
   const toggleColorScheme = (value?: ColorScheme) =>
     setColorScheme(value || (colorScheme === "dark" ? "light" : "dark"));
@@ -22,8 +23,10 @@ const App = () => {
   return (
     <ColorSchemeProvider colorScheme={colorScheme} toggleColorScheme={toggleColorScheme}>
       <MantineProvider theme={{ colorScheme }} withGlobalStyles withNormalizeCSS>
-        {authStatus === "authenticated" ? (
-          <AuthApp />
+        {authStatus === "authenticated" && user ? (
+          <UserProvider user={user}>
+            <AuthApp />
+          </UserProvider>
         ) : authStatus === "unauthenticated" ? (
           <UnauthApp />
         ) : authStatus === "loading" ? (

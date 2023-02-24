@@ -5,7 +5,6 @@ import { createContext, useContext, useEffect, useState } from "react";
 type AuthContextType = {
   user: User | null;
   status: string;
-  data: any;
   auth: Auth;
 };
 
@@ -18,8 +17,7 @@ type Props = {
 
 export default function AuthProvider({ app, children }: Props) {
   const [user, setUser] = useState<User | null>(null);
-  const [status, setStatus] = useState<string>("loading");
-  const [data, setData] = useState<any>(null);
+  const [status, setStatus] = useState("loading");
 
   const auth = getAuth(app);
 
@@ -31,19 +29,16 @@ export default function AuthProvider({ app, children }: Props) {
         setStatus("authenticated");
       } else {
         setUser(null);
-        setData(null);
         setStatus("unauthenticated");
       }
     });
   }, [auth]);
 
-  // Auth functions
-
   if (status === "loading") {
     return null;
   }
 
-  return <AuthContext.Provider value={{ user, status, data, auth }}>{children}</AuthContext.Provider>;
+  return <AuthContext.Provider value={{ user, status, auth }}>{children}</AuthContext.Provider>;
 }
 
 export function useAuth(): AuthContextType {

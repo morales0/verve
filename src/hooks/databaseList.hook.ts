@@ -1,67 +1,50 @@
-import {
-  Database,
-  DatabaseReference,
-  off,
-  onValue,
-  push,
-  Query,
-  query,
-  ref,
-  remove,
-  set,
-  update,
-} from "firebase/database";
+import { child, DatabaseReference, off, onValue, push, Query, remove, set, update } from "firebase/database";
 import { useEffect, useState } from "react";
-import { useAuth } from "../context/auth";
-import { useDatabase } from "../context/database";
 import { STATUS } from "../types/util";
 
 const useDatabaseList = <T>(listRef: DatabaseReference | Query) => {
-  const { user } = useAuth();
-  const { db } = useDatabase();
   const [data, setData] = useState<T[]>([]);
   const [idList, setIdList] = useState<string[]>([]);
   const [status, setStatus] = useState<STATUS>(STATUS.LOADING);
 
   useEffect(() => {
-    if (!user) return;
-
     onValue(listRef, (snapshot) => {
       if (snapshot.exists()) {
         const dataObj = snapshot.val() as { [id: string]: T };
         setIdList(Object.keys(dataObj));
         setData(Object.values(dataObj));
+      } else {
+        setData([]);
+        setIdList([]);
       }
 
       setStatus(STATUS.SUCCESS);
     });
 
     return () => off(listRef);
-  }, [db, user]);
+  }, []);
 
-  const addChild = async (child: T, key?: string) => {
+  const addChild = async (newChild: T, key?: string) => {
     if (key) {
-      const childRef = ref(db, `users/${user?.uid}/${listRef.ref.key}/${key}`);
+      const childRef = child(listRef.ref, key);
 
       if (idList.includes(key)) throw new Error("Key already exists");
       return set(childRef, child);
     } else {
-      const childRef = push(ref(db, `users/${user?.uid}/${listRef.ref.key}`));
+      const childRef = push(listRef.ref);
       return set(childRef, {
-        ...child,
+        ...newChild,
         id: childRef.key,
       });
     }
   };
 
   const removeChild = async (key: string) => {
-    const childRef = ref(db, `users/${user?.uid}/${listRef.ref.key}/${key}`);
-    return remove(childRef);
+    return remove(child(listRef.ref, key));
   };
 
   const updateChild = async (key: string, updates: Partial<T>) => {
-    const childRef = ref(db, `users/${user?.uid}/${listRef.ref.key}/${key}`);
-    return update(childRef, updates);
+    return update(child(listRef.ref, key), updates);
   };
 
   return {

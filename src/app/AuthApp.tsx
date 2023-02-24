@@ -1,10 +1,14 @@
 import { Box, Stack } from "@mantine/core";
 import { Route, Routes } from "react-router-dom";
 import UserNavbar from "../components/app/UserNavbar";
+import { useUser } from "../context/user";
 import Home from "../pages/Home/Home";
 import Workout from "../pages/Workout/Workout";
 
 const AuthApp = () => {
+  const userData = useUser();
+  console.log("User: ", userData);
+
   return (
     <Stack h={"100%"} spacing={0}>
       <UserNavbar />

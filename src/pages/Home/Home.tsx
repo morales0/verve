@@ -1,32 +1,27 @@
-import { Divider, Stack, Text } from "@mantine/core";
+import { Divider, Stack } from "@mantine/core";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../../context/auth";
-import { useIsWorkingOut } from "../../hooks/isWorkingOut.hook";
+import { useUser } from "../../context/user";
+import { startWorkout } from "../../services/firebase/general";
 import CurrentWorkoutSummary from "./components/CurrentWorkoutSummary";
 import HistorySection from "./components/HistorySection";
 import MuscleGroupsSection from "./components/MuscleGroupsSection";
 
 const Home = () => {
-  const { auth } = useAuth();
+  const { dataRef, meta } = useUser();
   const navigate = useNavigate();
-  const { isWorkingOut, startWorkout, status: workingOutStatus } = useIsWorkingOut();
 
-  const startNewWorkoutAndNavigate = () => {
-    return startWorkout().then(() => {
+  const startNewWorkoutAndNavigate = async () => {
+    return startWorkout(dataRef).then(() => {
       navigate("/workout");
     });
   };
-
-  if (workingOutStatus === "loading") {
-    return <Text>Loading data...</Text>;
-  }
 
   return (
     <Stack p="1rem" h="100%" sx={{ overflow: "hidden" }} spacing="sm">
       <MuscleGroupsSection />
       <Divider />
-      {isWorkingOut && <CurrentWorkoutSummary />}
-      <HistorySection startNewWorkoutAndNavigate={startNewWorkoutAndNavigate} isWorkingOut={isWorkingOut} />
+      {meta.isWorkingOut && <CurrentWorkoutSummary />}
+      <HistorySection startNewWorkoutAndNavigate={startNewWorkoutAndNavigate} isWorkingOut={meta.isWorkingOut} />
     </Stack>
   );
 };
