@@ -14,6 +14,7 @@ import {
   UnstyledButton,
 } from "@mantine/core";
 import { useState } from "react";
+import ExerciseInfoDropdown from "../../../components/app/ExerciseInfoDropdown";
 import useWorkoutHistory from "../../../hooks/workoutHistory.hook";
 import { STATUS } from "../../../types/util";
 
@@ -40,7 +41,7 @@ const HistorySection = ({ startNewWorkoutAndNavigate, isWorkingOut }: Props) => 
 
   return (
     <Stack h="100%" sx={{ overflow: "hidden" }} spacing={0}>
-      <Group position="apart" py="md">
+      <Group position="apart" py="sm">
         <Title order={3}>Workout History</Title>
         {!isWorkingOut && (
           <Button color={"teal"} onClick={handleStartWorkout} loading={isCreating}>
@@ -68,7 +69,7 @@ const HistorySection = ({ startNewWorkoutAndNavigate, isWorkingOut }: Props) => 
               <Divider mb={"md"} />
               <Group position="left" align="flex-start">
                 {workout.exercises?.map((exercise, i) => (
-                  <ExerciseDropdownInfo
+                  <ExerciseInfoDropdown
                     key={`exercise-${exercise.name}-${i}`}
                     name={exercise.name}
                     sets={exercise.sets}
@@ -104,55 +105,6 @@ const HistorySection = ({ startNewWorkoutAndNavigate, isWorkingOut }: Props) => 
             );
           })*/}
       </Stack>
-    </Stack>
-  );
-};
-
-type ExerciseDropdownInfoProps = {
-  name: string;
-  sets: Record<string, number>[];
-  units: string[];
-};
-
-const ExerciseDropdownInfo = ({ name, sets, units }: ExerciseDropdownInfoProps) => {
-  const [open, setOpen] = useState(false);
-
-  return (
-    <Stack>
-      <UnstyledButton onClick={() => setOpen((o) => !o)}>
-        <Group
-          align={"center"}
-          position={"apart"}
-          sx={{
-            "& .iconify.open": {
-              transform: "rotate(45deg)",
-            },
-          }}
-        >
-          <Text>{name}</Text>
-          <Icon icon="material-symbols:add" className={open ? "open" : ""} />
-        </Group>
-      </UnstyledButton>
-      <Collapse in={open} transitionDuration={80} transitionTimingFunction={"linear"}>
-        <Group>
-          <Stack>
-            {units.map((unit) => (
-              <Text key={`${name}-${unit}`} fw="bold" fz="sm">
-                {unit}
-              </Text>
-            ))}
-          </Stack>
-          {sets.map((set, i) => {
-            return (
-              <Stack key={`${name}-set-${i}`}>
-                {units.map((unit) => (
-                  <Text key={`${name}-${unit}-set-${i}-val`}>{set[unit]}</Text>
-                ))}
-              </Stack>
-            );
-          })}
-        </Group>
-      </Collapse>
     </Stack>
   );
 };

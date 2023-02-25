@@ -68,36 +68,40 @@ const AddExerciseScreen = ({ onStart, onEdit, onCreate, onDelete, currentExercis
             </td>
           </tr>
         ) : (
-          filteredData.map((ex, i) => (
-            <tr key={`ex-info-${ex.name}-${i}`}>
-              <td style={{ cursor: "pointer" }} onClick={() => onStart(ex)}>
-                <Text fz="md">{ex.name}</Text>
-                <Text fz="xs" color="dimmed" italic>
-                  {ex.weightType}
-                </Text>
-              </td>
-              <td style={{ textAlign: "center" }}>
-                <Stack justify="center" spacing={0}>
-                  {ex.primaryMuscleGroups && <Text size="sm">{Object.values(ex.primaryMuscleGroups).join(", ")}</Text>}
-                  {ex.secondaryMuscleGroups && (
-                    <Text color="dimmed" size="xs">
-                      {Object.values(ex.secondaryMuscleGroups).join(", ")}
-                    </Text>
-                  )}
-                </Stack>
-              </td>
-              <td style={{ textAlign: "center" }}>
-                <Group noWrap spacing="xs" position="center">
-                  <ActionIcon color="indigo" variant="light" onClick={() => onEdit(ex)}>
-                    <Icon icon="material-symbols:edit" />
-                  </ActionIcon>
-                  <ActionIcon color="red" variant="light" onClick={() => onDelete(ex)}>
-                    <Icon icon="ic:baseline-delete-forever" />
-                  </ActionIcon>
-                </Group>
-              </td>
-            </tr>
-          ))
+          filteredData
+            .sort((a, b) => (a.name < b.name ? -1 : a.name < b.name ? 1 : 0))
+            .map((ex, i) => (
+              <tr key={`ex-info-${ex.name}-${i}`}>
+                <td style={{ cursor: "pointer" }} onClick={() => onStart(ex)}>
+                  <Text fz="md">{ex.name}</Text>
+                  <Text fz="xs" color="dimmed" italic>
+                    {ex.weightType}
+                  </Text>
+                </td>
+                <td style={{ textAlign: "center" }}>
+                  <Stack justify="center" spacing={0}>
+                    {ex.primaryMuscleGroups && (
+                      <Text size="sm">{Object.values(ex.primaryMuscleGroups).join(", ")}</Text>
+                    )}
+                    {ex.secondaryMuscleGroups && (
+                      <Text color="dimmed" size="xs">
+                        {Object.values(ex.secondaryMuscleGroups).join(", ")}
+                      </Text>
+                    )}
+                  </Stack>
+                </td>
+                <td style={{ textAlign: "center" }}>
+                  <Group noWrap spacing="xs" position="center">
+                    <ActionIcon color="indigo" variant="light" onClick={() => onEdit(ex)}>
+                      <Icon icon="material-symbols:edit" />
+                    </ActionIcon>
+                    <ActionIcon color="red" variant="light" onClick={() => onDelete(ex)}>
+                      <Icon icon="ic:baseline-delete-forever" />
+                    </ActionIcon>
+                  </Group>
+                </td>
+              </tr>
+            ))
         )}
       </tbody>
     );

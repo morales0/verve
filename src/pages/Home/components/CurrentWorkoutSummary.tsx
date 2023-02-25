@@ -1,18 +1,68 @@
-import { Paper, Stack } from "@mantine/core";
+import { Icon } from "@iconify/react";
+import { Badge, Divider, Group, Paper, Stack, Text, Title } from "@mantine/core";
 import { Link } from "react-router-dom";
+import ExerciseInfoDropdown from "../../../components/app/ExerciseInfoDropdown";
+import useWorkout from "../../../hooks/workout.hook";
+import { WorkoutExercise } from "../../../types/workout";
 
-type Props = {
-  workout?: object;
-};
+const CurrentWorkoutSummary = () => {
+  const { workout } = useWorkout();
 
-const CurrentWorkoutSummary = ({ workout }: Props) => {
+  const getMuscleGroupSet = (exercises: WorkoutExercise[]) => {
+    const set = new Set<string>();
+
+    exercises.forEach((e) => {
+      e.primaryMuscleGroups?.forEach((pg) => set.add(pg));
+      e.secondaryMuscleGroups?.forEach((sg) => set.add(sg));
+    });
+
+    return set;
+  };
+
   return (
     <Stack>
-      <Link to="/workout">
-        <Paper shadow="xs" radius="sm" p="lg" withBorder>
-          Click to continue workout
-        </Paper>
-      </Link>
+      <Paper shadow="xs" radius="sm" p="lg" withBorder>
+        <Stack spacing="xs">
+          <Link to="/workout">
+            <Group position="left" align="baseline">
+              <Title order={3}>My Workout</Title>
+              <Text color="dimmed" size="xs" italic weight="bold">
+                {new Date(workout.dateStarted || "").toDateString()} @ {workout.timeStarted}
+              </Text>
+              <Group ml="auto" align="center" spacing={5} sx={{}}>
+                <Text color="teal" italic>
+                  Continue
+                </Text>
+                <Icon color="teal" icon="material-symbols:keyboard-arrow-right" />
+              </Group>
+            </Group>
+          </Link>
+          <Divider />
+          <Group>
+            {Array.from(getMuscleGroupSet(workout.exercises || [])).map((g) => (
+              <Badge key={g} variant="light" color="green">
+                {g}
+              </Badge>
+            ))}
+          </Group>
+          <Group position="left" align="flex-start">
+            {workout.exercises ? (
+              workout.exercises.map((exercise, i) => (
+                <ExerciseInfoDropdown
+                  key={`exercise-${exercise.name}-${i}`}
+                  name={exercise.name}
+                  sets={exercise.sets}
+                  units={exercise.units}
+                />
+              ))
+            ) : (
+              <Text color="dimmed" italic>
+                No exercises yet
+              </Text>
+            )}
+          </Group>
+        </Stack>
+      </Paper>
     </Stack>
   );
 };

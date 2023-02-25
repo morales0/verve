@@ -1,13 +1,12 @@
 import { Box, Stack } from "@mantine/core";
-import { Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 import UserNavbar from "../components/app/UserNavbar";
 import { useUser } from "../context/user";
 import Home from "../pages/Home/Home";
 import Workout from "../pages/Workout/Workout";
 
 const AuthApp = () => {
-  const userData = useUser();
-  console.log("User: ", userData);
+  const { meta } = useUser();
 
   return (
     <Stack h={"100%"} spacing={0}>
@@ -20,7 +19,7 @@ const AuthApp = () => {
       >
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/workout" element={<Workout />} />
+          <Route path="/workout" element={meta.isWorkingOut ? <Workout /> : <Navigate to="/" replace />} />
           <Route path="/exercises" element={<div>Exercises</div>} />
           <Route path="/history" element={<div>History</div>} />
           <Route path="/data" element={<div>Data</div>} />

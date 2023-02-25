@@ -14,7 +14,7 @@ import SummaryScreen from "./components/SummaryScreen";
 
 const Workout = () => {
   // server
-  const { isWorkingOut, status: isWorkingOutStatus, endWorkout } = useIsWorkingOut();
+  const { endWorkout } = useIsWorkingOut();
   const { status: workoutStatus, workout, api } = useWorkout();
   const { api: userExercisesApi } = useUserExercises();
 
@@ -77,13 +77,6 @@ const Workout = () => {
   };
 
   // status checks
-  if (isWorkingOutStatus === "loading") {
-    return <Text>Checking for workout...</Text>;
-  }
-
-  if (!isWorkingOut) {
-    return <Navigate to="/" replace />;
-  }
 
   if (workoutStatus === STATUS.LOADING) {
     return <Text>Loading your workout!</Text>;
