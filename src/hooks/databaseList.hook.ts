@@ -29,7 +29,7 @@ const useDatabaseList = <T>(listRef: DatabaseReference | Query) => {
       const childRef = child(listRef.ref, key);
 
       if (idList.includes(key)) throw new Error("Key already exists");
-      return set(childRef, child);
+      return set(childRef, newChild);
     } else {
       const childRef = push(listRef.ref);
       return set(childRef, {

@@ -4,9 +4,7 @@ import useMuscleGroups from "../../../hooks/muscleGroups.hook";
 import { STATUS } from "../../../types/util";
 import MuscleGroupTag from "./MuscleGroupTag";
 
-type Props = any;
-
-const MuscleGroupsSection = (props: Props) => {
+const MuscleGroupsSection = () => {
   const { status, data: groups } = useMuscleGroups();
 
   if (status === STATUS.LOADING) {
