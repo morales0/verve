@@ -40,7 +40,7 @@ const HistorySection = ({ startNewWorkoutAndNavigate, isWorkingOut }: Props) => 
   }
 
   return (
-    <Stack h="100%" sx={{ overflow: "hidden" }} spacing={0}>
+    <Stack h="100%" spacing={0}>
       <Group position="apart" py="sm">
         <Title order={3}>Workout History</Title>
         {!isWorkingOut && (
@@ -50,7 +50,7 @@ const HistorySection = ({ startNewWorkoutAndNavigate, isWorkingOut }: Props) => 
         )}
       </Group>
       <Divider />
-      <Stack py="md" pr="sm" sx={{ overflowY: "auto" }}>
+      <Stack py="md" pr="sm">
         {[...workouts].reverse().map((workout, i) => {
           const dateStarted = new Date(workout.dateStarted || "");
 

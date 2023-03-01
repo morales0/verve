@@ -20,12 +20,12 @@ const CurrentWorkoutSummary = () => {
   };
 
   return (
-    <Stack>
+    <Stack spacing="sm">
+      <Title order={3}>My Workout</Title>
       <Paper shadow="xs" radius="sm" p="lg" withBorder>
         <Stack spacing="xs">
           <Link to="/workout">
             <Group position="left" align="baseline">
-              <Title order={3}>My Workout</Title>
               <Text color="dimmed" size="xs" italic weight="bold">
                 {new Date(workout.dateStarted || "").toDateString()} @ {workout.timeStarted}
               </Text>

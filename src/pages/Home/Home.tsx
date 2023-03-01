@@ -1,4 +1,4 @@
-import { Divider, Stack } from "@mantine/core";
+import { Box, Divider, Stack } from "@mantine/core";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "../../context/user";
 import { startWorkout } from "../../services/firebase/general";
@@ -20,8 +20,10 @@ const Home = () => {
     <Stack p="1rem" h="100%" sx={{ overflow: "hidden" }} spacing="sm">
       <MuscleGroupsSection />
       <Divider />
-      {meta.isWorkingOut && <CurrentWorkoutSummary />}
-      <HistorySection startNewWorkoutAndNavigate={startNewWorkoutAndNavigate} isWorkingOut={meta.isWorkingOut} />
+      <Box sx={{ overflowY: "auto" }}>
+        {meta.isWorkingOut && <CurrentWorkoutSummary />}
+        <HistorySection startNewWorkoutAndNavigate={startNewWorkoutAndNavigate} isWorkingOut={meta.isWorkingOut} />
+      </Box>
     </Stack>
   );
 };
