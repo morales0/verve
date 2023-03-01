@@ -74,10 +74,16 @@ const useWorkout = () => {
         const muscleGroupsRef = ref(db, `users/${user?.uid}/muscleGroups`);
         workout.exercises?.forEach((ex) => {
           ex.primaryMuscleGroups?.forEach((group) => {
-            set(child(muscleGroupsRef, group + "/dateLastUsed"), now.toDateString());
+            set(child(muscleGroupsRef, group), {
+              dataLastUsed: now.toDateString(),
+              name: group,
+            });
           });
           ex.secondaryMuscleGroups?.forEach((group) => {
-            set(child(muscleGroupsRef, group + "/dateLastUsed"), now.toDateString());
+            set(child(muscleGroupsRef, group), {
+              dataLastUsed: now.toDateString(),
+              name: group,
+            });
           });
         });
       })
