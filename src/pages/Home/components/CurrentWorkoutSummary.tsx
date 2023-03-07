@@ -40,7 +40,7 @@ const CurrentWorkoutSummary = () => {
           <Divider />
           <Group>
             {Array.from(getMuscleGroupSet(workout.exercises || [])).map((g) => (
-              <Badge key={g} variant="light" color="green">
+              <Badge key={g} variant="dot" color="green">
                 {g}
               </Badge>
             ))}

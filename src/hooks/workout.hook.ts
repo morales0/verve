@@ -2,10 +2,12 @@ import { child, off, onValue, push, ref, remove, set, update } from "firebase/da
 import { useEffect, useState } from "react";
 import { useAuth } from "../context/auth";
 import { useDatabase } from "../context/database";
+import { useUser } from "../context/user";
 import { STATUS } from "../types/util";
 import { Workout, WorkoutExercise } from "../types/workout";
 
 const useWorkout = () => {
+  const { dataRef } = useUser();
   const { user } = useAuth();
   const { db } = useDatabase();
   const [status, setStatus] = useState<STATUS>(STATUS.LOADING);
@@ -70,21 +72,34 @@ const useWorkout = () => {
       timeEnded: time,
     })
       .then(() => {
-        // update muscle groups
         const muscleGroupsRef = ref(db, `users/${user?.uid}/muscleGroups`);
+        const exHistoryRef = child(dataRef, "exerciseHistory");
         workout.exercises?.forEach((ex) => {
+          // update groups
           ex.primaryMuscleGroups?.forEach((group) => {
             set(child(muscleGroupsRef, group), {
-              dataLastUsed: now.toDateString(),
+              dateLastUsed: now.toDateString(),
               name: group,
             });
           });
           ex.secondaryMuscleGroups?.forEach((group) => {
             set(child(muscleGroupsRef, group), {
-              dataLastUsed: now.toDateString(),
+              dateLastUsed: now.toDateString(),
               name: group,
             });
           });
+
+          // add to history
+          if (ex.id) {
+            const newEntryRef = push(child(exHistoryRef, ex.id));
+            set(newEntryRef, {
+              histId: newEntryRef.key,
+              exId: ex.id,
+              sets: ex.sets,
+              date: now.toString(),
+              time: time,
+            });
+          }
         });
       })
       .then(() => {

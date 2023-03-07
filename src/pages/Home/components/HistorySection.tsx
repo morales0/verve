@@ -1,22 +1,9 @@
-import { Icon } from "@iconify/react";
-import {
-  Box,
-  Button,
-  Card,
-  Collapse,
-  Container,
-  Divider,
-  Group,
-  ScrollArea,
-  Stack,
-  Text,
-  Title,
-  UnstyledButton,
-} from "@mantine/core";
+import { Badge, Button, Card, Divider, Group, Stack, Text, Title } from "@mantine/core";
 import { useState } from "react";
 import ExerciseInfoDropdown from "../../../components/app/ExerciseInfoDropdown";
 import useWorkoutHistory from "../../../hooks/workoutHistory.hook";
 import { STATUS } from "../../../types/util";
+import { WorkoutExercise } from "../../../types/workout";
 
 type Props = {
   startNewWorkoutAndNavigate: () => Promise<void>;
@@ -33,6 +20,17 @@ const HistorySection = ({ startNewWorkoutAndNavigate, isWorkingOut }: Props) => 
     startNewWorkoutAndNavigate().catch((e) => {
       console.log("Error creating workout, tell user to try again");
     });
+  };
+
+  const getMuscleGroupSet = (exercises: WorkoutExercise[]) => {
+    const set = new Set<string>();
+
+    exercises.forEach((e) => {
+      e.primaryMuscleGroups?.forEach((pg) => set.add(pg));
+      e.secondaryMuscleGroups?.forEach((sg) => set.add(sg));
+    });
+
+    return set;
   };
 
   if (status === STATUS.LOADING) {
@@ -66,7 +64,14 @@ const HistorySection = ({ startNewWorkoutAndNavigate, isWorkingOut }: Props) => 
               <Text c="dimmed" fz={"xs"} fs={"italic"}>
                 {workout.timeStarted} - {workout.timeEnded}
               </Text>
-              <Divider mb={"md"} />
+              <Divider />
+              <Group my={"sm"}>
+                {Array.from(getMuscleGroupSet(workout.exercises || [])).map((g) => (
+                  <Badge key={g} variant="light" color="indigo" size="xs">
+                    {g}
+                  </Badge>
+                ))}
+              </Group>
               <Group position="left" align="flex-start">
                 {workout.exercises?.map((exercise, i) => (
                   <ExerciseInfoDropdown
