@@ -29,3 +29,11 @@ export type WorkoutHistory = Workout & {
   dateEnded?: string;
   timeEnded?: string;
 };
+
+export type ExerciseHistory = {
+  date: string;
+  exId: string;
+  histId: string;
+  time: string;
+  sets: Record<string, string>[];
+};

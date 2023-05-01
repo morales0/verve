@@ -1,7 +1,10 @@
-import { Button, Divider, Group, Stack, Title } from "@mantine/core";
+import { Box, Button, Collapse, Divider, Group, Stack, Text, Title, UnstyledButton } from "@mantine/core";
 import { WorkoutExercise } from "../../../../types/workout";
 import BarbellSet from "./BarbellSet";
 import Set from "./Set";
+import useExerciseHistory from "../../../../hooks/exerciseHistory.hook";
+import { useState } from "react";
+import { Icon } from "@iconify/react";
 
 type Props = {
   exercise: WorkoutExercise;
@@ -11,6 +14,12 @@ type Props = {
 };
 
 const ExerciseScreen = ({ exercise, onFinish, onCancel, updateExercise }: Props) => {
+  const { status, data: history } = useExerciseHistory(exercise.id);
+  const lastExercise = history[0];
+  const lastExerciseDate = lastExercise && new Date(lastExercise.date);
+
+  const [open, setOpen] = useState(false);
+
   // functions
   const addSet = () => {
     updateExercise({
@@ -46,7 +55,53 @@ const ExerciseScreen = ({ exercise, onFinish, onCancel, updateExercise }: Props)
         </Group>
       </Group>
       <Divider />
-      <Stack w="100%" pr="sm" py="sm" sx={{ flexGrow: 1, overflowY: "auto", overflowX: "hidden" }} spacing={5}>
+      {lastExercise && (
+        <Stack spacing={0}>
+          <UnstyledButton
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              maxWidth: "500px",
+              border: "1px solid #dadada",
+              background: "#e9e9e9",
+              padding: "3px 7px",
+              marginTop: "6px",
+              borderRadius: "3px",
+            }}
+            onClick={() => setOpen((o) => !o)}
+          >
+            <Text fz="xs" fs="italic" c="dimmed">
+              <Text component="span" fw={700}>
+                Last time:
+              </Text>{" "}
+              {lastExerciseDate.toDateString()}
+            </Text>
+
+            <Icon icon="material-symbols:add" className={open ? "open" : ""} />
+          </UnstyledButton>
+          <Collapse px="xs" in={open} transitionDuration={80} transitionTimingFunction={"linear"}>
+            <Group noWrap sx={{ overflowX: "auto" }}>
+              <Stack spacing="xs">
+                {exercise.units.map((unit) => (
+                  <Text key={`${name}-${unit}`} fw="bold" fz="sm">
+                    {unit}
+                  </Text>
+                ))}
+              </Stack>
+              {lastExercise.sets.map((set, i) => {
+                return (
+                  <Stack key={`${exercise.name}-set-${i}`} spacing="xs">
+                    {exercise.units.map((unit) => (
+                      <Text key={`${exercise.name}-${unit}-set-${i}-val`}>{set[unit]}</Text>
+                    ))}
+                  </Stack>
+                );
+              })}
+            </Group>
+          </Collapse>
+        </Stack>
+      )}
+      <Stack w="100%" pr="sm" pb="sm" sx={{ flexGrow: 1, overflowY: "auto", overflowX: "hidden" }} spacing={5}>
         {exercise.sets.map((set, i) => {
           const updateUnitValue = (unit: string, value: number) => updateSetValue(i, unit, value);
 
