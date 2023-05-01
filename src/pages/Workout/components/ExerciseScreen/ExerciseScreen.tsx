@@ -1,4 +1,4 @@
-import { Box, Button, Collapse, Divider, Group, Stack, Text, Title, UnstyledButton } from "@mantine/core";
+import { ActionIcon, Box, Button, Collapse, Divider, Group, Stack, Text, Title, UnstyledButton } from "@mantine/core";
 import { WorkoutExercise } from "../../../../types/workout";
 import BarbellSet from "./BarbellSet";
 import Set from "./Set";
@@ -56,11 +56,12 @@ const ExerciseScreen = ({ exercise, onFinish, onCancel, updateExercise }: Props)
       </Group>
       <Divider />
       {lastExercise && (
-        <Stack spacing={0}>
+        <Stack spacing={0} align="center">
           <UnstyledButton
             sx={{
               display: "flex",
               justifyContent: "space-between",
+              alignItems: "center",
               maxWidth: "500px",
               border: "1px solid #dadada",
               background: "#e9e9e9",
@@ -76,8 +77,16 @@ const ExerciseScreen = ({ exercise, onFinish, onCancel, updateExercise }: Props)
               </Text>{" "}
               {lastExerciseDate.toDateString()}
             </Text>
-
-            <Icon icon="material-symbols:add" className={open ? "open" : ""} />
+            <ActionIcon
+              ml="sm"
+              sx={{
+                "& .iconify.open": {
+                  transform: "rotate(180deg)",
+                },
+              }}
+            >
+              <Icon icon="material-symbols:keyboard-arrow-down-rounded" className={open ? "open" : ""} />
+            </ActionIcon>
           </UnstyledButton>
           <Collapse px="xs" in={open} transitionDuration={80} transitionTimingFunction={"linear"}>
             <Group noWrap sx={{ overflowX: "auto" }}>
