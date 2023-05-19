@@ -1,12 +1,13 @@
 /* Reset and Global CSS */
 * {
-   margin: 0;
-   padding: 0;
-	transition: color 0s;
-	transition: background-color .2s;
+	margin: 0;
+	padding: 0;
+	/* transition: color 0s; */
+	/* transition: background-color .2s; */
 
-	font-family: 'Blinker', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans',
-		'Droid Sans', 'Helvetica Neue', sans-serif;
+	transition: all .35s;
+
+	font-family: 'Maven Pro', sans-serif !important;
 	font-weight: 300;
 }
 
@@ -39,11 +40,13 @@ code {
 	font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
 
-h1, h2 {
+h1,
+h2 {
 	font-weight: 600;
 }
 
-h3, h4 {
+h3,
+h4 {
 	font-weight: 400;
 }
 
@@ -53,4 +56,9 @@ input[type="password"] {
 	padding: 5px 5px;
 	margin-bottom: 6px;
 	font-family: inherit;
+}
+
+a {
+	color: inherit;
+	text-decoration: none;
 }

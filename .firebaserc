@@ -1,5 +1,18 @@
 {
   "projects": {
     "default": "workout-app-37a10"
-  }
+  },
+  "targets": {
+    "workout-app-37a10": {
+      "hosting": {
+        "dev": [
+          "dev-verve"
+        ],
+        "prod": [
+          "workout-app-37a10"
+        ]
+      }
+    }
+  },
+  "etags": {}
 }
