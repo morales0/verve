@@ -8,12 +8,12 @@
       "type": "image/x-icon"
     },
     {
-      "src": "workout_logo_24.png",
+      "src": "app-icon-24.png",
       "type": "image/png",
       "sizes": "24x24"
     },
     {
-      "src": "workout_logo_512.png",
+      "src": "app-icon-512.png",
       "type": "image/png",
       "sizes": "512x512"
     }
