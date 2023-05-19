@@ -19,7 +19,7 @@
       ]
     },
     {
-      "target": "workout-app-37a10",
+      "target": "prod",
       "public": "build",
       "ignore": [
         "firebase.json",
