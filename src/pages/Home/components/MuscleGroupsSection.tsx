@@ -33,12 +33,12 @@ const MuscleGroupsSection = () => {
                 Last 4 days
               </Text>
             </Indicator>
-            <Indicator color="blue" position="middle-end">
+            <Indicator color="yellow" position="middle-end">
               <Text size="sm" color="dimmed">
                 Last 6 days
               </Text>
             </Indicator>
-            <Indicator color="violet" position="middle-end">
+            <Indicator color="pink" position="middle-end">
               <Text size="sm" color="dimmed">
                 Last 8 days
               </Text>

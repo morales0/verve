@@ -10,7 +10,7 @@ const MuscleGroupTag = ({ group }: { group: MuscleGroup }) => {
       const now = new Date();
       const dateLastUsed = new Date(group.dateLastUsed);
       const daysSince = Math.floor((now.getTime() - dateLastUsed.getTime()) / 86400000);
-      return daysSince <= 4 ? "teal" : daysSince <= 6 ? "violet" : daysSince <= 8 ? "blue" : "gray";
+      return daysSince <= 4 ? "teal" : daysSince <= 6 ? "yellow" : daysSince <= 8 ? "pink" : "gray";
     } else {
       return "gray";
     }
