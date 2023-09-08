@@ -1,10 +1,12 @@
 import { ActionIcon, Box, Button, Collapse, Divider, Group, Stack, Text, Title, UnstyledButton } from "@mantine/core";
-import { WorkoutExercise } from "../../../../types/workout";
+import { SetType, WorkoutExercise } from "../../../../types/workout";
 import BarbellSet from "./BarbellSet";
 import Set from "./Set";
 import useExerciseHistory from "../../../../hooks/exerciseHistory.hook";
 import { useState } from "react";
 import { Icon } from "@iconify/react";
+import BarbellInput from "./BarbellInput";
+import DumbbellInput from "./DumbbellInput";
 
 type Props = {
   exercise: WorkoutExercise;
@@ -22,11 +24,15 @@ const ExerciseScreen = ({ exercise, onFinish, onCancel, updateExercise }: Props)
 
   // functions
   const addSet = () => {
+    const newSet: SetType = {
+      values:
+        exercise.sets.length > 0
+          ? exercise.sets[exercise.sets.length - 1].values
+          : exercise.units.reduce<Record<string, string | number>>((obj, unit) => ((obj[unit] = 0), obj), {}),
+      weights: (exercise.sets.length > 0 && exercise.sets[exercise.sets.length - 1].weights) || {},
+    };
     updateExercise({
-      sets: [
-        ...exercise.sets,
-        exercise.units.reduce<Record<string, number>>((obj, unit) => ((obj[unit] = 0), obj), {}),
-      ],
+      sets: [...exercise.sets, newSet],
     });
   };
   const removeSet = () => {
@@ -34,15 +40,30 @@ const ExerciseScreen = ({ exercise, onFinish, onCancel, updateExercise }: Props)
       sets: exercise.sets.slice(0, -1),
     });
   };
-  const updateSetValue = (index: number, unit: string, value: number) => {
+  const updateSetValue = (index: number, unit: string, newValue: string | number) => {
     updateExercise({
-      sets: exercise.sets.map((set, i) => (i === index ? { ...set, [unit]: value } : set)),
+      sets: exercise.sets.map((set, i) =>
+        i === index ? { ...set, values: { ...set.values, [unit]: newValue } } : set
+      ),
+    });
+  };
+
+  const updateSetWeight = (index: number, weight: string, newValue: number) => {
+    updateExercise({
+      sets: exercise.sets.map((set, i) => {
+        const newWeights = { ...set.weights, [weight]: newValue };
+        const newWeightValue = Object.entries(newWeights)
+          .filter(([plate, _]) => plate !== "bar")
+          .reduce<number>((sum, [plate, count]) => sum + parseFloat(plate) * count, newWeights.bar);
+
+        return i === index ? { ...set, values: { ...set.values, Weight: newWeightValue }, weights: newWeights } : set;
+      }),
     });
   };
 
   // render
   return (
-    <Stack justify="space-between" h="100%" sx={{ overflow: "hidden" }} spacing={0}>
+    <Stack justify="space-between" spacing={0} h="100%" sx={{ overflow: "hidden" }}>
       <Group align="center" position="apart" py="sm">
         <Title order={3}>{exercise.name}</Title>
         <Group align="stretch">
@@ -112,13 +133,20 @@ const ExerciseScreen = ({ exercise, onFinish, onCancel, updateExercise }: Props)
       )}
       <Stack w="100%" pr="sm" pb="sm" sx={{ flexGrow: 1, overflowY: "auto", overflowX: "hidden" }} spacing={5}>
         {exercise.sets.map((set, i) => {
-          const updateUnitValue = (unit: string, value: number) => updateSetValue(i, unit, value);
+          const updateUnitValue = (unit: string, value: string | number) => updateSetValue(i, unit, value);
+          const updateWeightValue = (weight: string, newValue: number) => updateSetWeight(i, weight, newValue);
 
-          if (exercise.weightType === "Barbell") {
-            return <BarbellSet key={`set-${i}`} set={set} onUnitChange={updateUnitValue} />;
-          } else {
-            return <Set key={`set-${i}`} set={set} onUnitChange={updateUnitValue} />;
-          }
+          return (
+            <Box key={`set-${i}`}>
+              <Set set={set} onUnitChange={updateUnitValue} />
+              {exercise.weightType === "Barbell" && (
+                <BarbellInput weights={set.weights ?? {}} onWeightsChange={updateWeightValue} />
+              )}
+              {exercise.weightType === "Dumbbell" && (
+                <DumbbellInput weights={set.weights ?? {}} onWeightsChange={updateWeightValue} />
+              )}
+            </Box>
+          );
         })}
       </Stack>
       <Divider />

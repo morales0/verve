@@ -29,8 +29,6 @@ const AddExerciseScreen = ({ onStart, onEdit, onCreate, onDelete, currentExercis
 
   useEffect(() => {
     if (status === STATUS.SUCCESS) {
-      console.log(userExercises);
-
       setData(userExercises);
     }
   }, [status, userExercises]);

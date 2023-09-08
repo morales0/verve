@@ -5,12 +5,13 @@ import { useIsWorkingOut } from "../../hooks/isWorkingOut.hook";
 import useUserExercises from "../../hooks/userExercises.hook";
 import useWorkout from "../../hooks/workout.hook";
 import { STATUS } from "../../types/util";
-import { UserExercise, WorkoutExercise } from "../../types/workout";
+import { SetType, UserExercise, WorkoutExercise } from "../../types/workout";
 import AddExerciseScreen from "./components/AddExerciseScreen";
 import ExerciseForm from "./components/ExerciseForm";
 import ExerciseScreen from "./components/ExerciseScreen/ExerciseScreen";
 import { StatusBar } from "./components/StatusBar";
 import SummaryScreen from "./components/SummaryScreen";
+import { DeleteModal } from "../../components/pages/Workout";
 
 const Workout = () => {
   // server
@@ -26,10 +27,24 @@ const Workout = () => {
 
   // functions
   const startExercise = (ex: UserExercise) => {
-    console.log(ex);
+    let sets: SetType[];
+    if (ex.weightType === "Barbell") {
+      sets = [
+        {
+          values: ex.units.reduce<Record<string, string | number>>(
+            (obj, unit) => ((obj[unit] = unit === "Weight" ? 45 : 0), obj),
+            {}
+          ),
+          weights: { bar: 45 },
+        },
+      ];
+    } else {
+      sets = [{ values: ex.units.reduce<Record<string, string | number>>((obj, unit) => ((obj[unit] = 0), obj), {}) }];
+    }
+
     setCurrentExercise({
       ...ex,
-      sets: [ex.units.reduce<Record<string, number>>((obj, unit) => ((obj[unit] = 0), obj), {})],
+      sets,
     });
   };
 
@@ -95,8 +110,6 @@ const Workout = () => {
   };
 
   const editExercise = async (data: UserExercise) => {
-    console.log(data);
-
     if (data.id) return userExercisesApi.updateChild(data.id, data).finally(() => setExerciseToEdit(null));
   };
 
@@ -118,35 +131,22 @@ const Workout = () => {
     );
   }
 
+  const handleDeleteModalClose = () => {
+    setExerciseToEdit(null);
+    setDeleteModalOpen(false);
+  };
+
+  const handleDeleteModalDelete = () => deleteExercise(exerciseToEdit || undefined);
+
   return (
-    <Stack h="100%" px="sm" pb="sm" sx={{ overflow: "hidden" }} spacing={0}>
-      <Modal
-        centered
+    <Stack h="100%" px="xs" pb="sm" sx={{ overflow: "hidden" }} spacing={0}>
+      <DeleteModal
         opened={deleteModalOpen}
-        onClose={() => {
-          setExerciseToEdit(null);
-          setDeleteModalOpen(false);
-        }}
-        title="Are you sure?"
-      >
-        <Text mb="md">Deleting: {exerciseToEdit?.name}</Text>
-        <Group position="apart">
-          <Button
-            variant="default"
-            color="teal"
-            onClick={() => {
-              setExerciseToEdit(null);
-              setDeleteModalOpen(false);
-            }}
-          >
-            No, go back
-          </Button>
-          <Button variant="light" color="red" onClick={() => deleteExercise(exerciseToEdit || undefined)}>
-            Yes, I want to delete
-          </Button>
-        </Group>
-      </Modal>
-      {!currentExercise && <StatusBar timeStarted={workout.timeStarted || "Time missing"} />}
+        onClose={handleDeleteModalClose}
+        onDelete={handleDeleteModalDelete}
+        name={exerciseToEdit?.name}
+      />
+      {/* {!currentExercise && <StatusBar timeStarted={workout.timeStarted || "Time missing"} />} */}
       <Tabs
         variant="default"
         value={activeTab}

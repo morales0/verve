@@ -1,41 +1,38 @@
 import { Icon } from "@iconify/react";
-import { Stack, UnstyledButton, Group, Collapse, Text } from "@mantine/core";
+import { Stack, UnstyledButton, Group, Collapse, Text, Paper, Flex, Divider, useMantineTheme } from "@mantine/core";
 import { useState } from "react";
+import { SetType, WorkoutExercise } from "../../types/workout";
 
 type ExerciseDropdownInfoProps = {
   name: string;
-  sets: Record<string, number>[];
+  sets: SetType[];
   units: string[];
 };
 
 const ExerciseInfoDropdown = ({ name, sets, units }: ExerciseDropdownInfoProps) => {
+  const theme = useMantineTheme();
   const [open, setOpen] = useState(false);
 
   return (
-    <Stack spacing="xs">
-      <UnstyledButton
-        p="xs"
-        sx={(theme) => ({
-          backgroundColor: theme.colorScheme === "light" ? theme.colors.gray[2] : theme.colors.gray[8],
-          borderRadius: "3px",
-        })}
-        onClick={() => setOpen((o) => !o)}
-      >
-        <Group
-          align={"center"}
-          position={"apart"}
-          sx={{
-            "& .iconify.open": {
-              transform: "rotate(45deg)",
-            },
-          }}
-        >
+    <Paper
+      bg={theme.colorScheme === "dark" ? theme.colors.gray[7] : theme.colors.gray[0]}
+      p="xs"
+      component={Stack}
+      spacing="sm"
+    >
+      <UnstyledButton component={Flex} justify="space-between" align="center" onClick={() => setOpen((prev) => !prev)}>
+        <Group align="center">
           <Text>{name}</Text>
-          <Icon icon="material-symbols:add" className={open ? "open" : ""} />
+
+          <Text color="dimmed" fz="sm">
+            {sets.length} sets
+          </Text>
         </Group>
+
+        <Icon icon="carbon:chevron-down" />
       </UnstyledButton>
       <Collapse px="xs" in={open} transitionDuration={80} transitionTimingFunction={"linear"}>
-        <Group>
+        <Group pt="xs">
           <Stack>
             {units.map((unit) => (
               <Text key={`${name}-${unit}`} fw="bold" fz="sm">
@@ -43,18 +40,18 @@ const ExerciseInfoDropdown = ({ name, sets, units }: ExerciseDropdownInfoProps) 
               </Text>
             ))}
           </Stack>
-          {sets.map((set, i) => {
-            return (
+          {sets.map(({ values }, i) =>
+            values ? (
               <Stack key={`${name}-set-${i}`}>
                 {units.map((unit) => (
-                  <Text key={`${name}-${unit}-set-${i}-val`}>{set[unit]}</Text>
+                  <Text key={`${name}-${unit}-set-${i}-val`}>{values[unit]}</Text>
                 ))}
               </Stack>
-            );
-          })}
+            ) : null
+          )}
         </Group>
       </Collapse>
-    </Stack>
+    </Paper>
   );
 };
 

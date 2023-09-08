@@ -7,14 +7,23 @@ export type UserExercise = {
   name: string;
   id?: string;
   units: string[];
+  /* units: {
+    name: string,
+    type: "string" | "number"
+  }[]; */
   primaryMuscleGroups?: string[];
   secondaryMuscleGroups?: string[];
   weightType?: string;
 };
 
+export type SetType = {
+  values: Record<string, string | number>;
+  weights?: Record<string, number>;
+};
+
 export type WorkoutExercise = UserExercise & {
   workoutId?: string;
-  sets: Record<string, number>[];
+  sets: SetType[];
 };
 
 export type Workout = {
@@ -32,8 +41,8 @@ export type WorkoutHistory = Workout & {
 
 export type ExerciseHistory = {
   date: string;
+  time: string;
   exId: string;
   histId: string;
-  time: string;
   sets: Record<string, string>[];
 };
