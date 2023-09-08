@@ -22,7 +22,25 @@ const App = () => {
 
   return (
     <ColorSchemeProvider colorScheme={colorScheme} toggleColorScheme={toggleColorScheme}>
-      <MantineProvider theme={{ colorScheme }} withGlobalStyles withNormalizeCSS>
+      <MantineProvider
+        theme={{
+          colorScheme,
+          globalStyles: (theme) => ({
+            "*, *::before, *::after": {
+              boxSizing: "border-box",
+            },
+
+            body: {
+              // ...theme.fn.fontStyles(),
+              backgroundColor: theme.colorScheme === "dark" ? theme.colors.gray[8] : theme.colors.gray[0],
+              // color: theme.colorScheme === 'dark' ? theme.colors.dark[0] : theme.black,
+              // lineHeight: theme.lineHeight,
+            },
+          }),
+        }}
+        withGlobalStyles
+        withNormalizeCSS
+      >
         {authStatus === "authenticated" && user ? (
           <UserProvider user={user}>
             <AuthApp />

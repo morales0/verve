@@ -48,11 +48,11 @@ const SummaryScreen = ({
                       </Text>
                     ))}
                   </Stack>
-                  {ex.sets.map((set, i) => {
+                  {ex.sets.map(({ values }, i) => {
                     return (
                       <Stack key={`${ex.name}-set-${i}`}>
                         {ex.units.map((unit) => (
-                          <Text key={`${ex.name}-${unit}-set-${i}-val`}>{set[unit]}</Text>
+                          <Text key={`${ex.name}-${unit}-set-${i}-val`}>{values[unit]}</Text>
                         ))}
                       </Stack>
                     );
