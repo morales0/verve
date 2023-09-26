@@ -6,6 +6,7 @@ import { UserCredential } from "firebase/auth";
 type Props = {
   signIn: (email: string, password: string) => Promise<UserCredential>;
   signInGoogle: () => Promise<UserCredential>;
+  register: (email: string, password: string) => Promise<UserCredential>;
 };
 
 type FormValues = {
@@ -14,7 +15,7 @@ type FormValues = {
   password: string;
 };
 
-const AuthForm = ({ signIn, signInGoogle }: Props) => {
+const AuthForm = ({ signIn, signInGoogle, register }: Props) => {
   const [type, toggle] = useToggle(["login", "register"]);
   const form = useForm({
     initialValues: {
@@ -30,9 +31,14 @@ const AuthForm = ({ signIn, signInGoogle }: Props) => {
   });
 
   const submitAuthForm = ({ email, password, name }: FormValues) => {
-    signIn(email, password).catch((e) => {
-      console.log("Error logging in: ", e);
-    });
+    if (type === "login") {
+      signIn(email, password).catch((e) => {
+        console.log("Error logging in: ", e);
+      });
+    }
+    if (type === "register") {
+      register(email, password);
+    }
   };
 
   return (
