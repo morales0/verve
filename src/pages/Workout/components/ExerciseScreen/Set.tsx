@@ -19,7 +19,7 @@ const Set = ({ set, onUnitChange, removeSet, isLastSet }: Props) => {
       align="center"
       py="xs"
       sx={(theme) => ({
-        border: `2px solid`,
+        border: `1px solid`,
         borderRadius: theme.radius.sm,
         borderColor: theme.colorScheme === "dark" ? theme.colors.gray[7] : theme.colors.gray[1],
         backgroundColor: theme.colorScheme === "dark" ? theme.colors.gray[9] : theme.white,
