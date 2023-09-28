@@ -4,7 +4,7 @@ type Props = {
 };
 
 const DumbbellInput = (props: Props) => {
-  return <div>DumbbellInput</div>;
+  return <div></div>;
 };
 
 export default DumbbellInput;
