@@ -138,6 +138,17 @@ const Workout = () => {
 
   const handleDeleteModalDelete = () => deleteExercise(exerciseToEdit || undefined);
 
+  if (currentExercise) {
+    return (
+      <ExerciseScreen
+        exercise={currentExercise}
+        onFinish={finishExercise}
+        onCancel={cancelExercise}
+        updateExercise={updateExercise}
+      />
+    );
+  }
+
   return (
     <Stack h="100%" px="xs" pb="sm" sx={{ overflow: "hidden" }} spacing={0}>
       <DeleteModal
@@ -148,7 +159,10 @@ const Workout = () => {
       />
       {/* {!currentExercise && <StatusBar timeStarted={workout.timeStarted || "Time missing"} />} */}
       <Tabs
+        inverted
         variant="default"
+        radius="xs"
+        mt="xs"
         value={activeTab}
         onTabChange={setActiveTab}
         sx={() => ({
@@ -158,11 +172,6 @@ const Workout = () => {
           overflow: "hidden",
         })}
       >
-        <Tabs.List grow>
-          <Tabs.Tab value="exercise">Exercise</Tabs.Tab>
-          <Tabs.Tab value="summary">Summary</Tabs.Tab>
-        </Tabs.List>
-
         <Tabs.Panel value="exercise" sx={{ flexGrow: 1, overflow: "hidden" }}>
           {currentExercise ? (
             <ExerciseScreen
@@ -198,6 +207,11 @@ const Workout = () => {
             onComplete={completeWorkout}
           />
         </Tabs.Panel>
+
+        <Tabs.List grow>
+          <Tabs.Tab value="exercise">Exercise</Tabs.Tab>
+          <Tabs.Tab value="summary">Summary</Tabs.Tab>
+        </Tabs.List>
       </Tabs>
     </Stack>
   );
