@@ -159,7 +159,6 @@ const Workout = () => {
       />
       {/* {!currentExercise && <StatusBar timeStarted={workout.timeStarted || "Time missing"} />} */}
       <Tabs
-        inverted
         variant="default"
         radius="xs"
         mt="xs"
@@ -172,6 +171,11 @@ const Workout = () => {
           overflow: "hidden",
         })}
       >
+        <Tabs.List grow>
+          <Tabs.Tab value="exercise">Exercise</Tabs.Tab>
+          <Tabs.Tab value="summary">Summary</Tabs.Tab>
+        </Tabs.List>
+
         <Tabs.Panel value="exercise" sx={{ flexGrow: 1, overflow: "hidden" }}>
           {currentExercise ? (
             <ExerciseScreen
@@ -207,11 +211,6 @@ const Workout = () => {
             onComplete={completeWorkout}
           />
         </Tabs.Panel>
-
-        <Tabs.List grow>
-          <Tabs.Tab value="exercise">Exercise</Tabs.Tab>
-          <Tabs.Tab value="summary">Summary</Tabs.Tab>
-        </Tabs.List>
       </Tabs>
     </Stack>
   );
