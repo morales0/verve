@@ -12,10 +12,11 @@ const AuthApp = () => {
     <Stack h={"100%"} spacing={0}>
       <UserNavbar />
       <Box
-        sx={{
+        sx={(theme) => ({
           flexGrow: 1,
           overflow: "hidden",
-        }}
+          backgroundColor: theme.colorScheme === "light" ? theme.colors.gray[0] : theme.colors.gray[9],
+        })}
       >
         <Routes>
           <Route path="/" element={<Home />} />

@@ -1,12 +1,28 @@
 import { Icon } from "@iconify/react";
-import { ActionIcon, createStyles, Flex, Group, Header, Menu, Title, useMantineColorScheme } from "@mantine/core";
-import { useMediaQuery } from "@mantine/hooks";
+import {
+  ActionIcon,
+  Box,
+  Center,
+  createStyles,
+  Flex,
+  Menu,
+  SimpleGrid,
+  Text,
+  useMantineColorScheme,
+} from "@mantine/core";
 import { signOut } from "firebase/auth";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../context/auth";
 
 const useStyles = createStyles((theme) => ({
-  brand: {},
+  root: {
+    background: "transparent",
+    boxShadow: `0 0 5px 1px #0000002e`,
+    zIndex: 99,
+  },
+  brand: {
+    color: theme.white,
+  },
   link: {
     display: "block",
     lineHeight: 1,
@@ -40,39 +56,32 @@ const UserNavbar = () => {
   const { auth } = useAuth();
   const { toggleColorScheme } = useMantineColorScheme();
   const { classes } = useStyles();
-  const largeScreen = useMediaQuery("(min-width: 1200px)");
 
   return (
-    <Header height={"auto"} pos="sticky">
-      <Flex direction={"row"} justify={"space-between"} align={"center"} px={"md"} py={"sm"}>
-        <Link className={classes.brand} to="/">
-          <Title order={largeScreen ? 1 : 3}>Verve</Title>
-        </Link>
-
-        {/* <Group>
-          <NavLink className={classes.link} to="/exercises">
-            Exercises
-          </NavLink>
-          <NavLink className={classes.link} to="/data">
-            Data
-          </NavLink>
-          <NavLink className={classes.link} to="history">
-            History
-          </NavLink>
-        </Group> */}
-
-        <Group>
-          {/* <Burger opened={false} className={classes.burger} /> */}
+    <Box className={classes.root} h={"auto"} pos="sticky">
+      <SimpleGrid cols={3} px={"md"} py={"sm"} w="100%">
+        <Flex>
           <ActionIcon size="lg" title="Theme switcher" onClick={() => toggleColorScheme()}>
-            <Icon icon="mdi:theme-light-dark" height={25} />
+            <Icon icon="mdi:theme-light-dark" height={25} color="white" />
           </ActionIcon>
+        </Flex>
+
+        <Center>
+          <Link className={classes.brand} to="/">
+            <Text fz="xl" fw={500}>
+              verve
+            </Text>
+          </Link>
+        </Center>
+
+        <Flex justify="flex-end">
           <ActionIcon size="lg" title="Settings">
-            <Icon icon="ph:gear" height={25} />
+            <Icon icon="ph:gear" height={25} color="white" />
           </ActionIcon>
           <Menu position="bottom-end" shadow="md" width={200}>
             <Menu.Target>
               <ActionIcon size="lg" title="User">
-                <Icon icon="mdi:user" height={25} />
+                <Icon icon="mdi:user" height={25} color="white" />
               </ActionIcon>
             </Menu.Target>
 
@@ -83,9 +92,9 @@ const UserNavbar = () => {
               </Menu.Item>
             </Menu.Dropdown>
           </Menu>
-        </Group>
-      </Flex>
-    </Header>
+        </Flex>
+      </SimpleGrid>
+    </Box>
   );
 };
 

@@ -31,10 +31,7 @@ const App = () => {
             },
 
             body: {
-              // ...theme.fn.fontStyles(),
-              backgroundColor: theme.colorScheme === "dark" ? theme.colors.gray[8] : theme.colors.gray[0],
-              // color: theme.colorScheme === 'dark' ? theme.colors.dark[0] : theme.black,
-              // lineHeight: theme.lineHeight,
+              backgroundColor: theme.colorScheme === "dark" ? theme.colors.gray[7] : theme.colors.gray[5],
             },
           }),
         }}
