@@ -22,7 +22,7 @@ const Home = () => {
   };
 
   return (
-    <Stack p="xs" h="100%" sx={{ overflow: "auto" }} spacing="md">
+    <Stack p="xs" py="lg" h="100%" sx={{ overflow: "auto" }} spacing="md">
       <MuscleGroupsSection />
       {meta.isWorkingOut && workout ? (
         <WorkoutSummary current {...workout} />
