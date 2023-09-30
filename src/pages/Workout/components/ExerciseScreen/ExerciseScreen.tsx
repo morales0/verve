@@ -133,7 +133,7 @@ const ExerciseScreen = ({ exercise, onFinish, onCancel, updateExercise }: Props)
         </Stack>
       )} */}
 
-      <Stack w="100%" pr="sm" py="sm" sx={{ flexGrow: 1, overflowY: "auto", overflowX: "hidden" }} spacing="sm">
+      <Stack w="100%" px="xs" py="sm" sx={{ flexGrow: 1, overflowY: "auto", overflowX: "hidden" }} spacing="sm">
         {exercise.sets.map((set, i) => {
           const updateUnitValue = (unit: string, value: string | number) => updateSetValue(i, unit, value);
           const updateWeightValue = (weight: string, newValue: number) => updateSetWeight(i, weight, newValue);

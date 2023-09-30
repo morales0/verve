@@ -21,8 +21,9 @@ const Set = ({ set, onUnitChange, removeSet, isLastSet }: Props) => {
       sx={(theme) => ({
         border: `1px solid`,
         borderRadius: theme.radius.sm,
-        borderColor: theme.colorScheme === "dark" ? theme.colors.gray[7] : theme.colors.gray[1],
+        borderColor: theme.colorScheme === "dark" ? theme.colors.gray[7] : theme.colors.gray[2],
         backgroundColor: theme.colorScheme === "dark" ? theme.colors.gray[9] : theme.white,
+        boxShadow: `0 0 3px 0 #00000022`,
       })}
     >
       {Object.entries(set.values).map(([unit, value], j) =>

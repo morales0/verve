@@ -52,7 +52,7 @@ const BarbellInput = ({ weights, onWeightsChange }: BarbellInputProps) => {
         </UnstyledButton>
       </Center>
 
-      <Collapse in={open} p="sm" pb="lg">
+      <Collapse in={open} pb="lg">
         <Paper
           withBorder
           p="sm"
