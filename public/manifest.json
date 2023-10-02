@@ -1,20 +1,20 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "Verve",
+  "name": "Verve - Hassle-Free Workout Logger",
   "icons": [
     {
-      "src": "app-icon.ico",
+      "src": "verve-logo-1.ico",
       "sizes": "32x32 24x24 16x16",
       "type": "image/x-icon"
     },
     {
-      "src": "app-icon-24.png",
-      "type": "image/png",
+      "src": "verve-logo-1.svg",
+      "type": "image/svg",
       "sizes": "24x24"
     },
     {
-      "src": "app-icon-512.png",
-      "type": "image/png",
+      "src": "verve-logo-1.svg",
+      "type": "image/svg",
       "sizes": "512x512"
     }
   ],
