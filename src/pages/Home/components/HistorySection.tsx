@@ -34,7 +34,7 @@ const HistorySection = ({ startNewWorkoutAndNavigate, isWorkingOut }: Props) => 
   };
 
   if (status === STATUS.LOADING) {
-    return <Text>Loading history...</Text>;
+    return null;
   }
 
   return (

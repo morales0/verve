@@ -67,7 +67,13 @@ const SummaryScreen = ({
       <Divider />
 
       <Group w="100%" py="md" mt="auto" align="center" position="apart" grow>
-        <Button size="sm" variant="light" color="red" onClick={onCancel}>
+        <Button
+          size="sm"
+          variant="light"
+          color="red"
+          sx={({ colors }) => ({ border: `1px solid ${colors.red[4]}` })}
+          onClick={onCancel}
+        >
           Cancel
         </Button>
         <Button size="sm" color="teal" onClick={onComplete} disabled={!exercises}>

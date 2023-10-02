@@ -31,7 +31,7 @@ const App = () => {
             },
 
             body: {
-              backgroundColor: theme.colorScheme === "dark" ? theme.colors.gray[7] : theme.colors.gray[5],
+              backgroundColor: theme.colorScheme === "dark" ? theme.colors.gray[8] : theme.colors.gray[0],
             },
           }),
         }}
@@ -44,9 +44,7 @@ const App = () => {
           </UserProvider>
         ) : authStatus === "unauthenticated" ? (
           <UnauthApp />
-        ) : authStatus === "loading" ? (
-          <div>Loading</div>
-        ) : (
+        ) : authStatus === "loading" ? null : (
           <div>Error: {authStatus}. Try again.</div>
         )}
       </MantineProvider>

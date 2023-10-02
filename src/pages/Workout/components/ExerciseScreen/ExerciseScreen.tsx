@@ -1,4 +1,17 @@
-import { ActionIcon, Box, Button, Collapse, Divider, Group, Stack, Text, Title, UnstyledButton } from "@mantine/core";
+import {
+  ActionIcon,
+  Box,
+  Button,
+  Collapse,
+  Divider,
+  Flex,
+  Group,
+  SegmentedControl,
+  Stack,
+  Text,
+  Title,
+  UnstyledButton,
+} from "@mantine/core";
 import { SetType, WorkoutExercise } from "../../../../types/workout";
 import BarbellSet from "./BarbellSet";
 import Set from "./Set";
@@ -65,18 +78,19 @@ const ExerciseScreen = ({ exercise, onFinish, onCancel, updateExercise }: Props)
   // render
   return (
     <Stack justify="space-between" spacing={0} h="100%" px="xs" sx={{ overflow: "hidden" }}>
-      <Group align="center" position="apart" py="sm">
+      <Group align="center" position="apart" py="xs">
         <Title order={3}>{exercise.name}</Title>
-        {/* <Group align="stretch">
-          <Button variant="default" color="gray" onClick={removeSet} size="xs" h="25px" w="36px">
-            -
-          </Button>
-          <Button variant="default" color="gray" onClick={addSet} size="xs" h="25px" w="36px">
-            +
-          </Button>
-        </Group> */}
+        <SegmentedControl
+          size="sm"
+          radius="md"
+          color="violet"
+          data={[
+            { label: "Sets", value: "sets" },
+            { label: "History", value: "history" },
+          ]}
+        />
       </Group>
-      <Divider />
+      <Divider color="gray.6" />
       {/*  {lastExercise && (
         <Stack spacing={0} align="center">
           <UnstyledButton
@@ -140,12 +154,21 @@ const ExerciseScreen = ({ exercise, onFinish, onCancel, updateExercise }: Props)
 
           return (
             <Box key={`set-${i}`}>
+              {/* <Flex>
+                <Text h="100%" sx={{ alignSelf: "center" }} mr="xs" color="dimmed">
+                  {i + 1}
+                </Text>
+                
+              </Flex> */}
+
               <Set
+                num={i + 1}
                 set={set}
                 onUnitChange={updateUnitValue}
                 removeSet={removeSet}
                 isLastSet={i === exercise.sets.length - 1}
               />
+
               {exercise.weightType === "Barbell" && (
                 <BarbellInput weights={set.weights ?? {}} onWeightsChange={updateWeightValue} />
               )}
@@ -155,14 +178,25 @@ const ExerciseScreen = ({ exercise, onFinish, onCancel, updateExercise }: Props)
             </Box>
           );
         })}
-        <Button variant="light" color="cyan.7" onClick={addSet}>
+        <Button
+          variant="light"
+          color="cyan.7"
+          sx={({ colors }) => ({ border: `1px solid ${colors.cyan[6]}` })}
+          onClick={addSet}
+        >
           <IconPlus />
         </Button>
       </Stack>
 
-      <Divider />
-      <Group w="100%" py="md" align="center" position="apart" grow mt="auto">
-        <Button variant="light" color="red" onClick={onCancel} size="sm">
+      <Divider color="gray.6" />
+      <Group w="100%" pb="lg" pt="sm" align="center" position="apart" grow mt="auto">
+        <Button
+          variant="light"
+          color="red"
+          sx={({ colors }) => ({ border: `1px solid ${colors.red[4]}` })}
+          onClick={onCancel}
+          size="sm"
+        >
           Cancel
         </Button>
         <Button gradient={{ from: "teal", to: "green", deg: 105 }} color="teal" onClick={onFinish} size="sm">

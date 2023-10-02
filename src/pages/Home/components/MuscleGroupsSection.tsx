@@ -1,5 +1,5 @@
 import { Icon } from "@iconify/react";
-import { ActionIcon, Group, Indicator, Popover, Text } from "@mantine/core";
+import { ActionIcon, Group, Indicator, Popover, Skeleton, Text } from "@mantine/core";
 import useMuscleGroups from "../../../hooks/muscleGroups.hook";
 import { STATUS } from "../../../types/util";
 import MuscleGroupTag from "./MuscleGroupTag";
@@ -7,20 +7,35 @@ import MuscleGroupTag from "./MuscleGroupTag";
 const MuscleGroupsSection = () => {
   const { status, data: groups } = useMuscleGroups();
 
-  if (status === STATUS.LOADING) {
-    return <Text>Loading muscle groups</Text>;
-  }
-
-  if (groups.length === 0) {
+  if (status === STATUS.SUCCESS && groups.length === 0) {
     return <Text>You have no muscle groups defined</Text>;
   }
 
   return (
     <>
-      <Group position="center" spacing={"sm"} pos="relative" px="35px">
-        {groups.map((group, i) => (
-          <MuscleGroupTag key={`group-${i}`} group={group} />
-        ))}
+      <Group
+        position="center"
+        spacing={"sm"}
+        pos="relative"
+        px="35px"
+        sx={{
+          "&>*": {
+            flex: "1 1 auto",
+          },
+        }}
+      >
+        {status === STATUS.LOADING && (
+          <>
+            <Skeleton h={20} w={120} radius="md" />
+            <Skeleton h={20} w={120} radius="md" />
+            <Skeleton h={20} w={120} radius="md" />
+            <Skeleton h={20} w={120} radius="md" />
+            <Skeleton h={20} w={120} radius="md" />
+          </>
+        )}
+
+        {status === STATUS.SUCCESS && groups.map((group, i) => <MuscleGroupTag key={`group-${i}`} group={group} />)}
+
         <Popover width={200} position="bottom" withArrow shadow="md">
           <Popover.Target>
             <ActionIcon size={26} radius="xl" variant="filled" color="cyan" pos="absolute" top="0" right="0">

@@ -1,4 +1,4 @@
-import { Text } from "@mantine/core";
+import { Center, Loader, Stack, Text } from "@mantine/core";
 import { User } from "firebase/auth";
 import { child, DatabaseReference, onValue, ref, set } from "firebase/database";
 import { createContext, useContext, useEffect, useState } from "react";
@@ -43,7 +43,16 @@ export default function UserProvider({ user, children }: Props) {
   }, []);
 
   if (status === "loading" || !meta) {
-    return <Text>Loading user data...</Text>;
+    return (
+      <Stack h="100%" align="center">
+        <Text py="md" fz="xl">
+          verve
+        </Text>
+        <Center sx={{ flexGrow: 1 }}>
+          <Loader variant="bars" color="indigo" />
+        </Center>
+      </Stack>
+    );
   }
 
   return <UserContext.Provider value={{ authData: user, meta, dataRef, status }}>{children}</UserContext.Provider>;

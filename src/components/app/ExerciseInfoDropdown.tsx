@@ -1,7 +1,7 @@
 import { Icon } from "@iconify/react";
-import { Stack, UnstyledButton, Group, Collapse, Text, Paper, Flex, Divider, useMantineTheme } from "@mantine/core";
+import { Collapse, Flex, Group, Paper, Stack, Text, UnstyledButton, useMantineTheme } from "@mantine/core";
 import { useState } from "react";
-import { SetType, WorkoutExercise } from "../../types/workout";
+import { SetType } from "../../types/workout";
 
 type ExerciseDropdownInfoProps = {
   name: string;
@@ -15,7 +15,7 @@ const ExerciseInfoDropdown = ({ name, sets, units }: ExerciseDropdownInfoProps) 
 
   return (
     <Paper
-      bg={theme.colorScheme === "dark" ? theme.colors.gray[7] : theme.colors.gray[0]}
+      bg={theme.colorScheme === "dark" ? theme.colors.gray[8] : theme.colors.gray[0]}
       p="xs"
       component={Stack}
       spacing="sm"

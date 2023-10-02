@@ -17,11 +17,12 @@ import { useAuth } from "../../context/auth";
 const useStyles = createStyles((theme) => ({
   root: {
     background: "transparent",
-    boxShadow: `0 0 5px 1px #0000002e`,
-    zIndex: 99,
+    borderBottom: "1px solid",
+    borderBottomColor: theme.colorScheme === "light" ? theme.colors.gray[4] : theme.colors.gray[7],
   },
+  rootNotAtTop: {},
   brand: {
-    color: theme.white,
+    // color: theme.white,
   },
   link: {
     display: "block",
@@ -55,14 +56,14 @@ const useStyles = createStyles((theme) => ({
 const UserNavbar = () => {
   const { auth } = useAuth();
   const { toggleColorScheme } = useMantineColorScheme();
-  const { classes } = useStyles();
+  const { classes, cx } = useStyles();
 
   return (
-    <Box className={classes.root} h={"auto"} pos="sticky">
+    <Box className={cx(classes.root)} h={"auto"} pos="sticky">
       <SimpleGrid cols={3} px={"md"} py={"sm"} w="100%">
         <Flex>
           <ActionIcon size="lg" title="Theme switcher" onClick={() => toggleColorScheme()}>
-            <Icon icon="mdi:theme-light-dark" height={25} color="white" />
+            <Icon icon="mdi:theme-light-dark" height={25} />
           </ActionIcon>
         </Flex>
 
@@ -76,12 +77,12 @@ const UserNavbar = () => {
 
         <Flex justify="flex-end">
           <ActionIcon size="lg" title="Settings">
-            <Icon icon="ph:gear" height={25} color="white" />
+            <Icon icon="ph:gear" height={25} />
           </ActionIcon>
           <Menu position="bottom-end" shadow="md" width={200}>
             <Menu.Target>
               <ActionIcon size="lg" title="User">
-                <Icon icon="mdi:user" height={25} color="white" />
+                <Icon icon="mdi:user" height={25} />
               </ActionIcon>
             </Menu.Target>
 

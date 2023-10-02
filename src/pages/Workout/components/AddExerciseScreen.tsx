@@ -1,5 +1,17 @@
 import { Icon } from "@iconify/react";
-import { ActionIcon, Button, Center, Divider, Group, ScrollArea, Stack, Table, Text, TextInput } from "@mantine/core";
+import {
+  ActionIcon,
+  Button,
+  Center,
+  Divider,
+  Group,
+  ScrollArea,
+  Stack,
+  Table,
+  Text,
+  TextInput,
+  useMantineTheme,
+} from "@mantine/core";
 import { useEffect, useState } from "react";
 import useUserExercises from "../../../hooks/userExercises.hook";
 import { STATUS } from "../../../types/util";
@@ -15,6 +27,7 @@ type Props = {
 };
 
 const AddExerciseScreen = ({ onStart, onEdit, onCreate, onDelete, currentExerciseIds }: Props) => {
+  const theme = useMantineTheme();
   const { status, data: userExercises, api } = useUserExercises();
   const [data, setData] = useState<UserExercise[]>([]);
   const [query, setQuery] = useState("");
@@ -34,7 +47,7 @@ const AddExerciseScreen = ({ onStart, onEdit, onCreate, onDelete, currentExercis
   }, [status, userExercises]);
 
   if (status === STATUS.LOADING) {
-    return <Text italic>Loading your exercises...</Text>;
+    return null;
   }
 
   const Header = () => {
@@ -122,7 +135,11 @@ const AddExerciseScreen = ({ onStart, onEdit, onCreate, onDelete, currentExercis
       <Divider />
 
       <ScrollArea>
-        <Table>
+        <Table
+          sx={(theme) => ({
+            "& td": { borderTopColor: theme.colorScheme === "dark" ? `${theme.colors.gray[7]}!important` : undefined },
+          })}
+        >
           <Header />
           <Body />
         </Table>

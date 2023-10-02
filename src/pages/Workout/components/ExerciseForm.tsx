@@ -61,7 +61,7 @@ const ExerciseForm = ({ cancel, submitExercise, exerciseToEdit }: Props) => {
   };
 
   if (groupsStatus === STATUS.LOADING) {
-    return <Text>Loading options...</Text>;
+    return null;
   }
 
   return (
@@ -104,7 +104,6 @@ const ExerciseForm = ({ cancel, submitExercise, exerciseToEdit }: Props) => {
                 placeholder="Select as many as you need"
                 dropdownPosition="flip"
                 maxDropdownHeight={250}
-                searchable
                 nothingFound="Nothing found"
                 required
                 {...form.getInputProps("primaryMuscleGroups")}
@@ -118,7 +117,6 @@ const ExerciseForm = ({ cancel, submitExercise, exerciseToEdit }: Props) => {
                 placeholder="Select as many as you need"
                 dropdownPosition="flip"
                 maxDropdownHeight={250}
-                searchable
                 nothingFound="Nothing found"
                 {...form.getInputProps("secondaryMuscleGroups")}
                 creatable

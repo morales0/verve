@@ -1,4 +1,4 @@
-import { Button, Group, Modal, Stack, Tabs, Text } from "@mantine/core";
+import { Button, Center, Group, Loader, Modal, Stack, Tabs, Text } from "@mantine/core";
 import { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
 import { useIsWorkingOut } from "../../hooks/isWorkingOut.hook";
@@ -94,7 +94,11 @@ const Workout = () => {
   // status checks
 
   if (workoutStatus === STATUS.LOADING) {
-    return <Text>Loading your workout!</Text>;
+    return (
+      <Center h="100%">
+        <Loader />
+      </Center>
+    );
   }
 
   if (workoutStatus === STATUS.DELETING) {

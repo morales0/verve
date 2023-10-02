@@ -36,6 +36,8 @@ export const WorkoutSummary = ({ exercises, dateStarted, dateEnded, current }: P
     return set;
   };
 
+  const groups = Array.from(getMuscleGroupSet(exercises ?? []));
+
   return (
     <Paper withBorder p="sm">
       <Flex justify="space-between" align="center">
@@ -71,11 +73,15 @@ export const WorkoutSummary = ({ exercises, dateStarted, dateEnded, current }: P
             sets={exercise.sets}
             units={exercise.units}
           />
-        ))}
+        )) ?? (
+          <Text color="dimmed" fz="sm" sx={{ alignSelf: "center" }}>
+            No exercises... yet!
+          </Text>
+        )}
       </Stack>
-      <Divider my="xs" />
+      <Divider my="xs" hidden={groups.length === 0} />
       <Flex sx={{ overflow: "auto" }} gap="sm" pb="sm">
-        {Array.from(getMuscleGroupSet(exercises ?? [])).map((g) => (
+        {groups.map((g) => (
           <Badge
             key={g}
             variant={current ? "dot" : "light"}

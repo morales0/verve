@@ -1,3 +1,4 @@
+import { Stack } from "@mantine/core";
 import { FirebaseApp } from "firebase/app";
 import { Auth, getAuth, onAuthStateChanged, User } from "firebase/auth";
 import { createContext, useContext, useEffect, useState } from "react";
