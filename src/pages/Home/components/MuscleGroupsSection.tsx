@@ -36,7 +36,7 @@ const MuscleGroupsSection = () => {
 
         {status === STATUS.SUCCESS && groups.map((group, i) => <MuscleGroupTag key={`group-${i}`} group={group} />)}
 
-        <Popover width={200} position="bottom" withArrow shadow="md">
+        {/* <Popover width={200} position="bottom" withArrow shadow="md">
           <Popover.Target>
             <ActionIcon size={26} radius="xl" variant="filled" color="cyan" pos="absolute" top="0" right="0">
               <Icon icon="bi:info" />
@@ -64,7 +64,7 @@ const MuscleGroupsSection = () => {
               </Text>
             </Indicator>
           </Popover.Dropdown>
-        </Popover>
+        </Popover> */}
       </Group>
     </>
   );

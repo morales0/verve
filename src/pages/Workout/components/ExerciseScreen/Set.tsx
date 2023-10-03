@@ -1,11 +1,11 @@
 import { ActionIcon, Box, Flex, NumberInput, NumberInputHandlers, Paper, Text, TextInput } from "@mantine/core";
 import React, { useRef } from "react";
-import { SetType } from "../../../../types/workout";
+import { ExerciseSet } from "../../../../types/workout";
 import { IconX } from "@tabler/icons-react";
 
 type Props = {
   num: number;
-  set: SetType;
+  set: ExerciseSet;
   onUnitChange: (unit: string, newValue: string | number) => void;
   removeSet: () => any;
   isLastSet: boolean;
@@ -82,7 +82,9 @@ const NumberSetInput = ({ unit, value, onUnitChange }: NumberSetInputProps) => {
     <Box>
       <NumberInput
         variant="unstyled"
-        styles={{ input: { width: 80, height: 80, textAlign: "center", fontSize: "1.7rem" } }}
+        styles={{
+          input: { width: unit === "Weight" ? 110 : 80, height: 80, textAlign: "center", fontSize: "1.7rem" },
+        }}
         label={unit}
         labelProps={{
           sx: { fontStyle: "italic", color: "#afafaf", fontSize: ".7rem", width: "100%", textAlign: "center" },
@@ -93,19 +95,13 @@ const NumberSetInput = ({ unit, value, onUnitChange }: NumberSetInputProps) => {
         }}
         min={0}
         precision={isDecimal ? 1 : 0}
-        step={0.5}
+        step={isDecimal ? 0.5 : 1}
         hideControls
         handlersRef={handlers}
         onFocus={handleFocus}
       />
       <Flex direction="row" w="100%" justify="space-around">
-        <ActionIcon
-          size={30}
-          variant="light"
-          onClick={() => {
-            handlers.current?.decrement();
-          }}
-        >
+        <ActionIcon size={30} variant="light" onClick={() => handlers.current?.decrement()}>
           –
         </ActionIcon>
         <ActionIcon size={30} variant="light" onClick={() => handlers.current?.increment()}>

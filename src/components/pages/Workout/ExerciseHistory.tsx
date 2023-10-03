@@ -1,49 +1,54 @@
-import { Stack } from "@mantine/core";
+import { Stack, useMantineTheme } from "@mantine/core";
 
-import React from "react";
 import {
-  Chart as ChartJS,
   CategoryScale,
+  Chart as ChartJS,
+  Legend,
+  LineElement,
   LinearScale,
   PointElement,
-  LineElement,
   Title,
   Tooltip,
-  Legend,
 } from "chart.js";
 import { Line } from "react-chartjs-2";
-import faker from "faker";
 import useExerciseHistory from "../../../hooks/exerciseHistory.hook";
+import { ExerciseSet } from "../../../types/workout";
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
-const labels1 = ["January", "February", "March", "April", "May", "June", "July"];
+export const unitsToType = (units: string[]) => {
+  if (units.length === 1) return "single";
+  if (units.length === 2 && units.includes("Reps") && units.includes("Weight")) return "weight";
 
-export const data1 = {
-  labels1,
-  datasets: [
-    {
-      label: "Dataset 1",
-      data: labels1.map(() => faker.datatype.number({ min: -1000, max: 1000 })),
-      borderColor: "rgb(255, 99, 132)",
-      backgroundColor: "rgba(255, 99, 132, 0.5)",
-    },
-    {
-      label: "Dataset 2",
-      data: labels1.map(() => faker.datatype.number({ min: -1000, max: 1000 })),
-      borderColor: "rgb(53, 162, 235)",
-      backgroundColor: "rgba(53, 162, 235, 0.5)",
-    },
-  ],
+  return "multi";
 };
+
+const singleUnitMapper = (sets: ExerciseSet[]) =>
+  sets.reduce((acc, set) => {
+    const setVal = Number(Object.values(set.values)[0]);
+    return setVal > acc ? setVal : acc;
+  }, -1);
+
+const oneRepMaxEquation = (weight: number, reps: number) => weight / (1.0278 - 0.0278 * reps);
+const weightMapper = (sets: ExerciseSet[]) =>
+  sets.reduce((acc, set) => {
+    const setReps = Number(set.values["Reps"]);
+    const setWeight = Number(set.values["Weight"]);
+
+    const setStrengthIndex = oneRepMaxEquation(setWeight, setReps);
+
+    return setStrengthIndex > acc ? setStrengthIndex : acc;
+  }, -1);
+
 export type ExerciseHistoryProps = {
   id: string;
-  type: "reps" | "weight" | "other";
+  units: string[];
 };
-export const ExerciseHistory = ({ id, type }: ExerciseHistoryProps) => {
+export const ExerciseHistory = ({ id, units }: ExerciseHistoryProps) => {
+  const theme = useMantineTheme();
   const { data: history, status } = useExerciseHistory(id, 10);
 
-  console.log(history);
+  const type = unitsToType(units);
 
   const options = {
     responsive: true,
@@ -53,40 +58,27 @@ export const ExerciseHistory = ({ id, type }: ExerciseHistoryProps) => {
       },
       title: {
         display: true,
-        text: type === "reps" ? "Total Reps" : "Average Volume",
+        text: "Best Set",
+      },
+    },
+    scales: {
+      y: {
+        grace: "15%",
+        min: 0,
       },
     },
   };
 
   const labels = history.map(({ date }) => {
     const dateObj = new Date(date);
-
-    console.log(date);
-
-    return dateObj.toLocaleDateString();
+    return dateObj.toLocaleDateString(undefined, { month: "short", day: "numeric", year: "2-digit" });
   });
+
   const datasets = [
     {
-      // label: type === "reps" ? "Total Reps" : "Average Volume",
-      data: history.map(({ sets }) => {
-        const sum = sets.reduce((acc, set) => {
-          if (set.values) {
-            if (type === "reps") return acc + Number(set.values["Reps"]);
-
-            const vol = set.values["Reps"] * set.values["Weight"];
-            return acc + vol;
-          } else {
-            if (type === "reps") return acc + Number(set["Reps"]);
-
-            const vol = set["Reps"] * set["Weight"];
-            return acc + vol;
-          }
-        }, 0);
-
-        return type === "reps" ? sum : sum / sets.length;
-      }),
-      borderColor: "rgb(53, 162, 235)",
-      backgroundColor: "rgba(53, 162, 235, 0.5)",
+      data: history.map(({ sets }) => (type === "weight" ? weightMapper(sets) : singleUnitMapper(sets))),
+      borderColor: theme.colors.teal[7],
+      backgroundColor: theme.fn.rgba("teal.7", 0.5),
     },
   ];
 

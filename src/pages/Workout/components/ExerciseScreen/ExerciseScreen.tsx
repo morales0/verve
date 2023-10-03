@@ -1,9 +1,9 @@
-import { Box, Button, Divider, Group, SegmentedControl, Stack, Title } from "@mantine/core";
+import { Box, Button, Divider, Flex, Group, SegmentedControl, Stack, Title } from "@mantine/core";
 
 import { IconPlus } from "@tabler/icons-react";
 import { useState } from "react";
 import useExerciseHistory from "../../../../hooks/exerciseHistory.hook";
-import { SetType, WorkoutExercise } from "../../../../types/workout";
+import { ExerciseSet, WorkoutExercise } from "../../../../types/workout";
 import BarbellInput from "./BarbellInput";
 import DumbbellInput from "./DumbbellInput";
 import Set from "./Set";
@@ -26,7 +26,7 @@ const ExerciseScreen = ({ exercise, onFinish, onCancel, updateExercise }: Props)
 
   // functions
   const addSet = () => {
-    const newSet: SetType = {
+    const newSet: ExerciseSet = {
       values:
         exercise.sets.length > 0
           ? exercise.sets[exercise.sets.length - 1].values
@@ -66,8 +66,8 @@ const ExerciseScreen = ({ exercise, onFinish, onCancel, updateExercise }: Props)
   // render
   return (
     <Stack justify="space-between" spacing={0} h="100%" px="xs" sx={{ overflow: "hidden" }}>
-      <Group align="center" position="apart" py="xs">
-        <Title order={3}>{exercise.name}</Title>
+      <Flex align="center" justify="space-between" py="xs" gap="xs">
+        <Title order={4}>{exercise.name}</Title>
         <SegmentedControl
           value={page}
           onChange={setPage}
@@ -78,8 +78,11 @@ const ExerciseScreen = ({ exercise, onFinish, onCancel, updateExercise }: Props)
             { label: "Sets", value: "sets" },
             { label: "History", value: "history" },
           ]}
+          sx={{
+            flex: "0 0 auto",
+          }}
         />
-      </Group>
+      </Flex>
       <Divider color="gray.6" />
       {/*  {lastExercise && (
         <Stack spacing={0} align="center">
@@ -178,12 +181,7 @@ const ExerciseScreen = ({ exercise, onFinish, onCancel, updateExercise }: Props)
           </Button>
         </Stack>
       )}
-      {page === "history" && (
-        <ExerciseHistory
-          id={exercise.id!}
-          type={exercise.units.includes("Weight") ? "weight" : exercise.units.includes("Reps") ? "reps" : "other"}
-        />
-      )}
+      {page === "history" && <ExerciseHistory id={exercise.id!} units={exercise.units} />}
       <Divider color="gray.6" mt="auto" />
       <Group w="100%" pb="lg" pt="sm" align="center" position="apart" grow>
         <Button

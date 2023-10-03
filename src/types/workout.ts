@@ -1,29 +1,30 @@
+export type Unit = "Reps" | "Weight" | "Minutes" | "Seconds";
+export type WeightType = "Dumbbell" | "Barbell" | "Kettle Bell";
+
 export type MuscleGroup = {
   name: string;
   dateLastUsed?: string;
 };
 
 export type UserExercise = {
-  name: string;
   id?: string;
+  name: string;
   units: string[];
-  /* units: {
-    name: string,
-    type: "string" | "number"
-  }[]; */
+  // units: Unit[]
   primaryMuscleGroups?: string[];
   secondaryMuscleGroups?: string[];
   weightType?: string;
+  // weightType?: WeightType
 };
 
-export type SetType = {
+export type ExerciseSet = {
   values: Record<string, string | number>;
   weights?: Record<string, number>;
 };
 
 export type WorkoutExercise = UserExercise & {
   workoutId?: string;
-  sets: SetType[];
+  sets: ExerciseSet[];
 };
 
 export type Workout = {
@@ -31,6 +32,7 @@ export type Workout = {
   dateStarted?: string;
   timeStarted?: string;
   dateLastUpdated?: string;
+  timeLastUpdated?: string;
 };
 
 export type WorkoutHistory = Workout & {
@@ -44,5 +46,5 @@ export type ExerciseHistory = {
   time: string;
   exId: string;
   histId: string;
-  sets: Record<string, any>[];
+  sets: ExerciseSet[];
 };

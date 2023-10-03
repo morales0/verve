@@ -17,7 +17,7 @@ const MuscleGroupTag = ({ group }: { group: MuscleGroup }) => {
   };
 
   const daysSince = calcDays() ?? 99;
-  const color = daysSince <= 4 ? "teal" : daysSince <= 6 ? "yellow" : daysSince <= 8 ? "pink" : "gray";
+  const color = daysSince <= 4 ? "teal" : daysSince <= 6 ? "yellow" : daysSince <= 7 ? "pink" : "gray";
 
   return (
     <Badge

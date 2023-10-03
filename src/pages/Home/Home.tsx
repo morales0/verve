@@ -38,8 +38,8 @@ const Home = () => {
       <Stack spacing="xs">
         <Title order={5}>Latest Workouts</Title>
         <Stack spacing="lg">
-          {[...workouts].reverse().map((w) => (
-            <WorkoutSummary key={w.historyId} {...w} />
+          {[...workouts].reverse().map((w, i) => (
+            <WorkoutSummary key={w.historyId ?? `hist-${i}`} {...w} />
           ))}
         </Stack>
       </Stack>

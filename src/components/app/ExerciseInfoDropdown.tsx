@@ -1,11 +1,11 @@
 import { Icon } from "@iconify/react";
 import { Collapse, Flex, Group, Paper, Stack, Text, UnstyledButton, useMantineTheme } from "@mantine/core";
 import { useState } from "react";
-import { SetType } from "../../types/workout";
+import { ExerciseSet } from "../../types/workout";
 
 type ExerciseDropdownInfoProps = {
   name: string;
-  sets: SetType[];
+  sets: ExerciseSet[];
   units: string[];
 };
 

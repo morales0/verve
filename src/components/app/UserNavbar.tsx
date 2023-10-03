@@ -19,6 +19,7 @@ const useStyles = createStyles((theme) => ({
     background: "transparent",
     borderBottom: "1px solid",
     borderBottomColor: theme.colorScheme === "light" ? theme.colors.gray[4] : theme.colors.gray[7],
+    zIndex: 999,
   },
   rootNotAtTop: {},
   brand: {

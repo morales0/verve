@@ -13,7 +13,7 @@ enum HistoryType {
 const useWorkoutHistory = () => {
   const { user } = useAuth();
   const { db } = useDatabase();
-  const [limit, setLimit] = useState(5);
+  const [limit, setLimit] = useState(14);
   const [historyType, setHistoryType] = useState<HistoryType>(HistoryType.Workouts);
 
   const historyRef = ref(db, `users/${user?.uid}/history`);

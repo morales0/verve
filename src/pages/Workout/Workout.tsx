@@ -1,19 +1,21 @@
-import { Button, Center, Group, Loader, Modal, Stack, Tabs, Text } from "@mantine/core";
-import { useEffect, useState } from "react";
-import { Navigate } from "react-router-dom";
+import { Center, Loader, Stack, Tabs, Text } from "@mantine/core";
+import { child, get, limitToLast, query } from "firebase/database";
+import { useState } from "react";
+import { DeleteModal } from "../../components/pages/Workout";
+import { useUser } from "../../context/user";
 import { useIsWorkingOut } from "../../hooks/isWorkingOut.hook";
 import useUserExercises from "../../hooks/userExercises.hook";
 import useWorkout from "../../hooks/workout.hook";
 import { STATUS } from "../../types/util";
-import { SetType, UserExercise, WorkoutExercise } from "../../types/workout";
+import { ExerciseHistory, ExerciseSet, UserExercise, WorkoutExercise } from "../../types/workout";
 import AddExerciseScreen from "./components/AddExerciseScreen";
 import ExerciseForm from "./components/ExerciseForm";
 import ExerciseScreen from "./components/ExerciseScreen/ExerciseScreen";
-import { StatusBar } from "./components/StatusBar";
 import SummaryScreen from "./components/SummaryScreen";
-import { DeleteModal } from "../../components/pages/Workout";
 
 const Workout = () => {
+  const { dataRef } = useUser();
+
   // server
   const { endWorkout } = useIsWorkingOut();
   const { status: workoutStatus, workout, api } = useWorkout();
@@ -26,9 +28,17 @@ const Workout = () => {
   const [currentExercise, setCurrentExercise] = useState<WorkoutExercise | null>(null);
 
   // functions
-  const startExercise = (ex: UserExercise) => {
-    let sets: SetType[];
-    if (ex.weightType === "Barbell") {
+  const startExercise = async (ex: UserExercise) => {
+    // Get exercise history
+    const historyRef = child(dataRef, `exerciseHistory/${ex.id}`);
+    const historyQuery = query(historyRef, limitToLast(1));
+    const lastExercise = Object.values((await get(historyQuery)).val() ?? {})[0] as ExerciseHistory;
+
+    let sets: ExerciseSet[];
+
+    if (lastExercise) {
+      sets = lastExercise.sets;
+    } else if (ex.weightType === "Barbell") {
       sets = [
         {
           values: ex.units.reduce<Record<string, string | number>>(
@@ -140,7 +150,11 @@ const Workout = () => {
     setDeleteModalOpen(false);
   };
 
-  const handleDeleteModalDelete = () => deleteExercise(exerciseToEdit || undefined);
+  const handleDeleteModalDelete = () =>
+    deleteExercise(exerciseToEdit || undefined).finally(() => {
+      setExerciseToEdit(null);
+      setDeleteModalOpen(false);
+    });
 
   if (currentExercise) {
     return (
