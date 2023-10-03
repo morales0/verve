@@ -15,7 +15,7 @@ const ExerciseInfoDropdown = ({ name, sets, units }: ExerciseDropdownInfoProps) 
 
   return (
     <Paper
-      bg={theme.colorScheme === "dark" ? theme.colors.gray[8] : theme.colors.gray[0]}
+      bg={theme.colorScheme === "dark" ? theme.colors.gray[9] : theme.colors.gray[0]}
       p="xs"
       component={Stack}
       spacing="sm"

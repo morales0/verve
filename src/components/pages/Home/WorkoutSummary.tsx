@@ -1,16 +1,26 @@
 import { Icon } from "@iconify/react";
-import { Paper, Flex, Group, Divider, Stack, Badge, Text } from "@mantine/core";
-import ExerciseInfoDropdown from "../../app/ExerciseInfoDropdown";
+import { Badge, Divider, Flex, Group, Paper, Stack, Text, useMantineColorScheme } from "@mantine/core";
 import { Link } from "react-router-dom";
 import { WorkoutExercise, WorkoutHistory } from "../../../types/workout";
-import { useEffect } from "react";
+import ExerciseInfoDropdown from "../../app/ExerciseInfoDropdown";
+
+function calcIsToday(date: Date) {
+  const today = new Date();
+  return (
+    date.getFullYear() === today.getFullYear() &&
+    date.getMonth() === today.getMonth() &&
+    date.getDate() === today.getDate()
+  );
+}
 
 type Props = Pick<WorkoutHistory, "dateEnded" | "dateStarted" | "exercises"> & {
   current?: boolean;
 };
 
 export const WorkoutSummary = ({ exercises, dateStarted, dateEnded, current }: Props) => {
+  const { colorScheme } = useMantineColorScheme();
   const dateStartedObject = new Date(dateStarted ?? "");
+  const isToday = calcIsToday(dateStartedObject);
   const displayDate = dateStartedObject.toLocaleDateString("en-US", {
     year: "2-digit",
     month: "2-digit",
@@ -38,8 +48,23 @@ export const WorkoutSummary = ({ exercises, dateStarted, dateEnded, current }: P
 
   const groups = Array.from(getMuscleGroupSet(exercises ?? []));
 
+  const todayBorderColor = current
+    ? colorScheme === "dark"
+      ? "teal.6"
+      : "teal.8"
+    : colorScheme === "dark"
+    ? "indigo.4"
+    : "indigo.8";
+
   return (
-    <Paper withBorder p="sm">
+    <Paper
+      withBorder
+      p="sm"
+      sx={(theme) => ({
+        borderColor: isToday ? theme.fn.themeColor(todayBorderColor) : "",
+        boxShadow: isToday ? `0 0 4px 0 ${theme.fn.rgba(theme.fn.themeColor(todayBorderColor), 0.3)}` : "",
+      })}
+    >
       <Flex justify="space-between" align="center">
         <Group spacing="xs">
           {current ? (
@@ -50,7 +75,7 @@ export const WorkoutSummary = ({ exercises, dateStarted, dateEnded, current }: P
             </Link>
           ) : (
             <Text span fw={500}>
-              {dayOfWeek}
+              {isToday ? "Today" : dayOfWeek}
             </Text>
           )}
           <Text span color="dimmed" fz="sm">
