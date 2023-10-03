@@ -44,5 +44,5 @@ export type ExerciseHistory = {
   time: string;
   exId: string;
   histId: string;
-  sets: Record<string, string>[];
+  sets: Record<string, any>[];
 };

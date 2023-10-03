@@ -178,7 +178,12 @@ const ExerciseScreen = ({ exercise, onFinish, onCancel, updateExercise }: Props)
           </Button>
         </Stack>
       )}
-      {page === "history" && <ExerciseHistory />}
+      {page === "history" && (
+        <ExerciseHistory
+          id={exercise.id!}
+          type={exercise.units.includes("Weight") ? "weight" : exercise.units.includes("Reps") ? "reps" : "other"}
+        />
+      )}
       <Divider color="gray.6" mt="auto" />
       <Group w="100%" pb="lg" pt="sm" align="center" position="apart" grow>
         <Button
