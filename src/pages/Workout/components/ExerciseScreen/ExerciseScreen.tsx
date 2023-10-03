@@ -1,26 +1,13 @@
-import {
-  ActionIcon,
-  Box,
-  Button,
-  Collapse,
-  Divider,
-  Flex,
-  Group,
-  SegmentedControl,
-  Stack,
-  Text,
-  Title,
-  UnstyledButton,
-} from "@mantine/core";
-import { SetType, WorkoutExercise } from "../../../../types/workout";
-import BarbellSet from "./BarbellSet";
-import Set from "./Set";
-import useExerciseHistory from "../../../../hooks/exerciseHistory.hook";
+import { Box, Button, Divider, Group, SegmentedControl, Stack, Title } from "@mantine/core";
+
+import { IconPlus } from "@tabler/icons-react";
 import { useState } from "react";
-import { Icon } from "@iconify/react";
+import useExerciseHistory from "../../../../hooks/exerciseHistory.hook";
+import { SetType, WorkoutExercise } from "../../../../types/workout";
 import BarbellInput from "./BarbellInput";
 import DumbbellInput from "./DumbbellInput";
-import { IconPlus } from "@tabler/icons-react";
+import Set from "./Set";
+import { ExerciseHistory } from "../../../../components/pages/Workout";
 
 type Props = {
   exercise: WorkoutExercise;
@@ -30,6 +17,7 @@ type Props = {
 };
 
 const ExerciseScreen = ({ exercise, onFinish, onCancel, updateExercise }: Props) => {
+  const [page, setPage] = useState("sets");
   const { status, data: history } = useExerciseHistory(exercise.id);
   const lastExercise = history[0];
   const lastExerciseDate = lastExercise && new Date(lastExercise.date);
@@ -81,6 +69,8 @@ const ExerciseScreen = ({ exercise, onFinish, onCancel, updateExercise }: Props)
       <Group align="center" position="apart" py="xs">
         <Title order={3}>{exercise.name}</Title>
         <SegmentedControl
+          value={page}
+          onChange={setPage}
           size="sm"
           radius="md"
           color="violet"
@@ -146,50 +136,51 @@ const ExerciseScreen = ({ exercise, onFinish, onCancel, updateExercise }: Props)
           </Collapse>
         </Stack>
       )} */}
+      {page === "sets" && (
+        <Stack w="100%" px="xs" py="sm" sx={{ flexGrow: 1, overflowY: "auto", overflowX: "hidden" }} spacing="sm">
+          {exercise.sets.map((set, i) => {
+            const updateUnitValue = (unit: string, value: string | number) => updateSetValue(i, unit, value);
+            const updateWeightValue = (weight: string, newValue: number) => updateSetWeight(i, weight, newValue);
 
-      <Stack w="100%" px="xs" py="sm" sx={{ flexGrow: 1, overflowY: "auto", overflowX: "hidden" }} spacing="sm">
-        {exercise.sets.map((set, i) => {
-          const updateUnitValue = (unit: string, value: string | number) => updateSetValue(i, unit, value);
-          const updateWeightValue = (weight: string, newValue: number) => updateSetWeight(i, weight, newValue);
-
-          return (
-            <Box key={`set-${i}`}>
-              {/* <Flex>
+            return (
+              <Box key={`set-${i}`}>
+                {/* <Flex>
                 <Text h="100%" sx={{ alignSelf: "center" }} mr="xs" color="dimmed">
                   {i + 1}
                 </Text>
                 
               </Flex> */}
 
-              <Set
-                num={i + 1}
-                set={set}
-                onUnitChange={updateUnitValue}
-                removeSet={removeSet}
-                isLastSet={i === exercise.sets.length - 1}
-              />
+                <Set
+                  num={i + 1}
+                  set={set}
+                  onUnitChange={updateUnitValue}
+                  removeSet={removeSet}
+                  isLastSet={i === exercise.sets.length - 1}
+                />
 
-              {exercise.weightType === "Barbell" && (
-                <BarbellInput weights={set.weights ?? {}} onWeightsChange={updateWeightValue} />
-              )}
-              {exercise.weightType === "Dumbbell" && (
-                <DumbbellInput weights={set.weights ?? {}} onWeightsChange={updateWeightValue} />
-              )}
-            </Box>
-          );
-        })}
-        <Button
-          variant="light"
-          color="cyan.7"
-          sx={({ colors }) => ({ border: `1px solid ${colors.cyan[6]}` })}
-          onClick={addSet}
-        >
-          <IconPlus />
-        </Button>
-      </Stack>
-
-      <Divider color="gray.6" />
-      <Group w="100%" pb="lg" pt="sm" align="center" position="apart" grow mt="auto">
+                {exercise.weightType === "Barbell" && (
+                  <BarbellInput weights={set.weights ?? {}} onWeightsChange={updateWeightValue} />
+                )}
+                {exercise.weightType === "Dumbbell" && (
+                  <DumbbellInput weights={set.weights ?? {}} onWeightsChange={updateWeightValue} />
+                )}
+              </Box>
+            );
+          })}
+          <Button
+            variant="light"
+            color="cyan.7"
+            sx={({ colors }) => ({ border: `1px solid ${colors.cyan[6]}` })}
+            onClick={addSet}
+          >
+            <IconPlus />
+          </Button>
+        </Stack>
+      )}
+      {page === "history" && <ExerciseHistory />}
+      <Divider color="gray.6" mt="auto" />
+      <Group w="100%" pb="lg" pt="sm" align="center" position="apart" grow>
         <Button
           variant="light"
           color="red"
