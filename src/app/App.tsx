@@ -26,7 +26,7 @@ const App = () => {
         theme={{
           colorScheme,
           globalStyles: (theme) => ({
-            "*, *::before, *::after": {
+            "*": {
               boxSizing: "border-box",
             },
 

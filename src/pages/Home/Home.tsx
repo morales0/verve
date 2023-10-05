@@ -1,49 +1,44 @@
 import { Icon } from "@iconify/react";
-import { Button, Group, Stack, Text, Title } from "@mantine/core";
-import { useNavigate } from "react-router-dom";
-import { WorkoutSummary } from "../../components/pages/Home";
-import { useUser } from "../../context/user";
-import { startWorkout } from "../../services/firebase/general";
-import useWorkoutHistory from "../../hooks/workoutHistory.hook";
-import useWorkout from "../../hooks/workout.hook";
-import MuscleGroupsSection from "./components/MuscleGroupsSection";
+import { Tabs, createStyles } from "@mantine/core";
+import { Exercises, MainView } from "../../components/pages/Home";
 
+const useStyles = createStyles((theme) => ({
+  root: {
+    overflow: "auto",
+    height: "100%",
+  },
+  tabs: {
+    position: "sticky",
+    top: 0,
+    zIndex: 99,
+    backdropFilter: `blur(10px)`,
+    "& > button": {
+      transitionDuration: "0s",
+    },
+  },
+}));
 const Home = () => {
-  const { dataRef, meta } = useUser();
-  const { status, data: workouts } = useWorkoutHistory();
-  const { status: workoutStatus, workout } = useWorkout();
-
-  const navigate = useNavigate();
-
-  const startNewWorkoutAndNavigate = async () => {
-    return startWorkout(dataRef).then(() => {
-      navigate("/workout");
-    });
-  };
+  const { classes } = useStyles();
 
   return (
-    <Stack p="xs" py="lg" h="100%" sx={{ overflow: "auto" }} spacing="md">
-      <MuscleGroupsSection />
-      {meta.isWorkingOut && workout ? (
-        <WorkoutSummary current {...workout} />
-      ) : (
-        <Button size="lg" p="sm" variant="light" color="indigo" onClick={startNewWorkoutAndNavigate}>
-          <Group spacing="sm">
-            <Icon icon="bi:fire" />
-            <Text>Start a workout!</Text>
-          </Group>
-        </Button>
-      )}
+    <Tabs className={classes.root} variant="pills" radius="lg" defaultValue="home">
+      <Tabs.List grow className={classes.tabs} p="xs">
+        <Tabs.Tab value="home" icon={<Icon icon="bi:fire" />} color="indigo.6">
+          Home
+        </Tabs.Tab>
+        <Tabs.Tab value="exercises" icon={<Icon icon="material-symbols:exercise-outline-sharp" />} color="teal.7">
+          Exercises
+        </Tabs.Tab>
+      </Tabs.List>
 
-      <Stack spacing="xs">
-        <Title order={5}>Latest Workouts</Title>
-        <Stack spacing="lg">
-          {[...workouts].reverse().map((w, i) => (
-            <WorkoutSummary key={w.historyId ?? `hist-${i}`} {...w} />
-          ))}
-        </Stack>
-      </Stack>
-    </Stack>
+      <Tabs.Panel value="home" pt="xs">
+        <MainView />
+      </Tabs.Panel>
+
+      <Tabs.Panel value="exercises" pt="xs">
+        <Exercises />
+      </Tabs.Panel>
+    </Tabs>
   );
 };
 

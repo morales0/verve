@@ -1,5 +1,5 @@
 import { Icon } from "@iconify/react";
-import { ActionIcon, Group, Indicator, Popover, Skeleton, Text } from "@mantine/core";
+import { ActionIcon, Group, Indicator, Paper, Popover, Skeleton, Text } from "@mantine/core";
 import useMuscleGroups from "../../../hooks/muscleGroups.hook";
 import { STATUS } from "../../../types/util";
 import MuscleGroupTag from "./MuscleGroupTag";
@@ -12,12 +12,17 @@ const MuscleGroupsSection = () => {
   }
 
   return (
-    <>
+    <Paper
+      py="sm"
+      px="xl"
+      radius={0}
+      withBorder
+      sx={(theme) => ({ borderColor: theme.colors.indigo[2], borderRight: "none", borderLeft: "none" })}
+    >
       <Group
         position="center"
         spacing={"sm"}
         pos="relative"
-        px="35px"
         sx={{
           "&>*": {
             flex: "1 1 auto",
@@ -66,7 +71,7 @@ const MuscleGroupsSection = () => {
           </Popover.Dropdown>
         </Popover> */}
       </Group>
-    </>
+    </Paper>
   );
 };
 
