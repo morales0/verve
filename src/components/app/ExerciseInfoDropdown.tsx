@@ -29,7 +29,10 @@ const ExerciseInfoDropdown = ({ name, sets, units }: ExerciseDropdownInfoProps) 
           </Text>
         </Group>
 
-        <Icon icon="carbon:chevron-down" />
+        <Icon
+          icon="carbon:chevron-down"
+          style={{ transition: "500ms", transform: `rotate(${open ? "180deg" : "0"})` }}
+        />
       </UnstyledButton>
       <Collapse px="xs" in={open} transitionDuration={80} transitionTimingFunction={"linear"}>
         <Group pt="xs">

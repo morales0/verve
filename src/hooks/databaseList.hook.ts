@@ -22,7 +22,7 @@ const useDatabaseList = <T>(listRef: DatabaseReference | Query) => {
     });
 
     return () => off(listRef);
-  }, []);
+  }, [listRef]);
 
   const addChild = async (newChild: T, key?: string) => {
     if (key) {
