@@ -1,16 +1,18 @@
-import { child, DatabaseReference, off, onValue, push, Query, remove, set, update } from "firebase/database";
+import { child, DatabaseReference, onValue, push, Query, remove, set, update } from "firebase/database";
 import { useEffect, useState } from "react";
 import { STATUS } from "../types/util";
 
-const useDatabaseList = <T>(listRef: DatabaseReference | Query) => {
+const useDatabaseList = <T>(listRef: DatabaseReference | Query, key?: any) => {
   const [data, setData] = useState<T[]>([]);
   const [idList, setIdList] = useState<string[]>([]);
   const [status, setStatus] = useState<STATUS>(STATUS.LOADING);
 
   useEffect(() => {
-    onValue(listRef, (snapshot) => {
+    const off = onValue(listRef, (snapshot) => {
+      setStatus(STATUS.LOADING);
       if (snapshot.exists()) {
         const dataObj = snapshot.val() as { [id: string]: T };
+
         setIdList(Object.keys(dataObj));
         setData(Object.values(dataObj));
       } else {
@@ -21,8 +23,10 @@ const useDatabaseList = <T>(listRef: DatabaseReference | Query) => {
       setStatus(STATUS.SUCCESS);
     });
 
-    return () => off(listRef);
-  }, [listRef]);
+    return () => {
+      off();
+    };
+  }, [listRef.ref.key, key]);
 
   const addChild = async (newChild: T, key?: string) => {
     if (key) {

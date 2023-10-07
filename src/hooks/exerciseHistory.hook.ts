@@ -12,6 +12,8 @@ const useExerciseHistory = (exId: string | undefined, limit = 1) => {
   const historyQuery = query(historyRef, limitToLast(limit));
   const { status, data } = useDatabaseList<ExerciseHistory>(historyQuery);
 
+  console.log("HOOK", data);
+
   return {
     status,
     data,
