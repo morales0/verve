@@ -18,7 +18,7 @@ const useWorkout = () => {
     if (!user) return;
 
     const workoutRef = ref(db, refString);
-    onValue(workoutRef, (snapshot) => {
+    const off = onValue(workoutRef, (snapshot) => {
       if (snapshot.exists()) {
         // exercises comes in as an object, lets make it an array, and cast it
         const data = snapshot.val();
@@ -33,7 +33,9 @@ const useWorkout = () => {
       setStatus(STATUS.SUCCESS);
     });
 
-    return () => off(workoutRef);
+    return () => {
+      off();
+    };
   }, [db, user]);
 
   const addExercise = async (exercise: WorkoutExercise) => {
