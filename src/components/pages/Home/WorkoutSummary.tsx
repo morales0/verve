@@ -87,8 +87,8 @@ export const WorkoutSummary = ({ exercises, dateStarted, dateEnded, current }: P
               </Text>
             </Link>
           ) : (
-            <Text span fw={500} color={isToday ? "indigo.6" : isYesterday ? "violet" : ""}>
-              {isToday ? "Today" : dayOfWeek}
+            <Text span fw={500} color={isToday ? "indigo.6" : isYesterday ? "violet.5" : ""}>
+              {isToday ? "Today" : isYesterday ? "Yesterday" : dayOfWeek}
             </Text>
           )}
           <Text span color="dimmed" fz="sm">
