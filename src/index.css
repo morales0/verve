@@ -17,6 +17,16 @@ body {
 	-moz-osx-font-smoothing: grayscale;
 }
 
+/* body {
+	background: #eee;
+}
+
+@media (prefers-color-scheme: dark) {
+	body {
+		background: #444
+	}
+} */
+
 #root {
 	height: 100%;
 }

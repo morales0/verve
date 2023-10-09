@@ -9,7 +9,6 @@ const useStyles = createStyles((theme) => ({
   root: {
     flexGrow: 1,
     overflow: "hidden",
-    // backgroundColor: theme.colorScheme === "light" ? theme.colors.gray[0] : theme.colors.gray[9],
   },
 }));
 
@@ -24,9 +23,6 @@ const AuthApp = () => {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/workout" element={meta.isWorkingOut ? <Workout /> : <Navigate to="/" replace />} />
-          <Route path="/exercises" element={<div>Exercises</div>} />
-          <Route path="/history" element={<div>History</div>} />
-          <Route path="/data" element={<div>Data</div>} />
         </Routes>
       </Box>
     </Stack>

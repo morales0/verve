@@ -4,7 +4,7 @@
  */
 
 import { ColorScheme, ColorSchemeProvider, MantineProvider } from "@mantine/core";
-import { useState } from "react";
+import { useLocalStorage } from "@mantine/hooks";
 import { useAuth } from "../context/auth";
 import UserProvider from "../context/user";
 import AuthApp from "./AuthApp";
@@ -16,7 +16,13 @@ import UnauthApp from "./UnauthApp";
 
 const App = () => {
   const { user, status: authStatus } = useAuth();
-  const [colorScheme, setColorScheme] = useState<ColorScheme>("light");
+
+  const [colorScheme, setColorScheme] = useLocalStorage<ColorScheme>({
+    key: "mantine-color-scheme",
+    defaultValue: "dark",
+    getInitialValueInEffect: true,
+  });
+
   const toggleColorScheme = (value?: ColorScheme) =>
     setColorScheme(value || (colorScheme === "dark" ? "light" : "dark"));
 
