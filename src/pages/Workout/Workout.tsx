@@ -191,7 +191,7 @@ const Workout = () => {
       >
         <Tabs.List grow>
           <Tabs.Tab value="exercise">Exercise</Tabs.Tab>
-          <Tabs.Tab value="summary">Summary</Tabs.Tab>
+          <Tabs.Tab value="summary">Summary & Exit</Tabs.Tab>
         </Tabs.List>
 
         <Tabs.Panel value="exercise" sx={{ flexGrow: 1, overflow: "hidden" }}>
