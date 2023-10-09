@@ -77,9 +77,6 @@ const UserNavbar = () => {
         </Center>
 
         <Flex justify="flex-end">
-          <ActionIcon size="lg" title="Settings">
-            <Icon icon="ph:gear" height={25} />
-          </ActionIcon>
           <Menu position="bottom-end" shadow="md" width={200}>
             <Menu.Target>
               <ActionIcon size="lg" title="User">

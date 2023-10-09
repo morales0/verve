@@ -35,7 +35,7 @@ export const MainView = () => {
             color="indigo"
             onClick={startNewWorkoutAndNavigate}
             sx={(theme) => ({
-              boxShadow: `0 0 4px 0 ${theme.fn.rgba(theme.fn.themeColor("indigo"), 0.5)}`,
+              border: `1px solid ${theme.colorScheme === "dark" ? theme.colors.indigo[7] : theme.colors.indigo[6]}`,
             })}
           >
             <Group spacing="sm">

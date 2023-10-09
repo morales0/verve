@@ -13,6 +13,18 @@ function calcIsToday(date: Date) {
   );
 }
 
+function calcIsYesterday(date: Date): boolean {
+  const today: Date = new Date();
+  const yesterday: Date = new Date(today);
+  yesterday.setDate(today.getDate() - 1);
+
+  return (
+    date.getDate() === yesterday.getDate() &&
+    date.getMonth() === yesterday.getMonth() &&
+    date.getFullYear() === yesterday.getFullYear()
+  );
+}
+
 type Props = Pick<WorkoutHistory, "dateEnded" | "dateStarted" | "exercises"> & {
   current?: boolean;
 };
@@ -21,6 +33,7 @@ export const WorkoutSummary = ({ exercises, dateStarted, dateEnded, current }: P
   const { colorScheme } = useMantineColorScheme();
   const dateStartedObject = new Date(dateStarted ?? "");
   const isToday = calcIsToday(dateStartedObject);
+  const isYesterday = calcIsYesterday(dateStartedObject);
   const displayDate = dateStartedObject.toLocaleDateString("en-US", {
     year: "2-digit",
     month: "2-digit",
@@ -60,10 +73,10 @@ export const WorkoutSummary = ({ exercises, dateStarted, dateEnded, current }: P
     <Paper
       withBorder
       p="sm"
-      sx={(theme) => ({
-        borderColor: isToday ? theme.fn.themeColor(todayBorderColor) : "",
-        boxShadow: isToday ? `0 0 4px 0 ${theme.fn.rgba(theme.fn.themeColor(todayBorderColor), 0.3)}` : "",
-      })}
+      // sx={(theme) => ({
+      //   borderColor: isToday ? theme.fn.themeColor(todayBorderColor) : "",
+      //   boxShadow: isToday ? `0 0 4px 0 ${theme.fn.rgba(theme.fn.themeColor(todayBorderColor), 0.3)}` : "",
+      // })}
     >
       <Flex justify="space-between" align="center">
         <Group spacing="xs">
@@ -74,7 +87,7 @@ export const WorkoutSummary = ({ exercises, dateStarted, dateEnded, current }: P
               </Text>
             </Link>
           ) : (
-            <Text span fw={500}>
+            <Text span fw={500} color={isToday ? "indigo.6" : isYesterday ? "violet" : ""}>
               {isToday ? "Today" : dayOfWeek}
             </Text>
           )}
