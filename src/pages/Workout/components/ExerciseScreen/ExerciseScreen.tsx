@@ -8,6 +8,7 @@ import BarbellInput from "./BarbellInput";
 import DumbbellInput from "./DumbbellInput";
 import Set from "./Set";
 import { ExerciseHistory } from "../../../../components/pages/Workout";
+import { decodeKey } from "../../../../functions/utils";
 
 type Props = {
   exercise: WorkoutExercise;
@@ -56,7 +57,7 @@ const ExerciseScreen = ({ exercise, onFinish, onCancel, updateExercise }: Props)
         const newWeights = { ...set.weights, [weight]: newValue };
         const newWeightValue = Object.entries(newWeights)
           .filter(([plate, _]) => plate !== "bar")
-          .reduce<number>((sum, [plate, count]) => sum + parseFloat(plate) * count, newWeights.bar);
+          .reduce<number>((sum, [plate, count]) => sum + parseFloat(decodeKey(plate)) * count, newWeights.bar);
 
         return i === index ? { ...set, values: { ...set.values, Weight: newWeightValue }, weights: newWeights } : set;
       }),

@@ -19,6 +19,7 @@ import { useDisclosure } from "@mantine/hooks";
 import { useRef, useState } from "react";
 import { Bar } from "../../../../components/ui/Bar";
 import { Barbell } from "../../../../components/ui/Barbell";
+import { encodeKey, decodeKey } from "../../../../functions/utils";
 
 const WEIGHTS = [2.5, 5, 10, 20, 25, 35, 45];
 
@@ -35,7 +36,7 @@ const BarbellInput = ({ weights, onWeightsChange }: BarbellInputProps) => {
     .reduce<number[]>((arr, [plate, count]) => {
       const plateArr: number[] = [];
       for (let i = 0; i < count / 2; i++) {
-        plateArr.push(parseFloat(plate));
+        plateArr.push(parseFloat(decodeKey(plate)));
       }
 
       return [...arr, ...plateArr];
@@ -70,6 +71,7 @@ const BarbellInput = ({ weights, onWeightsChange }: BarbellInputProps) => {
               value={weights["bar"] ?? 0}
               onChange={(value) => onWeightsChange("bar", value === undefined ? 0 : value)}
               min={0}
+              max={99}
               hideControls
               onFocus={(event) => event.target.select()}
             />
@@ -84,8 +86,8 @@ const BarbellInput = ({ weights, onWeightsChange }: BarbellInputProps) => {
                 <Carousel.Slide key={weight}>
                   <PlateInputSlide
                     weight={weight}
-                    value={weights[weight.toString()] ?? 0}
-                    onChange={(value) => onWeightsChange(weight.toString(), value === undefined ? 0 : value)}
+                    value={weights[encodeKey(weight.toString())] ?? 0}
+                    onChange={(value) => onWeightsChange(encodeKey(weight.toString()), value === undefined ? 0 : value)}
                   />
                 </Carousel.Slide>
               ))}
@@ -112,7 +114,11 @@ type PlateInputSlideProps = {
 };
 const PlateInputSlide = ({ weight, value, onChange }: PlateInputSlideProps) => {
   return (
-    <Center>
+    <Center
+      onClick={(e) => {
+        e.stopPropagation();
+      }}
+    >
       <Box
         component={Center}
         sx={(theme) => ({
