@@ -40,7 +40,7 @@ export const Barbell = ({ plates, bar }: BarbellProps) => {
       </Flex>
       <Bar weight={bar} />
       <Flex gap={0} align="center">
-        {plates.reverse().map((weight, i) => (
+        {[...plates].reverse().map((weight, i) => (
           <PlateSide key={`left-weight-${weight}-${i}`} weight={weight} />
         ))}
       </Flex>

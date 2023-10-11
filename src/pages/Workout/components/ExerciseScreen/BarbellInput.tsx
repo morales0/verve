@@ -41,7 +41,7 @@ const BarbellInput = ({ weights, onWeightsChange }: BarbellInputProps) => {
 
       return [...arr, ...plateArr];
     }, [])
-    .sort((a, b) => b - a);
+    .sort((a, b) => a - b);
 
   return (
     <>
