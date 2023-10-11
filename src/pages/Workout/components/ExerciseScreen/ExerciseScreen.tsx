@@ -168,6 +168,7 @@ const ExerciseScreen = ({ exercise, onFinish, onCancel, updateExercise }: Props)
                 {exercise.weightType === "Dumbbell" && (
                   <DumbbellInput weights={set.weights ?? {}} onWeightsChange={updateWeightValue} />
                 )}
+                <Divider />
               </Box>
             );
           })}

@@ -14,7 +14,7 @@ type Props = {
 const Set = ({ num, set, onUnitChange, removeSet, isLastSet }: Props) => {
   return (
     <Paper
-      withBorder
+      // withBorder
       component={Flex}
       pos="relative"
       justify="space-evenly"

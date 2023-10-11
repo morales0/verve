@@ -1,4 +1,5 @@
 import { Icon } from "@iconify/react";
+import { Carousel } from "@mantine/carousel";
 import {
   Center,
   UnstyledButton,
@@ -11,10 +12,15 @@ import {
   Stack,
   Collapse,
   Paper,
+  Drawer,
+  Flex,
 } from "@mantine/core";
+import { useDisclosure } from "@mantine/hooks";
 import { useRef, useState } from "react";
+import { Bar } from "../../../../components/ui/Bar";
+import { Barbell } from "../../../../components/ui/Barbell";
 
-const WEIGHTS = [10, 25, 35, 45, 2.5, 5, 20];
+const WEIGHTS = [2.5, 5, 10, 20, 25, 35, 45];
 
 type BarbellInputProps = {
   weights: Record<string, number>;
@@ -22,7 +28,7 @@ type BarbellInputProps = {
 };
 
 const BarbellInput = ({ weights, onWeightsChange }: BarbellInputProps) => {
-  const [open, setOpen] = useState(false);
+  const [opened, { open, close }] = useDisclosure(false);
 
   const plates: number[] = Object.entries(weights)
     .filter(([w, val]) => w !== "bar")
@@ -34,144 +40,142 @@ const BarbellInput = ({ weights, onWeightsChange }: BarbellInputProps) => {
 
       return [...arr, ...plateArr];
     }, [])
-    .sort((a, b) => a - b);
+    .sort((a, b) => b - a);
 
   return (
-    <Stack>
+    <>
+      <Drawer
+        opened={opened}
+        onClose={close}
+        withCloseButton={false}
+        position="bottom"
+        size="60%"
+        overlayOpacity={0.3}
+        trapFocus={false}
+      >
+        <Stack mt="lg" spacing="lg">
+          <Stack align="center" spacing="xs">
+            <Center maw="100%" mih={110}>
+              <Barbell plates={plates} bar={weights["bar"] ?? 0} />
+            </Center>
+            <NumberInput
+              label="Bar"
+              variant="filled"
+              styles={{
+                input: { width: 50, textAlign: "center", fontSize: "1.2rem" },
+              }}
+              labelProps={{
+                sx: { fontStyle: "italic", color: "#afafaf", fontSize: ".7rem", width: "100%", textAlign: "center" },
+              }}
+              value={weights["bar"] ?? 0}
+              onChange={(value) => onWeightsChange("bar", value === undefined ? 0 : value)}
+              min={0}
+              hideControls
+              onFocus={(event) => event.target.select()}
+            />
+          </Stack>
+
+          <Stack align="center" spacing="xs">
+            <Text italic fw={500} fz="sm" color="#afafaf">
+              Plates
+            </Text>
+            <Carousel w="100%" controlsOffset={80} loop>
+              {WEIGHTS.map((weight) => (
+                <Carousel.Slide key={weight}>
+                  <PlateInputSlide
+                    weight={weight}
+                    value={weights[weight.toString()] ?? 0}
+                    onChange={(value) => onWeightsChange(weight.toString(), value === undefined ? 0 : value)}
+                  />
+                </Carousel.Slide>
+              ))}
+            </Carousel>
+          </Stack>
+        </Stack>
+      </Drawer>
+
       <Center>
-        <UnstyledButton onClick={() => setOpen((o) => !o)}>
-          <Group position="center" spacing={0} align="center" noWrap py="1rem">
-            {plates.map((weight, i) => (
-              <Plate key={`left-weight-${weight}-${i}`} weight={weight} />
-            ))}
-            <Bar weight={weights.bar ?? 45} empty={plates.length === 0} open={open} />
-            {plates.reverse().map((weight, i) => (
-              <Plate key={`left-weight-${weight}-${i}`} weight={weight} />
-            ))}
-          </Group>
+        <UnstyledButton onClick={open} maw="100%">
+          <Center maw="100%">
+            <Barbell plates={plates} bar={weights["bar"] ?? 0} />
+          </Center>
         </UnstyledButton>
       </Center>
-
-      <Collapse in={open} pb="lg">
-        <Paper
-          withBorder
-          p="sm"
-          shadow="lg"
-          sx={(theme) => ({
-            backgroundColor: theme.colorScheme === "light" ? theme.colors.gray[2] : theme.colors.gray[9],
-          })}
-        >
-          <Group position="apart">
-            {WEIGHTS.map((weight, i) => (
-              <PlateInput
-                key={`plate-input-${i}-${weight}`}
-                weight={weight}
-                val={weights[weight] ?? 0}
-                onChange={(newVal) => onWeightsChange(weight.toString(), newVal)}
-              />
-            ))}
-          </Group>
-        </Paper>
-      </Collapse>
-    </Stack>
+    </>
   );
 };
 
-const Bar = ({ weight, empty, open }: { weight: number; empty?: boolean; open: boolean }) => (
-  <Box
-    component={Center}
-    h="10px"
-    w="80px"
-    sx={(theme) => ({
-      position: "relative",
-      backgroundColor: theme.colors.gray[7],
-      borderTop: "1px solid",
-      borderBottom: "1px solid",
-      borderLeft: empty ? "1px solid" : "none",
-      borderRight: empty ? "1px solid" : "none",
-      borderColor: theme.colors.gray[5],
-      margin: "1rem 0",
-    })}
-  >
-    <Text fz="xs" fw="bold" color="dimmed" sx={{ position: "absolute", bottom: "12px" }}>
-      {weight}
-    </Text>
-    <Icon
-      icon="material-symbols:keyboard-arrow-down-rounded"
-      width="30px"
-      height="30px"
-      style={{
-        position: "absolute",
-        top: "8px",
-        transform: open ? "rotate(180deg)" : "unset",
-        color: "#444",
-      }}
-    />
-  </Box>
-);
-
-const Plate = ({ weight }: { weight: number }) => (
-  <Box
-    h={`${weight <= 20 ? "30" : weight * 1.6}px`}
-    w="20px"
-    sx={() => ({
-      display: "flex",
-      justifyContent: "center",
-      alignItems: "center",
-      border: "1px solid",
-      borderColor: "gray",
-      borderRadius: "5px",
-    })}
-  >
-    <Text fz="xs" fw="bold" color="dimmed">
-      {weight}
-    </Text>
-  </Box>
-);
-
-const PlateInput = ({ weight, val, onChange }: { weight: number; val: number; onChange: (newVal: number) => void }) => {
-  const handlers = useRef<NumberInputHandlers>();
-
+type PlateInputSlideProps = {
+  weight: number;
+  value: number | undefined;
+  onChange: (value: number | undefined) => void;
+};
+const PlateInputSlide = ({ weight, value, onChange }: PlateInputSlideProps) => {
   return (
-    <Stack align="center" spacing="xs">
+    <Center>
       <Box
         component={Center}
         sx={(theme) => ({
-          width: "65px",
-          height: "65px",
+          width: "140px",
+          height: "140px",
           textAlign: "center",
           borderRadius: "50%",
-          color: theme.colors.gray[0],
-          backgroundColor: theme.colorScheme === "light" ? theme.colors.gray[5] : theme.colors.gray[8],
-          border: `1px solid ${theme.colorScheme === "light" ? theme.colors.gray[6] : theme.colors.gray[6]}`,
+          color: theme.colors.gray[7],
+          backgroundColor: theme.colorScheme === "light" ? theme.colors.gray[4] : theme.colors.gray[4],
+          border: `2px solid ${theme.colorScheme === "light" ? theme.colors.gray[5] : theme.colors.gray[6]}`,
         })}
       >
-        <Text>{weight}</Text>
+        <Box
+          w={20}
+          h={20}
+          sx={(theme) => ({
+            borderRadius: "50%",
+            backgroundColor: theme.colorScheme === "light" ? "white" : theme.colors.gray[8],
+            border: "2px solid",
+            borderColor: theme.colors.gray[6],
+          })}
+        ></Box>
+        <Text pos="absolute" top={10} fw={500}>
+          {weight}{" "}
+          <Text color="dimmed" fz="xs">
+            x2
+          </Text>
+        </Text>
+        <Box pos="absolute" bottom={10}>
+          <PlateCountInput value={value} onChange={onChange} />
+        </Box>
       </Box>
-      <Group align="center" spacing={8}>
-        <ActionIcon size={30} variant="default" onClick={() => handlers.current?.decrement()}>
-          –
-        </ActionIcon>
-        <NumberInput
-          value={val}
-          onChange={(newVal) => onChange(newVal || 0)}
-          handlersRef={handlers}
-          hideControls
-          min={0}
-          step={2}
-          styles={{
-            input: {
-              textAlign: "center",
-              width: "40px",
-              marginBottom: "0!important",
-            },
-          }}
-        />
-        <ActionIcon size={30} variant="default" onClick={() => handlers.current?.increment()}>
-          +
-        </ActionIcon>
-      </Group>
-    </Stack>
+    </Center>
+  );
+};
+
+type PlateCountInputProps = Pick<PlateInputSlideProps, "value" | "onChange">;
+const PlateCountInput = ({ value, onChange }: PlateCountInputProps) => {
+  const handlers = useRef<NumberInputHandlers>();
+
+  return (
+    <Group spacing={5} align="center">
+      <ActionIcon size={35} variant="filled" onClick={() => handlers.current?.decrement()}>
+        –
+      </ActionIcon>
+
+      <NumberInput
+        readOnly
+        variant="unstyled"
+        hideControls
+        value={value ? value / 2 : 0}
+        onChange={(val) => onChange(val ? val * 2 : 0)}
+        handlersRef={handlers}
+        max={9}
+        min={0}
+        step={1}
+        styles={{ input: { color: "black", width: 30, textAlign: "center", fontSize: "1.4rem" } }}
+      />
+
+      <ActionIcon size={35} variant="filled" onClick={() => handlers.current?.increment()}>
+        +
+      </ActionIcon>
+    </Group>
   );
 };
 
