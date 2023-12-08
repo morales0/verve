@@ -40,6 +40,28 @@ const App = () => {
               backgroundColor: theme.colorScheme === "dark" ? theme.colors.gray[8] : theme.colors.gray[0],
             },
           }),
+          components: {
+            ActionIcon: {
+              styles: (theme, params) => ({
+                root: { boxShadow: params.variant === "light" ? `0 0 1px 0` : undefined },
+              }),
+            },
+            Button: {
+              styles: (theme, params) => ({
+                root: { boxShadow: params.variant === "light" ? `0 0 1px 0` : undefined },
+              }),
+            },
+            Paper: {
+              styles: (theme, params) => ({
+                root: { borderColor: theme.colorScheme === "dark" ? theme.colors.gray[7] : theme.colors.gray[2] },
+              }),
+            },
+            Checkbox: {
+              styles: (theme, params) => ({
+                input: { borderColor: theme.colorScheme === "light" ? theme.colors.gray[2] : undefined },
+              }),
+            },
+          },
         }}
         withGlobalStyles
         withNormalizeCSS

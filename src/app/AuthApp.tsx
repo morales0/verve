@@ -3,7 +3,7 @@ import { Navigate, Route, Routes } from "react-router-dom";
 import UserNavbar from "../components/app/UserNavbar";
 import { useUser } from "../context/user";
 import Home from "../pages/Home/Home";
-import Workout from "../pages/Workout/Workout";
+import { Workout } from "@/pages/Workout";
 
 const useStyles = createStyles((theme) => ({
   root: {
