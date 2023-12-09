@@ -32,10 +32,6 @@ const App = () => {
         theme={{
           colorScheme,
           globalStyles: (theme) => ({
-            "*": {
-              boxSizing: "border-box",
-            },
-
             body: {
               backgroundColor: theme.colorScheme === "dark" ? theme.colors.gray[8] : theme.colors.gray[0],
             },

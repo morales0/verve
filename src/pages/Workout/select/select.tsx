@@ -176,8 +176,8 @@ export const Select = ({ onReturn, onStartExercise }: SelectProps) => {
         <Button size="sm" variant="light" color="red" onClick={onReturn}>
           Cancel
         </Button>
-        <Button size="sm" color="teal" onClick={onStartExercise}>
-          Continue
+        <Button size="sm" color="blue.4" onClick={onStartExercise}>
+          Start
         </Button>
       </Group>
     </Stack>

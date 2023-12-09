@@ -17,14 +17,14 @@ export const Summary = ({ onAddExercise }: SummaryProps) => {
         <Text sx={{ placeSelf: "center" }}>All this empty space, lets get our verve on</Text>
       </Stack>
 
-      <Divider />
+      <Divider mt="auto" />
 
-      <Group w="100%" py="md" px="xs" mt="auto" align="center" position="apart" grow>
+      <Group w="100%" py="md" px="xs" align="center" position="apart" grow>
         <Button size="sm" variant="light" color="red">
           Cancel
         </Button>
-        <Button size="sm" color="teal">
-          Complete
+        <Button size="sm" variant="gradient" gradient={{ from: "teal", to: "blue", deg: 40 }}>
+          <Text fw={500}>Complete</Text>
         </Button>
       </Group>
     </Stack>

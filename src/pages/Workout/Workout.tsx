@@ -5,7 +5,7 @@ import { Select } from "./select";
 import { Exercises } from "./exercises";
 
 export const Workout = () => {
-  const [screen, setScreen] = useState<"summary" | "exercise" | "select">("summary");
+  const [screen, setScreen] = useState<"summary" | "exercise" | "select">("exercise");
 
   return (
     <Box h="100%" pb="sm" sx={{ overflow: "hidden" }}>
@@ -13,7 +13,9 @@ export const Workout = () => {
       {screen === "select" && (
         <Select onReturn={() => setScreen("summary")} onStartExercise={() => setScreen("exercise")} />
       )}
-      {screen === "exercise" && <Exercises />}
+      {screen === "exercise" && (
+        <Exercises onRemove={() => setScreen("summary")} onFinish={() => setScreen("summary")} />
+      )}
     </Box>
   );
 };
