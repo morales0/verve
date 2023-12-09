@@ -9,7 +9,10 @@ export const Summary = ({ onAddExercise }: SummaryProps) => {
     <Stack justify="space-between" h="100%" sx={{ overflow: "hidden" }} spacing={0}>
       <Stack py="sm" px="xs" sx={{ overflow: "hidden" }}>
         <Button size="lg" variant="light" color="cyan" onClick={onAddExercise}>
-          Add Exercise
+          <Group spacing="sm" align="center">
+            <Icon icon="fluent:add-28-filled" />
+            Add Exercises
+          </Group>
         </Button>
         <Text sx={{ placeSelf: "center" }}>All this empty space, lets get our verve on</Text>
       </Stack>

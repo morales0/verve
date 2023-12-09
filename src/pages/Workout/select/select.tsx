@@ -1,19 +1,33 @@
 import useUserExercises from "@/hooks/userExercises.hook";
 import { Icon } from "@iconify/react";
-import { ActionIcon, Badge, Checkbox, Divider, Flex, Menu, Paper, Stack, Text, TextInput } from "@mantine/core";
+import {
+  ActionIcon,
+  Badge,
+  Button,
+  Checkbox,
+  Divider,
+  Flex,
+  Group,
+  Menu,
+  Paper,
+  Stack,
+  Text,
+  TextInput,
+} from "@mantine/core";
 import { useState } from "react";
 
 export type SelectProps = {
+  onReturn: () => void;
   onStartExercise: () => void;
 };
 
-export const Select = ({ onStartExercise }: SelectProps) => {
+export const Select = ({ onReturn, onStartExercise }: SelectProps) => {
   const { status, data: userExercises, api } = useUserExercises();
   const [filterOption, setFilterOption] = useState<"filter" | "sort" | undefined>(undefined);
 
   console.log(userExercises);
   return (
-    <Stack spacing={0}>
+    <Stack h="100%" sx={{ overflow: "hidden" }} spacing={0}>
       <Flex align="center" gap="xs" w="100%" py="xs" px="xs">
         <ActionIcon size="lg" radius="sm" variant="light" color="gray">
           <Icon icon="icon-park-outline:return" />
@@ -74,7 +88,7 @@ export const Select = ({ onStartExercise }: SelectProps) => {
         </Flex>
       )}
 
-      <Stack spacing="xs" px="xs" py="sm">
+      <Stack spacing="xs" px="xs" py="sm" sx={{ overflow: "auto" }}>
         {status === "loading" && <div>Loading...</div>}
         {status === "error" && <div>Error loading exercises</div>}
         {status === "success" && (
@@ -155,6 +169,17 @@ export const Select = ({ onStartExercise }: SelectProps) => {
           </>
         )}
       </Stack>
+
+      <Divider mt="auto" />
+
+      <Group w="100%" py="md" px="xs" align="center" position="apart" grow>
+        <Button size="sm" variant="light" color="red" onClick={onReturn}>
+          Cancel
+        </Button>
+        <Button size="sm" color="teal" onClick={onStartExercise}>
+          Continue
+        </Button>
+      </Group>
     </Stack>
   );
 };
