@@ -65,7 +65,7 @@ const ExerciseForm = ({ cancel, submitExercise, exerciseToEdit }: Props) => {
   }
 
   return (
-    <Stack h="100%" p="sm" sx={{ overflow: "hidden" }} spacing={0}>
+    <Stack h="100%" p="sm" sx={{ overflow: "hidden" }} gap={0}>
       <form
         style={{
           height: "100%",
@@ -80,7 +80,7 @@ const ExerciseForm = ({ cancel, submitExercise, exerciseToEdit }: Props) => {
         </Title>
         <Divider />
         <Box py="sm" sx={{ flexGrow: 1, overflow: "auto" }}>
-          <Stack spacing="md">
+          <Stack gap="md">
             <TextInput label="Name" required {...form.getInputProps("name")} />
             <MultiSelect
               data={unitOptions}

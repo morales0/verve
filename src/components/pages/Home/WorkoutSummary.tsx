@@ -66,8 +66,8 @@ export const WorkoutSummary = ({ exercises, dateStarted, dateEnded, current }: P
       ? "teal.6"
       : "teal.8"
     : colorScheme === "dark"
-    ? "indigo.4"
-    : "indigo.8";
+      ? "indigo.4"
+      : "indigo.8";
 
   return (
     <Paper
@@ -79,7 +79,7 @@ export const WorkoutSummary = ({ exercises, dateStarted, dateEnded, current }: P
       // })}
     >
       <Flex justify="space-between" align="center">
-        <Group spacing="xs">
+        <Group gap="xs">
           {current ? (
             <Link to="/workout">
               <Text color="teal.7" fw="500">
@@ -95,7 +95,7 @@ export const WorkoutSummary = ({ exercises, dateStarted, dateEnded, current }: P
             {displayDate}
           </Text>
         </Group>
-        <Group spacing={5} align="center">
+        <Group gap={5} align="center">
           <Icon icon="ic:outline-timer" />
           <Text fz="sm">
             {minutes}:{seconds}
@@ -103,7 +103,7 @@ export const WorkoutSummary = ({ exercises, dateStarted, dateEnded, current }: P
         </Group>
       </Flex>
       <Divider my="xs" />
-      <Stack spacing="xs">
+      <Stack gap="xs">
         {exercises?.map((exercise, i) => (
           <ExerciseInfoDropdown
             key={exercise.id ?? exercise.name}

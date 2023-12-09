@@ -20,15 +20,15 @@ const SummaryScreen = ({
   onComplete,
 }: Props) => {
   return (
-    <Stack justify="space-between" h="100%" sx={{ overflow: "hidden" }} spacing={0}>
+    <Stack justify="space-between" h="100%" sx={{ overflow: "hidden" }} gap={0}>
       <Stack h="100%" py="lg" sx={{ overflow: "hidden" }}>
         <ScrollArea>
-          <Stack spacing="md">
+          <Stack gap="md">
             {exercises?.map((ex, i) => (
               <Card key={`summary-ex-${ex.id}`} withBorder shadow="xs">
                 <Group position="apart" pb="xs">
                   <Text weight="bold">{ex.name}</Text>
-                  <Group noWrap spacing="xs" position="center">
+                  <Group noWrap gap="xs" position="center">
                     {canEditExercise && (
                       <ActionIcon color="indigo" variant="light" onClick={() => onEditExercise(ex)}>
                         <Icon icon="material-symbols:edit" />

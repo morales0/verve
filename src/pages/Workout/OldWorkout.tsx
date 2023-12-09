@@ -168,7 +168,7 @@ const Workout = () => {
   }
 
   return (
-    <Stack h="100%" px="xs" pb="sm" sx={{ overflow: "hidden" }} spacing={0}>
+    <Stack h="100%" px="xs" pb="sm" sx={{ overflow: "hidden" }} gap={0}>
       <DeleteModal
         opened={deleteModalOpen}
         onClose={handleDeleteModalClose}

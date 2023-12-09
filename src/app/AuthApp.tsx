@@ -1,25 +1,17 @@
-import { Box, Stack, createStyles } from "@mantine/core";
+import UserNavbar from "@/components/app/UserNavbar";
+import { useUser } from "@/context/user";
+import { Home, Workout } from "@/pages";
+import classes from "@/styles/app.module.css";
+import { Box, Stack } from "@mantine/core";
 import { Navigate, Route, Routes } from "react-router-dom";
-import UserNavbar from "../components/app/UserNavbar";
-import { useUser } from "../context/user";
-import Home from "../pages/Home/Home";
-import { Workout } from "@/pages/Workout";
-
-const useStyles = createStyles((theme) => ({
-  root: {
-    flexGrow: 1,
-    overflow: "hidden",
-  },
-}));
 
 const AuthApp = () => {
   const { meta } = useUser();
-  const { classes } = useStyles();
 
   return (
-    <Stack h={"100%"} spacing={0}>
+    <Stack h="100%" gap={0}>
       <UserNavbar />
-      <Box className={classes.root}>
+      <Box className={classes.main}>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/workout" element={meta.isWorkingOut ? <Workout /> : <Navigate to="/" replace />} />

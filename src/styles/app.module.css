@@ -1,0 +1,19 @@
+.main {
+  flex-grow: 1;
+  overflow: "hidden";
+}
+
+/* Theme overrides */
+.lightButtonShadow {
+  box-shadow: 0 0 1px 0;
+}
+
+.paper {
+  border-color: light-dark(var(--mantine-color-gray-2), var(--mantine-color-gray-7));
+}
+
+.checkbox {
+  @mixin light {
+    border-color: var(--mantine-color-gray-2);
+  }
+}

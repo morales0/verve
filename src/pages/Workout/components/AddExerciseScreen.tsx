@@ -90,7 +90,7 @@ const AddExerciseScreen = ({ onStart, onEdit, onCreate, onDelete, currentExercis
                   </Text>
                 </td>
                 <td style={{ textAlign: "center" }}>
-                  <Stack justify="center" spacing={0}>
+                  <Stack justify="center" gap={0}>
                     {ex.primaryMuscleGroups && (
                       <Text size="sm">{Object.values(ex.primaryMuscleGroups).join(", ")}</Text>
                     )}
@@ -102,7 +102,7 @@ const AddExerciseScreen = ({ onStart, onEdit, onCreate, onDelete, currentExercis
                   </Stack>
                 </td>
                 <td style={{ textAlign: "center" }}>
-                  <Group noWrap spacing="xs" position="center">
+                  <Group noWrap gap="xs" position="center">
                     <ActionIcon color="indigo" variant="light" onClick={() => onEdit(ex)}>
                       <Icon icon="material-symbols:edit" />
                     </ActionIcon>
@@ -119,7 +119,7 @@ const AddExerciseScreen = ({ onStart, onEdit, onCreate, onDelete, currentExercis
   };
 
   return (
-    <Stack h="100%" py="lg" sx={{ overflow: "hidden" }} spacing={0}>
+    <Stack h="100%" py="lg" sx={{ overflow: "hidden" }} gap={0}>
       <Group align="flex-start" pb="sm">
         <TextInput
           placeholder="Search by name"

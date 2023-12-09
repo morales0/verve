@@ -14,7 +14,7 @@ interface ExerciseSwitchProps extends React.ComponentPropsWithoutRef<"button"> {
 const ExerciseSwitch = forwardRef<HTMLButtonElement, ExerciseSwitchProps>(
   ({ exercise, ...others }: ExerciseSwitchProps, ref) => (
     <UnstyledButton ref={ref} {...others}>
-      <Group spacing="xs" align="center">
+      <Group gap="xs" align="center">
         <Text fz="xl" weight={500}>
           {exercise}
         </Text>
@@ -34,7 +34,7 @@ export type ExercisesProps = {
 
 export const Exercises = ({ onRemove, onFinish }: ExercisesProps) => {
   return (
-    <Stack px="xs" pb="xs" spacing={0} h="100%" sx={{ overflow: "hidden" }}>
+    <Stack px="xs" pb="xs" gap={0} h="100%" sx={{ overflow: "hidden" }}>
       <Flex justify="space-between" align="center" py={6}>
         <Menu position="bottom-end">
           <Menu.Target>

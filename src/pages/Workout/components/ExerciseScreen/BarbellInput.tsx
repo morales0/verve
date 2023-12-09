@@ -54,8 +54,8 @@ const BarbellInput = ({ weights, onWeightsChange }: BarbellInputProps) => {
         overlayOpacity={0.3}
         trapFocus={false}
       >
-        <Stack mt="lg" spacing="lg">
-          <Stack align="center" spacing="xs">
+        <Stack mt="lg" gap="lg">
+          <Stack align="center" gap="xs">
             <Center maw="100%" mih={110}>
               <Barbell plates={plates} bar={weights["bar"] ?? 0} />
             </Center>
@@ -77,7 +77,7 @@ const BarbellInput = ({ weights, onWeightsChange }: BarbellInputProps) => {
             />
           </Stack>
 
-          <Stack align="center" spacing="xs">
+          <Stack align="center" gap="xs">
             <Text italic fw={500} fz="sm" color="#afafaf">
               Plates
             </Text>
@@ -160,7 +160,7 @@ const PlateCountInput = ({ value, onChange }: PlateCountInputProps) => {
   const handlers = useRef<NumberInputHandlers>();
 
   return (
-    <Group spacing={5} align="center">
+    <Group gap={5} align="center">
       <ActionIcon size={35} variant="filled" onClick={() => handlers.current?.decrement()}>
         –
       </ActionIcon>

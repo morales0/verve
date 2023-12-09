@@ -39,20 +39,20 @@ export const MainView = () => {
               border: `1px solid ${theme.colorScheme === "dark" ? theme.colors.indigo[7] : theme.colors.indigo[6]}`,
             })}
           >
-            <Group spacing="sm">
+            <Group gap="sm">
               <Icon icon="bi:fire" />
               <Text>Start a workout!</Text>
             </Group>
           </Button>
         )}
 
-        <Stack spacing={8}>
+        <Stack gap={8}>
           <Title order={5}>My Workouts</Title>
           <WorkoutsChart />
         </Stack>
 
-        <Stack spacing="xs">
-          <Stack spacing="lg">
+        <Stack gap="xs">
+          <Stack gap="lg">
             {[...workouts].reverse().map((w, i) => (
               <WorkoutSummary key={w.historyId ?? `hist-${i}`} {...w} />
             ))}

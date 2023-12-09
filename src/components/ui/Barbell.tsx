@@ -31,7 +31,7 @@ const Collar = () => {
 export type BarbellProps = { plates: number[]; bar: number };
 export const Barbell = ({ plates, bar }: BarbellProps) => {
   return (
-    <Group position="left" m="auto" px="xs" spacing={2} align="center" noWrap py="1rem" sx={{ overflowX: "auto" }}>
+    <Group position="left" m="auto" px="xs" gap={2} align="center" noWrap py="1rem" sx={{ overflowX: "auto" }}>
       <Collar />
       <Flex gap={0} align="center">
         {plates.map((weight, i) => (

@@ -27,7 +27,7 @@ export const Select = ({ onReturn, onStartExercise }: SelectProps) => {
 
   console.log(userExercises);
   return (
-    <Stack h="100%" sx={{ overflow: "hidden" }} spacing={0}>
+    <Stack h="100%" sx={{ overflow: "hidden" }} gap={0}>
       <Flex align="center" gap="xs" w="100%" py="xs" px="xs">
         <ActionIcon size="lg" radius="sm" variant="light" color="gray">
           <Icon icon="icon-park-outline:return" />
@@ -88,7 +88,7 @@ export const Select = ({ onReturn, onStartExercise }: SelectProps) => {
         </Flex>
       )}
 
-      <Stack spacing="xs" px="xs" py="sm" sx={{ overflow: "auto" }}>
+      <Stack gap="xs" px="xs" py="sm" sx={{ overflow: "auto" }}>
         {status === "loading" && <div>Loading...</div>}
         {status === "error" && <div>Error loading exercises</div>}
         {status === "success" && (

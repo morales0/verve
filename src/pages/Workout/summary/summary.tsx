@@ -6,10 +6,10 @@ export type SummaryProps = {
 };
 export const Summary = ({ onAddExercise }: SummaryProps) => {
   return (
-    <Stack justify="space-between" h="100%" sx={{ overflow: "hidden" }} spacing={0}>
+    <Stack justify="space-between" h="100%" sx={{ overflow: "hidden" }} gap={0}>
       <Stack py="sm" px="xs" sx={{ overflow: "hidden" }}>
         <Button size="lg" variant="light" color="cyan" onClick={onAddExercise}>
-          <Group spacing="sm" align="center">
+          <Group gap="sm" align="center">
             <Icon icon="fluent:add-28-filled" />
             Add Exercises
           </Group>

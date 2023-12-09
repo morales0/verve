@@ -54,7 +54,7 @@ const BarbellSet = ({ set, onUnitChange }: Props) => {
   }, [plateCount, bar]);
 
   return (
-    <Stack align="stretch" spacing="sm" mb="xs">
+    <Stack align="stretch" gap="sm" mb="xs">
       <Group sx={{ justifyContent: "space-evenly" }} align="center">
         {Object.entries(set).map(([unit, val], j) => (
           <SetInput
@@ -68,7 +68,7 @@ const BarbellSet = ({ set, onUnitChange }: Props) => {
 
       <Center>
         <UnstyledButton onClick={() => setOpen((o) => !o)}>
-          <Group position="center" spacing={0} align="center" noWrap py="1rem">
+          <Group position="center" gap={0} align="center" noWrap py="1rem">
             {plates.map((weight, i) => (
               <Plate key={`left-weight-${weight}-${i}`} weight={weight} />
             ))}
@@ -166,7 +166,7 @@ const PlateInput = ({ weight, val, onChange }: { weight: number; val: number; on
   const handlers = useRef<NumberInputHandlers>();
 
   return (
-    <Stack align="center" spacing="xs">
+    <Stack align="center" gap="xs">
       <Box
         component={Center}
         sx={(theme) => ({
@@ -181,7 +181,7 @@ const PlateInput = ({ weight, val, onChange }: { weight: number; val: number; on
       >
         <Text>{weight}</Text>
       </Box>
-      <Group align="center" spacing={8}>
+      <Group align="center" gap={8}>
         <ActionIcon size={30} variant="default" onClick={() => handlers.current?.decrement()}>
           –
         </ActionIcon>
@@ -212,7 +212,7 @@ const SetInput = ({ unit, val, onChange }: { unit: string; val: number; onChange
   const handlers = useRef<NumberInputHandlers>();
 
   return (
-    <Group spacing={8}>
+    <Group gap={8}>
       <ActionIcon size={30} variant="default" onClick={() => handlers.current?.decrement()}>
         –
       </ActionIcon>
