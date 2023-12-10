@@ -5,10 +5,8 @@ import classes from "./home.module.css";
 export const Home = () => {
   return (
     <Tabs
-      className={classes.root}
-      classNames={{ panel: classes.panel, tab: classes.tab }}
-      variant="pills"
-      radius="lg"
+      variant="unstyled"
+      classNames={{ root: classes.root, panel: classes.panel, tab: classes.tab }}
       defaultValue="home"
     >
       <Tabs.List grow className={classes.tabs} p="xs">
@@ -22,6 +20,9 @@ export const Home = () => {
         >
           Exercises
         </Tabs.Tab>
+        <Tabs.Tab value="stats" leftSection={<Icon icon="nimbus:stats" />} color="orange.4">
+          Stats
+        </Tabs.Tab>
       </Tabs.List>
 
       <Tabs.Panel value="home">
@@ -32,6 +33,10 @@ export const Home = () => {
       <Tabs.Panel value="exercises">
         {/* <Exercises /> */}
         Exercises
+      </Tabs.Panel>
+      <Tabs.Panel value="stats">
+        {/* <Exercises /> */}
+        Stats
       </Tabs.Panel>
     </Tabs>
   );
