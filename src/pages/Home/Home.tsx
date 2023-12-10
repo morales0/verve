@@ -1,6 +1,7 @@
 import { Icon } from "@iconify/react";
 import { Tabs } from "@mantine/core";
 import classes from "./home.module.css";
+import { MainView } from "./main-view";
 
 export const Home = () => {
   return (
@@ -26,8 +27,7 @@ export const Home = () => {
       </Tabs.List>
 
       <Tabs.Panel value="home">
-        {/* <MainView /> */}
-        Main View
+        <MainView />
       </Tabs.Panel>
 
       <Tabs.Panel value="exercises">
