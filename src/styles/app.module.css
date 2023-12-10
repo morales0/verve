@@ -4,8 +4,9 @@
 }
 
 /* Theme overrides */
+
 .lightButton {
-  box-shadow: 0 0 1px 0;
+  box-shadow: 0 0 2px 0px;
 }
 
 .paper {
