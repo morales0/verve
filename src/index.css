@@ -14,15 +14,9 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* body {
-	background: #eee;
+body {
+  background-color: light-dark(#f9fafc, #343a40);
 }
-
-@media (prefers-color-scheme: dark) {
-	body {
-		background: #444
-	}
-} */
 
 #root {
   height: 100%;

@@ -1,7 +1,7 @@
 import { Icon } from "@iconify/react";
 import { Badge, Divider, Flex, Group, Paper, Stack, Text, useMantineColorScheme } from "@mantine/core";
 import { Link } from "react-router-dom";
-import { WorkoutExercise, WorkoutHistory } from "../../../types/workout";
+import { WorkoutExercise, WorkoutHistory } from "../../../../types/workout";
 import { ExerciseDropdown } from "./exercise-dropdown";
 
 function calcIsToday(date: Date) {
@@ -25,12 +25,24 @@ function calcIsYesterday(date: Date): boolean {
   );
 }
 
-type Props = Pick<WorkoutHistory, "dateEnded" | "dateStarted" | "exercises"> & {
+const getMuscleGroupSet = (exercises: WorkoutExercise[]) => {
+  const set = new Set<string>();
+
+  exercises.forEach((e) => {
+    e.primaryMuscleGroups?.forEach((pg) => set.add(pg));
+    e.secondaryMuscleGroups?.forEach((sg) => set.add(sg));
+  });
+
+  return set;
+};
+
+type WorkoutCardProps = Pick<WorkoutHistory, "dateEnded" | "dateStarted" | "exercises"> & {
   current?: boolean;
 };
 
-export const WorkoutCard = ({ exercises, dateStarted, dateEnded, current }: Props) => {
+export const WorkoutCard = ({ exercises, dateStarted, dateEnded, current }: WorkoutCardProps) => {
   const { colorScheme } = useMantineColorScheme();
+
   const dateStartedObject = new Date(dateStarted ?? "");
   const isToday = calcIsToday(dateStartedObject);
   const isYesterday = calcIsYesterday(dateStartedObject);
@@ -48,46 +60,20 @@ export const WorkoutCard = ({ exercises, dateStarted, dateEnded, current }: Prop
     .toString()
     .padStart(2, "0");
 
-  const getMuscleGroupSet = (exercises: WorkoutExercise[]) => {
-    const set = new Set<string>();
-
-    exercises.forEach((e) => {
-      e.primaryMuscleGroups?.forEach((pg) => set.add(pg));
-      e.secondaryMuscleGroups?.forEach((sg) => set.add(sg));
-    });
-
-    return set;
-  };
-
   const groups = Array.from(getMuscleGroupSet(exercises ?? []));
 
-  const todayBorderColor = current
-    ? colorScheme === "dark"
-      ? "teal.6"
-      : "teal.8"
-    : colorScheme === "dark"
-      ? "indigo.4"
-      : "indigo.8";
-
   return (
-    <Paper
-      withBorder
-      p="sm"
-      // sx={(theme) => ({
-      //   borderColor: isToday ? theme.fn.themeColor(todayBorderColor) : "",
-      //   boxShadow: isToday ? `0 0 4px 0 ${theme.fn.rgba(theme.fn.themeColor(todayBorderColor), 0.3)}` : "",
-      // })}
-    >
+    <Paper withBorder p="sm">
       <Flex justify="space-between" align="center">
         <Group gap="xs">
           {current ? (
             <Link to="/workout">
-              <Text color="teal.7" fw="500">
+              <Text c="teal.7" fw="500">
                 Current Workout
               </Text>
             </Link>
           ) : (
-            <Text span fw={500} color={isToday ? "indigo.6" : isYesterday ? "violet.5" : ""}>
+            <Text span fw={500} c={isToday ? "indigo.6" : isYesterday ? "violet.5" : ""}>
               {isToday ? "Today" : isYesterday ? "Yesterday" : dayOfWeek}
             </Text>
           )}
