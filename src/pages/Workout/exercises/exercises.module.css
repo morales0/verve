@@ -1,3 +1,7 @@
+.exercises {
+  overflow: hidden;
+}
+
 .input {
   background: transparent;
   border: none;

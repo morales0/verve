@@ -15,19 +15,22 @@ import {
   TextInput,
 } from "@mantine/core";
 import { useState } from "react";
+import classes from "./select.module.css";
+import { useNavigate } from "react-router-dom";
 
 export type SelectProps = {
-  onReturn: () => void;
+  onCancelWorkout: () => void;
   onStartExercise: () => void;
 };
 
-export const Select = ({ onReturn, onStartExercise }: SelectProps) => {
+export const Select = ({ onCancelWorkout, onStartExercise }: SelectProps) => {
+  const navigate = useNavigate();
   const { status, data: userExercises, api } = useUserExercises();
   const [filterOption, setFilterOption] = useState<"filter" | "sort" | undefined>(undefined);
 
   console.log(userExercises);
   return (
-    <Stack h="100%" sx={{ overflow: "hidden" }} gap={0}>
+    <Stack className={classes.select} h="100%" gap={0}>
       <Flex align="center" gap="xs" w="100%" py="xs" px="xs">
         <ActionIcon size="lg" radius="sm" variant="light" color="gray">
           <Icon icon="icon-park-outline:return" />
@@ -88,7 +91,7 @@ export const Select = ({ onReturn, onStartExercise }: SelectProps) => {
         </Flex>
       )}
 
-      <Stack gap="xs" px="xs" py="sm" sx={{ overflow: "auto" }}>
+      <Stack className={classes.scroll} gap="xs" px="xs" py="sm">
         {status === "loading" && <div>Loading...</div>}
         {status === "error" && <div>Error loading exercises</div>}
         {status === "success" && (
@@ -172,12 +175,12 @@ export const Select = ({ onReturn, onStartExercise }: SelectProps) => {
 
       <Divider mt="auto" />
 
-      <Group w="100%" py="md" px="xs" align="center" position="apart" grow>
-        <Button size="sm" variant="light" color="red" onClick={onReturn}>
-          Cancel
+      <Group w="100%" pt="sm" pb="md" px="xs" align="center" justify="space-between" grow>
+        <Button size="sm" variant="light" color="red" onClick={onCancelWorkout}>
+          Cancel Workout
         </Button>
-        <Button size="sm" color="blue.4" onClick={onStartExercise}>
-          Start
+        <Button size="sm" color="blue.5" onClick={() => navigate(`/workout/exercise/${"pushup"}`)}>
+          Start Exercises
         </Button>
       </Group>
     </Stack>

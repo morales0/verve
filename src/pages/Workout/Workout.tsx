@@ -3,19 +3,26 @@ import { Summary } from "./summary";
 import { useState } from "react";
 import { Select } from "./select";
 import { Exercises } from "./exercises";
+import classes from "./workout.module.css";
+import { Link, Route, Routes } from "react-router-dom";
 
 export const Workout = () => {
-  const [screen, setScreen] = useState<"summary" | "exercise" | "select">("exercise");
+  const [screen, setScreen] = useState<"summary" | "exercise" | "select">("select");
+
+  const cancelWorkout = () => {
+    console.log("cancel workout");
+  };
+  const startExercises = () => {
+    console.log("start exercises");
+  };
 
   return (
-    <Box h="100%" pb="sm" sx={{ overflow: "hidden" }}>
-      {screen === "summary" && <Summary onAddExercise={() => setScreen("select")} />}
-      {screen === "select" && (
-        <Select onReturn={() => setScreen("summary")} onStartExercise={() => setScreen("exercise")} />
-      )}
-      {screen === "exercise" && (
-        <Exercises onRemove={() => setScreen("summary")} onFinish={() => setScreen("summary")} />
-      )}
+    <Box h="100%" pb="sm" className={classes.workout}>
+      <Routes>
+        <Route path="/" element={<Select />} />
+        <Route path="/summary" element={<Summary />} />
+        <Route path="/exercise/:name" element={<Exercises />} />
+      </Routes>
     </Box>
   );
 };

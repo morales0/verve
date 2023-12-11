@@ -3,6 +3,15 @@
   overflow: hidden;
 }
 
+/* Global classes */
+.heightLocked {
+  overflow: hidden;
+}
+
+.scrollable {
+  overflow: auto;
+}
+
 /* Theme overrides */
 
 .lightButton {

@@ -1,6 +1,8 @@
 import { Button, Divider, Flex, Group, Menu, SegmentedControl, Stack, Text, UnstyledButton } from "@mantine/core";
 import { forwardRef } from "react";
 import { Icon } from "@iconify/react";
+import classes from "./exercises.module.css";
+import { useNavigate, useParams } from "react-router-dom";
 
 const data = [
   { value: "bench-press", label: "Bench press" },
@@ -15,11 +17,10 @@ const ExerciseSwitch = forwardRef<HTMLButtonElement, ExerciseSwitchProps>(
   ({ exercise, ...others }: ExerciseSwitchProps, ref) => (
     <UnstyledButton ref={ref} {...others}>
       <Group gap="xs" align="center">
-        <Text fz="xl" weight={500}>
+        <Icon icon="icon-park-outline:switch" />
+        <Text fz="xl" fw={500}>
           {exercise}
         </Text>
-
-        <Icon icon="icon-park-outline:switch" />
       </Group>
     </UnstyledButton>
   )
@@ -33,10 +34,13 @@ export type ExercisesProps = {
 };
 
 export const Exercises = ({ onRemove, onFinish }: ExercisesProps) => {
+  const params = useParams();
+  const navigate = useNavigate();
+
   return (
-    <Stack px="xs" pb="xs" gap={0} h="100%" sx={{ overflow: "hidden" }}>
+    <Stack className={classes.exercises} px="xs" gap={0} h="100%">
       <Flex justify="space-between" align="center" py={6}>
-        <Menu position="bottom-end">
+        <Menu position="bottom-start">
           <Menu.Target>
             <ExerciseSwitch exercise={data[0].label} />
           </Menu.Target>
@@ -57,12 +61,9 @@ export const Exercises = ({ onRemove, onFinish }: ExercisesProps) => {
       <Divider />
 
       <Divider mt="auto" />
-      <Group w="100%" py="md" px="xs" align="center" position="apart" grow>
-        <Button size="sm" variant="light" color="red" onClick={onRemove}>
-          Remove
-        </Button>
-        <Button size="sm" color="teal" onClick={onFinish}>
-          Finish
+      <Group w="100%" pt="sm" pb="md" px="xs" align="center" justify="space-between" grow>
+        <Button size="sm" color="teal" onClick={() => navigate("/workout/summary")}>
+          Go to Summary
         </Button>
       </Group>
     </Stack>

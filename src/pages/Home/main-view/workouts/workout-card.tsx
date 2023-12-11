@@ -3,6 +3,7 @@ import { Badge, Divider, Flex, Group, Paper, Stack, Text, useMantineColorScheme 
 import { Link } from "react-router-dom";
 import { WorkoutExercise, WorkoutHistory } from "../../../../types/workout";
 import { ExerciseDropdown } from "./exercise-dropdown";
+import { getMuscleGroupSet } from "@/functions/data";
 
 function calcIsToday(date: Date) {
   const today = new Date();
@@ -24,17 +25,6 @@ function calcIsYesterday(date: Date): boolean {
     date.getFullYear() === yesterday.getFullYear()
   );
 }
-
-const getMuscleGroupSet = (exercises: WorkoutExercise[]) => {
-  const set = new Set<string>();
-
-  exercises.forEach((e) => {
-    e.primaryMuscleGroups?.forEach((pg) => set.add(pg));
-    e.secondaryMuscleGroups?.forEach((sg) => set.add(sg));
-  });
-
-  return set;
-};
 
 type WorkoutCardProps = Pick<WorkoutHistory, "dateEnded" | "dateStarted" | "exercises"> & {
   current?: boolean;

@@ -14,7 +14,7 @@ const AuthApp = () => {
       <Box className={classes.main}>
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/workout" element={meta.isWorkingOut ? <Workout /> : <Navigate to="/" replace />} />
+          <Route path="/workout/*" element={meta.isWorkingOut ? <Workout /> : <Navigate to="/" replace />} />
         </Routes>
       </Box>
     </Stack>
