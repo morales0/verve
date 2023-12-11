@@ -8,3 +8,20 @@
   font-size: 1.25rem;
   font-weight: bold;
 }
+
+.header {
+}
+
+.exerciseSwitch {
+  min-width: 0;
+}
+
+.title {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.pageSwitch {
+  flex-shrink: 0;
+}

@@ -32,7 +32,7 @@ export const Select = ({ onCancelWorkout, onStartExercise }: SelectProps) => {
   return (
     <Stack className={classes.select} h="100%" gap={0}>
       <Flex align="center" gap="xs" w="100%" py="xs" px="xs">
-        <ActionIcon size="lg" radius="sm" variant="light" color="gray">
+        <ActionIcon size="lg" radius="sm" variant="light" color="gray" onClick={() => navigate("/workout/summary")}>
           <Icon icon="icon-park-outline:return" />
         </ActionIcon>
         <TextInput variant="unstyled" placeholder="Search or create..." sx={{ flexGrow: 1 }} />

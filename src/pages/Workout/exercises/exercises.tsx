@@ -1,11 +1,22 @@
-import { Button, Divider, Flex, Group, Menu, SegmentedControl, Stack, Text, UnstyledButton } from "@mantine/core";
+import {
+  ActionIcon,
+  Button,
+  Divider,
+  Flex,
+  Group,
+  Menu,
+  SegmentedControl,
+  Stack,
+  Text,
+  UnstyledButton,
+} from "@mantine/core";
 import { forwardRef } from "react";
 import { Icon } from "@iconify/react";
 import classes from "./exercises.module.css";
 import { useNavigate, useParams } from "react-router-dom";
 
 const data = [
-  { value: "bench-press", label: "Bench press" },
+  { value: "bench-press", label: "Standing Lateral Back Lunge" },
   { value: "deadlift", label: "Deadlift" },
 ];
 
@@ -15,13 +26,15 @@ interface ExerciseSwitchProps extends React.ComponentPropsWithoutRef<"button"> {
 
 const ExerciseSwitch = forwardRef<HTMLButtonElement, ExerciseSwitchProps>(
   ({ exercise, ...others }: ExerciseSwitchProps, ref) => (
-    <UnstyledButton ref={ref} {...others}>
-      <Group gap="xs" align="center">
-        <Icon icon="icon-park-outline:switch" />
-        <Text fz="xl" fw={500}>
+    <UnstyledButton ref={ref} {...others} className={classes.exerciseSwitch}>
+      <Flex gap="xs" align="center">
+        <ActionIcon component="div" variant="light" size="sm">
+          <Icon icon="icon-park-outline:switch" />
+        </ActionIcon>
+        <Text className={classes.title} fz="md" fw={500}>
           {exercise}
         </Text>
-      </Group>
+      </Flex>
     </UnstyledButton>
   )
 );
@@ -50,7 +63,10 @@ export const Exercises = ({ onRemove, onFinish }: ExercisesProps) => {
             ))}
           </Menu.Dropdown>
         </Menu>
+
         <SegmentedControl
+          className={classes.pageSwitch}
+          size="xs"
           data={[
             { label: "Sets", value: "sets" },
             { label: "History", value: "history" },
