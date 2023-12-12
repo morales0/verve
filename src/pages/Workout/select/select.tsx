@@ -3,20 +3,29 @@ import { Icon } from "@iconify/react";
 import {
   ActionIcon,
   Badge,
+  BadgeProps,
+  Box,
   Button,
+  Center,
   Checkbox,
   Divider,
   Flex,
   Group,
+  Loader,
   Menu,
   Paper,
   Stack,
+  Switch,
   Text,
   TextInput,
+  createPolymorphicComponent,
 } from "@mantine/core";
 import { useState } from "react";
 import classes from "./select.module.css";
 import { useNavigate } from "react-router-dom";
+import { IconPlus, IconX } from "@tabler/icons-react";
+import { useScrollIntoView } from "@mantine/hooks";
+import { Exercises } from "./exercises";
 
 export type SelectProps = {
   onCancelWorkout: () => void;
@@ -26,16 +35,60 @@ export type SelectProps = {
 export const Select = ({ onCancelWorkout, onStartExercise }: SelectProps) => {
   const navigate = useNavigate();
   const { status, data: userExercises, api } = useUserExercises();
+  const [query, setQuery] = useState("");
   const [filterOption, setFilterOption] = useState<"filter" | "sort" | undefined>(undefined);
+  const [selections, setSelections] = useState<string[][]>([[]]);
+  const [currGroup, setCurrGroup] = useState(0);
+  const { scrollIntoView, targetRef, scrollableRef } = useScrollIntoView<HTMLDivElement, HTMLDivElement>({
+    axis: "x",
+    duration: 800,
+  });
 
-  console.log(userExercises);
+  const filteredExercises = userExercises.filter(
+    (ex) => query === "" || ex.name.toLowerCase().includes(query.toLowerCase())
+  );
+
+  const filteredSelections = selections.map((selection) =>
+    selection.filter((id) => id.toLowerCase().includes(query.toLowerCase()))
+  );
+
+  const onChangeExercise = (id: string, checked: boolean) => {
+    setSelections((prev) => {
+      const newSelections = [...prev];
+
+      if (checked) {
+        newSelections[currGroup] = [...newSelections[currGroup], id];
+      } else {
+        newSelections[currGroup] = newSelections[currGroup].filter((n) => n !== id);
+      }
+      return newSelections;
+    });
+  };
+
+  const onChangeAllExercises = (checked: boolean) => {
+    setSelections((prev) => {
+      const newSelections = [...prev];
+
+      if (checked) {
+        newSelections[currGroup] = filteredExercises.map(({ id, name }) => `${name}-${id}`);
+      } else {
+        newSelections[currGroup] = [];
+      }
+      return newSelections;
+    });
+  };
+
   return (
     <Stack className={classes.select} h="100%" gap={0}>
+      {/* Search section */}
       <Flex align="center" gap="xs" w="100%" py="xs" px="xs">
-        <ActionIcon size="lg" radius="sm" variant="light" color="gray" onClick={() => navigate("/workout/summary")}>
-          <Icon icon="icon-park-outline:return" />
-        </ActionIcon>
-        <TextInput variant="unstyled" placeholder="Search or create..." sx={{ flexGrow: 1 }} />
+        <TextInput
+          value={query}
+          onChange={(event) => setQuery(event.target.value)}
+          variant="unstyled"
+          placeholder="Search or create..."
+          styles={{ root: { flexGrow: 1 } }}
+        />
         <ActionIcon size="lg" radius="sm" variant="light" color="teal">
           <Icon icon="mdi:plus" />
         </ActionIcon>
@@ -57,124 +110,112 @@ export const Select = ({ onCancelWorkout, onStartExercise }: SelectProps) => {
         >
           <Icon icon="iconoir:sort" />
         </ActionIcon>
+        <ActionIcon
+          size="lg"
+          radius="sm"
+          variant="light"
+          color="pink"
+          disabled={query === ""}
+          onClick={() => {
+            setQuery("");
+            setFilterOption(undefined);
+          }}
+        >
+          <Icon icon="iwwa:reset" />
+        </ActionIcon>
       </Flex>
 
       <Divider />
 
-      {filterOption !== undefined && (
-        <Flex sx={{ overflowX: "auto", "& > *": { flexShrink: 0 } }} align="center" gap="md" p="sm">
-          {filterOption === "sort" ? (
-            <>
-              <Badge size="lg" color="gray.3" c="gray" variant="outline">
-                Most Used
-              </Badge>
-              <Badge size="lg" color="gray.3" c="gray" variant="outline">
-                Last Used
-              </Badge>
-              <Badge size="lg" color="gray.3" c="gray" variant="outline">
-                Recently Added
-              </Badge>
-            </>
-          ) : (
-            <>
-              <Badge size="lg" color="gray.3" c="gray" variant="outline">
-                Chest
-              </Badge>
-              <Badge size="lg" color="gray.3" c="gray" variant="outline">
-                Barbell
-              </Badge>
-              <Badge size="lg" color="gray.3" c="gray" variant="outline">
-                Dumbbell
-              </Badge>
-            </>
-          )}
-        </Flex>
+      {/* Circuit section */}
+      <Flex className={classes.circuitsContainer} ref={scrollableRef} gap={6} px="xs" py={6} align="center">
+        <Badge
+          component="button"
+          size={currGroup === 0 ? "lg" : "md"}
+          color="teal"
+          variant={currGroup === 0 ? "filled" : "outline"}
+          onClick={() => setCurrGroup(0)}
+        >
+          Normal {selections[0] && `(${selections[0].length})`}
+        </Badge>
+        {
+          // For every array within the array of selections after index 1, add a badge for that array
+          selections.slice(1).map((selection, i) => (
+            <Badge
+              key={i}
+              component="button"
+              onClick={() => setCurrGroup(i + 1)}
+              size={currGroup === i + 1 ? "lg" : "md"}
+              color="blue"
+              variant={currGroup === i + 1 ? "filled" : "outline"}
+            >
+              Circuit {i + 1} ({selection.length})
+            </Badge>
+          ))
+        }
+        <Badge
+          // @ts-expect-error - `ref` is not a valid prop for `Badge` but this still works
+          ref={targetRef}
+          component="button"
+          onClick={() => {
+            const prevLength = selections.length;
+            setSelections((prev) => [...prev, []]);
+            setCurrGroup(prevLength);
+            scrollIntoView({ alignment: "center" });
+          }}
+          size="md"
+          variant="light"
+        >
+          <Group gap={5} align="center">
+            <IconPlus width={14} />
+            Circuit
+          </Group>
+        </Badge>
+      </Flex>
+
+      <Divider mx="xs" />
+
+      {/* List section */}
+      {status !== "success" && (
+        <Center p="xs" pt="md">
+          {status === "loading" ? <Loader variant="" /> : <Text>An error occurred. Try again.</Text>}
+        </Center>
       )}
 
-      <Stack className={classes.scroll} gap="xs" px="xs" py="sm">
-        {status === "loading" && <div>Loading...</div>}
-        {status === "error" && <div>Error loading exercises</div>}
-        {status === "success" && (
-          <>
-            <Flex justify="space-between">
-              <Checkbox />
-              <Text color="dimmed" fz="sm">
-                Showing # of {userExercises.length} exercises
-              </Text>
-            </Flex>
+      {status === "success" && (
+        <Box className={classes.scroll} p="xs">
+          <Exercises
+            exercises={filteredExercises}
+            total={userExercises.length}
+            selections={filteredSelections}
+            currGroup={currGroup}
+            onChange={onChangeExercise}
+            onChangeAll={onChangeAllExercises}
+          />
+        </Box>
+      )}
 
-            {userExercises?.map(({ id, name, weightType, primaryMuscleGroups, secondaryMuscleGroups }) => (
-              <Checkbox
-                key={id || name}
-                color="teal"
-                styles={{
-                  body: { width: "100%", alignItems: "center", gap: 0 },
-                  labelWrapper: { flexGrow: 1 },
-                  label: { cursor: "pointer" },
-                  input: { cursor: "pointer" },
-                }}
-                label={
-                  <Paper withBorder px="xs" py={6} radius="sm">
-                    <Flex justify="space-between">
-                      <Flex align="baseline" gap="xs">
-                        <Text fw={500} fz="md">
-                          {name}
-                        </Text>
-                        {weightType && (
-                          <Text italic fw={500} color="dimmed" fz="xs" span>
-                            {" "}
-                            {weightType}
-                          </Text>
-                        )}
-                      </Flex>
+      {/* Bottom control section */}
+      <Box display={currGroup === 0 ? "none" : ""} mt="auto" px="xs">
+        <Divider />
+        <Center py={6}>
+          <Button
+            size="compact-sm"
+            color="pink"
+            onClick={() => {
+              setSelections((prev) => prev.filter((_, index) => index !== currGroup));
 
-                      <Menu shadow="md" position="left">
-                        <Menu.Target>
-                          <ActionIcon variant="transparent" color="violet.4">
-                            <Icon icon="fluent:options-20-regular" width={24} />
-                          </ActionIcon>
-                        </Menu.Target>
+              if (currGroup === selections.length - 1) {
+                setCurrGroup(currGroup - 1);
+              }
+            }}
+          >
+            Remove Circuit
+          </Button>
+        </Center>
+      </Box>
 
-                        <Menu.Dropdown>
-                          <Menu.Item color="indigo" icon={<Icon icon="material-symbols:edit" />}>
-                            Edit
-                          </Menu.Item>
-                          <Menu.Item color="red" icon={<Icon icon="ic:baseline-delete-forever" />}>
-                            Delete
-                          </Menu.Item>
-                        </Menu.Dropdown>
-                      </Menu>
-                    </Flex>
-
-                    <Flex justify="space-between">
-                      <Flex>
-                        {primaryMuscleGroups && (
-                          <Text fz="xs" fw={400}>
-                            {Object.values(primaryMuscleGroups).join(", ")}
-                          </Text>
-                        )}
-                        {secondaryMuscleGroups && (
-                          <Text fz="xs" color="dimmed" fw={400}>
-                            {", "}
-                            {Object.values(secondaryMuscleGroups).join(", ")}
-                          </Text>
-                        )}
-                      </Flex>
-
-                      <Text fz="xs" color="cyan.7">
-                        3 days ago
-                      </Text>
-                    </Flex>
-                  </Paper>
-                }
-              />
-            ))}
-          </>
-        )}
-      </Stack>
-
-      <Divider mt="auto" />
-
+      <Divider mt={currGroup === 0 ? "auto" : ""} />
       <Group w="100%" pt="sm" pb="md" px="xs" align="center" justify="space-between" grow>
         <Button size="sm" variant="light" color="red" onClick={onCancelWorkout}>
           Cancel Workout

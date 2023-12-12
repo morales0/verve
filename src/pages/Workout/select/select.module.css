@@ -5,3 +5,14 @@
 .scroll {
   overflow: auto;
 }
+
+.circuitsWrapper {
+}
+
+.circuitsContainer {
+  flex-shrink: 0;
+  overflow-x: auto;
+  & > * {
+    flex-shrink: 0;
+  }
+}
