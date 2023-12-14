@@ -20,7 +20,8 @@ export const Exercises = ({ exercises, total, selections, currGroup, onChange, o
           <Checkbox
             color={currGroup === 0 ? "teal" : "blue"}
             indeterminate={selections[currGroup].length > 0 && selections[currGroup].length < exercises.length}
-            checked={exercises.length === selections[currGroup].length}
+            checked={exercises.length === selections[currGroup].length && exercises.length > 0}
+            disabled={exercises.length === 0}
             onChange={(event) => onChangeAll(event.currentTarget.checked)}
           />
           <Text c="dimmed" fz="sm">

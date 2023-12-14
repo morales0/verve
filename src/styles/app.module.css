@@ -5,6 +5,7 @@
 
 /* Global classes */
 .heightLocked {
+  height: 100%;
   overflow: hidden;
 }
 

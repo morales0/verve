@@ -78,6 +78,10 @@ export const Select = ({ onCancelWorkout, onStartExercise }: SelectProps) => {
     });
   };
 
+  const navigateToExerciseForm = () => {
+    navigate(`/exercise-form${query ? `?name=${query}` : ""}`, { state: { prevPath: "/workout/select" } });
+  };
+
   return (
     <Stack className={classes.select} h="100%" gap={0}>
       {/* Search section */}
@@ -89,7 +93,7 @@ export const Select = ({ onCancelWorkout, onStartExercise }: SelectProps) => {
           placeholder="Search or create..."
           styles={{ root: { flexGrow: 1 } }}
         />
-        <ActionIcon size="lg" radius="sm" variant="light" color="teal">
+        <ActionIcon size="lg" radius="sm" variant="light" color="teal" onClick={navigateToExerciseForm}>
           <Icon icon="mdi:plus" />
         </ActionIcon>
         <ActionIcon

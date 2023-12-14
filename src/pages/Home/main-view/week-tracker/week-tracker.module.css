@@ -22,7 +22,7 @@
 
   &[data-today="true"] {
     font-weight: 500;
-    border-color: var(--mantine-color-orange-8);
+    border-color: light-dark(#4b4b4b, var(--mantine-color-gray-1));
   }
 }
 
