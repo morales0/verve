@@ -63,7 +63,7 @@ export const Summary = () => {
                     </Text>
                   ))}
                 </Stack>
-                {ex.sets.map(({ values }, i) => {
+                {ex.sets?.map(({ values }, i) => {
                   return (
                     <Stack key={`${ex.name}-set-${i}`}>
                       {ex.units.map((unit) => (

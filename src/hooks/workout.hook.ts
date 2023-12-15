@@ -43,7 +43,7 @@ const useWorkout = () => {
     return set(newRef, {
       ...exercise,
       workoutId: newRef.key,
-    });
+    }).then(() => newRef.key);
   };
 
   const removeExercise = async (id: string) => {

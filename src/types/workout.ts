@@ -1,9 +1,14 @@
-export type Unit = "Reps" | "Weight" | "Minutes" | "Seconds";
+// export type Unit = "Reps" | "Weight" | "Minutes" | "Seconds";
 export type WeightType = "Dumbbell" | "Barbell" | "Kettle Bell";
 
 export type MuscleGroup = {
   name: string;
   dateLastUsed?: string;
+};
+
+export type Unit = {
+  name: string;
+  unitType: "number" | "time" | "weight" | "distance";
 };
 
 export type UserExercise = {
@@ -25,6 +30,7 @@ export type ExerciseSet = {
 export type WorkoutExercise = UserExercise & {
   workoutId?: string;
   sets: ExerciseSet[];
+  circuit: number;
 };
 
 export type Workout = {

@@ -14,6 +14,7 @@ import { forwardRef } from "react";
 import { Icon } from "@iconify/react";
 import classes from "./exercises.module.css";
 import { useNavigate, useParams } from "react-router-dom";
+import useWorkout from "@/hooks/workout.hook";
 
 const data = [
   { value: "bench-press", label: "Standing Lateral Back Lunge" },
@@ -49,6 +50,12 @@ export type ExercisesProps = {
 export const Exercises = ({ onRemove, onFinish }: ExercisesProps) => {
   const params = useParams();
   const navigate = useNavigate();
+  const { workout } = useWorkout();
+
+  const exWId = params["id"];
+  const workoutExs = workout.exercises;
+
+  console.log(exWId, workoutExs);
 
   return (
     <Stack className={classes.exercises} px="xs" gap={0} h="100%">
@@ -57,11 +64,7 @@ export const Exercises = ({ onRemove, onFinish }: ExercisesProps) => {
           <Menu.Target>
             <ExerciseSwitch exercise={data[0].label} />
           </Menu.Target>
-          <Menu.Dropdown>
-            {data.map((item) => (
-              <Menu.Item key={item.value}>{item.label}</Menu.Item>
-            ))}
-          </Menu.Dropdown>
+          <Menu.Dropdown>{workoutExs?.map(({ id, name }) => <Menu.Item key={id}>{name}</Menu.Item>)}</Menu.Dropdown>
         </Menu>
 
         <SegmentedControl

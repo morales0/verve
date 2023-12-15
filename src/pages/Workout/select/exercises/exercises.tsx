@@ -36,8 +36,8 @@ export const Exercises = ({ exercises, total, selections, currGroup, onChange, o
       {exercises?.map(({ id, name, weightType, primaryMuscleGroups, secondaryMuscleGroups }) => (
         <Checkbox
           key={id || name}
-          checked={selections[currGroup]?.includes(`${name}-${id}`)}
-          onChange={(event) => onChange(`${name}-${id}`, event.currentTarget.checked)}
+          checked={selections[currGroup]?.includes(id!)}
+          onChange={(event) => onChange(id!, event.currentTarget.checked)}
           color={currGroup === 0 ? "teal" : "blue"}
           styles={{
             body: { width: "100%", alignItems: "center", gap: 0 },

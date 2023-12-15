@@ -21,7 +21,7 @@ export const Workout = () => {
       <Routes>
         <Route path="/" element={<Select />} />
         <Route path="/summary" element={<Summary />} />
-        <Route path="/exercise/:name" element={<Exercises />} />
+        <Route path="/exercise/:id" element={<Exercises />} />
       </Routes>
     </Box>
   );
