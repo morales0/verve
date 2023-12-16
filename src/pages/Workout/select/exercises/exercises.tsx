@@ -1,4 +1,6 @@
-import { UserExercise } from "@/types/workout";
+import useUserExercises from "@/hooks/userExercises.hook";
+import useWorkout from "@/hooks/workout.hook";
+import { UserExercise, WorkoutExercise } from "@/types/workout";
 import { Icon } from "@iconify/react";
 import { ActionIcon, Checkbox, Flex, Menu, Paper, Stack, Text } from "@mantine/core";
 import { IconHelp } from "@tabler/icons-react";
@@ -13,6 +15,30 @@ export type ExercisesProps = {
 };
 
 export const Exercises = ({ exercises, total, selections, currGroup, onChange, onChangeAll }: ExercisesProps) => {
+  const workout = useWorkout();
+
+  const handleChangeExercise = (id: string, checked: boolean) => {
+    const ex = exercises.find((ex) => ex.id === id);
+    if (!ex) return;
+
+    if (checked) {
+      const newWEx: WorkoutExercise = {
+        ...ex,
+        sets: [],
+        circuit: currGroup,
+      };
+      workout.api.addExercise(newWEx);
+    } else {
+      const wEx = workout.data?.exercises?.find((wEx) => wEx.id === id);
+
+      if (!wEx) return;
+
+      workout.api.removeExercise(wEx.workoutId!);
+    }
+
+    console.log("changing", id);
+  };
+
   return (
     <Stack gap="xs">
       <Flex justify="space-between">
@@ -37,7 +63,7 @@ export const Exercises = ({ exercises, total, selections, currGroup, onChange, o
         <Checkbox
           key={id || name}
           checked={selections[currGroup]?.includes(id!)}
-          onChange={(event) => onChange(id!, event.currentTarget.checked)}
+          onChange={(event) => handleChangeExercise(id!, event.currentTarget.checked)}
           color={currGroup === 0 ? "teal" : "blue"}
           styles={{
             body: { width: "100%", alignItems: "center", gap: 0 },

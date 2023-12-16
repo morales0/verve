@@ -112,7 +112,7 @@ const useWorkout = () => {
 
   return {
     status,
-    workout,
+    data: workout,
     api: {
       addExercise,
       removeExercise,

@@ -42,12 +42,7 @@ const ExerciseSwitch = forwardRef<HTMLButtonElement, ExerciseSwitchProps>(
 
 ExerciseSwitch.displayName = "ExerciseSwitch";
 
-export type ExercisesProps = {
-  onRemove: () => void;
-  onFinish: () => void;
-};
-
-export const Exercises = ({ onRemove, onFinish }: ExercisesProps) => {
+export const Exercises = () => {
   const params = useParams();
   const navigate = useNavigate();
   const { workout } = useWorkout();

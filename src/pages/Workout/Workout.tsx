@@ -1,23 +1,14 @@
-import { Box, Stack } from "@mantine/core";
-import { Summary } from "./summary";
-import { useState } from "react";
-import { Select } from "./select";
+import { Box } from "@mantine/core";
+import { Route, Routes } from "react-router-dom";
 import { Exercises } from "./exercises";
-import classes from "./workout.module.css";
-import { Link, Route, Routes } from "react-router-dom";
+import { Select } from "./select";
+import { Summary } from "./summary";
+// import classes from "./workout.module.css";
+import globalClasses from "@/styles/app.module.css";
 
 export const Workout = () => {
-  const [screen, setScreen] = useState<"summary" | "exercise" | "select">("select");
-
-  const cancelWorkout = () => {
-    console.log("cancel workout");
-  };
-  const startExercises = () => {
-    console.log("start exercises");
-  };
-
   return (
-    <Box h="100%" pb="sm" className={classes.workout}>
+    <Box className={globalClasses.heightLocked} h="100%" pb="sm">
       <Routes>
         <Route path="/" element={<Select />} />
         <Route path="/summary" element={<Summary />} />

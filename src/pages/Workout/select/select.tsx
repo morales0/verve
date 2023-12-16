@@ -20,273 +20,194 @@ import {
   TextInput,
   createPolymorphicComponent,
 } from "@mantine/core";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import classes from "./select.module.css";
 import { useLocation, useNavigate } from "react-router-dom";
 import { IconLocationSearch, IconPlus, IconX } from "@tabler/icons-react";
 import { useScrollIntoView } from "@mantine/hooks";
 import { Exercises } from "./exercises";
-import { ExerciseSet, WorkoutExercise } from "@/types/workout";
+import { ExerciseSet, Workout, WorkoutExercise } from "@/types/workout";
 import useWorkout from "@/hooks/workout.hook";
+import { Search } from "./search";
+import { Circuits } from "./circuits";
+import { Control } from "./control";
 
-export type SelectProps = {
-  onCancelWorkout: () => void;
-  onStartExercise: () => void;
-};
+const reduceCircuitSelections = (data: WorkoutExercise[] | undefined, size: number) =>
+  data?.reduce<string[][]>(
+    (arr, ex) => {
+      if (ex.circuit < arr.length) {
+        arr[ex.circuit].push(ex.id!);
+      } else {
+        arr[0].push(ex.id!);
+      }
 
-export const Select = ({ onCancelWorkout, onStartExercise }: SelectProps) => {
+      return arr;
+    },
+    Array.from({ length: size }, () => [])
+  ) ?? Array.from({ length: size }, () => []);
+
+export const Select = () => {
+  // console.log("SELECT");
   const location = useLocation();
   const navigate = useNavigate();
-  const { status, data: userExercises, api: userExercisesApi } = useUserExercises();
-  const { status: workoutStatus, workout, api: workoutApi } = useWorkout();
+
+  /* Local state */
+  // const [isStartingExercises, setIsStartingExercises] = useState<boolean>(false);
   const [query, setQuery] = useState<string>(location?.state?.["name"] ?? "");
   const [filterOption, setFilterOption] = useState<"filter" | "sort" | undefined>(undefined);
-  const [selections, setSelections] = useState<string[][]>(location?.state?.["selections"] ?? [[]]);
-  const [currGroup, setCurrGroup] = useState(0);
-  const { scrollIntoView, targetRef, scrollableRef } = useScrollIntoView<HTMLDivElement, HTMLDivElement>({
-    axis: "x",
-    duration: 800,
-  });
+  const [currCircuit, setCurrCircuit] = useState(0);
+  const [numCircuits, setNumCircuits] = useState(0);
 
-  const [isStartingExercises, setIsStartingExercises] = useState<boolean>(false);
+  /* Server state */
+  const userExercises = useUserExercises();
+  const workout = useWorkout();
 
-  const filteredExercises = userExercises.filter(
+  /* Data */
+  const filteredExercises = userExercises.data.filter(
     (ex) => query === "" || ex.name.toLowerCase().includes(query.toLowerCase())
   );
 
-  const filteredSelections = selections.map((selection) =>
-    selection.filter((id) => id.toLowerCase().includes(query.toLowerCase()))
+  const selections: string[][] = useMemo(
+    () => reduceCircuitSelections(workout.data.exercises, numCircuits + 1),
+    [workout.data.exercises, numCircuits]
+  );
+  const filteredSelections = selections?.map((selection) =>
+    selection.filter(
+      (id) =>
+        userExercises.data
+          .find((ex) => ex.id === id)
+          ?.name.toLowerCase()
+          .includes(query.toLowerCase())
+    )
   );
 
-  const onChangeExercise = (id: string, checked: boolean) => {
-    setSelections((prev) => {
-      const newSelections = [...prev];
+  /* Effects */
+  // Update number of circuits when exercises change
+  useEffect(() => {
+    if (workout.data.exercises) {
+      setNumCircuits(workout.data.exercises.reduce((max, ex) => Math.max(max, ex.circuit), 0));
+    }
+  }, [workout.data.exercises]);
 
-      if (checked && !prev[currGroup].includes(id)) {
-        newSelections[currGroup] = [...newSelections[currGroup], id];
-      } else {
-        newSelections[currGroup] = newSelections[currGroup].filter((n) => n !== id);
-      }
-      return newSelections;
-    });
-  };
+  // const onChangeExercise = (id: string, checked: boolean) => {
+  //   setSelections((prev) => {
+  //     const newSelections = [...prev];
 
-  const onChangeAllExercises = (checked: boolean) => {
-    setSelections((prev) => {
-      const newSelections = [...prev];
+  //     if (checked && !prev[currGroup].includes(id)) {
+  //       newSelections[currGroup] = [...newSelections[currGroup], id];
+  //     } else {
+  //       newSelections[currGroup] = newSelections[currGroup].filter((n) => n !== id);
+  //     }
+  //     return newSelections;
+  //   });
+  // };
 
-      if (checked) {
-        newSelections[currGroup] = filteredExercises.map(({ id }) => id!);
-      } else {
-        newSelections[currGroup] = [];
-      }
-      return newSelections;
-    });
-  };
+  // const onChangeAllExercises = (checked: boolean) => {
+  //   setSelections((prev) => {
+  //     const newSelections = [...prev];
 
-  const navigateToExerciseForm = () => {
-    navigate(`/exercise-form${query ? `?name=${query}` : ""}`, { state: { prevPath: "/workout", selections } });
-  };
+  //     if (checked) {
+  //       newSelections[currGroup] = filteredExercises.map(({ id }) => id!);
+  //     } else {
+  //       newSelections[currGroup] = [];
+  //     }
+  //     return newSelections;
+  //   });
+  // };
 
-  const handleStartExercises: React.MouseEventHandler<HTMLButtonElement> = async (event) => {
-    event.stopPropagation();
-    setIsStartingExercises(true);
-    // Get exercise history
-    // const historyRef = child(dataRef, `exerciseHistory/${ex.id}`);
-    // const historyQuery = query(historyRef, limitToLast(1));
-    // const lastExercise = Object.values((await get(historyQuery)).val() ?? {})[0] as ExerciseHistory;
+  // const handleStartExercises: React.MouseEventHandler<HTMLButtonElement> = async (event) => {
+  //   event.stopPropagation();
+  //   setIsStartingExercises(true);
+  //   // Get exercise history
+  //   // const historyRef = child(dataRef, `exerciseHistory/${ex.id}`);
+  //   // const historyQuery = query(historyRef, limitToLast(1));
+  //   // const lastExercise = Object.values((await get(historyQuery)).val() ?? {})[0] as ExerciseHistory;
 
-    // if (lastExercise) {
-    //   sets = lastExercise.sets;
-    // } else if (ex.weightType === "Barbell") {
-    //   sets = [
-    //     {
-    //       values: ex.units.reduce<Record<string, string | number>>(
-    //         (obj, unit) => ((obj[unit] = unit === "Weight" ? 45 : 0), obj),
-    //         {}
-    //       ),
-    //       weights: { bar: 45 },
-    //     },
-    //   ];
-    // } else {
-    //   sets = [{ values: ex.units.reduce<Record<string, string | number>>((obj, unit) => ((obj[unit] = 0), obj), {}) }];
-    // }
+  //   // if (lastExercise) {
+  //   //   sets = lastExercise.sets;
+  //   // } else if (ex.weightType === "Barbell") {
+  //   //   sets = [
+  //   //     {
+  //   //       values: ex.units.reduce<Record<string, string | number>>(
+  //   //         (obj, unit) => ((obj[unit] = unit === "Weight" ? 45 : 0), obj),
+  //   //         {}
+  //   //       ),
+  //   //       weights: { bar: 45 },
+  //   //     },
+  //   //   ];
+  //   // } else {
+  //   //   sets = [{ values: ex.units.reduce<Record<string, string | number>>((obj, unit) => ((obj[unit] = 0), obj), {}) }];
+  //   // }
 
-    let firstExercise: string = "";
-    // Create exercises in each group; ignore empty groups
-    await Promise.all(
-      selections
-        .map((s, i) => ({ circuit: i, exs: s }))
-        .filter(({ exs, circuit }) => circuit === 0 || exs.length > 0)
-        .flatMap(({ circuit, exs }, i) =>
-          exs.map(async (id) => {
-            const ex = userExercises.find((ex) => ex.id === id)!;
-            console.log("SELECT", id);
-            const sets: ExerciseSet[] = [];
-            const newWorkoutExercise: WorkoutExercise = {
-              ...ex,
-              circuit: circuit === 0 ? 0 : i,
-              sets,
-            };
+  //   let firstExercise: string = "";
+  //   // Create exercises in each group; ignore empty groups
+  //   await Promise.all(
+  //     selections
+  //       .map((s, i) => ({ circuit: i, exs: s }))
+  //       .filter(({ exs, circuit }) => circuit === 0 || exs.length > 0)
+  //       .flatMap(({ circuit, exs }, i) =>
+  //         exs.map(async (id) => {
+  //           const ex = userExercises.find((ex) => ex.id === id)!;
+  //           console.log("SELECT", id);
+  //           const sets: ExerciseSet[] = [];
+  //           const newWorkoutExercise: WorkoutExercise = {
+  //             ...ex,
+  //             circuit: circuit === 0 ? 0 : i,
+  //             sets,
+  //           };
 
-            const key = await workoutApi.addExercise(newWorkoutExercise);
-            if (i === 0) {
-              firstExercise = key ?? "";
-            }
-          })
-        )
-    );
+  //           const key = await workoutApi.addExercise(newWorkoutExercise);
+  //           if (i === 0) {
+  //             firstExercise = key ?? "";
+  //           }
+  //         })
+  //       )
+  //   );
 
-    // Navigate to workout page
-    navigate(`/workout/exercise/${firstExercise}`);
+  //   // Navigate to workout page
+  //   navigate(`/workout/exercise/${firstExercise}`);
+  // };
+
+  const handleAddCircuit = () => {
+    setNumCircuits((prev) => prev + 1);
+    setCurrCircuit((prev) => prev + 1);
   };
 
   return (
     <Stack className={classes.select} h="100%" gap={0}>
-      {/* Search section */}
-      <Flex align="center" gap="xs" w="100%" py="xs" px="xs">
-        <TextInput
-          value={query}
-          onChange={(event) => setQuery(event.target.value)}
-          variant="unstyled"
-          placeholder="Search or create..."
-          styles={{ root: { flexGrow: 1 } }}
-        />
-        <ActionIcon size="lg" radius="sm" variant="light" color="teal" onClick={navigateToExerciseForm}>
-          <Icon icon="mdi:plus" />
-        </ActionIcon>
-        <ActionIcon
-          size="lg"
-          radius="sm"
-          variant={filterOption === "filter" ? "filled" : "light"}
-          color="blue"
-          onClick={() => setFilterOption((prev) => (prev === "filter" ? undefined : "filter"))}
-        >
-          <Icon icon="mdi:filter-outline" />
-        </ActionIcon>
-        <ActionIcon
-          size="lg"
-          radius="sm"
-          variant={filterOption === "sort" ? "filled" : "light"}
-          color="blue"
-          onClick={() => setFilterOption((prev) => (prev === "sort" ? undefined : "sort"))}
-        >
-          <Icon icon="iconoir:sort" />
-        </ActionIcon>
-        <ActionIcon
-          size="lg"
-          radius="sm"
-          variant="light"
-          color="pink"
-          disabled={query === ""}
-          onClick={() => {
-            setQuery("");
-            setFilterOption(undefined);
-          }}
-        >
-          <Icon icon="iwwa:reset" />
-        </ActionIcon>
-      </Flex>
-
+      <Search
+        query={query}
+        setQuery={setQuery}
+        filterOption={filterOption}
+        setFilterOption={setFilterOption}
+        toggleFilterOption={(option) => setFilterOption((prev) => (prev === option ? undefined : option))}
+      />
       <Divider />
-
-      {/* Circuit section */}
-      <Flex className={classes.circuitsContainer} ref={scrollableRef} gap={6} px="xs" py={6} align="center">
-        <Badge
-          component="button"
-          size={currGroup === 0 ? "lg" : "md"}
-          color="teal"
-          variant={currGroup === 0 ? "filled" : "outline"}
-          onClick={() => setCurrGroup(0)}
-        >
-          Normal {selections[0] && `(${selections[0].length})`}
-        </Badge>
-        {
-          // For every array within the array of selections after index 1, add a badge for that array
-          selections.slice(1).map((selection, i) => (
-            <Badge
-              key={i}
-              component="button"
-              onClick={() => setCurrGroup(i + 1)}
-              size={currGroup === i + 1 ? "lg" : "md"}
-              color="blue"
-              variant={currGroup === i + 1 ? "filled" : "outline"}
-            >
-              Circuit {i + 1} ({selection.length})
-            </Badge>
-          ))
-        }
-        <Badge
-          // @ts-expect-error - `ref` is not a valid prop for `Badge` but this still works
-          ref={targetRef}
-          component="button"
-          onClick={() => {
-            const prevLength = selections.length;
-            setSelections((prev) => [...prev, []]);
-            setCurrGroup(prevLength);
-            scrollIntoView({ alignment: "center" });
-          }}
-          size="md"
-          variant="light"
-        >
-          <Group gap={5} align="center">
-            <IconPlus width={14} />
-            Circuit
-          </Group>
-        </Badge>
-      </Flex>
-
+      <Circuits
+        selections={selections}
+        addCircuit={handleAddCircuit}
+        currCircuit={currCircuit}
+        setCurrCircuit={(value) => setCurrCircuit(Number(value))}
+      />
       <Divider mx="xs" />
 
-      {/* List section */}
-      {status !== "success" && (
-        <Center p="xs" pt="md">
-          {status === "loading" ? <Loader variant="" /> : <Text>An error occurred. Try again.</Text>}
-        </Center>
-      )}
-
-      {status === "success" && (
-        <Box className={classes.scroll} p="xs">
+      <Box className={classes.scroll} p="xs">
+        {userExercises.status === "success" ? (
           <Exercises
             exercises={filteredExercises}
-            total={userExercises.length}
+            total={userExercises.data.length}
             selections={filteredSelections}
-            currGroup={currGroup}
-            onChange={onChangeExercise}
-            onChangeAll={onChangeAllExercises}
+            currGroup={currCircuit}
+            onChange={(id, checked) => {}}
+            onChangeAll={(checked) => {}}
           />
-        </Box>
-      )}
-
-      {/* Bottom control section */}
-      <Box display={currGroup === 0 ? "none" : ""} mt="auto" px="xs">
-        <Divider />
-        <Center py={6}>
-          <Button
-            size="compact-sm"
-            color="pink"
-            onClick={() => {
-              setSelections((prev) => prev.filter((_, index) => index !== currGroup));
-
-              if (currGroup === selections.length - 1) {
-                setCurrGroup(currGroup - 1);
-              }
-            }}
-          >
-            Remove Circuit
-          </Button>
-        </Center>
+        ) : (
+          <Center pt="md">
+            {userExercises.status === "loading" ? <Loader /> : <Text>An error occurred. Try again.</Text>}
+          </Center>
+        )}
       </Box>
-
-      <Divider mt={currGroup === 0 ? "auto" : ""} />
-      <Group w="100%" pt="sm" pb="md" px="xs" align="center" justify="space-between" grow>
-        <Button size="sm" variant="light" color="red" onClick={onCancelWorkout}>
-          Cancel Workout
-        </Button>
-        <Button size="sm" color="blue.5" loading={isStartingExercises} onClick={handleStartExercises}>
-          Start Exercises
-        </Button>
-      </Group>
+      {/* <Control /> */}
     </Stack>
   );
 };
