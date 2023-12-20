@@ -12,7 +12,7 @@ const createWorkout = async (userRef: DatabaseReference) => {
     minute: "2-digit",
   });
 
-  return set(child(userRef, "/currentWorkout"), {
+  return set(child(userRef, "/workout"), {
     dateStarted: now.toString(),
     timeStarted: time,
   }).then(() => {

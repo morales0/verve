@@ -1,52 +1,53 @@
-import useUserExercises from "@/hooks/userExercises.hook";
-import useWorkout from "@/hooks/workout.hook";
+import { STATUS } from "@/types/util";
 import { UserExercise, WorkoutExercise } from "@/types/workout";
 import { Icon } from "@iconify/react";
-import { ActionIcon, Checkbox, Flex, Menu, Paper, Stack, Text } from "@mantine/core";
+import { ActionIcon, Center, Checkbox, Flex, Loader, Menu, Paper, Stack, Text } from "@mantine/core";
 import { IconHelp } from "@tabler/icons-react";
+export type ExerciseSelection = Pick<WorkoutExercise, "id" | "name"> & { index: number };
 
 export type ExercisesProps = {
   exercises: UserExercise[];
+  status: STATUS;
   total: number;
-  selections: string[][];
-  currGroup: number;
-  onChange: (id: string, checked: boolean) => void;
+  selections: ExerciseSelection[][];
+  currCircuit: number;
+  onSelect: (id: string) => void;
+  onDeselect: (id: string) => void;
   onChangeAll: (checked: boolean) => void;
 };
 
-export const Exercises = ({ exercises, total, selections, currGroup, onChange, onChangeAll }: ExercisesProps) => {
-  const workout = useWorkout();
+export const Exercises = ({
+  exercises,
+  status,
+  total,
+  selections,
+  currCircuit,
+  onSelect,
+  onDeselect,
+  onChangeAll,
+}: ExercisesProps) => {
+  // const workout = useWorkout();
 
-  const handleChangeExercise = (id: string, checked: boolean) => {
-    const ex = exercises.find((ex) => ex.id === id);
-    if (!ex) return;
-
-    if (checked) {
-      const newWEx: WorkoutExercise = {
-        ...ex,
-        sets: [],
-        circuit: currGroup,
-      };
-      workout.api.addExercise(newWEx);
-    } else {
-      const wEx = workout.data?.exercises?.find((wEx) => wEx.id === id);
-
-      if (!wEx) return;
-
-      workout.api.removeExercise(wEx.workoutId!);
-    }
-
-    console.log("changing", id);
-  };
+  if (status !== "success") {
+    return <Center pt="md">{status === "loading" ? <Loader /> : <Text>An error occurred. Try again.</Text>}</Center>;
+  }
 
   return (
     <Stack gap="xs">
       <Flex justify="space-between">
         <Flex align="center" gap="xs">
           <Checkbox
-            color={currGroup === 0 ? "teal" : "blue"}
-            indeterminate={selections[currGroup].length > 0 && selections[currGroup].length < exercises.length}
-            checked={exercises.length === selections[currGroup].length && exercises.length > 0}
+            color={currCircuit === 0 ? "teal" : "blue"}
+            indeterminate={
+              currCircuit < selections.length &&
+              selections[currCircuit].length > 0 &&
+              selections[currCircuit].length < exercises.length
+            }
+            checked={
+              currCircuit < selections.length &&
+              exercises.length === selections[currCircuit].length &&
+              exercises.length > 0
+            }
             disabled={exercises.length === 0}
             onChange={(event) => onChangeAll(event.currentTarget.checked)}
           />
@@ -59,12 +60,12 @@ export const Exercises = ({ exercises, total, selections, currGroup, onChange, o
         </ActionIcon>
       </Flex>
 
-      {exercises?.map(({ id, name, weightType, primaryMuscleGroups, secondaryMuscleGroups }) => (
+      {exercises?.map(({ id, name, type, primaryMuscleGroups, secondaryMuscleGroups }) => (
         <Checkbox
           key={id || name}
-          checked={selections[currGroup]?.includes(id!)}
-          onChange={(event) => handleChangeExercise(id!, event.currentTarget.checked)}
-          color={currGroup === 0 ? "teal" : "blue"}
+          checked={currCircuit < selections.length && selections[currCircuit]?.map((e) => e.id).includes(id!)}
+          onChange={(event) => (event.currentTarget.checked ? onSelect(id!) : onDeselect(id!))}
+          color={currCircuit === 0 ? "teal" : "blue"}
           styles={{
             body: { width: "100%", alignItems: "center", gap: 0 },
             labelWrapper: { flexGrow: 1 },
@@ -78,10 +79,10 @@ export const Exercises = ({ exercises, total, selections, currGroup, onChange, o
                   <Text fw={500} fz="md">
                     {name}
                   </Text>
-                  {weightType && (
+                  {type && (
                     <Text fs="italic" fw={500} c="dimmed" fz="xs" span>
                       {" "}
-                      {weightType}
+                      {type}
                     </Text>
                   )}
                 </Flex>

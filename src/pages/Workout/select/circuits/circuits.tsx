@@ -3,15 +3,15 @@ import { IconPlus } from "@tabler/icons-react";
 import classes from "./circuits.module.css";
 
 import { useScrollIntoView } from "@mantine/hooks";
+import { ExerciseSelection } from "../exercises";
 
 export type CircuitsProps = {
-  selections: string[][];
-  addCircuit: () => void;
+  selections: ExerciseSelection[][];
   currCircuit: number;
   setCurrCircuit: (value: string | string[]) => void;
 };
 
-export const Circuits = ({ selections, addCircuit, currCircuit, setCurrCircuit }: CircuitsProps) => {
+export const Circuits = ({ selections, currCircuit, setCurrCircuit }: CircuitsProps) => {
   // console.log("CIRCUITS");
   const { scrollIntoView, targetRef, scrollableRef } = useScrollIntoView<HTMLDivElement, HTMLDivElement>({
     axis: "x",
@@ -53,15 +53,15 @@ export const Circuits = ({ selections, addCircuit, currCircuit, setCurrCircuit }
         disabled={!canAddNewCircuit}
         color={!canAddNewCircuit ? "gray" : ""}
         onClick={() => {
-          addCircuit();
+          setCurrCircuit(selections.length.toString());
           scrollIntoView({ alignment: "center" });
         }}
-        size="md"
-        variant="light"
+        size={currCircuit === selections.length ? "lg" : "md"}
+        variant={currCircuit === selections.length ? "filled" : "outline"}
       >
         <Group gap={5} align="center">
-          <IconPlus width={14} />
-          Circuit
+          {currCircuit < selections.length && <IconPlus width={14} />}
+          {currCircuit === selections.length && "New"} Circuit
         </Group>
       </Badge>
     </Flex>

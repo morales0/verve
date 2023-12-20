@@ -1,34 +1,38 @@
-export const Control = () => {
+import { Box, Divider, Center, Button, Group } from "@mantine/core";
+
+export type ControlProps = {
+  canRemoveCircuit: boolean;
+  removeCurrCircuit: () => void;
+  isStartingExercises: boolean;
+  onStartExercises: () => void;
+};
+
+export const Control = ({
+  canRemoveCircuit,
+  removeCurrCircuit,
+  isStartingExercises,
+  onStartExercises,
+}: ControlProps) => {
   return (
-    <>
-      <Box display={currGroup === 0 ? "none" : ""} mt="auto" px="xs">
+    <Box mt="auto">
+      <Box display={canRemoveCircuit ? "" : "none"} px="xs">
         <Divider />
         <Center py={6}>
-          <Button
-            size="compact-sm"
-            color="pink"
-            onClick={() => {
-              setSelections((prev) => prev.filter((_, index) => index !== currGroup));
-
-              if (currGroup === selections.length - 1) {
-                setCurrGroup(currGroup - 1);
-              }
-            }}
-          >
+          <Button size="compact-sm" color="pink" onClick={removeCurrCircuit}>
             Remove Circuit
           </Button>
         </Center>
       </Box>
 
-      <Divider mt={currGroup === 0 ? "auto" : ""} />
+      <Divider />
       <Group w="100%" pt="sm" pb="md" px="xs" align="center" justify="space-between" grow>
         <Button size="sm" variant="light" color="red">
           Cancel Workout
         </Button>
-        <Button size="sm" color="blue.5" loading={isStartingExercises} onClick={handleStartExercises}>
+        <Button size="sm" color="blue.5" loading={isStartingExercises} onClick={onStartExercises}>
           Start Exercises
         </Button>
       </Group>
-    </>
+    </Box>
   );
 };
