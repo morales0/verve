@@ -36,7 +36,10 @@ export type WorkoutExercise = UserExercise & {
 export type LocalWorkoutExercise = Omit<WorkoutExercise, "id">;
 
 export type Workout = {
-  exercises?: WorkoutExercise[][];
+  exercises?: {
+    normal?: WorkoutExercise[];
+    circuits?: WorkoutExercise[][];
+  };
   dateStarted?: string;
   timeStarted?: string;
   dateLastUpdated?: string;

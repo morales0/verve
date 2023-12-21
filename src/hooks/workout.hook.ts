@@ -40,46 +40,63 @@ const useWorkout = () => {
     };
   }, [db, user]);
 
-  const addExercises = async (exercises: WorkoutExercise[], circuit: number) => {
-    const circuits = [...(workout.exercises ?? [[]])];
-    const numCircuits = circuits.length;
-
-    // Always add to first group
-    if (circuit === 0) {
-      circuits[0].push(...exercises);
-      console.log(circuits);
-      return set(exercisesRef, circuits);
+  const addExercises = async (exercises: WorkoutExercise[], group: number) => {
+    console.log(group);
+    if (group === 0) {
+      const normalExercises = [...(workout.exercises?.normal ?? [])];
+      normalExercises.push(...exercises);
+      return set(child(exercisesRef, "normal"), normalExercises);
     }
 
-    // Skip if circuit is not in range, not immediate, or last circuit is empty
-    if (circuit > numCircuits || (circuits.at(-1)?.length === 0 && circuit > 1)) return;
+    const index = group - 1;
+    const numCircuits = workout.exercises?.circuits?.length ?? 0;
+    const circuits = [...(workout.exercises?.circuits ?? [])];
+
+    if (index > numCircuits) return;
 
     // Add new array if circuit is next up
-    if (circuit === numCircuits) {
-      circuits.push([...exercises]);
-      return set(exercisesRef, circuits);
+    if (index === numCircuits) {
+      circuits.push([]);
     }
 
-    circuits[circuit].push(...exercises);
-    return set(exercisesRef, circuits);
+    circuits[index].push(...exercises);
+    return set(child(exercisesRef, "circuits"), circuits);
   };
 
-  const updateExercise = async (exerciseUpdates: Partial<WorkoutExercise>, circuit: number, index: number) => {
-    const exRef = child(exercisesRef, `${circuit}/${index}`);
+  const updateExercise = async (exerciseUpdates: Partial<WorkoutExercise>, group: number, index: number) => {
+    const exRef = child(exercisesRef, `${group === 0 ? "normal" : "circuits"}/${index}`);
     update(exRef, exerciseUpdates);
   };
 
-  const removeExercises = async (circuit: number, ids: string[]) => {
-    const circuits = [...(workout.exercises ?? [[]])];
-    if (circuit >= circuits.length) return;
+  const removeExercises = async (ids: string[], group: number) => {
+    if (group === 0) {
+      const normalExercises = [...(workout.exercises?.normal ?? [])];
+      return set(
+        child(exercisesRef, "normal"),
+        normalExercises.filter((ex) => !ids.includes(ex.id))
+      );
+    }
 
-    circuits[circuit] = circuits[circuit].filter((ex) => !ids.includes(ex.id));
+    const circuit = group - 1;
+    const circuits = [...(workout.exercises?.circuits ?? [[]])];
+    const circuitExercises = circuits.at(circuit);
 
-    return set(exercisesRef, circuits);
+    if (!circuitExercises) return;
+
+    return set(
+      child(exercisesRef, `circuits/${circuit}`),
+      circuitExercises.filter((ex) => !ids.includes(ex.id))
+    );
   };
 
-  const removeCircuit = async (circuit: number) => {
-    return set(exercisesRef, workout.exercises?.filter((_, i) => i !== circuit));
+  const removeCircuit = async (group: number) => {
+    const circuit = group - 1;
+    const circuits = [...(workout.exercises?.circuits ?? [])];
+
+    return set(
+      child(exercisesRef, `circuits`),
+      circuits.filter((_, i) => i !== circuit)
+    );
   };
 
   const cancelWorkout = () => {
@@ -104,7 +121,9 @@ const useWorkout = () => {
       timeEnded: time,
     })
       .then(() => {
-        workout.exercises?.flat().forEach((ex) => {
+        const normalExercises = workout.exercises?.normal ?? [];
+        const circuitExercises = workout.exercises?.circuits?.flat() ?? [];
+        return [...normalExercises, ...circuitExercises].forEach((ex) => {
           // update groups
           ex.primaryMuscleGroups?.forEach((group) => {
             set(child(muscleGroupsRef, `${group}/dataLastUsed`), now.toDateString());
@@ -128,7 +147,7 @@ const useWorkout = () => {
       })
       .then(() => {
         // finally, delete workout
-        remove(workoutRef);
+        return remove(workoutRef);
       });
   };
 

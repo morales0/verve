@@ -1,7 +1,7 @@
 import useUserExercises from "@/hooks/userExercises.hook";
 import useWorkout from "@/hooks/workout.hook";
 import globalClasses from "@/styles/app.module.css";
-import { UserExercise, WorkoutExercise } from "@/types/workout";
+import { UserExercise, Workout, WorkoutExercise } from "@/types/workout";
 import { Box, Divider, Stack } from "@mantine/core";
 import { useEffect, useMemo, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -19,8 +19,12 @@ selections is state
 
 */
 
-const mapExercisesToSelections = (data: WorkoutExercise[][] | undefined) =>
-  data?.map((group) => group.map((wex, index) => ({ id: wex.id, name: wex.name, index }) as ExerciseSelection));
+const mapExercisesToSelections = (data: Workout["exercises"] | undefined) => {
+  const normalExercises: ExerciseSelection[] = data?.normal?.map((ex) => ({ id: ex.id, name: ex.name })) ?? [];
+  const circuits: ExerciseSelection[][] =
+    data?.circuits?.map((circuit) => circuit.map((ex) => ({ id: ex.id, name: ex.name }))) ?? [];
+  return [normalExercises, ...circuits];
+};
 
 const filterExercisesByName = (data: UserExercise[], query: string) =>
   data.filter((ex) => query === "" || ex.name.toLowerCase().includes(query.toLowerCase()));
@@ -39,7 +43,7 @@ export const Select = () => {
   const [isStartingExercises, setIsStartingExercises] = useState<boolean>(false);
   const [query, setQuery] = useState<string>(location?.state?.["name"] ?? "");
   const [filterOption, setFilterOption] = useState<"filter" | "sort" | undefined>(undefined);
-  const [currCircuit, setCurrCircuit] = useState(0);
+  const [currGroup, setCurrGroup] = useState(0);
 
   /* Server state */
   const userExercises = useUserExercises();
@@ -55,35 +59,35 @@ export const Select = () => {
     () => mapExercisesToSelections(workout.data.exercises) ?? [[]],
     [workout.data.exercises]
   );
+  console.log(selections);
 
   const filteredSelections = useMemo(() => filterSelectionsByExerciseName(selections, query), [selections, query]);
 
   /* Functions */
   const handleSelectExercise = (id: UserExercise["id"]) => {
     const ex = filteredExercises.find((ex) => ex.id === id);
-    console.log(ex, id, currCircuit);
     if (!ex) return;
 
-    return workout.api.addExercises([{ ...ex }], currCircuit);
+    return workout.api.addExercises([{ ...ex }], currGroup);
   };
 
-  const handleDeselectExercise = (id: UserExercise["id"]) => workout.api.removeExercises(currCircuit, [id]);
+  const handleDeselectExercise = (id: UserExercise["id"]) => workout.api.removeExercises([id], currGroup);
 
   const handleChangeAllExercises = (checked: boolean) =>
     checked
       ? workout.api.addExercises(
           filteredExercises.filter(
-            (ex) => currCircuit === selections.length || !selections[currCircuit].map((s) => s.id).includes(ex.id)
+            (ex) => currGroup === selections.length || !selections[currGroup].map((s) => s.id).includes(ex.id)
           ),
-          currCircuit
+          currGroup
         )
       : workout.api.removeExercises(
-          currCircuit,
-          filteredExercises.map((ex) => ex.id)
+          filteredExercises.map((ex) => ex.id),
+          currGroup
         );
 
   const handleRemoveCurrCircuit = async () => {
-    return workout.api.removeCircuit(currCircuit).then(() => setCurrCircuit((prev) => prev - 1));
+    return workout.api.removeCircuit(currGroup);
   };
 
   const handleStartExercises = () => {
@@ -103,8 +107,8 @@ export const Select = () => {
       <Divider />
       <Circuits
         selections={selections}
-        currCircuit={currCircuit}
-        setCurrCircuit={(value) => setCurrCircuit(Number(value))}
+        currCircuit={currGroup}
+        setCurrCircuit={(value) => setCurrGroup(Number(value))}
       />
       <Divider mx="xs" />
 
@@ -114,16 +118,17 @@ export const Select = () => {
           status={userExercises.status}
           total={userExercises.data.length}
           selections={filteredSelections}
-          currCircuit={currCircuit}
+          currCircuit={currGroup}
           onSelect={handleSelectExercise}
           onDeselect={handleDeselectExercise}
           onChangeAll={handleChangeAllExercises}
         />
       </Box>
       <Control
-        canRemoveCircuit={currCircuit !== selections.length && currCircuit !== 0}
+        canRemoveCircuit={currGroup !== selections.length && currGroup !== 0}
         removeCurrCircuit={handleRemoveCurrCircuit}
         isStartingExercises={isStartingExercises}
+        canStartExercises={selections.some((selection) => selection.length > 0)}
         onStartExercises={handleStartExercises}
       />
     </Stack>

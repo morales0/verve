@@ -4,6 +4,7 @@ export type ControlProps = {
   canRemoveCircuit: boolean;
   removeCurrCircuit: () => void;
   isStartingExercises: boolean;
+  canStartExercises: boolean;
   onStartExercises: () => void;
 };
 
@@ -11,6 +12,7 @@ export const Control = ({
   canRemoveCircuit,
   removeCurrCircuit,
   isStartingExercises,
+  canStartExercises,
   onStartExercises,
 }: ControlProps) => {
   return (
@@ -29,7 +31,13 @@ export const Control = ({
         <Button size="sm" variant="light" color="red">
           Cancel Workout
         </Button>
-        <Button size="sm" color="blue.5" loading={isStartingExercises} onClick={onStartExercises}>
+        <Button
+          size="sm"
+          color="blue.5"
+          loading={isStartingExercises}
+          disabled={!canStartExercises}
+          onClick={onStartExercises}
+        >
           Start Exercises
         </Button>
       </Group>

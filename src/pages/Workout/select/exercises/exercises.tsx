@@ -3,7 +3,7 @@ import { UserExercise, WorkoutExercise } from "@/types/workout";
 import { Icon } from "@iconify/react";
 import { ActionIcon, Center, Checkbox, Flex, Loader, Menu, Paper, Stack, Text } from "@mantine/core";
 import { IconHelp } from "@tabler/icons-react";
-export type ExerciseSelection = Pick<WorkoutExercise, "id" | "name"> & { index: number };
+export type ExerciseSelection = Pick<WorkoutExercise, "id" | "name">;
 
 export type ExercisesProps = {
   exercises: UserExercise[];
