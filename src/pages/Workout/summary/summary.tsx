@@ -5,9 +5,11 @@ import {
   Box,
   Button,
   Card,
+  Center,
   Divider,
   Flex,
   Group,
+  Loader,
   Paper,
   ScrollArea,
   Stack,
@@ -18,72 +20,55 @@ import appClasses from "@/styles/app.module.css";
 import useWorkout from "@/hooks/workout.hook";
 import { getMuscleGroupSet } from "@/functions/data";
 import { useNavigate } from "react-router-dom";
+import { ExerciseCard } from "./exercise-card";
+import classes from "./summary.module.css";
 
 export const Summary = () => {
   const navigate = useNavigate();
-  const { workout, api } = useWorkout();
+  const { data, api, status } = useWorkout();
 
-  const exercises = workout.exercises;
-  const groups = Array.from(getMuscleGroupSet(exercises ?? []));
+  // const groups = Array.from(getMuscleGroupSet(exercises ?? []));
 
   return (
     <Stack className={cx(appClasses.heightLocked)} justify="space-between" h="100%" gap={0}>
       <Box p="xs">
-        <Button w="100%" size="md" variant="light" color="cyan" onClick={() => navigate("/workout")}>
+        <Button
+          w="100%"
+          size="compact-md"
+          radius={"xs"}
+          variant="light"
+          color="cyan"
+          onClick={() => navigate("/workout")}
+        >
           <Group gap="sm" align="center">
             <Icon icon="fluent:add-28-filled" />
-            Add Exercises
+            Edit Exercises
           </Group>
         </Button>
       </Box>
 
       <Stack className={cx(appClasses.scrollable)} gap="sm" px="xs" py="sm">
-        {exercises?.map((ex, i) => (
-          <Paper key={`summary-ex-${ex.id}`} withBorder py="xs" px="sm">
-            <Stack gap="xs">
-              <Flex justify="space-between" align="center">
-                <Text fw="bold">{ex.name}</Text>
-                <Flex wrap="nowrap" gap="xs" align="center">
-                  <ActionIcon color="indigo" variant="light" onClick={() => console.log("edit")}>
-                    <Icon icon="material-symbols:edit" />
-                  </ActionIcon>
-
-                  <ActionIcon color="red" variant="light" onClick={() => console.log("delete")}>
-                    <Icon icon="ic:baseline-delete-forever" />
-                  </ActionIcon>
-                </Flex>
-              </Flex>
-
-              <Divider />
-              <Flex styles={{ root: { overflowX: "auto" } }} gap="md">
-                <Stack>
-                  {ex.units.map((unit) => (
-                    <Text key={`${ex.name}-${unit}`} fw="bold" fz="sm">
-                      {unit}
-                    </Text>
-                  ))}
-                </Stack>
-                {ex.sets?.map(({ values }, i) => {
-                  return (
-                    <Stack key={`${ex.name}-set-${i}`}>
-                      {ex.units.map((unit) => (
-                        <Text key={`${ex.name}-${unit}-set-${i}-val`}>{values[unit]}</Text>
-                      ))}
-                    </Stack>
-                  );
-                })}
-              </Flex>
-
-              <Divider />
-              <Flex gap="sm" pb="sm" styles={{ root: { overflow: "auto" } }}>
-                {ex.primaryMuscleGroups?.concat(ex.secondaryMuscleGroups ?? []).map((g) => (
-                  <Badge key={g} variant={"light"} color={"indigo"} styles={{ root: { flexShrink: 0 } }}>
-                    {g}
-                  </Badge>
-                ))}
-              </Flex>
-            </Stack>
-          </Paper>
+        {status !== "success" && (
+          <Center>
+            <Loader />
+          </Center>
+        )}
+        {data.exercises?.normal?.map((ex, i) => <ExerciseCard key={`normal-${ex.id}`} {...ex} group={0} index={i} />)}
+        {data.exercises?.circuits?.map((exs, i) => (
+          <Stack gap={0} key={i}>
+            <Text c="dimmed" fz="sm" fw={500} fs="italic" mb={4}>
+              Circuit {i + 1}
+            </Text>
+            {exs.map((ex, j) => (
+              <ExerciseCard
+                key={`circuits-${ex.id}`}
+                className={classes.circuitPaper}
+                {...ex}
+                group={i + 1}
+                index={j}
+              />
+            ))}
+          </Stack>
         ))}
       </Stack>
 

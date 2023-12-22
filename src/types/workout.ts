@@ -8,13 +8,14 @@ export type MuscleGroup = {
 
 export type Unit = {
   name: string;
-  unitType: "number" | "time" | "weight" | "distance";
+  type: "number" | "time" | "weight" | "distance";
 };
 
 export type UserExercise = {
   id: string;
   name: string;
-  units: Unit[];
+  units: string[];
+  // units: Unit[];
   primaryMuscleGroups?: string[];
   secondaryMuscleGroups?: string[];
   type: string;

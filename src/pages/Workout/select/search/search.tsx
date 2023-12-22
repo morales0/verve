@@ -30,9 +30,9 @@ export const Search = ({ query, setQuery, filterOption, toggleFilterOption, setF
         styles={{ root: { flexGrow: 1 } }}
       />
       <ActionIcon size="lg" radius="sm" variant="light" color="teal" onClick={navigateToExerciseForm}>
-        <Icon icon="mdi:plus" />
+        <Icon icon="gridicons:create" />
       </ActionIcon>
-      <ActionIcon
+      {/* <ActionIcon
         size="lg"
         radius="sm"
         variant={filterOption === "filter" ? "filled" : "light"}
@@ -49,7 +49,7 @@ export const Search = ({ query, setQuery, filterOption, toggleFilterOption, setF
         onClick={() => toggleFilterOption("sort")}
       >
         <Icon icon="iconoir:sort" />
-      </ActionIcon>
+      </ActionIcon> */}
       <ActionIcon
         size="lg"
         radius="sm"

@@ -28,7 +28,7 @@ const useWorkout = () => {
       if (snapshot.exists()) {
         const data = snapshot.val();
 
-        console.log(data);
+        // console.log(data);
         setWorkout(data as Workout);
       }
 
@@ -41,7 +41,7 @@ const useWorkout = () => {
   }, [db, user]);
 
   const addExercises = async (exercises: WorkoutExercise[], group: number) => {
-    console.log(group);
+    // console.log(group);
     if (group === 0) {
       const normalExercises = [...(workout.exercises?.normal ?? [])];
       normalExercises.push(...exercises);

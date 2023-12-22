@@ -1,66 +1,45 @@
-import {
-  ActionIcon,
-  Button,
-  Divider,
-  Flex,
-  Group,
-  Menu,
-  SegmentedControl,
-  Stack,
-  Text,
-  UnstyledButton,
-} from "@mantine/core";
-import { forwardRef } from "react";
-import { Icon } from "@iconify/react";
-import classes from "./exercises.module.css";
-import { useNavigate, useParams } from "react-router-dom";
 import useWorkout from "@/hooks/workout.hook";
-
-const data = [
-  { value: "bench-press", label: "Standing Lateral Back Lunge" },
-  { value: "deadlift", label: "Deadlift" },
-];
-
-interface ExerciseSwitchProps extends React.ComponentPropsWithoutRef<"button"> {
-  exercise: string;
-}
-
-const ExerciseSwitch = forwardRef<HTMLButtonElement, ExerciseSwitchProps>(
-  ({ exercise, ...others }: ExerciseSwitchProps, ref) => (
-    <UnstyledButton ref={ref} {...others} className={classes.exerciseSwitch}>
-      <Flex gap="xs" align="center">
-        <ActionIcon component="div" variant="light" size="sm">
-          <Icon icon="icon-park-outline:switch" />
-        </ActionIcon>
-        <Text className={classes.title} fz="md" fw={500}>
-          {exercise}
-        </Text>
-      </Flex>
-    </UnstyledButton>
-  )
-);
-
-ExerciseSwitch.displayName = "ExerciseSwitch";
+import { Button, Divider, Flex, Group, Menu, SegmentedControl, Stack } from "@mantine/core";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { ExerciseSwitch } from "./exercise-switch";
+import classes from "./exercises.module.css";
+import { ExerciseTitle } from "./exercise-title";
 
 export const Exercises = () => {
   const params = useParams();
   const navigate = useNavigate();
-  const { workout } = useWorkout();
+  const workout = useWorkout();
 
-  const exWId = params["id"];
-  const workoutExs = workout.exercises;
+  const group = Number(params["group"]);
+  const index = params["index"];
+  const exercises =
+    group === 0 ? workout?.data.exercises?.["normal"] : workout?.data.exercises?.["circuits"]?.at(group - 1);
+  const currExercise = exercises?.at(Number(index));
 
-  console.log(exWId, workoutExs);
+  if (!currExercise) return null;
 
   return (
     <Stack className={classes.exercises} px="xs" gap={0} h="100%">
       <Flex justify="space-between" align="center" py={6}>
-        <Menu position="bottom-start">
-          <Menu.Target>
-            <ExerciseSwitch exercise={data[0].label} />
-          </Menu.Target>
-          <Menu.Dropdown>{workoutExs?.map(({ id, name }) => <Menu.Item key={id}>{name}</Menu.Item>)}</Menu.Dropdown>
-        </Menu>
+        {group === 0 ? (
+          <ExerciseTitle name={currExercise?.name} />
+        ) : (
+          <Menu position="bottom-start">
+            <Menu.Target>
+              <ExerciseSwitch exercise={currExercise?.name} group={group} />
+            </Menu.Target>
+            <Menu.Dropdown>
+              {exercises
+                ?.map(({ id, name }, i) => ({ id, name, index: i }))
+                ?.filter(({ id }) => id !== currExercise.id)
+                .map(({ id, name, index }) => (
+                  <Menu.Item key={id} component={Link} to={`/workout/exercise/${group}/${index}`} replace>
+                    {name}
+                  </Menu.Item>
+                ))}
+            </Menu.Dropdown>
+          </Menu>
+        )}
 
         <SegmentedControl
           className={classes.pageSwitch}

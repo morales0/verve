@@ -59,7 +59,6 @@ export const Select = () => {
     () => mapExercisesToSelections(workout.data.exercises) ?? [[]],
     [workout.data.exercises]
   );
-  console.log(selections);
 
   const filteredSelections = useMemo(() => filterSelectionsByExerciseName(selections, query), [selections, query]);
 
@@ -92,7 +91,8 @@ export const Select = () => {
 
   const handleStartExercises = () => {
     setIsStartingExercises(true);
-    navigate(`/workout/exercise`);
+    const group = currGroup === selections.length ? selections.length - 1 : currGroup;
+    navigate(`/workout/exercise/${group}/0`);
   };
 
   return (
