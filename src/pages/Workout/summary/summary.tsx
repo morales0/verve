@@ -1,24 +1,8 @@
-import { Icon } from "@iconify/react";
-import {
-  ActionIcon,
-  Badge,
-  Box,
-  Button,
-  Card,
-  Center,
-  Divider,
-  Flex,
-  Group,
-  Loader,
-  Paper,
-  ScrollArea,
-  Stack,
-  Text,
-} from "@mantine/core";
-import cx from "clsx";
-import appClasses from "@/styles/app.module.css";
 import useWorkout from "@/hooks/workout.hook";
-import { getMuscleGroupSet } from "@/functions/data";
+import appClasses from "@/styles/app.module.css";
+import { Icon } from "@iconify/react";
+import { Box, Button, Center, Divider, Group, Loader, Stack, Text } from "@mantine/core";
+import cx from "clsx";
 import { useNavigate } from "react-router-dom";
 import { ExerciseCard } from "./exercise-card";
 import classes from "./summary.module.css";

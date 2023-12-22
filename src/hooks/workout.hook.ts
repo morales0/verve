@@ -64,8 +64,9 @@ const useWorkout = () => {
   };
 
   const updateExercise = async (exerciseUpdates: Partial<WorkoutExercise>, group: number, index: number) => {
-    const exRef = child(exercisesRef, `${group === 0 ? "normal" : "circuits"}/${index}`);
-    update(exRef, exerciseUpdates);
+    const exRef = child(exercisesRef, `${group === 0 ? "normal" : `circuits/${group - 1}`}/${index}`);
+    console.log(group, index);
+    return update(exRef, exerciseUpdates);
   };
 
   const removeExercises = async (ids: string[], group: number) => {

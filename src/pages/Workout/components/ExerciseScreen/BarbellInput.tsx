@@ -1,25 +1,20 @@
-import { Icon } from "@iconify/react";
 import { Carousel } from "@mantine/carousel";
 import {
-  Center,
-  UnstyledButton,
-  Group,
-  Text,
   ActionIcon,
   Box,
+  Center,
+  Drawer,
+  Group,
   NumberInput,
   NumberInputHandlers,
   Stack,
-  Collapse,
-  Paper,
-  Drawer,
-  Flex,
+  Text,
+  UnstyledButton,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import { useRef, useState } from "react";
-import { Bar } from "../../../../components/ui/Bar";
+import { useRef } from "react";
 import { Barbell } from "../../../../components/ui/Barbell";
-import { encodeKey, decodeKey } from "../../../../functions/utils";
+import { decodeKey, encodeKey } from "../../../../functions/utils";
 
 const WEIGHTS = [2.5, 5, 10, 20, 25, 35, 45];
 
@@ -51,7 +46,7 @@ const BarbellInput = ({ weights, onWeightsChange }: BarbellInputProps) => {
         withCloseButton={false}
         position="bottom"
         size="60%"
-        overlayOpacity={0.3}
+        opacity={0.3}
         trapFocus={false}
       >
         <Stack mt="lg" gap="lg">
@@ -69,7 +64,7 @@ const BarbellInput = ({ weights, onWeightsChange }: BarbellInputProps) => {
                 sx: { fontStyle: "italic", color: "#afafaf", fontSize: ".7rem", width: "100%", textAlign: "center" },
               }}
               value={weights["bar"] ?? 0}
-              onChange={(value) => onWeightsChange("bar", value === undefined ? 0 : value)}
+              onChange={(value) => onWeightsChange("bar", value === undefined ? 0 : Number(value))}
               min={0}
               max={99}
               hideControls
@@ -78,7 +73,7 @@ const BarbellInput = ({ weights, onWeightsChange }: BarbellInputProps) => {
           </Stack>
 
           <Stack align="center" gap="xs">
-            <Text italic fw={500} fz="sm" color="#afafaf">
+            <Text fs="italic" fw={500} fz="sm" color="#afafaf">
               Plates
             </Text>
             <Carousel w="100%" controlsOffset={80} loop>
@@ -120,36 +115,37 @@ const PlateInputSlide = ({ weight, value, onChange }: PlateInputSlideProps) => {
       }}
     >
       <Box
-        component={Center}
-        sx={(theme) => ({
+        style={(theme) => ({
           width: "140px",
           height: "140px",
           textAlign: "center",
           borderRadius: "50%",
           color: theme.colors.gray[7],
-          backgroundColor: theme.colorScheme === "light" ? theme.colors.gray[4] : theme.colors.gray[4],
-          border: `2px solid ${theme.colorScheme === "light" ? theme.colors.gray[5] : theme.colors.gray[6]}`,
+          backgroundColor: theme.colors.gray[4],
+          border: `2px solid ${theme.colors.gray[6]}`,
         })}
       >
-        <Box
-          w={20}
-          h={20}
-          sx={(theme) => ({
-            borderRadius: "50%",
-            backgroundColor: theme.colorScheme === "light" ? "white" : theme.colors.gray[8],
-            border: "2px solid",
-            borderColor: theme.colors.gray[6],
-          })}
-        ></Box>
-        <Text pos="absolute" top={10} fw={500}>
-          {weight}{" "}
-          <Text color="dimmed" fz="xs">
-            x2
+        <Center>
+          <Box
+            w={20}
+            h={20}
+            style={(theme) => ({
+              borderRadius: "50%",
+              backgroundColor: theme.colors.gray[8],
+              border: "2px solid",
+              borderColor: theme.colors.gray[6],
+            })}
+          ></Box>
+          <Text pos="absolute" top={10} fw={500}>
+            {weight}{" "}
+            <Text color="dimmed" fz="xs">
+              x2
+            </Text>
           </Text>
-        </Text>
-        <Box pos="absolute" bottom={10}>
-          <PlateCountInput value={value} onChange={onChange} />
-        </Box>
+          <Box pos="absolute" bottom={10}>
+            <PlateCountInput value={value} onChange={onChange} />
+          </Box>
+        </Center>
       </Box>
     </Center>
   );
@@ -170,7 +166,7 @@ const PlateCountInput = ({ value, onChange }: PlateCountInputProps) => {
         variant="unstyled"
         hideControls
         value={value ? value / 2 : 0}
-        onChange={(val) => onChange(val ? val * 2 : 0)}
+        onChange={(val) => onChange(val ? Number(val) * 2 : 0)}
         handlersRef={handlers}
         max={9}
         min={0}

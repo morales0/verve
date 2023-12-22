@@ -7,7 +7,7 @@ type Props = {
   num: number;
   set: ExerciseSet;
   onUnitChange: (unit: string, newValue: string | number) => void;
-  removeSet: () => any;
+  removeSet: () => void;
   isLastSet: boolean;
 };
 
@@ -15,21 +15,11 @@ const Set = ({ num, set, onUnitChange, removeSet, isLastSet }: Props) => {
   return (
     <Paper
       // withBorder
-      component={Flex}
       pos="relative"
-      justify="space-evenly"
-      direction="row"
-      align="center"
       py="xs"
-      sx={(theme) => ({
-        flexGrow: 1,
-        // border: `1px solid`,
-        // borderRadius: theme.radius.sm,
-        // borderColor: theme.colorScheme === "dark" ? theme.colors.gray[7] : theme.colors.gray[2],
-        // backgroundColor: theme.colorScheme === "dark" ? theme.colors.gray[9] : theme.white,
-        // boxShadow: `0 0 3px 0 #00000022`,
-      })}
+      style={{ flexGrow: 1 }}
     >
+      <Flex justify="space-evenly" direction="row" align="center"></Flex>
       {Object.entries(set.values).map(([unit, value], j) =>
         typeof value === "number" ? (
           <NumberSetInput key={`set-${unit}-${j}`} unit={unit} value={value} onUnitChange={onUnitChange} />
@@ -58,7 +48,7 @@ const Set = ({ num, set, onUnitChange, removeSet, isLastSet }: Props) => {
           <IconX size=".75rem" />
         </ActionIcon>
       )}
-      <Text pos="absolute" bottom={2} right={0} px="xs" color="dimmed" fw={600} italic fz="lg">
+      <Text pos="absolute" bottom={2} right={0} px="xs" color="dimmed" fw={600} fs="italic" fz="lg">
         {num}
       </Text>
     </Paper>
@@ -91,10 +81,11 @@ const NumberSetInput = ({ unit, value, onUnitChange }: NumberSetInputProps) => {
         }}
         value={value}
         onChange={(newValue) => {
-          onUnitChange(unit, newValue || 0);
+          onUnitChange(unit, Number(newValue) || 0);
         }}
         min={0}
-        precision={isDecimal ? 1 : 0}
+        allowDecimal={isDecimal}
+        decimalScale={isDecimal ? 1 : 0}
         step={isDecimal ? 0.5 : 1}
         hideControls
         handlersRef={handlers}

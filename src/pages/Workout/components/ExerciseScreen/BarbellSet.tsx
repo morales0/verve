@@ -55,7 +55,7 @@ const BarbellSet = ({ set, onUnitChange }: Props) => {
 
   return (
     <Stack align="stretch" gap="sm" mb="xs">
-      <Group sx={{ justifyContent: "space-evenly" }} align="center">
+      <Group style={{ justifyContent: "space-evenly" }} align="center">
         {Object.entries(set).map(([unit, val], j) => (
           <SetInput
             key={`set-input-${unit}-${j}`}
@@ -68,7 +68,7 @@ const BarbellSet = ({ set, onUnitChange }: Props) => {
 
       <Center>
         <UnstyledButton onClick={() => setOpen((o) => !o)}>
-          <Group position="center" gap={0} align="center" noWrap py="1rem">
+          <Group justify="center" gap={0} align="center" wrap="nowrap" py="1rem">
             {plates.map((weight, i) => (
               <Plate key={`left-weight-${weight}-${i}`} weight={weight} />
             ))}
@@ -81,15 +81,8 @@ const BarbellSet = ({ set, onUnitChange }: Props) => {
       </Center>
 
       <Collapse in={open} p="sm" pb="lg">
-        <Paper
-          withBorder
-          p="sm"
-          shadow="lg"
-          sx={(theme) => ({
-            backgroundColor: theme.colorScheme === "light" ? theme.colors.gray[2] : theme.colors.gray[9],
-          })}
-        >
-          <Group position="apart">
+        <Paper withBorder p="sm" shadow="lg">
+          <Group justify="space-between">
             {weights.map((weight, i) => (
               <PlateInput
                 key={`plate-input-${i}-${weight}`}
@@ -112,10 +105,9 @@ const BarbellSet = ({ set, onUnitChange }: Props) => {
 
 const Bar = ({ weight, empty, open }: { weight: number; empty?: boolean; open: boolean }) => (
   <Box
-    component={Center}
     h="10px"
     w="80px"
-    sx={(theme) => ({
+    style={(theme) => ({
       position: "relative",
       backgroundColor: theme.colors.gray[7],
       borderTop: "1px solid",
@@ -126,20 +118,22 @@ const Bar = ({ weight, empty, open }: { weight: number; empty?: boolean; open: b
       margin: "1rem 0",
     })}
   >
-    <Text fz="xs" fw="bold" color="dimmed" sx={{ position: "absolute", bottom: "12px" }}>
-      {weight}
-    </Text>
-    <Icon
-      icon="material-symbols:keyboard-arrow-down-rounded"
-      width="30px"
-      height="30px"
-      style={{
-        position: "absolute",
-        top: "8px",
-        transform: open ? "rotate(180deg)" : "unset",
-        color: "#444",
-      }}
-    />
+    <Center>
+      <Text fz="xs" fw="bold" color="dimmed" style={{ position: "absolute", bottom: "12px" }}>
+        {weight}
+      </Text>
+      <Icon
+        icon="material-symbols:keyboard-arrow-down-rounded"
+        width="30px"
+        height="30px"
+        style={{
+          position: "absolute",
+          top: "8px",
+          transform: open ? "rotate(180deg)" : "unset",
+          color: "#444",
+        }}
+      />
+    </Center>
   </Box>
 );
 
@@ -147,7 +141,7 @@ const Plate = ({ weight }: { weight: number }) => (
   <Box
     h={`${weight <= 20 ? "30" : weight * 1.6}px`}
     w="20px"
-    sx={() => ({
+    style={() => ({
       display: "flex",
       justifyContent: "center",
       alignItems: "center",
@@ -156,7 +150,7 @@ const Plate = ({ weight }: { weight: number }) => (
       borderRadius: "5px",
     })}
   >
-    <Text fz="xs" fw="bold" color="dimmed">
+    <Text fz="xs" fw="bold" c="dimmed">
       {weight}
     </Text>
   </Box>
@@ -168,15 +162,16 @@ const PlateInput = ({ weight, val, onChange }: { weight: number; val: number; on
   return (
     <Stack align="center" gap="xs">
       <Box
-        component={Center}
-        sx={(theme) => ({
-          width: "65px",
-          height: "65px",
-          textAlign: "center",
-          borderRadius: "50%",
-          color: theme.colors.gray[0],
-          backgroundColor: theme.colorScheme === "light" ? theme.colors.gray[5] : theme.colors.gray[8],
-          border: `1px solid ${theme.colorScheme === "light" ? theme.colors.gray[6] : theme.colors.gray[6]}`,
+        style={(theme) => ({
+          root: {
+            width: "65px",
+            height: "65px",
+            textAlign: "center",
+            borderRadius: "50%",
+            color: theme.colors.gray[0],
+            backgroundColor: theme.colors.gray[8],
+            border: `1px solid ${theme.colors.gray[6]}`,
+          },
         })}
       >
         <Text>{weight}</Text>
@@ -187,7 +182,7 @@ const PlateInput = ({ weight, val, onChange }: { weight: number; val: number; on
         </ActionIcon>
         <NumberInput
           value={val}
-          onChange={(newVal) => onChange(newVal || 0)}
+          onChange={(newVal) => onChange(Number(newVal) || 0)}
           handlersRef={handlers}
           hideControls
           min={0}
@@ -221,7 +216,7 @@ const SetInput = ({ unit, val, onChange }: { unit: string; val: number; onChange
         labelProps={{ sx: { fontStyle: "italic", color: "#bbb", fontSize: ".7rem" } }}
         hideControls
         value={Number.isNaN(val) ? undefined : val}
-        onChange={(newVal) => onChange(newVal || 0)}
+        onChange={(newVal) => onChange(Number(newVal) || 0)}
         handlersRef={handlers}
         min={0}
         styles={{ input: { width: 60, height: 60, textAlign: "center", fontSize: "1.4rem" } }}
