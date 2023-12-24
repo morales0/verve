@@ -1,5 +1,5 @@
 import { Icon } from "@iconify/react";
-import { ActionIcon, Box, Center, Flex, Menu, SimpleGrid, Text, useMantineColorScheme } from "@mantine/core";
+import { ActionIcon, Box, Center, Flex, Menu, SimpleGrid, Text, rem, useMantineColorScheme } from "@mantine/core";
 import cx from "clsx";
 import { signOut } from "firebase/auth";
 import { Link } from "react-router-dom";
@@ -12,7 +12,7 @@ const UserNavbar = () => {
 
   return (
     <Box className={cx(classes.root)} h={"auto"} pos="sticky">
-      <SimpleGrid cols={3} px={"md"} py={"xs"} w="100%">
+      <SimpleGrid cols={3} px={"md"} py={rem(8)} w="100%">
         <Flex>
           <ActionIcon
             size="lg"

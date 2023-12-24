@@ -3,6 +3,10 @@
   overflow: hidden;
 }
 
+.navbarDivider {
+  border-color: light-dark(var(--mantine-color-gray-5), var(--mantine-color-gray-6));
+}
+
 /* Global classes */
 .heightLocked {
   height: 100%;

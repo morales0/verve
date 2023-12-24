@@ -1,27 +1,42 @@
+import { decodeKey } from "@/functions/utils";
 import useWorkout from "@/hooks/workout.hook";
-import { Box, Button, Divider, Flex, Group, Menu, SegmentedControl, Stack } from "@mantine/core";
-import { Link, useNavigate, useParams } from "react-router-dom";
-import { ExerciseSwitch } from "./exercise-switch";
-import classes from "./exercises.module.css";
-import { ExerciseTitle } from "./exercise-title";
-import Set from "../components/ExerciseScreen/Set";
+import { ExerciseSet } from "@/types/workout";
+import { Box, Button, Center, Divider, Flex, Group, Loader, Menu, SegmentedControl, Stack } from "@mantine/core";
+import { IconPlus } from "@tabler/icons-react";
+import { useMemo } from "react";
+import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
 import BarbellInput from "../components/ExerciseScreen/BarbellInput";
 import DumbbellInput from "../components/ExerciseScreen/DumbbellInput";
-import { IconPlus } from "@tabler/icons-react";
-import { ExerciseSet } from "@/types/workout";
-import { decodeKey } from "@/functions/utils";
+import Set from "../components/ExerciseScreen/Set";
+import { ExerciseSwitch } from "./exercise-switch";
+import { ExerciseTitle } from "./exercise-title";
+import classes from "./exercises.module.css";
+import globalClasses from "@/styles/app.module.css";
+import { findExerciseByIndices, getExercisesByGroup } from "./functions";
+import { STATUS } from "@/types/util";
 
+// todo: create context for execise state
 export const Exercises = () => {
   const params = useParams();
   const navigate = useNavigate();
+
+  /* URL state */
+  const group = Number(params["group"]);
+  const index = Number(params["index"]);
+
+  /* Local state */
+
+  /* Server */
   const workout = useWorkout();
 
-  const group = Number(params["group"]);
-  const index = params["index"];
-  const exercises =
-    group === 0 ? workout?.data.exercises?.["normal"] : workout?.data.exercises?.["circuits"]?.at(group - 1);
-  const exercise = exercises?.at(Number(index));
+  /* Data */
+  const exercises = useMemo(
+    () => getExercisesByGroup(workout.data?.exercises, group),
+    [workout.data?.exercises, group]
+  );
+  const exercise = exercises.at(index);
 
+  /* Functions */
   const addSet = () => {
     console.log("add", exercise);
     if (!exercise) return;
@@ -88,11 +103,9 @@ export const Exercises = () => {
     );
   };
 
-  if (!exercise) return null;
-
-  return (
-    <Stack className={classes.exercises} px="xs" gap={0} h="100%">
-      <Flex justify="space-between" align="center" py={6}>
+  return workout.status === STATUS.SUCCESS && exercise ? (
+    <Stack className={globalClasses.heightLocked} px="xs" gap={0}>
+      <Flex justify="space-between" align="flex-end" pb={6}>
         {group === 0 ? (
           <ExerciseTitle name={exercise?.name} />
         ) : (
@@ -174,5 +187,11 @@ export const Exercises = () => {
         </Button>
       </Group>
     </Stack>
+  ) : workout.status === STATUS.LOADING ? (
+    <Center>
+      <Loader />
+    </Center>
+  ) : (
+    <Navigate to="/workout" replace />
   );
 };
