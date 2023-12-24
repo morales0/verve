@@ -1,15 +1,15 @@
 import useUserExercises from "@/hooks/userExercises.hook";
 import useWorkout from "@/hooks/workout.hook";
 import globalClasses from "@/styles/app.module.css";
-import { UserExercise, Workout, WorkoutExercise } from "@/types/workout";
+import { UserExercise } from "@/types/workout";
 import { Box, Divider, Stack } from "@mantine/core";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Circuits } from "./circuits";
-import { ExerciseSelection, Exercises } from "./exercises";
-import { Search } from "./search";
 import { Control } from "./control";
-import { existsSync } from "fs";
+import { Exercises } from "./exercises";
+import { filterExercisesByName, filterSelectionsByExerciseName, mapExercisesToSelections } from "./functions";
+import { Search } from "./search";
 
 /*
 ex are listed by with their ex id
@@ -19,21 +19,9 @@ selections is state
 
 */
 
-const mapExercisesToSelections = (data: Workout["exercises"] | undefined) => {
-  const normalExercises: ExerciseSelection[] = data?.normal?.map((ex) => ({ id: ex.id, name: ex.name })) ?? [];
-  const circuits: ExerciseSelection[][] =
-    data?.circuits?.map((circuit) => circuit.map((ex) => ({ id: ex.id, name: ex.name }))) ?? [];
-  return [normalExercises, ...circuits];
-};
-
-const filterExercisesByName = (data: UserExercise[], query: string) =>
-  data.filter((ex) => query === "" || ex.name.toLowerCase().includes(query.toLowerCase()));
-
-const filterSelectionsByExerciseName = (selections: ExerciseSelection[][], query: string) =>
-  selections.map((selection) => selection.filter(({ name }) => name.toLowerCase().includes(query.toLowerCase())));
-
 // todo: paginate to avoid large amt of exercises
 // todo: allow user to select same exercise in multiple
+// todo: create context for local select state
 export const Select = () => {
   // console.log("SELECT");
   const location = useLocation();
@@ -54,12 +42,7 @@ export const Select = () => {
     () => filterExercisesByName(userExercises.data, query),
     [userExercises.data, query]
   );
-
-  const selections: ExerciseSelection[][] = useMemo(
-    () => mapExercisesToSelections(workout.data.exercises) ?? [[]],
-    [workout.data.exercises]
-  );
-
+  const selections = useMemo(() => mapExercisesToSelections(workout.data.exercises), [workout.data.exercises]);
   const filteredSelections = useMemo(() => filterSelectionsByExerciseName(selections, query), [selections, query]);
 
   /* Functions */
@@ -96,7 +79,7 @@ export const Select = () => {
   };
 
   return (
-    <Stack className={globalClasses.heightLocked} h="100%" gap={0}>
+    <Stack className={globalClasses.heightLocked} gap={0}>
       <Search
         query={query}
         setQuery={setQuery}
