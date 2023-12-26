@@ -15,3 +15,7 @@
 .pageSwitch {
   flex-shrink: 0;
 }
+
+.addSetButton {
+  flex-shrink: 0;
+}
