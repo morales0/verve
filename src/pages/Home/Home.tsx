@@ -1,5 +1,5 @@
 import { Icon } from "@iconify/react";
-import { Tabs } from "@mantine/core";
+import { Box, Tabs, Text } from "@mantine/core";
 import classes from "./home.module.css";
 import { MainView } from "./main-view";
 
@@ -32,11 +32,15 @@ export const Home = () => {
 
       <Tabs.Panel value="exercises">
         {/* <Exercises /> */}
-        Exercises
+        <Box px="xs">
+          <Text>Coming soon!</Text>
+        </Box>
       </Tabs.Panel>
       <Tabs.Panel value="stats">
         {/* <Exercises /> */}
-        Stats
+        <Box px="xs">
+          <Text>Coming soon!</Text>
+        </Box>
       </Tabs.Panel>
     </Tabs>
   );

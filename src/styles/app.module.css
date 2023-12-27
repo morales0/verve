@@ -1,6 +1,7 @@
 .main {
   flex-grow: 1;
   overflow: hidden;
+  background-color: light-dark(#f7f8f9, #2c2d30);
 }
 
 .navbarDivider {

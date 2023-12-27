@@ -16,8 +16,8 @@ const UserNavbar = () => {
         <Flex>
           <ActionIcon
             size="lg"
-            variant="subtle"
-            c="cyan.8"
+            variant="transparent"
+            color="indigo"
             title="Color scheme toggle"
             onClick={() => toggleColorScheme()}
           >
@@ -36,8 +36,8 @@ const UserNavbar = () => {
         <Flex justify="flex-end">
           <Menu position="bottom-end" shadow="md" width={200}>
             <Menu.Target>
-              <ActionIcon size="lg" variant="subtle" color="gray" title="User">
-                <Icon icon="mdi:user" height={25} />
+              <ActionIcon size="lg" variant="transparent" color="indigo" title="User">
+                <Icon icon="mdi:robot-happy-outline" height={25} />
               </ActionIcon>
             </Menu.Target>
 

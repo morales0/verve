@@ -1,5 +1,5 @@
 import { Icon } from "@iconify/react";
-import { Flex, TextInput, ActionIcon } from "@mantine/core";
+import { Flex, TextInput, ActionIcon, rem } from "@mantine/core";
 import { useNavigate } from "react-router-dom";
 
 export type SearchProps = {
@@ -21,7 +21,7 @@ export const Search = ({ query, setQuery, filterOption, toggleFilterOption, setF
   };
 
   return (
-    <Flex align="center" gap="xs" w="100%" py="xs" px="xs">
+    <Flex align="center" gap="xs" w="100%" py={rem(6)} px="xs">
       <TextInput
         value={query}
         onChange={(event) => setQuery(event.target.value)}

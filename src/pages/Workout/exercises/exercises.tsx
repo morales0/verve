@@ -3,7 +3,7 @@ import useWorkout from "@/hooks/workout.hook";
 import globalClasses from "@/styles/app.module.css";
 import { STATUS } from "@/types/util";
 import { ExerciseSet as ExerciseSetType } from "@/types/workout";
-import { Box, Button, Center, Divider, Flex, Group, Loader, Menu, SegmentedControl, Stack } from "@mantine/core";
+import { Box, Button, Center, Divider, Flex, Group, Loader, Menu, SegmentedControl, Stack, rem } from "@mantine/core";
 import { IconPlus } from "@tabler/icons-react";
 import { useMemo } from "react";
 import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
@@ -99,7 +99,7 @@ export const Exercises = () => {
 
   return workout.status === STATUS.SUCCESS && exercise ? (
     <Flex className={globalClasses.heightLocked} direction="column" px="xs">
-      <Flex justify="space-between" align="flex-end" pb={6}>
+      <Flex justify="space-between" align="center" py={rem(6)}>
         {!isCircuit ? (
           <ExerciseTitle name={exercise.name} />
         ) : (

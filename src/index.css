@@ -15,7 +15,7 @@ body {
 }
 
 body {
-  background-color: light-dark(#f9fafc, #343a40);
+  background-color: light-dark(var(--mantine-color-gray-3), var(--mantine-color-gray-9));
 }
 
 #root {

@@ -77,6 +77,7 @@ export const Select = () => {
     const group = currGroup === selections.length ? selections.length - 1 : currGroup;
     navigate(`/workout/exercise/${group}/0`);
   };
+  const cancelWorkout = () => workout.api.cancelWorkout().then(() => navigate("/"));
 
   return (
     <Stack className={globalClasses.heightLocked} gap={0}>
@@ -113,6 +114,7 @@ export const Select = () => {
         isStartingExercises={isStartingExercises}
         canStartExercises={selections.some((selection) => selection.length > 0)}
         onStartExercises={handleStartExercises}
+        onCancelWorkout={cancelWorkout}
       />
     </Stack>
   );

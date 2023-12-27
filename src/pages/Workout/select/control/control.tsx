@@ -6,6 +6,7 @@ export type ControlProps = {
   isStartingExercises: boolean;
   canStartExercises: boolean;
   onStartExercises: () => void;
+  onCancelWorkout: () => void;
 };
 
 export const Control = ({
@@ -14,6 +15,7 @@ export const Control = ({
   isStartingExercises,
   canStartExercises,
   onStartExercises,
+  onCancelWorkout,
 }: ControlProps) => {
   return (
     <Box mt="auto">
@@ -28,7 +30,7 @@ export const Control = ({
 
       <Divider />
       <Group w="100%" pt="sm" pb="md" px="xs" align="center" justify="space-between" grow>
-        <Button size="sm" variant="light" color="red">
+        <Button size="sm" variant="light" color="red" onClick={onCancelWorkout}>
           Cancel Workout
         </Button>
         <Button
