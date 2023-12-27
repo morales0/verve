@@ -26,8 +26,6 @@ export const StartButton = () => {
   const workout = useWorkout();
   const navigate = useNavigate();
 
-  console.log(workout.data);
-
   const startWorkout = () => {
     setStarting(true);
 

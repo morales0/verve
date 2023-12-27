@@ -1,7 +1,7 @@
 import { Icon } from "@iconify/react";
 import { Badge, Divider, Flex, Group, Paper, Stack, Text, useMantineColorScheme } from "@mantine/core";
 import { Link } from "react-router-dom";
-import { WorkoutExercise, WorkoutHistory } from "../../../../types/workout";
+import { Workout, WorkoutExercise, WorkoutHistory } from "@/types/workout";
 import { ExerciseDropdown } from "./exercise-dropdown";
 import { getMuscleGroupSet } from "@/functions/data";
 
@@ -24,6 +24,15 @@ function calcIsYesterday(date: Date): boolean {
     date.getMonth() === yesterday.getMonth() &&
     date.getFullYear() === yesterday.getFullYear()
   );
+}
+
+function figureOutExercises(exercises: Workout["exercises"]) {
+  // if exercises is an array
+  if (Array.isArray(exercises)) {
+    return exercises as WorkoutExercise[];
+  }
+  // if exercises is an object
+  return [...(exercises?.normal ?? []), ...(exercises?.circuits?.flat() ?? [])];
 }
 
 type WorkoutCardProps = Pick<WorkoutHistory, "dateEnded" | "dateStarted" | "exercises"> & {
@@ -50,7 +59,8 @@ export const WorkoutCard = ({ exercises, dateStarted, dateEnded, current }: Work
     .toString()
     .padStart(2, "0");
 
-  const groups = Array.from(getMuscleGroupSet(exercises ?? []));
+  const flattenedExercises = figureOutExercises(exercises);
+  const groups = Array.from(getMuscleGroupSet(flattenedExercises));
 
   return (
     <Paper withBorder p="sm">
@@ -80,11 +90,11 @@ export const WorkoutCard = ({ exercises, dateStarted, dateEnded, current }: Work
       </Flex>
       <Divider my="xs" />
       <Stack gap="xs">
-        {exercises?.map((exercise, i) => (
+        {flattenedExercises?.map((exercise, i) => (
           <ExerciseDropdown
             key={exercise.id ?? exercise.name}
             name={exercise.name}
-            sets={exercise.sets}
+            sets={exercise.sets!}
             units={exercise.units}
           />
         )) ?? (

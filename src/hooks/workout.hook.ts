@@ -128,10 +128,10 @@ const useWorkout = () => {
         return [...normalExercises, ...circuitExercises].forEach((ex) => {
           // update groups
           ex.primaryMuscleGroups?.forEach((group) => {
-            set(child(muscleGroupsRef, `${group}/dataLastUsed`), now.toDateString());
+            set(child(muscleGroupsRef, `${group}/dateLastUsed`), now.toDateString());
           });
           ex.secondaryMuscleGroups?.forEach((group) => {
-            set(child(muscleGroupsRef, `${group}/dataLastUsed`), now.toDateString());
+            set(child(muscleGroupsRef, `${group}/dateLastUsed`), now.toDateString());
           });
 
           // add to history
