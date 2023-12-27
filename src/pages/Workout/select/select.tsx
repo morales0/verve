@@ -42,7 +42,7 @@ export const Select = () => {
     () => filterExercisesByName(userExercises.data, query),
     [userExercises.data, query]
   );
-  const selections = useMemo(() => mapExercisesToSelections(workout.data.exercises), [workout.data.exercises]);
+  const selections = useMemo(() => mapExercisesToSelections(workout.data?.exercises), [workout.data?.exercises]);
   const filteredSelections = useMemo(() => filterSelectionsByExerciseName(selections, query), [selections, query]);
 
   /* Functions */

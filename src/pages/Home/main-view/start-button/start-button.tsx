@@ -1,4 +1,6 @@
 import { useUser } from "@/context/user";
+import useWorkout from "@/hooks/workout.hook";
+import { STATUS } from "@/types/util";
 import { Icon } from "@iconify/react";
 import { Button, Group, Text } from "@mantine/core";
 import { DatabaseReference, child, set } from "firebase/database";
@@ -15,20 +17,21 @@ const createWorkout = async (userRef: DatabaseReference) => {
   return set(child(userRef, "/workout"), {
     dateStarted: now.toString(),
     timeStarted: time,
-  }).then(() => {
-    set(child(userRef, "/meta/isWorkingOut"), true);
   });
 };
 
 export const StartButton = () => {
-  const { dataRef, meta } = useUser();
+  const { dataRef } = useUser();
   const [starting, setStarting] = useState(false);
+  const workout = useWorkout();
   const navigate = useNavigate();
+
+  console.log(workout.data);
 
   const startWorkout = () => {
     setStarting(true);
 
-    if (meta.isWorkingOut) {
+    if (workout.status === STATUS.SUCCESS && !!workout.data) {
       navigate("/workout");
       setStarting(false);
       return;
@@ -42,14 +45,16 @@ export const StartButton = () => {
 
   return (
     <Button
-      loading={starting}
+      loading={starting || workout.status === STATUS.LOADING}
       variant="gradient"
       gradient={{ from: "teal", to: "blue", deg: 120 }}
       onClick={startWorkout}
     >
       <Group gap="xs">
         <Icon icon="bi:fire" />
-        <Text>{meta.isWorkingOut ? "Continue Workout" : "Start Workout"}</Text>
+        <Text>
+          {workout.status !== STATUS.SUCCESS ? "Loading" : workout.data ? "Continue Workout" : "Start Workout"}
+        </Text>
       </Group>
     </Button>
   );

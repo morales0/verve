@@ -14,6 +14,7 @@ export const ExerciseCard = ({
   secondaryMuscleGroups,
   group,
   index,
+  type,
   ...other
 }: ExerciseCardProps) => {
   const numSets = sets?.length ?? 0;
@@ -38,15 +39,13 @@ export const ExerciseCard = ({
             <Icon icon="gg:arrow-right" />
           </ActionIcon>
         </Flex>
-        <Divider />
 
         {numSets > 0 ? (
           <>
-            <Divider />
-            <Flex styles={{ root: { overflowX: "auto" } }} gap="md">
+            <Flex align="center" styles={{ root: { overflowX: "auto" } }} gap="md">
               <Stack>
                 {units.map((unit) => (
-                  <Text key={`${name}-${unit}`} fw="bold" fz="sm">
+                  <Text key={`${name}-${unit}`} fw="bold" c="gray" fz="sm">
                     {unit}
                   </Text>
                 ))}

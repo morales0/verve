@@ -11,7 +11,7 @@ const useWorkout = () => {
   const { user } = useAuth();
   const { db } = useDatabase();
   const [status, setStatus] = useState<STATUS>(STATUS.LOADING);
-  const [workout, setWorkout] = useState<Workout>({});
+  const [workout, setWorkout] = useState<Workout | null>(null);
 
   /* Refs */
   const workoutRef = child(dataRef, "workout");
@@ -30,6 +30,8 @@ const useWorkout = () => {
 
         // console.log(data);
         setWorkout(data as Workout);
+      } else {
+        setWorkout(null);
       }
 
       setStatus(STATUS.SUCCESS);
@@ -43,14 +45,14 @@ const useWorkout = () => {
   const addExercises = async (exercises: WorkoutExercise[], group: number) => {
     // console.log(group);
     if (group === 0) {
-      const normalExercises = [...(workout.exercises?.normal ?? [])];
+      const normalExercises = [...(workout?.exercises?.normal ?? [])];
       normalExercises.push(...exercises);
       return set(child(exercisesRef, "normal"), normalExercises);
     }
 
     const index = group - 1;
-    const numCircuits = workout.exercises?.circuits?.length ?? 0;
-    const circuits = [...(workout.exercises?.circuits ?? [])];
+    const numCircuits = workout?.exercises?.circuits?.length ?? 0;
+    const circuits = [...(workout?.exercises?.circuits ?? [])];
 
     if (index > numCircuits) return;
 
@@ -70,7 +72,7 @@ const useWorkout = () => {
 
   const removeExercises = async (ids: string[], group: number) => {
     if (group === 0) {
-      const normalExercises = [...(workout.exercises?.normal ?? [])];
+      const normalExercises = [...(workout?.exercises?.normal ?? [])];
       return set(
         child(exercisesRef, "normal"),
         normalExercises.filter((ex) => !ids.includes(ex.id))
@@ -78,7 +80,7 @@ const useWorkout = () => {
     }
 
     const circuit = group - 1;
-    const circuits = [...(workout.exercises?.circuits ?? [[]])];
+    const circuits = [...(workout?.exercises?.circuits ?? [[]])];
     const circuitExercises = circuits.at(circuit);
 
     if (!circuitExercises) return;
@@ -91,7 +93,7 @@ const useWorkout = () => {
 
   const removeCircuit = async (group: number) => {
     const circuit = group - 1;
-    const circuits = [...(workout.exercises?.circuits ?? [])];
+    const circuits = [...(workout?.exercises?.circuits ?? [])];
 
     return set(
       child(exercisesRef, `circuits`),
@@ -121,8 +123,8 @@ const useWorkout = () => {
       timeEnded: time,
     })
       .then(() => {
-        const normalExercises = workout.exercises?.normal ?? [];
-        const circuitExercises = workout.exercises?.circuits?.flat() ?? [];
+        const normalExercises = workout?.exercises?.normal ?? [];
+        const circuitExercises = workout?.exercises?.circuits?.flat() ?? [];
         return [...normalExercises, ...circuitExercises].forEach((ex) => {
           // update groups
           ex.primaryMuscleGroups?.forEach((group) => {
