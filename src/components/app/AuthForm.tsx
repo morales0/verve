@@ -74,7 +74,7 @@ const AuthForm = ({ signIn, signInGoogle, register }: Props) => {
           />
         </Stack>
 
-        <Group position="apart" mt="xl">
+        <Group justify="space-between" mt="xl">
           <Anchor component="button" type="button" color="dimmed" onClick={() => toggle()} size="xs">
             {type === "register" ? "Login to your account here" : "Register for an account here"}
           </Anchor>

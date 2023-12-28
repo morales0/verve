@@ -3,7 +3,7 @@ import { IconPlus } from "@tabler/icons-react";
 import classes from "./circuits.module.css";
 
 import { useScrollIntoView } from "@mantine/hooks";
-import { ExerciseSelection } from "../exercises";
+import { ExerciseSelection } from "../functions";
 
 export type CircuitsProps = {
   selections: ExerciseSelection[][];

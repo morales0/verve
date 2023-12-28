@@ -1,5 +1,15 @@
 import { Icon } from "@iconify/react";
-import { Collapse, Flex, Group, Paper, Stack, Text, UnstyledButton, useMantineTheme } from "@mantine/core";
+import {
+  Collapse,
+  Flex,
+  Group,
+  Paper,
+  Stack,
+  Text,
+  UnstyledButton,
+  useMantineColorScheme,
+  useMantineTheme,
+} from "@mantine/core";
 import { useState } from "react";
 import { ExerciseSet } from "../../types/workout";
 
@@ -12,15 +22,11 @@ type ExerciseDropdownInfoProps = {
 const ExerciseInfoDropdown = ({ name, sets, units }: ExerciseDropdownInfoProps) => {
   const theme = useMantineTheme();
   const [open, setOpen] = useState(false);
+  const { colorScheme } = useMantineColorScheme();
 
   return (
-    <Paper
-      bg={theme.colorScheme === "dark" ? theme.colors.gray[9] : theme.colors.gray[0]}
-      p="xs"
-      component={Stack}
-      gap="sm"
-    >
-      <UnstyledButton component={Flex} justify="space-between" align="center" onClick={() => setOpen((prev) => !prev)}>
+    <Paper bg={colorScheme === "dark" ? theme.colors.gray[9] : theme.colors.gray[0]} p="xs" component={Stack} gap="sm">
+      <UnstyledButton onClick={() => setOpen((prev) => !prev)}>
         <Group align="center">
           <Text>{name}</Text>
 

@@ -1,4 +1,4 @@
-import { Stack, useMantineTheme } from "@mantine/core";
+import { Stack, rgba, useMantineTheme } from "@mantine/core";
 
 import {
   CategoryScale,
@@ -78,7 +78,7 @@ export const ExerciseGraph = ({ id, units }: ExerciseHistoryProps) => {
     {
       data: history.map(({ sets }) => (type === "weight" ? weightMapper(sets) : singleUnitMapper(sets))),
       borderColor: theme.colors.teal[7],
-      backgroundColor: theme.fn.rgba("teal.7", 0.5),
+      backgroundColor: rgba("teal.7", 0.5),
     },
   ];
 
