@@ -14,7 +14,7 @@ const MuscleGroupsSection = () => {
     <Paper py="sm" px="xl" radius={0} withBorder sx={(theme) => ({ borderRight: "none", borderLeft: "none" })}>
       <Group
         position="center"
-        spacing={"sm"}
+        gap={"sm"}
         pos="relative"
         sx={{
           "&>*": {

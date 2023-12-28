@@ -15,8 +15,8 @@ export const Exercises = () => {
   const currExerciseData = userExercises.find(({ id }) => id === currExercise);
 
   return (
-    <Stack p="xs" pt={0} pb="lg" h="100%" spacing="xs">
-      <Stack spacing={0}>
+    <Stack p="xs" pt={0} pb="lg" h="100%" gap="xs">
+      <Stack gap={0}>
         <ExerciseSelect value={currExercise} onChange={setCurrExercise} />
         <Divider />
       </Stack>

@@ -66,7 +66,7 @@ const ExerciseScreen = ({ exercise, onFinish, onCancel, updateExercise }: Props)
 
   // render
   return (
-    <Stack justify="space-between" spacing={0} h="100%" px="xs" sx={{ overflow: "hidden" }}>
+    <Stack justify="space-between" gap={0} h="100%" px="xs" sx={{ overflow: "hidden" }}>
       <Flex align="center" justify="space-between" py="xs" gap="xs">
         <Title order={4}>{exercise.name}</Title>
         <SegmentedControl
@@ -86,7 +86,7 @@ const ExerciseScreen = ({ exercise, onFinish, onCancel, updateExercise }: Props)
       </Flex>
       <Divider color="gray.6" />
       {/*  {lastExercise && (
-        <Stack spacing={0} align="center">
+        <Stack gap={0} align="center">
           <UnstyledButton
             sx={{
               display: "flex",
@@ -120,7 +120,7 @@ const ExerciseScreen = ({ exercise, onFinish, onCancel, updateExercise }: Props)
           </UnstyledButton>
           <Collapse px="xs" in={open} transitionDuration={80} transitionTimingFunction={"linear"}>
             <Group noWrap sx={{ overflowX: "auto" }}>
-              <Stack spacing="xs">
+              <Stack gap="xs">
                 {exercise.units.map((unit) => (
                   <Text key={`${name}-${unit}`} fw="bold" fz="sm">
                     {unit}
@@ -129,7 +129,7 @@ const ExerciseScreen = ({ exercise, onFinish, onCancel, updateExercise }: Props)
               </Stack>
               {lastExercise.sets.map((set, i) => {
                 return (
-                  <Stack key={`${exercise.name}-set-${i}`} spacing="xs">
+                  <Stack key={`${exercise.name}-set-${i}`} gap="xs">
                     {exercise.units.map((unit) => (
                       <Text key={`${exercise.name}-${unit}-set-${i}-val`}>{set[unit]}</Text>
                     ))}
@@ -141,7 +141,7 @@ const ExerciseScreen = ({ exercise, onFinish, onCancel, updateExercise }: Props)
         </Stack>
       )} */}
       {page === "sets" && (
-        <Stack w="100%" px="xs" py="sm" sx={{ flexGrow: 1, overflowY: "auto", overflowX: "hidden" }} spacing="sm">
+        <Stack w="100%" px="xs" py="sm" sx={{ flexGrow: 1, overflowY: "auto", overflowX: "hidden" }} gap="sm">
           {exercise.sets.map((set, i) => {
             const updateUnitValue = (unit: string, value: string | number) => updateSetValue(i, unit, value);
             const updateWeightValue = (weight: string, newValue: number) => updateSetWeight(i, weight, newValue);

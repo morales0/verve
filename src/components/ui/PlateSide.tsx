@@ -1,16 +1,4 @@
-import { Box, Text, createStyles } from "@mantine/core";
-
-const useStyles = createStyles((theme) => ({
-  plate: {
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    background: "radial-gradient(circle, rgba(255,255,255,0) 60%, rgba(67, 67, 67, 0.2) 100%)",
-    border: "1px solid",
-    borderColor: "gray",
-    borderRadius: "5px",
-  },
-}));
+import { Box, Text } from "@mantine/core";
 
 export type PlateSideProps = {
   weight: number;
@@ -25,12 +13,23 @@ function mapRange(value: number): number {
 }
 
 export const PlateSide = ({ weight }: PlateSideProps) => {
-  const { classes } = useStyles();
   const height = mapRange(weight);
   const width = 22;
 
   return (
-    <Box h={height} w={width} className={classes.plate}>
+    <Box
+      h={height}
+      w={width}
+      style={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        background: "radial-gradient(circle, rgba(255,255,255,0) 60%, rgba(67, 67, 67, 0.2) 100%)",
+        border: "1px solid",
+        borderColor: "gray",
+        borderRadius: "5px",
+      }}
+    >
       <Text fz="xs">{weight}</Text>
     </Box>
   );

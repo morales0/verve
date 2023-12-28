@@ -1,69 +1,26 @@
 import { Icon } from "@iconify/react";
-import {
-  ActionIcon,
-  Box,
-  Center,
-  createStyles,
-  Flex,
-  Menu,
-  SimpleGrid,
-  Text,
-  useMantineColorScheme,
-} from "@mantine/core";
+import { ActionIcon, Box, Center, Flex, Menu, SimpleGrid, Text, rem, useMantineColorScheme } from "@mantine/core";
+import cx from "clsx";
 import { signOut } from "firebase/auth";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../context/auth";
-
-const useStyles = createStyles((theme) => ({
-  root: {
-    background: "transparent",
-    borderBottom: "1px solid",
-    borderBottomColor: theme.colorScheme === "light" ? theme.colors.gray[4] : theme.colors.gray[7],
-    zIndex: 100,
-  },
-  rootNotAtTop: {},
-  brand: {
-    // color: theme.white,
-  },
-  link: {
-    display: "block",
-    lineHeight: 1,
-    padding: ".5rem .75rem",
-    borderRadius: theme.radius.sm,
-    textDecoration: "none",
-    color: theme.colorScheme === "dark" ? theme.colors.dark[0] : theme.colors.gray[7],
-    fontSize: theme.fontSizes.md,
-    fontWeight: 500,
-
-    "&:hover": {
-      backgroundColor: theme.colorScheme === "dark" ? theme.colors.dark[6] : theme.colors.gray[0],
-    },
-
-    "&.active": {
-      textDecoration: "underline",
-    },
-
-    [theme.fn.smallerThan("sm")]: {
-      display: "none",
-    },
-  },
-  burger: {
-    [theme.fn.largerThan("sm")]: {
-      display: "none",
-    },
-  },
-}));
+import classes from "./user-navbar.module.css";
 
 const UserNavbar = () => {
   const { auth } = useAuth();
   const { toggleColorScheme } = useMantineColorScheme();
-  const { classes, cx } = useStyles();
 
   return (
     <Box className={cx(classes.root)} h={"auto"} pos="sticky">
-      <SimpleGrid cols={3} px={"md"} py={"sm"} w="100%">
+      <SimpleGrid cols={3} px={"md"} py={rem(8)} w="100%">
         <Flex>
-          <ActionIcon size="lg" title="Theme switcher" onClick={() => toggleColorScheme()}>
+          <ActionIcon
+            size="lg"
+            variant="transparent"
+            color="indigo"
+            title="Color scheme toggle"
+            onClick={() => toggleColorScheme()}
+          >
             <Icon icon="mdi:theme-light-dark" height={25} />
           </ActionIcon>
         </Flex>
@@ -79,8 +36,8 @@ const UserNavbar = () => {
         <Flex justify="flex-end">
           <Menu position="bottom-end" shadow="md" width={200}>
             <Menu.Target>
-              <ActionIcon size="lg" title="User">
-                <Icon icon="mdi:user" height={25} />
+              <ActionIcon size="lg" variant="transparent" color="indigo" title="User">
+                <Icon icon="mdi:robot-happy-outline" height={25} />
               </ActionIcon>
             </Menu.Target>
 

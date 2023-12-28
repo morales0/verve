@@ -1,33 +1,37 @@
-import { child, off, onValue, push, ref, remove, set, update } from "firebase/database";
+import { child, onValue, push, remove, set, update } from "firebase/database";
 import { useEffect, useState } from "react";
-import { useAuth } from "../context/auth";
-import { useDatabase } from "../context/database";
-import { useUser } from "../context/user";
-import { STATUS } from "../types/util";
-import { Workout, WorkoutExercise } from "../types/workout";
+import { useAuth } from "@/context/auth";
+import { useDatabase } from "@/context/database";
+import { useUser } from "@/context/user";
+import { STATUS } from "@/types/util";
+import { Workout, WorkoutExercise } from "@/types/workout";
 
 const useWorkout = () => {
   const { dataRef } = useUser();
   const { user } = useAuth();
   const { db } = useDatabase();
   const [status, setStatus] = useState<STATUS>(STATUS.LOADING);
-  const [workout, setWorkout] = useState<Workout>({});
-  const refString = `users/${user?.uid}/currentWorkout`;
+  const [workout, setWorkout] = useState<Workout | null>(null);
 
+  /* Refs */
+  const workoutRef = child(dataRef, "workout");
+  const exercisesRef = child(workoutRef, "exercises");
+  const historyRef = child(dataRef, "history");
+  const muscleGroupsRef = child(dataRef, "muscleGroups");
+  const exerciseHistoryRef = child(dataRef, "exerciseHistory");
+
+  // Load workout data
   useEffect(() => {
     if (!user) return;
 
-    const workoutRef = ref(db, refString);
     const off = onValue(workoutRef, (snapshot) => {
       if (snapshot.exists()) {
-        // exercises comes in as an object, lets make it an array, and cast it
         const data = snapshot.val();
-        if (data.exercises) {
-          const listExercises: WorkoutExercise[] = Object.values(data.exercises);
-          data.exercises = listExercises;
-        }
 
+        // console.log(data);
         setWorkout(data as Workout);
+      } else {
+        setWorkout(null);
       }
 
       setStatus(STATUS.SUCCESS);
@@ -38,22 +42,69 @@ const useWorkout = () => {
     };
   }, [db, user]);
 
-  const addExercise = async (exercise: WorkoutExercise) => {
-    const newRef = push(ref(db, refString + "/exercises"));
-    return set(newRef, {
-      ...exercise,
-      workoutId: newRef.key,
-    });
+  const addExercises = async (exercises: WorkoutExercise[], group: number) => {
+    // console.log(group);
+    if (group === 0) {
+      const normalExercises = [...(workout?.exercises?.normal ?? [])];
+      normalExercises.push(...exercises);
+      return set(child(exercisesRef, "normal"), normalExercises);
+    }
+
+    const index = group - 1;
+    const numCircuits = workout?.exercises?.circuits?.length ?? 0;
+    const circuits = [...(workout?.exercises?.circuits ?? [])];
+
+    if (index > numCircuits) return;
+
+    // Add new array if circuit is next up
+    if (index === numCircuits) {
+      circuits.push([]);
+    }
+
+    circuits[index].push(...exercises);
+    return set(child(exercisesRef, "circuits"), circuits);
   };
 
-  const removeExercise = async (id: string) => {
-    return remove(ref(db, refString + `/exercises/${id}`));
+  const updateExercise = async (exerciseUpdates: Partial<WorkoutExercise>, group: number, index: number) => {
+    const exRef = child(exercisesRef, `${group === 0 ? "normal" : `circuits/${group - 1}`}/${index}`);
+    return update(exRef, exerciseUpdates);
+  };
+
+  const removeExercises = async (ids: string[], group: number) => {
+    if (group === 0) {
+      const normalExercises = [...(workout?.exercises?.normal ?? [])];
+      return set(
+        child(exercisesRef, "normal"),
+        normalExercises.filter((ex) => !ids.includes(ex.id))
+      );
+    }
+
+    const circuit = group - 1;
+    const circuits = [...(workout?.exercises?.circuits ?? [[]])];
+    const circuitExercises = circuits.at(circuit);
+
+    if (!circuitExercises) return;
+
+    return set(
+      child(exercisesRef, `circuits/${circuit}`),
+      circuitExercises.filter((ex) => !ids.includes(ex.id))
+    );
+  };
+
+  const removeCircuit = async (group: number) => {
+    const circuit = group - 1;
+    const circuits = [...(workout?.exercises?.circuits ?? [])];
+
+    return set(
+      child(exercisesRef, `circuits`),
+      circuits.filter((_, i) => i !== circuit)
+    );
   };
 
   const cancelWorkout = () => {
     setStatus(STATUS.DELETING);
 
-    return remove(ref(db, refString));
+    return remove(workoutRef);
   };
 
   const completeWorkout = async () => {
@@ -65,8 +116,6 @@ const useWorkout = () => {
       minute: "2-digit",
     });
 
-    // we want to move this workout to workoutHistory
-    const historyRef = ref(db, `users/${user?.uid}/history`);
     const newRef = push(historyRef);
     return set(newRef, {
       ...workout,
@@ -74,26 +123,20 @@ const useWorkout = () => {
       timeEnded: time,
     })
       .then(() => {
-        const muscleGroupsRef = ref(db, `users/${user?.uid}/muscleGroups`);
-        const exHistoryRef = child(dataRef, "exerciseHistory");
-        workout.exercises?.forEach((ex) => {
+        const normalExercises = workout?.exercises?.normal ?? [];
+        const circuitExercises = workout?.exercises?.circuits?.flat() ?? [];
+        return [...normalExercises, ...circuitExercises].forEach((ex) => {
           // update groups
           ex.primaryMuscleGroups?.forEach((group) => {
-            set(child(muscleGroupsRef, group), {
-              dateLastUsed: now.toDateString(),
-              name: group,
-            });
+            set(child(muscleGroupsRef, `${group}/dateLastUsed`), now.toDateString());
           });
           ex.secondaryMuscleGroups?.forEach((group) => {
-            set(child(muscleGroupsRef, group), {
-              dateLastUsed: now.toDateString(),
-              name: group,
-            });
+            set(child(muscleGroupsRef, `${group}/dateLastUsed`), now.toDateString());
           });
 
           // add to history
           if (ex.id) {
-            const newEntryRef = push(child(exHistoryRef, ex.id));
+            const newEntryRef = push(child(exerciseHistoryRef, ex.id));
             set(newEntryRef, {
               histId: newEntryRef.key,
               exId: ex.id,
@@ -106,16 +149,18 @@ const useWorkout = () => {
       })
       .then(() => {
         // finally, delete workout
-        remove(ref(db, refString));
+        return remove(workoutRef);
       });
   };
 
   return {
     status,
-    workout,
+    data: workout,
     api: {
-      addExercise,
-      removeExercise,
+      addExercises,
+      updateExercise,
+      removeExercises,
+      removeCircuit,
       cancelWorkout,
       completeWorkout,
     },

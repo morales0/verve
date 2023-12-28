@@ -48,7 +48,7 @@ export default function UserProvider({ user, children }: Props) {
         <Text py="md" fz="xl">
           verve
         </Text>
-        <Center sx={{ flexGrow: 1 }}>
+        <Center>
           <Loader variant="bars" color="indigo" />
         </Center>
       </Stack>

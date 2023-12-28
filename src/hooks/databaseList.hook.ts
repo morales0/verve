@@ -28,18 +28,18 @@ const useDatabaseList = <T>(listRef: DatabaseReference | Query, key?: any) => {
     };
   }, [listRef.ref.key, key]);
 
-  const addChild = async (newChild: T, key?: string) => {
+  const addChild = async (newChild: Omit<T, "id">, key?: string) => {
     if (key) {
       const childRef = child(listRef.ref, key);
 
       if (idList.includes(key)) throw new Error("Key already exists");
-      return set(childRef, newChild);
+      return set(childRef, newChild).then(() => key);
     } else {
       const childRef = push(listRef.ref);
       return set(childRef, {
         ...newChild,
         id: childRef.key,
-      });
+      }).then(() => childRef.key);
     }
   };
 
@@ -48,7 +48,7 @@ const useDatabaseList = <T>(listRef: DatabaseReference | Query, key?: any) => {
   };
 
   const updateChild = async (key: string, updates: Partial<T>) => {
-    return update(child(listRef.ref, key), updates);
+    return update(child(listRef.ref, key), updates).then(() => key);
   };
 
   return {

@@ -1,0 +1,35 @@
+.main {
+  flex-grow: 1;
+  overflow: hidden;
+  background-color: light-dark(#f7f8f9, #2c2d30);
+}
+
+.navbarDivider {
+  border-color: light-dark(var(--mantine-color-gray-5), var(--mantine-color-gray-6));
+}
+
+/* Global classes */
+.heightLocked {
+  height: 100%;
+  overflow: hidden;
+}
+
+.scrollable {
+  overflow: auto;
+}
+
+/* Theme overrides */
+
+.lightButton {
+  box-shadow: 0 0 2px 0px;
+}
+
+.paper {
+  border-color: light-dark(var(--mantine-color-gray-2), var(--mantine-color-gray-7));
+}
+
+.checkbox {
+  @mixin light {
+    border-color: var(--mantine-color-gray-2);
+  }
+}

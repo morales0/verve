@@ -18,7 +18,7 @@ const ExerciseInfoDropdown = ({ name, sets, units }: ExerciseDropdownInfoProps) 
       bg={theme.colorScheme === "dark" ? theme.colors.gray[9] : theme.colors.gray[0]}
       p="xs"
       component={Stack}
-      spacing="sm"
+      gap="sm"
     >
       <UnstyledButton component={Flex} justify="space-between" align="center" onClick={() => setOpen((prev) => !prev)}>
         <Group align="center">

@@ -38,7 +38,7 @@ const HistorySection = ({ startNewWorkoutAndNavigate, isWorkingOut }: Props) => 
   }
 
   return (
-    <Stack h="100%" spacing={0}>
+    <Stack h="100%" gap={0}>
       <Group position="apart" py="sm">
         <Title order={3}>Workout History</Title>
         {!isWorkingOut && (

@@ -1,0 +1,32 @@
+.root {
+  background: transparent;
+  /* border-bottom: 1px solid;
+  border-bottom-color: light-dark(var(--mantine-color-gray-4), var(--mantine-color-indigo-6)); */
+  z-index: 100;
+}
+
+.root-not-at-top {
+}
+
+.brand {
+  /* color: theme.white; */
+}
+
+.link {
+  display: "block";
+  line-height: 1;
+  padding: ".5rem .75rem";
+  /* border-radius: theme.radius.sm; */
+  text-decoration: "none";
+  color: light-dark(var(--mantine-color-gray-7), var(--mantine-color-dark-0));
+  /* font-size: theme.fontSizes.md; */
+  font-weight: 500;
+
+  &:hover {
+    background-color: light-dark(var(--mantine-color-gray-0), var(--mantine-color-dark-6));
+  }
+
+  &.active {
+    text-decoration: "underline";
+  }
+}
