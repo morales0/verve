@@ -3,6 +3,8 @@ import React, { useRef } from "react";
 import { ExerciseSet as ExerciseSetType, UserExercise } from "@/types/workout";
 import { IconX } from "@tabler/icons-react";
 import classes from "./exercise-set.module.css";
+import { BarbellInput } from "./barbell-input";
+import { decodeKey } from "@/functions/utils";
 
 export type ExerciseSetProps = ExerciseSetType & {
   num: number;
@@ -20,6 +22,20 @@ export const ExerciseSet = ({ values, weights, type, num, updateSet, removeSet, 
         [unit]: newValue,
       },
     });
+  const onWeightChange = (weight: string, newValue: number) => {
+    const newWeights = { ...weights, [weight]: newValue };
+    updateSet({
+      values: {
+        ...values,
+        Weight: Object.entries(newWeights)
+          .filter(([plate, _]) => plate !== "bar")
+          .reduce<number>((sum, [plate, count]) => sum + parseFloat(decodeKey(plate)) * count, newWeights.bar),
+      },
+      weights: {
+        ...newWeights,
+      },
+    });
+  };
 
   return (
     <Box>
@@ -59,7 +75,7 @@ export const ExerciseSet = ({ values, weights, type, num, updateSet, removeSet, 
         </Text>
       </Paper>
 
-      {/* {type === "Barbell" && <BarbellInput weights={weights ?? {}} onWeightsChange={() => {}} />} */}
+      {type === "Barbell" && <BarbellInput weights={weights ?? {}} onWeightsChange={onWeightChange} />}
 
       {/* {type === "Dumbbell"(<DumbbellInput weights={weights ?? {}} onWeightsChange={() => {}} />)} */}
     </Box>

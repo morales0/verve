@@ -7,7 +7,6 @@ import useDatabaseList from "./databaseList.hook";
 
 const useMuscleGroups = () => {
   const { dataRef, meta } = useUser();
-  const [limit, setLimit] = useState(5);
 
   const muscleGroupsRef = child(dataRef, "muscleGroups");
   const { status, data, api } = useDatabaseList<MuscleGroup>(muscleGroupsRef);
