@@ -29,13 +29,15 @@ export default function AuthProvider({ app, children }: Props) {
         setUser(user);
         setStatus("authenticated");
       } else {
-        if (process.env.NODE_ENV === "development") {
-          console.log("Loggin in with test user");
-          signInWithEmailAndPassword(auth, "test@verve.com", "testpass");
-        } else {
-          setUser(null);
-          setStatus("unauthenticated");
-        }
+        // if (process.env.NODE_ENV === "development") {
+        //   console.log("Loggin in with test user");
+        //   signInWithEmailAndPassword(auth, "test@verve.com", "testpass");
+        // } else {
+        //   setUser(null);
+        //   setStatus("unauthenticated");
+        // }
+        setUser(null);
+        setStatus("unauthenticated");
       }
     });
   }, [auth]);
