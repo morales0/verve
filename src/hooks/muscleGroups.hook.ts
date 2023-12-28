@@ -1,4 +1,4 @@
-import { child, set } from "firebase/database";
+import { child, set, update } from "firebase/database";
 import { useEffect, useState } from "react";
 import { useUser } from "../context/user";
 import { STATUS } from "../types/util";
@@ -16,11 +16,20 @@ const useMuscleGroups = () => {
     const formattedName = name.slice(0, 1).toUpperCase() + name.slice(1);
     api.addChild({ name: formattedName });
   };
-  const removeMuscleGroup = (name: string) => {
-    api.removeChild(name);
+  const removeMuscleGroup = (id: string) => {
+    api.removeChild(id);
   };
-  const updateMuscleGroup = (name: string, updates: Partial<MuscleGroup>) => {
-    api.updateChild(name, updates);
+  const updateMuscleGroup = (id: string, updates: Partial<MuscleGroup>) => {
+    const toUpdate = data.find((group) => group.id === id || group.name === id);
+
+    if (toUpdate === undefined) return;
+
+    if (toUpdate?.id === undefined) {
+      // Update the id to be the current name
+      return api.updateChild(id, { ...updates, id: toUpdate.name });
+    }
+
+    return api.updateChild(id, updates);
   };
 
   useEffect(() => {
