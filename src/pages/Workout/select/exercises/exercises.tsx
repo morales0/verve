@@ -4,6 +4,7 @@ import { Icon } from "@iconify/react";
 import { ActionIcon, Center, Checkbox, Flex, Loader, Menu, Paper, Stack, Text } from "@mantine/core";
 import { IconHelp } from "@tabler/icons-react";
 import { ExerciseSelection } from "../functions";
+import { useNavigate } from "react-router-dom";
 
 export type ExercisesProps = {
   exercises: UserExercise[];
@@ -14,6 +15,7 @@ export type ExercisesProps = {
   onSelect: (id: string) => void;
   onDeselect: (id: string) => void;
   onChangeAll: (checked: boolean) => void;
+  onDeleteExercise: (id: string) => void;
 };
 
 export const Exercises = ({
@@ -25,8 +27,14 @@ export const Exercises = ({
   onSelect,
   onDeselect,
   onChangeAll,
+  onDeleteExercise,
 }: ExercisesProps) => {
   // const workout = useWorkout();
+  const navigate = useNavigate();
+
+  const editExercise = (exercise: UserExercise) => {
+    navigate(`/exercise-form`, { state: { prevPath: "/workout", exercise } });
+  };
 
   if (status !== "success") {
     return <Center pt="md">{status === "loading" ? <Loader /> : <Text>An error occurred. Try again.</Text>}</Center>;
@@ -60,7 +68,7 @@ export const Exercises = ({
         </ActionIcon>
       </Flex>
 
-      {exercises?.map(({ id, name, type, primaryMuscleGroups, secondaryMuscleGroups }) => (
+      {exercises?.map(({ id, name, type, primaryMuscleGroups, secondaryMuscleGroups, units }) => (
         <Checkbox
           key={id || name}
           checked={currCircuit < selections.length && selections[currCircuit]?.map((e) => e.id).includes(id!)}
@@ -80,7 +88,7 @@ export const Exercises = ({
                     {name}
                   </Text>
                   {type && (
-                    <Text fs="italic" fw={500} c="dimmed" fz="xs" span>
+                    <Text fw={500} c="dimmed" fz="xs" span>
                       {" "}
                       {type}
                     </Text>
@@ -95,10 +103,27 @@ export const Exercises = ({
                   </Menu.Target>
 
                   <Menu.Dropdown>
-                    <Menu.Item color="indigo" leftSection={<Icon icon="material-symbols:edit" />}>
+                    <Menu.Item
+                      color="indigo"
+                      leftSection={<Icon icon="material-symbols:edit" />}
+                      onClick={() =>
+                        editExercise({
+                          id: id!,
+                          name,
+                          type,
+                          units,
+                          primaryMuscleGroups,
+                          secondaryMuscleGroups,
+                        })
+                      }
+                    >
                       Edit
                     </Menu.Item>
-                    <Menu.Item color="red" leftSection={<Icon icon="ic:baseline-delete-forever" />}>
+                    <Menu.Item
+                      color="red"
+                      leftSection={<Icon icon="ic:baseline-delete-forever" />}
+                      onClick={() => onDeleteExercise(id!)}
+                    >
                       Delete
                     </Menu.Item>
                   </Menu.Dropdown>

@@ -2,6 +2,7 @@
 // export type WeightType = "Dumbbell" | "Barbell" | "Kettle Bell";
 
 export type MuscleGroup = {
+  id?: string;
   name: string;
   dateLastUsed?: string;
 };

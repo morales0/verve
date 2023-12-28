@@ -46,6 +46,7 @@ export const Select = () => {
   const filteredSelections = useMemo(() => filterSelectionsByExerciseName(selections, query), [selections, query]);
 
   /* Functions */
+  const handleDeleteExercise = (id: UserExercise["id"]) => userExercises.api.removeChild(id);
   const handleSelectExercise = (id: UserExercise["id"]) => {
     const ex = filteredExercises.find((ex) => ex.id === id);
     if (!ex) return;
@@ -106,6 +107,7 @@ export const Select = () => {
           onSelect={handleSelectExercise}
           onDeselect={handleDeselectExercise}
           onChangeAll={handleChangeAllExercises}
+          onDeleteExercise={handleDeleteExercise}
         />
       </Box>
       <Control

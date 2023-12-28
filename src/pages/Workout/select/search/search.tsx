@@ -16,8 +16,7 @@ export const Search = ({ query, setQuery, filterOption, toggleFilterOption, setF
 
   /* Functions */
   const navigateToExerciseForm = () => {
-    const nameParam = query ? `?name=${query}` : "";
-    navigate(`/exercise-form${nameParam}`, { state: { prevPath: "/workout" } });
+    navigate(`/exercise-form`, { state: { prevPath: "/workout", exercise: { query } } });
   };
 
   return (

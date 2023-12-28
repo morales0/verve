@@ -14,7 +14,13 @@ const useMuscleGroups = () => {
 
   const addMuscleGroup = (name: string) => {
     const formattedName = name.slice(0, 1).toUpperCase() + name.slice(1);
-    api.addChild({ name: formattedName }, formattedName);
+    api.addChild({ name: formattedName });
+  };
+  const removeMuscleGroup = (name: string) => {
+    api.removeChild(name);
+  };
+  const updateMuscleGroup = (name: string, updates: Partial<MuscleGroup>) => {
+    api.updateChild(name, updates);
   };
 
   useEffect(() => {
@@ -40,6 +46,8 @@ const useMuscleGroups = () => {
     data: data,
     api: {
       addMuscleGroup,
+      removeMuscleGroup,
+      updateMuscleGroup,
     },
   };
 };

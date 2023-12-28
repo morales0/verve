@@ -30,22 +30,23 @@ export type ExerciseFormValues = {
 };
 
 export const ExerciseForm = () => {
-  const { data } = useMuscleGroups();
-  const params = useParams();
-  const searchParams = useSearchParams();
+  const { data, api: muscleApi } = useMuscleGroups();
   const location = useLocation();
   const navigate = useNavigate();
   const { api } = useUserExercises();
 
   const [page, setPage] = useState(0);
+  const [newGroup, setNewGroup] = useState<string>("");
+
+  const exercise: Partial<UserExercise> = location.state?.exercise ?? {};
 
   const form = useForm<ExerciseFormValues>({
     initialValues: {
-      name: searchParams[0].get("name") ?? "",
-      type: searchParams[0].get("type") ?? "",
-      units: [],
-      primaryMuscleGroups: [],
-      secondaryMuscleGroups: [],
+      name: exercise.name ?? "",
+      type: exercise.type ?? "",
+      units: [...(exercise.units ?? [])],
+      primaryMuscleGroups: [...(exercise.primaryMuscleGroups ?? [])],
+      secondaryMuscleGroups: [...(exercise.secondaryMuscleGroups ?? [])],
     },
   });
 
@@ -55,27 +56,43 @@ export const ExerciseForm = () => {
       (page === 1 && form.values.primaryMuscleGroups.length > 0) ||
       page === 2);
 
-  const completeForm = () => {
-    const newExercise: UserExercise = {
-      ...form.values,
-    };
-    api.addChild(newExercise).then((key) => {
-      if (location.state["prevPath"]) {
-        const selections: string[][] = location?.state?.["selections"] ?? [[]];
-        selections[0].push(`${newExercise.name}-${key}`);
-
-        navigate(location.state["prevPath"], {
-          state: {
-            name: newExercise.name,
-            selections,
-          },
-        });
-        // console.log("Navigating to: ", location.state["prevPath"]);
-      } else {
-        console.log("No prevPath");
-      }
-    });
+  const completeForm = async () => {
+    if (exercise.id) {
+      api.updateChild(exercise.id, form.values).then((key) => {
+        if (location.state["prevPath"]) {
+          navigate(location.state["prevPath"], {
+            state: {
+              exerciseId: key,
+              name: form.values.name,
+            },
+          });
+        }
+      });
+    } else {
+      api.addChild(form.values).then((key) => {
+        if (location.state["prevPath"]) {
+          navigate(location.state["prevPath"], {
+            state: {
+              exerciseId: key,
+              name: form.values.name,
+            },
+          });
+        }
+      });
+    }
   };
+
+  const handleNewGroupSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    if (newGroup === "") return;
+    if (data.find((group) => group.name === newGroup)) return;
+
+    muscleApi.addMuscleGroup(newGroup);
+    setNewGroup("");
+  };
+
+  if (!exercise) return null;
 
   return (
     <Stack className={cx(appClasses.heightLocked)} gap={0}>
@@ -96,7 +113,8 @@ export const ExerciseForm = () => {
           Choose type:
         </Text>
         <Chip.Group
-          {...form.getInputProps("type", { type: "checkbox" })}
+          // {...form.getInputProps("type", { type: "checkbox" })}
+          value={form.values.type}
           onChange={(value) => {
             form.setFieldValue("type", value as string);
             form.setFieldValue("units", mockTypeData.find(({ name }) => name === value)?.units ?? []);
@@ -167,7 +185,7 @@ export const ExerciseForm = () => {
             <Text fw={500} mb="xs">
               Choose units:
             </Text>
-            <Chip.Group multiple {...form.getInputProps("units", { type: "checkbox" })}>
+            <Chip.Group multiple {...form.getInputProps("units", { type: "checkbox" })} value={form.values.units}>
               <Flex gap="xs" align="center" wrap="wrap">
                 {["Reps", "Weight", "Time", "Distance"].map((unit) => (
                   <Chip
@@ -187,11 +205,13 @@ export const ExerciseForm = () => {
         )}
       </Box>
 
-      <Box display={page === 1 ? "" : "none"} p="xs">
-        <Text fw={500} mb="xs">
-          Choose primary muscle groups:
-        </Text>
-        <Chip.Group multiple {...form.getInputProps("primaryMuscleGroups", { type: "checkbox" })}>
+      <Stack display={page === 1 ? "" : "none"} p="xs">
+        <Text fw={500}>Choose primary muscle groups:</Text>
+        <Chip.Group
+          multiple
+          {...form.getInputProps("primaryMuscleGroups", { type: "checkbox" })}
+          value={form.values.primaryMuscleGroups}
+        >
           <Flex gap="xs" align="center" wrap="wrap">
             {data.map((group) => (
               <Chip
@@ -207,14 +227,28 @@ export const ExerciseForm = () => {
             ))}
           </Flex>
         </Chip.Group>
-      </Box>
+        <form onSubmit={handleNewGroupSubmit}>
+          <TextInput
+            value={newGroup}
+            onChange={(event) => setNewGroup(event.target.value)}
+            placeholder="Create new group"
+            radius="xl"
+            w={160}
+            styles={{ input: { textAlign: "center" } }}
+          />
+        </form>
+      </Stack>
 
       <Box display={page === 2 ? "" : "none"} p="xs">
         <Text fw={500} mb="xs">
           Choose secondary muscle groups:
         </Text>
         <Text fz="xs">Optional</Text>
-        <Chip.Group multiple {...form.getInputProps("secondaryMuscleGroups", { type: "checkbox" })}>
+        <Chip.Group
+          multiple
+          {...form.getInputProps("secondaryMuscleGroups", { type: "checkbox" })}
+          value={form.values.secondaryMuscleGroups}
+        >
           <Flex gap="xs" align="center" wrap="wrap">
             {data.map((group) => (
               <Chip
@@ -258,6 +292,7 @@ export const ExerciseForm = () => {
         <Flex align="center" justify="center" gap="sm" pt="xs" pb="md" px="xs">
           <ActionIcon
             radius="xl"
+            size="lg"
             color="cyan"
             disabled={page === 0}
             onClick={() => {
@@ -271,6 +306,7 @@ export const ExerciseForm = () => {
           {page < 3 ? (
             <ActionIcon
               radius="xl"
+              size="lg"
               color="blue"
               disabled={!okayToContinue}
               onClick={() => {
@@ -280,7 +316,7 @@ export const ExerciseForm = () => {
               <Icon icon="material-symbols-light:check" />
             </ActionIcon>
           ) : (
-            <ActionIcon radius="xl" color="green" onClick={() => completeForm()}>
+            <ActionIcon size="lg" radius="xl" color="green" onClick={() => completeForm()}>
               <Icon icon="formkit:submit" />
             </ActionIcon>
           )}

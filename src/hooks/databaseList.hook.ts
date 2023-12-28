@@ -28,7 +28,7 @@ const useDatabaseList = <T>(listRef: DatabaseReference | Query, key?: any) => {
     };
   }, [listRef.ref.key, key]);
 
-  const addChild = async (newChild: T, key?: string) => {
+  const addChild = async (newChild: Omit<T, "id">, key?: string) => {
     if (key) {
       const childRef = child(listRef.ref, key);
 
@@ -48,7 +48,7 @@ const useDatabaseList = <T>(listRef: DatabaseReference | Query, key?: any) => {
   };
 
   const updateChild = async (key: string, updates: Partial<T>) => {
-    return update(child(listRef.ref, key), updates);
+    return update(child(listRef.ref, key), updates).then(() => key);
   };
 
   return {
