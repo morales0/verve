@@ -1,4 +1,4 @@
-import { Center } from "@mantine/core";
+import { Center, Stack, Text, rem } from "@mantine/core";
 import {
   GoogleAuthProvider,
   signInWithEmailAndPassword,
@@ -7,6 +7,7 @@ import {
 } from "firebase/auth";
 import AuthForm from "../components/app/AuthForm";
 import { useAuth } from "../context/auth";
+import classes from "./app.module.css";
 
 const UnauthApp = () => {
   const { auth } = useAuth();
@@ -19,9 +20,15 @@ const UnauthApp = () => {
   };
 
   return (
-    <Center h={"100%"}>
+    <Stack h={"100%"} className={classes.authScreen} align="center" justify="flex-start">
+      <Text c="white" fz={rem(27)} py={rem(80)}>
+        Welcome to{" "}
+        <Text span fz="inherit" fw={600}>
+          verve
+        </Text>
+      </Text>
       <AuthForm signIn={signIn} register={register} signInGoogle={signInGoogle} />
-    </Center>
+    </Stack>
   );
 };
 

@@ -1,7 +1,8 @@
-import { Anchor, Button, Group, Paper, PasswordInput, Stack, TextInput } from "@mantine/core";
+import { Anchor, Button, Divider, Group, Paper, PasswordInput, Stack, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { upperFirst, useToggle } from "@mantine/hooks";
 import { UserCredential } from "firebase/auth";
+import { GoogleButton } from "./google-button";
 
 type Props = {
   signIn: (email: string, password: string) => Promise<UserCredential>;
@@ -42,10 +43,13 @@ const AuthForm = ({ signIn, signInGoogle, register }: Props) => {
   };
 
   return (
-    <Paper radius="sm" p="lg" withBorder>
+    <Paper radius="sm" p="lg" withBorder shadow="md">
       <form onSubmit={form.onSubmit(submitAuthForm)}>
         <Stack>
-          <Button onClick={signInGoogle}>Google</Button>
+          <GoogleButton radius="xl" onClick={signInGoogle}>
+            Google
+          </GoogleButton>
+          <Divider label="Or continue with email" labelPosition="center" my="sm" />
           {type === "register" && (
             <TextInput
               label="Name"
@@ -58,7 +62,7 @@ const AuthForm = ({ signIn, signInGoogle, register }: Props) => {
           <TextInput
             required
             label="Email"
-            placeholder="hello@mantine.dev"
+            placeholder="me@myverve.com"
             value={form.values.email}
             onChange={(event) => form.setFieldValue("email", event.currentTarget.value)}
             error={form.errors.email && "Invalid email"}
@@ -67,7 +71,7 @@ const AuthForm = ({ signIn, signInGoogle, register }: Props) => {
           <PasswordInput
             required
             label="Password"
-            placeholder="Your password"
+            placeholder="Password"
             value={form.values.password}
             onChange={(event) => form.setFieldValue("password", event.currentTarget.value)}
             error={form.errors.password && "Password should include at least 6 characters"}
@@ -75,10 +79,12 @@ const AuthForm = ({ signIn, signInGoogle, register }: Props) => {
         </Stack>
 
         <Group justify="space-between" mt="xl">
-          <Anchor component="button" type="button" color="dimmed" onClick={() => toggle()} size="xs">
-            {type === "register" ? "Login to your account here" : "Register for an account here"}
+          <Anchor component="button" type="button" onClick={() => toggle()} size="xs">
+            {type === "register" ? "Login to your account" : "Register for an account"}
           </Anchor>
-          <Button type="submit">{upperFirst(type)}</Button>
+          <Button type="submit" color={type === "login" ? "indigo" : "teal"}>
+            {upperFirst(type)}
+          </Button>
         </Group>
       </form>
     </Paper>
