@@ -34,20 +34,11 @@ const UserNavbar = () => {
         </Center>
 
         <Flex justify="flex-end">
-          <Menu position="bottom-end" shadow="md" width={200}>
-            <Menu.Target>
-              <ActionIcon size="lg" variant="transparent" color="indigo" title="User">
-                <Icon icon="mdi:robot-happy-outline" height={25} />
-              </ActionIcon>
-            </Menu.Target>
-
-            <Menu.Dropdown>
-              <Menu.Divider />
-              <Menu.Item color="yellow" onClick={() => signOut(auth)}>
-                Sign out
-              </Menu.Item>
-            </Menu.Dropdown>
-          </Menu>
+          <Link to="/user">
+            <ActionIcon size="lg" variant="transparent" color="indigo" title="User" component="div">
+              <Icon icon="mdi:robot-happy-outline" height={25} />
+            </ActionIcon>
+          </Link>
         </Flex>
       </SimpleGrid>
     </Box>

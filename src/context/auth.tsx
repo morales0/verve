@@ -26,6 +26,7 @@ export default function AuthProvider({ app, children }: Props) {
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
+        console.log(user);
         setUser(user);
         setStatus("authenticated");
       } else {
