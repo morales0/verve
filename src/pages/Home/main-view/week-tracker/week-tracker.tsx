@@ -1,38 +1,8 @@
-import { Center, Flex, Text, rgba, useMantineTheme } from "@mantine/core";
-import classes from "./week-tracker.module.css";
+import { DAYS_OF_WEEK } from "@/constants";
 import useWorkoutHistory from "@/hooks/workoutHistory.hook";
-import { WorkoutHistory } from "@/types/workout";
-import { Icon } from "@iconify/react";
-
-const daysOfWeek = ["S", "M", "T", "W", "Th", "F", "Sa"];
-
-const findHitDays = (data: WorkoutHistory[]) => {
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-
-  const hitDays = daysOfWeek.map(() => false);
-
-  for (let i = 0; i < data.length; i++) {
-    const date = new Date(data[i].dateStarted ?? "");
-
-    // Calculate the diff in days bw the date and today
-    const diffInDays = Math.floor((today.valueOf() - date.valueOf()) / (1000 * 60 * 60 * 24));
-
-    // If the diff is greater than 6, then the date is outside of the week
-    if (diffInDays > 6) {
-      break;
-    }
-
-    // Get the day of the week
-    const day = date.getDay();
-
-    if (day <= today.getDay()) {
-      hitDays[day] = true;
-    }
-  }
-
-  return hitDays;
-};
+import { Center, Flex, Text, useMantineTheme } from "@mantine/core";
+import { findHitDays } from "./find-hit-days";
+import classes from "./week-tracker.module.css";
 
 export const WeekTracker = () => {
   const theme = useMantineTheme();
@@ -43,7 +13,7 @@ export const WeekTracker = () => {
 
   return (
     <Flex w="100%" justify="space-evenly">
-      {daysOfWeek.map((day, i) => {
+      {DAYS_OF_WEEK.map((day, i) => {
         const isToday = i === today;
         const isHit = hitDays[i];
         const isMissed = !isHit && i < today;
