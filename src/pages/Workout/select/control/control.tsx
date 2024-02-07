@@ -1,4 +1,5 @@
 import { Box, Divider, Center, Button, Group } from "@mantine/core";
+import { Link } from "react-router-dom";
 
 export type ControlProps = {
   canRemoveCircuit: boolean;
@@ -34,13 +35,16 @@ export const Control = ({
           Cancel Workout
         </Button>
         <Button
+          component={Link}
+          to="/workout/summary"
+          type="button"
           size="sm"
           color="blue.5"
           loading={isStartingExercises}
           disabled={!canStartExercises}
           onClick={onStartExercises}
         >
-          Start Exercises
+          Go to Review
         </Button>
       </Group>
     </Box>

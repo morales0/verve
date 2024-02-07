@@ -44,8 +44,13 @@ export const Exercises = () => {
       values:
         exercise?.sets && exercise?.sets.length > 0
           ? exercise.sets[exercise.sets.length - 1].values
-          : exercise.units.reduce<Record<string, string | number>>((obj, unit) => ((obj[unit] = 0), obj), {}),
-      weights: (exercise.sets && exercise?.sets.length > 0 && exercise.sets[exercise.sets.length - 1].weights) || {},
+          : exercise.units.reduce<Record<string, string | number>>(
+              (obj, unit) => ((obj[unit] = unit === "Weight" ? 45 : 0), obj),
+              {}
+            ),
+      weights: (exercise.sets && exercise?.sets.length > 0 && exercise.sets[exercise.sets.length - 1].weights) || {
+        bar: 45,
+      },
     };
 
     return workout.api.updateExercise(
@@ -152,8 +157,18 @@ export const Exercises = () => {
 
       <Divider mt="auto" />
       <Group w="100%" pt="sm" pb="md" px="xs" align="center" justify="space-between" grow>
+        <Button
+          size="sm"
+          variant="light"
+          color="red"
+          onClick={() => {
+            workout.api.removeExercises([exercise.id], group);
+          }}
+        >
+          Delete
+        </Button>
         <Button size="sm" color="teal" onClick={() => navigate("/workout/summary")}>
-          Go to Summary
+          Go to Review
         </Button>
       </Group>
     </Flex>

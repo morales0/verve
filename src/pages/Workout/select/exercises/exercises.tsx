@@ -146,7 +146,7 @@ export const Exercises = ({
                 </Flex>
 
                 <Text fz="xs" c="cyan.7">
-                  3 days ago
+                  {/* 3 days ago */}
                 </Text>
               </Flex>
             </Paper>
