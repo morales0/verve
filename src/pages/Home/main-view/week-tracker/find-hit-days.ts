@@ -10,26 +10,26 @@ export const findHitDays = (data: WorkoutHistory[]) => {
     return hitDays;
   }
 
+  // Start with today at 00:00
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
-  // Search for exercises until we are beyond start of week
+  // Iterate through workouts
   let i = 0;
-  let currDate = new Date(data[i].dateStarted ?? "");
-  let diff = dateDiff(today, currDate);
-  let isInCurrWeek = diff <= today.getDay();
+  while (i < data.length) {
+    const currDate = new Date(data[i].dateStarted ?? "");
+    const diff = dateDiff(currDate, today);
 
-  while (isInCurrWeek || hitDays.at(-1) === true) {
-    const day = new Date(data[i].dateStarted ?? "").getDay();
-
-    if (day <= today.getDay()) {
-      hitDays[day] = true;
+    // if workout is not in this current week or hitdays are done, break
+    if (diff >= today.getDay() || hitDays.at(-1) === true) {
+      break;
     }
 
+    // mark the day
+    const day = currDate.getDay();
+    hitDays[day] = true;
+
     i = i + 1;
-    currDate = new Date(data[i].dateStarted ?? "");
-    diff = dateDiff(today, currDate);
-    isInCurrWeek = diff <= today.getDay();
   }
 
   return hitDays;
