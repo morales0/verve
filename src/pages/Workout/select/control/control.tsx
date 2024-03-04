@@ -44,7 +44,7 @@ export const Control = ({
           disabled={!canStartExercises}
           onClick={onStartExercises}
         >
-          Go to Review
+          Start
         </Button>
       </Group>
     </Box>

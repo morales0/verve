@@ -168,7 +168,7 @@ export const Exercises = () => {
           Delete
         </Button>
         <Button size="sm" color="teal" onClick={() => navigate("/workout/summary")}>
-          Go to Review
+          Done
         </Button>
       </Group>
     </Flex>
