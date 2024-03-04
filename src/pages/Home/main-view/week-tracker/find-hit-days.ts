@@ -10,18 +10,18 @@ export const findHitDays = (data: WorkoutHistory[]) => {
     return hitDays;
   }
 
-  // Start with today at 00:00
+  // Create a today object and set to last minute
   const today = new Date();
-  today.setHours(0, 0, 0, 0);
+  today.setHours(23, 59, 59, 999);
 
   // Iterate through workouts
   let i = 0;
   while (i < data.length) {
     const currDate = new Date(data[i].dateStarted ?? "");
-    const diff = dateDiff(currDate, today);
+    const diff = dateDiff(today, currDate);
 
     // if workout is not in this current week or hitdays are done, break
-    if (diff >= today.getDay() || hitDays.at(-1) === true) {
+    if (diff > today.getDay() || hitDays.at(-1) === true) {
       break;
     }
 
