@@ -5,7 +5,7 @@ import { STATUS } from "@/types/util";
 import { ExerciseSet as ExerciseSetType } from "@/types/workout";
 import { Box, Button, Center, Divider, Flex, Group, Loader, Menu, SegmentedControl, Stack, rem } from "@mantine/core";
 import { IconPlus } from "@tabler/icons-react";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
 import { ExerciseSet } from "./exercise-set";
 import { ExerciseSwitch } from "./exercise-switch";
@@ -13,6 +13,7 @@ import { ExerciseTitle } from "./exercise-title";
 import classes from "./exercises.module.css";
 
 import { getExercisesByGroup } from "./functions";
+import { ExerciseHistoryData } from "@/components/app";
 
 // todo: create context for execise state
 export const Exercises = () => {
@@ -25,6 +26,7 @@ export const Exercises = () => {
 
   /* Local state */
   const isCircuit = group > 0;
+  const [page, setPage] = useState<"sets" | "history">("sets");
 
   /* Server */
   const workout = useWorkout();
@@ -128,6 +130,8 @@ export const Exercises = () => {
         <SegmentedControl
           className={classes.pageSwitch}
           size="xs"
+          value={page}
+          onChange={setPage}
           data={[
             { label: "Sets", value: "sets" },
             { label: "History", value: "history" },
@@ -137,23 +141,29 @@ export const Exercises = () => {
 
       <Divider />
 
-      <Stack className={globalClasses.scrollable} w="100%" px="xs" py="sm" gap="sm">
-        {exercise.sets?.map((set, i, array) => (
-          <ExerciseSet
-            key={`set-${i}`}
-            {...set}
-            type={exercise.type}
-            num={i + 1}
-            updateSet={updateSet(i)}
-            removeSet={removeSet}
-            isLastSet={i === array.length - 1}
-          />
-        ))}
+      {page === "sets" ? (
+        <Stack className={globalClasses.scrollable} w="100%" px="xs" py="sm" gap="sm">
+          {exercise.sets?.map((set, i, array) => (
+            <ExerciseSet
+              key={`set-${i}`}
+              {...set}
+              type={exercise.type}
+              num={i + 1}
+              updateSet={updateSet(i)}
+              removeSet={removeSet}
+              isLastSet={i === array.length - 1}
+            />
+          ))}
 
-        <Button className={classes.addSetButton} variant="light" color="blue" onClick={addSet}>
-          <IconPlus />
-        </Button>
-      </Stack>
+          <Button className={classes.addSetButton} variant="light" color="blue" onClick={addSet}>
+            <IconPlus />
+          </Button>
+        </Stack>
+      ) : (
+        <Stack className={globalClasses.scrollable} w="100%" px="xs" py="sm" gap="sm">
+          <ExerciseHistoryData id={exercise.id} />
+        </Stack>
+      )}
 
       <Divider mt="auto" />
       <Group w="100%" pt="sm" pb="md" px="xs" align="center" justify="space-between" grow>
