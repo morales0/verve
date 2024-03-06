@@ -26,7 +26,7 @@ export const Exercises = () => {
 
   /* Local state */
   const isCircuit = group > 0;
-  const [page, setPage] = useState<"sets" | "history">("sets");
+  const [page, setPage] = useState<string>("sets");
 
   /* Server */
   const workout = useWorkout();
