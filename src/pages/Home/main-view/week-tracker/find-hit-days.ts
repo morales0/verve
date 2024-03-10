@@ -21,7 +21,7 @@ export const findHitDays = (data: WorkoutHistory[]) => {
     const diff = dateDiff(today, currDate);
 
     // if workout is not in this current week or hitdays are done, break
-    if (diff > today.getDay() || hitDays.at(-1) === true) {
+    if (diff > today.getDay()) {
       break;
     }
 
