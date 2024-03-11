@@ -1,4 +1,4 @@
-import { Flex, Badge, Group, Chip } from "@mantine/core";
+import { Flex, Badge, Group, Chip, rem } from "@mantine/core";
 import { IconPlus } from "@tabler/icons-react";
 import classes from "./circuits.module.css";
 
@@ -21,7 +21,7 @@ export const Circuits = ({ selections, currCircuit, setCurrCircuit }: CircuitsPr
   const canAddNewCircuit = selections.length === 1 || selections[selections.length - 1].length > 0;
 
   return (
-    <Flex className={classes.circuitsContainer} ref={scrollableRef} gap={6} px="xs" py={6} align="center">
+    <Flex className={classes.circuitsContainer} ref={scrollableRef} gap={6} px="xs" py="xs" align="center">
       <Badge
         component="button"
         size={currCircuit === 0 ? "lg" : "md"}

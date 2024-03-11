@@ -1,12 +1,13 @@
 import useWorkout from "@/hooks/workout.hook";
 import appClasses from "@/styles/app.module.css";
 import { Icon } from "@iconify/react";
-import { Box, Button, Center, Divider, Group, Loader, Stack, Text, rem } from "@mantine/core";
+import { ActionIcon, Box, Button, Center, Divider, Flex, Group, Loader, Stack, Text, Title, rem } from "@mantine/core";
 import cx from "clsx";
 import { useNavigate } from "react-router-dom";
 import { ExerciseCard } from "./exercise-card";
 import classes from "./summary.module.css";
 import workoutApi from "@/api/workout-api";
+import { IconHelp } from "@tabler/icons-react";
 
 export const Summary = () => {
   const navigate = useNavigate();
@@ -23,6 +24,15 @@ export const Summary = () => {
 
   return (
     <Stack className={cx(appClasses.heightLocked)} justify="space-between" gap={0}>
+      <Box px="xs">
+        <Flex align="center">
+          <Title order={5}>My Workout</Title>
+          <ActionIcon variant="subtle" ml="auto">
+            <IconHelp />
+          </ActionIcon>
+        </Flex>
+        <Divider />
+      </Box>
       <Stack className={cx(appClasses.scrollable)} gap="sm" px="xs" py="sm">
         {status !== "success" && (
           <Center>
@@ -65,13 +75,22 @@ export const Summary = () => {
       </Box>
 
       <Divider />
-      <Group w="100%" pt="sm" pb="md" px="xs" align="center" justify="space-between" grow>
-        <Button size="sm" variant="light" color="red" onClick={cancelWorkout}>
+      <Group
+        w="100%"
+        pt="sm"
+        pb="lg"
+        px="xs"
+        align="center"
+        justify="space-between"
+        grow
+        bg="var(--mantine-color-body)"
+      >
+        <Button size="xs" variant="light" color="red" onClick={cancelWorkout}>
           Cancel Workout
         </Button>
         <Button
           disabled={!readyToComplete}
-          size="sm"
+          size="xs"
           variant="gradient"
           gradient={{ from: "teal", to: "blue", deg: 40 }}
           onClick={completeWorkout}

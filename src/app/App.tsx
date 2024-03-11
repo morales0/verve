@@ -1,4 +1,4 @@
-import { theme } from "@/styles/theme";
+import { resolver, theme } from "@/styles";
 import { MantineProvider } from "@mantine/core";
 import { useAuth } from "../context/auth";
 import UserProvider from "../context/user";
@@ -13,7 +13,7 @@ const App = () => {
   const { user, status: authStatus } = useAuth();
 
   return (
-    <MantineProvider defaultColorScheme="auto" theme={theme}>
+    <MantineProvider defaultColorScheme="auto" theme={theme} cssVariablesResolver={resolver}>
       {authStatus === "authenticated" && user ? (
         <UserProvider user={user}>
           <AuthApp />

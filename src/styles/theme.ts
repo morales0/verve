@@ -1,5 +1,5 @@
 import classes from "@/styles/app.module.css";
-import { ActionIcon, Button, Checkbox, Paper, createTheme } from "@mantine/core";
+import { ActionIcon, Button, Checkbox, Divider, Paper, createTheme } from "@mantine/core";
 import cx from "clsx";
 
 export const theme = createTheme({
@@ -16,6 +16,12 @@ export const theme = createTheme({
       }),
     }),
 
+    Divider: Divider.extend({
+      classNames: (_theme, params) => ({
+        root: cx(classes.divider),
+      }),
+    }),
+
     Paper: Paper.extend({
       classNames: (_theme, params) => ({
         root: cx(classes.paper),
@@ -23,7 +29,7 @@ export const theme = createTheme({
     }),
     Checkbox: Checkbox.extend({
       classNames: (_theme, params) => ({
-        root: cx(classes.checkbox),
+        input: cx(classes.checkbox),
       }),
     }),
   },

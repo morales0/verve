@@ -15,7 +15,7 @@ export const Workout = () => {
       <Loader />
     </Center>
   ) : workout.data ? (
-    <Box className={globalClasses.heightLocked} pb="sm">
+    <Box className={globalClasses.heightLocked} pt="xs">
       <Routes>
         <Route path="/" element={<Select />} />
         <Route path="/summary" element={<Summary />} />

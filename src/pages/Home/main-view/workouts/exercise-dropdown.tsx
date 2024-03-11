@@ -20,12 +20,10 @@ type ExerciseDropdownInfoProps = {
 };
 
 export const ExerciseDropdown = ({ name, sets, units }: ExerciseDropdownInfoProps) => {
-  const theme = useMantineTheme();
-  const colorScheme = useComputedColorScheme("light");
   const [open, setOpen] = useState(false);
 
   return (
-    <Paper bg={colorScheme === "dark" ? theme.colors.gray[8] : theme.colors.gray[1]} p="xs" component={Stack} gap="sm">
+    <Paper p="xs" component={Stack} gap="sm">
       <UnstyledButton onClick={() => setOpen((prev) => !prev)}>
         <Flex justify="space-between" align="center">
           <Group align="center">

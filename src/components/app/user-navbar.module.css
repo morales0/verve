@@ -1,7 +1,7 @@
 .root {
   background: transparent;
-  /* border-bottom: 1px solid;
-  border-bottom-color: light-dark(var(--mantine-color-gray-4), var(--mantine-color-indigo-6)); */
+  border-bottom: 1px solid;
+  border-bottom-color: light-dark(var(--mantine-color-gray-3), var(--mantine-color-indigo-3));
   z-index: 100;
 }
 

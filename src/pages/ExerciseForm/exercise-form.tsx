@@ -11,7 +11,7 @@ import useMuscleGroups from "@/hooks/muscleGroups.hook";
 import useUserExercises from "@/hooks/userExercises.hook";
 import { UserExercise } from "@/types/workout";
 
-const mockTypeData = [
+export const mockTypeData = [
   { name: "Barbell", icon: "ion:barbell", units: ["Reps", "Weight"] },
   { name: "Dumbbell", icon: "solar:dumbbell-bold-duotone", units: ["Reps", "Weight"] },
   { name: "Timed", icon: "solar:stopwatch-broken", units: ["Time"] },

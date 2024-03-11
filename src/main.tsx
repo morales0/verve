@@ -6,15 +6,9 @@ import App from "./app/App";
 import FirebaseProviders from "./context/firebase";
 // core styles are required for all packages
 import "@mantine/core/styles.layer.css";
-import "@mantine/carousel/styles.css";
-import "@mantine/charts/styles.css";
+import "@mantine/carousel/styles.layer.css";
+import "@mantine/charts/styles.layer.css";
 
-// other css files are required only if
-// you are using components from the corresponding package
-// import '@mantine/dates/styles.css';
-// import '@mantine/dropzone/styles.css';
-// import '@mantine/code-highlight/styles.css';
-// ...
 import "./index.css";
 
 // Firebase config

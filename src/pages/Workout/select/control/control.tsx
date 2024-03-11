@@ -19,7 +19,7 @@ export const Control = ({
   onCancelWorkout,
 }: ControlProps) => {
   return (
-    <Box mt="auto">
+    <Box mt="auto" bg="var(--mantine-color-body">
       <Box display={canRemoveCircuit ? "" : "none"} px="xs">
         <Divider />
         <Center py={6}>
@@ -30,19 +30,25 @@ export const Control = ({
       </Box>
 
       <Divider />
-      <Group w="100%" pt="sm" pb="md" px="xs" align="center" justify="space-between" grow>
-        <Button size="sm" variant="light" color="red" onClick={onCancelWorkout}>
+      <Group w="100%" pt="sm" pb="lg" px="xs" align="center" justify="space-between" grow>
+        <Button size="xs" variant="light" color="red" onClick={onCancelWorkout}>
           Cancel Workout
         </Button>
         <Button
           component={Link}
           to="/workout/summary"
           type="button"
-          size="sm"
+          size="xs"
           color="blue.5"
           loading={isStartingExercises}
           disabled={!canStartExercises}
-          onClick={onStartExercises}
+          onClick={
+            canStartExercises
+              ? onStartExercises
+              : (e) => {
+                  e.preventDefault();
+                }
+          }
         >
           Start
         </Button>

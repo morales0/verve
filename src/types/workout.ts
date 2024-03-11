@@ -16,6 +16,7 @@ export type UserExercise = {
   id: string;
   name: string;
   units: string[];
+  lastUsed?: string;
   // units: Unit[];
   primaryMuscleGroups?: string[];
   secondaryMuscleGroups?: string[];

@@ -1,35 +1,43 @@
-.main {
-  flex-grow: 1;
-  overflow: hidden;
-  background-color: light-dark(#f7f8f9, #2c2d30);
-}
+@layer mantine, globals, theme;
 
-.navbarDivider {
-  border-color: light-dark(var(--mantine-color-gray-5), var(--mantine-color-gray-6));
-}
+@layer theme {
+  .main {
+    flex-grow: 1;
+    overflow: hidden;
+    background-color: light-dark(var(--mantine-color-gray-0), #2c2d30);
+  }
 
-/* Global classes */
-.heightLocked {
-  height: 100%;
-  overflow: hidden;
-}
+  .divider {
+  }
 
-.scrollable {
-  overflow: auto;
-}
+  .navbarDivider {
+    border-color: light-dark(var(--mantine-color-gray-5), var(--mantine-color-gray-6));
+  }
 
-/* Theme overrides */
+  /* Global classes */
+  .heightLocked {
+    height: 100%;
+    overflow: hidden;
+  }
 
-.lightButton {
-  box-shadow: 0 0 2px 0px;
-}
+  .scrollable {
+    overflow: auto;
+  }
 
-.paper {
-  border-color: light-dark(var(--mantine-color-gray-2), var(--mantine-color-gray-7));
-}
+  /* Theme overrides */
 
-.checkbox {
-  @mixin light {
-    border-color: var(--mantine-color-gray-2);
+  .lightButton {
+    box-shadow: 0 0 2px 0px;
+  }
+
+  .paper {
+    background-color: light-dark(var(--mantine-color-white), var(--mantine-color-dark-7));
+    border-color: light-dark(var(--mantine-color-gray-3), var(--mantine-color-indigo-3));
+  }
+
+  .checkbox {
+    &:not(:checked):not([data-indeterminate="true"]) {
+      border-color: light-dark(var(--mantine-color-gray-3), var(--mantine-color-indigo-3));
+    }
   }
 }

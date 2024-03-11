@@ -2,28 +2,26 @@ import useUserExercises from "@/hooks/userExercises.hook";
 import useWorkout from "@/hooks/workout.hook";
 import globalClasses from "@/styles/app.module.css";
 import { UserExercise } from "@/types/workout";
-import { Box, Divider, Stack } from "@mantine/core";
+import { ActionIcon, Box, Divider, Flex, Stack, Title } from "@mantine/core";
+import { IconHelp } from "@tabler/icons-react";
 import { useMemo, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Circuits } from "./circuits";
 import { Control } from "./control";
 import { Exercises } from "./exercises";
-import { filterExercisesByName, filterSelectionsByExerciseName, mapExercisesToSelections } from "./functions";
+import {
+  filterExercisesByFilters,
+  filterExercisesByName,
+  filterSelectionsByExerciseName,
+  mapExercisesToSelections,
+  sortExercises,
+} from "./functions";
 import { Search } from "./search";
-
-/*
-ex are listed by with their ex id
-when ex is clicked -> add that ex to workout -> get wid back -> add wid, exid to correct index in selections array
-ex is checked if ex id is in the current index
-selections is state
-
-*/
 
 // todo: paginate to avoid large amt of exercises
 // todo: allow user to select same exercise in multiple
 // todo: create context for local select state
 export const Select = () => {
-  // console.log("SELECT");
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -33,14 +31,21 @@ export const Select = () => {
   const [filterOption, setFilterOption] = useState<"filter" | "sort" | undefined>(undefined);
   const [currGroup, setCurrGroup] = useState(0);
 
+  const [sort, setSort] = useState<{ order: string; value: string; label: string }>({
+    order: "desc",
+    value: "name",
+    label: "Name",
+  });
+  const [filters, setFilters] = useState<Record<string, string[]>>({});
+
   /* Server state */
   const userExercises = useUserExercises();
   const workout = useWorkout();
 
   /* Data */
   const filteredExercises = useMemo(
-    () => filterExercisesByName(userExercises.data, query),
-    [userExercises.data, query]
+    () => sortExercises(filterExercisesByFilters(filterExercisesByName(userExercises.data, query), filters), sort),
+    [userExercises.data, query, sort, filters]
   );
   const selections = useMemo(() => mapExercisesToSelections(workout.data?.exercises), [workout.data?.exercises]);
   const filteredSelections = useMemo(() => filterSelectionsByExerciseName(selections, query), [selections, query]);
@@ -82,23 +87,44 @@ export const Select = () => {
 
   return (
     <Stack className={globalClasses.heightLocked} gap={0}>
+      <Box px="xs">
+        <Flex align="center">
+          <Title order={5}>Choose your exercises</Title>
+          <ActionIcon variant="subtle" ml="auto">
+            <IconHelp />
+          </ActionIcon>
+        </Flex>
+        <Divider />
+      </Box>
+
+      <Circuits
+        selections={selections}
+        currCircuit={currGroup}
+        setCurrCircuit={(value) => setCurrGroup(Number(value))}
+      />
       <Search
         query={query}
         setQuery={setQuery}
         filterOption={filterOption}
         setFilterOption={setFilterOption}
         toggleFilterOption={(option) => setFilterOption((prev) => (prev === option ? undefined : option))}
-      />
-      <Divider />
-      <Circuits
-        selections={selections}
-        currCircuit={currGroup}
-        setCurrCircuit={(value) => setCurrGroup(Number(value))}
+        sort={sort}
+        setSort={(value: { label: string; value: string }) => setSort((prev) => ({ ...prev, ...value }))}
+        setOrder={(value: string) => setSort((prev) => ({ ...prev, order: value }))}
+        filters={filters}
+        setFilters={setFilters}
+        changeFilter={(key, value, checked) =>
+          setFilters((prev) => ({
+            ...prev,
+            [key]: checked ? [...(prev[key] ?? []), value] : (prev[key] ?? []).filter((v) => v !== value),
+          }))
+        }
       />
       <Divider mx="xs" />
 
       <Box className={globalClasses.scrollable} p="xs">
         <Exercises
+          query={query}
           exercises={filteredExercises}
           status={userExercises.status}
           total={userExercises.data.length}

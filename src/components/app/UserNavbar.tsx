@@ -1,23 +1,31 @@
 import { Icon } from "@iconify/react";
-import { ActionIcon, Box, Center, Flex, Menu, SimpleGrid, Text, rem, useMantineColorScheme } from "@mantine/core";
+import {
+  ActionIcon,
+  Box,
+  Center,
+  Flex,
+  SimpleGrid,
+  Text,
+  rem,
+  useComputedColorScheme,
+  useMantineColorScheme,
+} from "@mantine/core";
 import cx from "clsx";
-import { signOut } from "firebase/auth";
 import { Link } from "react-router-dom";
-import { useAuth } from "../../context/auth";
 import classes from "./user-navbar.module.css";
 
 const UserNavbar = () => {
-  const { auth } = useAuth();
   const { toggleColorScheme } = useMantineColorScheme();
+  const colorScheme = useComputedColorScheme("light");
 
   return (
     <Box className={cx(classes.root)} h={"auto"} pos="sticky">
-      <SimpleGrid cols={3} px={"md"} py={rem(8)} w="100%">
+      <SimpleGrid cols={3} px="md" py={rem(8)} w="100%">
         <Flex>
           <ActionIcon
             size="lg"
             variant="transparent"
-            color="indigo"
+            color={`gray.${colorScheme === "dark" ? 3 : 6}`}
             title="Color scheme toggle"
             onClick={() => toggleColorScheme()}
           >

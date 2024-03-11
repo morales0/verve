@@ -1,12 +1,13 @@
 import { STATUS } from "@/types/util";
 import { UserExercise, WorkoutExercise } from "@/types/workout";
 import { Icon } from "@iconify/react";
-import { ActionIcon, Center, Checkbox, Flex, Loader, Menu, Paper, Stack, Text } from "@mantine/core";
+import { ActionIcon, Button, Center, Checkbox, Flex, Loader, Menu, Paper, Stack, Text } from "@mantine/core";
 import { IconHelp } from "@tabler/icons-react";
 import { ExerciseSelection } from "../functions";
 import { useNavigate } from "react-router-dom";
 
 export type ExercisesProps = {
+  query: string;
   exercises: UserExercise[];
   status: STATUS;
   total: number;
@@ -19,6 +20,7 @@ export type ExercisesProps = {
 };
 
 export const Exercises = ({
+  query,
   exercises,
   status,
   total,
@@ -34,6 +36,10 @@ export const Exercises = ({
 
   const editExercise = (exercise: UserExercise) => {
     navigate(`/exercise-form`, { state: { prevPath: "/workout", exercise } });
+  };
+
+  const navigateToExerciseForm = () => {
+    navigate(`/exercise-form`, { state: { prevPath: "/workout", exercise: { name: query } } });
   };
 
   if (status !== "success") {
@@ -63,9 +69,15 @@ export const Exercises = ({
             Showing {exercises.length} of {total} exercises
           </Text>
         </Flex>
-        <ActionIcon variant="subtle">
-          <IconHelp />
-        </ActionIcon>
+        <Button
+          color="teal"
+          size="compact-xs"
+          ml="auto"
+          leftSection={<Icon icon="ic:twotone-add" />}
+          onClick={() => navigateToExerciseForm()}
+        >
+          Create
+        </Button>
       </Flex>
 
       {exercises?.map(({ id, name, type, primaryMuscleGroups, secondaryMuscleGroups, units }) => (

@@ -166,9 +166,18 @@ export const Exercises = () => {
       )}
 
       <Divider mt="auto" />
-      <Group w="100%" pt="sm" pb="md" px="xs" align="center" justify="space-between" grow>
-        <Button
-          size="sm"
+      <Group
+        w="100%"
+        pt="sm"
+        pb="lg"
+        px="xs"
+        align="center"
+        justify="space-between"
+        grow
+        bg="var(--mantine-color-body)"
+      >
+        {/* <Button
+          size="xs"
           variant="light"
           color="red"
           onClick={() => {
@@ -176,9 +185,9 @@ export const Exercises = () => {
           }}
         >
           Delete
-        </Button>
-        <Button size="sm" color="teal" onClick={() => navigate("/workout/summary")}>
-          Done
+        </Button> */}
+        <Button size="xs" color={exercise.sets ? "teal" : "blue"} onClick={() => navigate("/workout/summary")}>
+          {exercise.sets ? "Done" : "Back to workout"}
         </Button>
       </Group>
     </Flex>
