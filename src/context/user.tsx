@@ -22,9 +22,10 @@ type Props = {
 export default function UserProvider({ user, children }: Props) {
   const { db } = useDatabase();
   const [status, setStatus] = useState("loading");
-  const [meta, setMeta] = useState<UserMetaData | undefined>();
+  const [meta, setMeta] = useState<UserMetaData>({ isWorkingOut: false, hasUpdatedMuscleGroups: true });
   const dataRef = ref(db, `users/${user.uid}`);
 
+  /*
   useEffect(() => {
     const metaRef = child(dataRef, "meta");
     onValue(metaRef, (snapshot) => {
@@ -41,19 +42,7 @@ export default function UserProvider({ user, children }: Props) {
       }
     });
   }, []);
-
-  if (status === "loading" || !meta) {
-    return (
-      <Stack h="100%" align="center">
-        <Text py="md" fz="xl">
-          verve
-        </Text>
-        <Center>
-          <Loader variant="bars" color="indigo" />
-        </Center>
-      </Stack>
-    );
-  }
+  */
 
   return <UserContext.Provider value={{ authData: user, meta, dataRef, status }}>{children}</UserContext.Provider>;
 }

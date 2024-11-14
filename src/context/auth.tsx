@@ -25,6 +25,7 @@ export default function AuthProvider({ app, children }: Props) {
   // Listen to auth changes
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
+      console.log("Auth", user);
       if (user) {
         setUser(user);
         setStatus("authenticated");
@@ -41,10 +42,6 @@ export default function AuthProvider({ app, children }: Props) {
       }
     });
   }, [auth]);
-
-  if (status === "loading") {
-    return null;
-  }
 
   return <AuthContext.Provider value={{ user, status, auth }}>{children}</AuthContext.Provider>;
 }

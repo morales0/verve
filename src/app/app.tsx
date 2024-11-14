@@ -2,8 +2,8 @@ import { resolver, theme } from "@/styles";
 import { MantineProvider } from "@mantine/core";
 import { useAuth } from "../context/auth";
 import UserProvider from "../context/user";
-import AuthApp from "./AuthApp";
 import UnauthApp from "./UnauthApp";
+import UserApp from "./user-app";
 
 // Lazy load apps (need suspense)
 // const AuthApp = React.lazy(() => import('./AuthApp'))
@@ -16,7 +16,7 @@ const App = () => {
     <MantineProvider defaultColorScheme="auto" theme={theme} cssVariablesResolver={resolver}>
       {authStatus === "authenticated" && user ? (
         <UserProvider user={user}>
-          <AuthApp />
+          <UserApp />
         </UserProvider>
       ) : authStatus === "unauthenticated" ? (
         <UnauthApp />
