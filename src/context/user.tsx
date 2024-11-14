@@ -1,7 +1,6 @@
-import { Center, Loader, Stack, Text } from "@mantine/core";
 import { User } from "firebase/auth";
-import { child, DatabaseReference, onValue, ref, set } from "firebase/database";
-import { createContext, useContext, useEffect, useState } from "react";
+import { DatabaseReference, ref } from "firebase/database";
+import { createContext, useContext, useState } from "react";
 import { UserMetaData } from "../types/user";
 import { useDatabase } from "./database";
 

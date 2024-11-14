@@ -1,13 +1,20 @@
-import UserNavbar from "@/components/app/UserNavbar";
-import { ExerciseForm, Home, User, Workout } from "@/pages";
-import classes from "@/styles/app.module.css";
-import { Box, Stack } from "@mantine/core";
+import { useAuth } from "@/context/auth";
+import { Button } from "@mantine/core";
 import { Route, Routes } from "react-router-dom";
 
 const UserApp = () => {
+  const { auth } = useAuth();
+
   return (
     <Routes>
-      <Route path="/" element={<>Home</>} />
+      <Route
+        path="/"
+        element={
+          <>
+            <Button>Primary</Button>
+          </>
+        }
+      />
     </Routes>
   );
 };

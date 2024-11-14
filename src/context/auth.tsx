@@ -1,6 +1,5 @@
-import { Stack } from "@mantine/core";
 import { FirebaseApp } from "firebase/app";
-import { Auth, getAuth, onAuthStateChanged, signInWithEmailAndPassword, User } from "firebase/auth";
+import { Auth, getAuth, onAuthStateChanged, User } from "firebase/auth";
 import { createContext, useContext, useEffect, useState } from "react";
 
 type AuthContextType = {
@@ -25,7 +24,10 @@ export default function AuthProvider({ app, children }: Props) {
   // Listen to auth changes
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
-      console.log("Auth", user);
+      if (process.env.NODE_ENV === "development") {
+        console.log("Auth", user);
+      }
+
       if (user) {
         setUser(user);
         setStatus("authenticated");

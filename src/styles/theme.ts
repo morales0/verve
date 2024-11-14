@@ -3,6 +3,7 @@ import { ActionIcon, Button, Checkbox, Divider, Paper, createTheme } from "@mant
 import cx from "clsx";
 
 export const theme = createTheme({
+  primaryColor: "blue",
   components: {
     ActionIcon: ActionIcon.extend({
       classNames: (_theme, params) => ({
