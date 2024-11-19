@@ -1,4 +1,5 @@
 import { useAuth } from "@/context/auth";
+import { Home } from "@/screens";
 import { Button } from "@mantine/core";
 import { Route, Routes } from "react-router-dom";
 
@@ -7,14 +8,7 @@ const UserApp = () => {
 
   return (
     <Routes>
-      <Route
-        path="/"
-        element={
-          <>
-            <Button>Primary</Button>
-          </>
-        }
-      />
+      <Route path="/" element={<Home />} />
     </Routes>
   );
 };

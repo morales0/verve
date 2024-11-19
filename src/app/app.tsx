@@ -32,7 +32,7 @@ const App = () => {
         setUserTheme(mergedTheme);
       }
     });
-  }, []);
+  }, [user]);
 
   return (
     <MantineProvider theme={userTheme} defaultColorScheme="auto">
