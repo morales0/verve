@@ -22,7 +22,7 @@ export default function UserProvider({ user, children }: Props) {
   const { db } = useDatabase();
   const [status, setStatus] = useState("loading");
   const [meta, setMeta] = useState<UserMetaData>({ isWorkingOut: false, hasUpdatedMuscleGroups: true });
-  const dataRef = ref(db, `users/${user.uid}`);
+  const dataRef = ref(db, `users/${user.uid}${process.env.NODE_ENV === "development" ? "/dev" : ""}`);
 
   /*
   useEffect(() => {
