@@ -31,7 +31,7 @@ export const Groups = () => {
   };
 
   return (
-    <Flex align="center" wrap="wrap" gap="sm" className={classes.root}>
+    <Flex align="center" justify="space-evenly" wrap="wrap" gap="sm" className={classes.root}>
       {status === STATUS.LOADING && <GroupSkeleton />}
       {status === STATUS.SUCCESS &&
         groups.map((group, i) => (

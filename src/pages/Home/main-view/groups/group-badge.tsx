@@ -1,7 +1,7 @@
 import { MuscleGroup } from "@/types/workout";
-import { Badge, Modal, Button, Stack, Text, Group, TextInput } from "@mantine/core";
+import { Badge, BadgeProps, Button, Group, Modal, Stack, Text, TextInput, useComputedColorScheme } from "@mantine/core";
 import { useDisclosure, useMediaQuery } from "@mantine/hooks";
-import { on } from "events";
+import { IconPlant2, IconPoint, IconPointFilled } from "@tabler/icons-react";
 import { useState } from "react";
 
 const calcDays = (group: MuscleGroup) => {
@@ -22,11 +22,13 @@ export type GroupBadgeProps = {
 
 export const GroupBadge = ({ group, onDelete, onUpdate }: GroupBadgeProps) => {
   const largeScreen = useMediaQuery("(min-width: 900px)");
+  const colorScheme = useComputedColorScheme();
   const [opened, { open, close }] = useDisclosure(false);
   const [newName, setNewName] = useState("");
 
   const daysSince = calcDays(group) ?? 99;
-  const color = daysSince <= 4 ? "teal" : daysSince <= 6 ? "yellow" : daysSince <= 7 ? "pink" : "gray";
+  const darkColor = colorScheme === "dark" ? "dark.1" : "dark.3";
+  const color = daysSince <= 3 ? "teal" : daysSince <= 5 ? "yellow" : daysSince <= 6 ? "pink" : darkColor;
 
   const handleEdit = () => {
     onUpdate(group.id ?? group.name, newName);
@@ -36,6 +38,19 @@ export const GroupBadge = ({ group, onDelete, onUpdate }: GroupBadgeProps) => {
   const handleDelete = () => {
     onDelete(group.id ?? group.name);
     close();
+  };
+
+  const badgeProps: Partial<BadgeProps> = {
+    color,
+    variant: daysSince <= 3 ? "filled" : "light",
+    leftSection:
+      daysSince <= 3 ? (
+        <IconPlant2 size={16} />
+      ) : daysSince <= 6 ? (
+        <IconPointFilled size={16} />
+      ) : (
+        <IconPoint size={16} />
+      ),
   };
 
   return (
@@ -61,14 +76,7 @@ export const GroupBadge = ({ group, onDelete, onUpdate }: GroupBadgeProps) => {
           </Group>
         </Stack>
       </Modal>
-      <Badge
-        component="button"
-        onClick={open}
-        color={color}
-        variant={"light"}
-        radius={"md"}
-        size={largeScreen ? "lg" : "md"}
-      >
+      <Badge component="button" onClick={open} {...badgeProps} size={largeScreen ? "lg" : "md"} maw="50%">
         {group.name}
       </Badge>
     </>

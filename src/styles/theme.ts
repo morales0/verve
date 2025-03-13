@@ -1,5 +1,5 @@
 import classes from "@/styles/app.module.css";
-import { ActionIcon, Button, Checkbox, Divider, Paper, createTheme } from "@mantine/core";
+import { ActionIcon, Badge, Button, Checkbox, Divider, Paper, createTheme } from "@mantine/core";
 import cx from "clsx";
 
 export const theme = createTheme({
@@ -8,6 +8,12 @@ export const theme = createTheme({
       classNames: (_theme, params) => ({
         root: cx({ [classes.lightButton]: params.variant === "light" }),
       }),
+    }),
+
+    Badge: Badge.extend({
+      defaultProps: {
+        radius: "sm",
+      },
     }),
 
     Button: Button.extend({
