@@ -20,7 +20,7 @@ const UnauthApp = () => {
   };
 
   return (
-    <Stack h={"100%"} className={classes.authScreen} align="center" justify="flex-start">
+    <Stack h="100vh" className={classes.authScreen} align="center" justify="flex-start">
       <Text c="white" fz={rem(27)} py={rem(80)}>
         Welcome to{" "}
         <Text span fz="inherit" fw={600}>

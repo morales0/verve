@@ -1,0 +1,9 @@
+.topbar {
+  padding-top: env(safe-area-inset-top, 0);
+  backdrop-filter: blur(10px);
+  z-index: 99;
+}
+
+.fabLog {
+  box-shadow: var(--mantine-shadow-xl);
+}

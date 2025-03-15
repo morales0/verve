@@ -1,6 +1,11 @@
 /* Reset and Global CSS */
 
 @layer globals {
+  :root {
+    --bg-violet: rgba(41, 33, 68, 1);
+    --bg-light: #f0ecf3;
+  }
+
   * {
     font-family: "Maven Pro", sans-serif !important;
   }
@@ -10,29 +15,27 @@
     box-sizing: border-box;
     margin: 0;
     padding: 0;
-    height: 100%;
     font-size: 18px;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    min-height: 100vh;
+  }
+
+  body {
+    background-color: light-dark(var(--bg-light), var(--bg-violet));
   }
 
   #root {
-    height: 100%;
+    min-height: 100vh;
+    background: light-dark(
+      var(--bg-light),
+      repeating-linear-gradient(to bottom, var(--bg-violet) 0%, rgb(35, 34, 40) 50%, var(--bg-violet) 100%)
+    );
   }
 
   code {
     font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
   }
-
-  /* h1,
-h2 {
-  font-weight: 600;
-}
-
-h3,
-h4 {
-  font-weight: 400;
-} */
 
   input[type="text"],
   input[type="email"],

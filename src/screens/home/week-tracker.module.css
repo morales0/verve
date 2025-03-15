@@ -1,0 +1,31 @@
+.dayBox {
+  position: relative;
+  border-radius: 50%;
+  border-width: 2px;
+  border-color: transparent;
+  border-style: solid;
+  height: 40px;
+  aspect-ratio: 1/1;
+
+  &[data-missed="true"] {
+    border-color: light-dark(var(--mantine-color-gray-4), var(--mantine-color-gray-6));
+  }
+
+  &[data-hit="true"] {
+    font-weight: 400;
+    border-color: var(--mantine-color-teal-7);
+    background: light-dark(alpha(var(--mantine-color-teal-6), 0.5), alpha(var(--mantine-color-teal-6), 0.3));
+    text-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+    color: light-dark(var(--mantine-color-gray-9), var(--mantine-color-white));
+  }
+
+  &[data-today="true"] {
+    font-weight: 500;
+    border-color: light-dark(#4b4b4b, var(--mantine-color-gray-1));
+  }
+}
+
+.icon {
+  position: absolute;
+  bottom: 0;
+}

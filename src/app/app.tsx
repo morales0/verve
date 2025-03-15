@@ -1,5 +1,5 @@
 import { useDatabase } from "@/context/database";
-import { theme } from "@/styles";
+import { resolver, theme } from "@/styles";
 import { createTheme, LoadingOverlay, MantineProvider, MantineThemeOverride, mergeThemeOverrides } from "@mantine/core";
 import { child, onValue, ref } from "firebase/database";
 import { useEffect, useState } from "react";
@@ -35,7 +35,7 @@ const App = () => {
   }, [user]);
 
   return (
-    <MantineProvider theme={userTheme} defaultColorScheme="auto">
+    <MantineProvider theme={userTheme} defaultColorScheme="dark" cssVariablesResolver={resolver}>
       {status === "authenticated" && user ? (
         <UserProvider user={user}>
           <UserApp />
