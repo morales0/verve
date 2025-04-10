@@ -1,16 +1,17 @@
-import { Center, Stack, Text, rem } from "@mantine/core";
+import { app } from "@/firebase/config";
+import { Stack, Text, rem } from "@mantine/core";
 import {
   GoogleAuthProvider,
+  createUserWithEmailAndPassword,
+  getAuth,
   signInWithEmailAndPassword,
   signInWithPopup,
-  createUserWithEmailAndPassword,
 } from "firebase/auth";
-import AuthForm from "../components/app/AuthForm";
-import { useAuth } from "../context/auth";
+import { AuthForm } from "../components/app";
 import classes from "./app.module.css";
 
 const UnauthApp = () => {
-  const { auth } = useAuth();
+  const auth = getAuth(app);
 
   const signIn = async (email: string, password: string) => signInWithEmailAndPassword(auth, email, password);
   const register = async (email: string, password: string) => createUserWithEmailAndPassword(auth, email, password);

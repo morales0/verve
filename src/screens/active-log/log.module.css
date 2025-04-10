@@ -1,0 +1,14 @@
+.topbar {
+  padding-top: env(safe-area-inset-top, 0);
+  backdrop-filter: blur(10px);
+  z-index: 99;
+}
+
+.logScreen {
+  height: "100%";
+}
+
+.control {
+  padding-bottom: env(safe-area-inset-bottom, 0);
+  border-top: 2px solid var(--mantine-color-violet-8);
+}

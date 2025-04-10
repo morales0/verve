@@ -1,0 +1,5 @@
+.exerciseCard {
+  &[data-complete="false"] {
+    border: 2px solid var(--mantine-color-teal-8);
+  }
+}

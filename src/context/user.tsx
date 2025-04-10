@@ -1,11 +1,11 @@
+import { app } from "@/firebase/config";
 import { User } from "firebase/auth";
-import { DatabaseReference, ref } from "firebase/database";
+import { DatabaseReference, getDatabase, ref } from "firebase/database";
 import { createContext, useContext, useState } from "react";
 import { UserMetaData } from "../types/user";
-import { useDatabase } from "./database";
 
 type UserContextType = {
-  authData: User;
+  user: User;
   meta: UserMetaData;
   dataRef: DatabaseReference;
   status: string;
@@ -18,11 +18,11 @@ type Props = {
   children: React.ReactNode;
 };
 
-export default function UserProvider({ user, children }: Props) {
-  const { db } = useDatabase();
+export const UserProvider = ({ user, children }: Props) => {
+  const db = getDatabase(app);
   const [status, setStatus] = useState("loading");
   const [meta, setMeta] = useState<UserMetaData>({ isWorkingOut: false, hasUpdatedMuscleGroups: true });
-  const dataRef = ref(db, `users/${user.uid}${process.env.NODE_ENV === "development" ? "/dev" : ""}`);
+  const dataRef = ref(db, `users/${user.uid}${import.meta.env.VITE_ENV === "dev" ? "/dev" : ""}`);
 
   /*
   useEffect(() => {
@@ -43,8 +43,8 @@ export default function UserProvider({ user, children }: Props) {
   }, []);
   */
 
-  return <UserContext.Provider value={{ authData: user, meta, dataRef, status }}>{children}</UserContext.Provider>;
-}
+  return <UserContext.Provider value={{ user, meta, dataRef, status }}>{children}</UserContext.Provider>;
+};
 
 export function useUser(): UserContextType {
   const consumeUserContext = useContext(UserContext);

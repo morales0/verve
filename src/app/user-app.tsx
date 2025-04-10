@@ -1,16 +1,21 @@
-import { useAuth } from "@/context/auth";
-import { Home, Log } from "@/screens";
-import { Button } from "@mantine/core";
+import { FocusAreasProvider, TagsProvider, useUser } from "@/context";
+import { Home, ActiveLog, ActiveExercise } from "@/screens";
 import { Route, Routes } from "react-router-dom";
 
 const UserApp = () => {
-  const { auth } = useAuth();
+  const { user } = useUser();
 
   return (
-    <Routes>
-      <Route path="/" element={<Home />} />
-      <Route path="/log" element={<Log />} />
-    </Routes>
+    <FocusAreasProvider>
+      <TagsProvider>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/active-log" element={<ActiveLog />} />
+          <Route path="/active-log/:logId" element={<ActiveExercise />} />
+          <Route path="/log/:logId" element={<>See and edit a logged exercise</>} />
+        </Routes>
+      </TagsProvider>
+    </FocusAreasProvider>
   );
 };
 

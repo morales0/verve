@@ -1,5 +1,3 @@
-@layer mantine, globals, theme;
-
 @layer theme {
   .main {
     flex-grow: 1;

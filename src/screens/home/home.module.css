@@ -1,9 +1,26 @@
-.topbar {
-  padding-top: env(safe-area-inset-top, 0);
-  backdrop-filter: blur(10px);
-  z-index: 99;
-}
-
 .fabLog {
   box-shadow: var(--mantine-shadow-xl);
+}
+
+.control {
+  margin-bottom: env(safe-area-inset-bottom, 0);
+
+  & .paper {
+    background-color: light-dark(var(--mantine-color-white), var(--mantine-color-dark-9));
+    overflow: hidden;
+  }
+
+  & .group {
+  }
+}
+
+.quickBtn {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  border-right: none;
+}
+
+.logBtn {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
 }

@@ -1,9 +1,11 @@
 /* Reset and Global CSS */
+@layer mantine, globals, theme;
 
 @layer globals {
   :root {
-    --bg-violet: rgba(41, 33, 68, 1);
-    --bg-light: #f0ecf3;
+    --bg-primary: #3a226f;
+    --bg-secondary: #3b6567;
+    --bg-light: #f8f4fa;
   }
 
   * {
@@ -22,14 +24,14 @@
   }
 
   body {
-    background-color: light-dark(var(--bg-light), var(--bg-violet));
+    background-color: light-dark(var(--bg-light), var(--bg-primary));
   }
 
   #root {
     min-height: 100vh;
     background: light-dark(
       var(--bg-light),
-      repeating-linear-gradient(to bottom, var(--bg-violet) 0%, rgb(35, 34, 40) 50%, var(--bg-violet) 100%)
+      repeating-linear-gradient(to bottom, var(--bg-primary) 0%, var(--bg-secondary) 60%, var(--bg-primary) 100%)
     );
   }
 

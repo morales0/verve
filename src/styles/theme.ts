@@ -1,10 +1,10 @@
 import classes from "@/styles/app.module.css";
-import { ActionIcon, Badge, Button, Checkbox, Divider, Paper, createTheme } from "@mantine/core";
+import { ActionIcon, Badge, Button, Checkbox, Chip, Divider, Loader, Paper, createTheme } from "@mantine/core";
 import cx from "clsx";
 
 export const theme = createTheme({
   primaryColor: "teal",
-  primaryShade: 8,
+  primaryShade: 7,
   defaultRadius: "sm",
 
   components: {
@@ -31,10 +31,23 @@ export const theme = createTheme({
       }),
     }),
 
+    Chip: Chip.extend({
+      defaultProps: {
+        radius: "sm",
+      },
+    }),
+
     Divider: Divider.extend({
       classNames: (_theme, params) => ({
         root: cx(classes.divider),
       }),
+    }),
+
+    Loader: Loader.extend({
+      defaultProps: {
+        type: "bars",
+        size: "sm",
+      },
     }),
 
     Paper: Paper.extend({
@@ -42,6 +55,7 @@ export const theme = createTheme({
         root: cx(classes.paper),
       }),
     }),
+
     Checkbox: Checkbox.extend({
       classNames: (_theme, params) => ({
         input: cx(classes.checkbox),
