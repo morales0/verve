@@ -5,9 +5,8 @@ import { child } from "firebase/database";
 
 export const useLogExercise = (id: string) => {
   const { dataRef } = useUser();
-  const logExerciseRef = child(dataRef, `log/${id}`);
 
-  const data = useDatabaseValue<Exercise | undefined>(logExerciseRef);
+  const data = useDatabaseValue<Exercise | undefined>(`log/${id}`);
 
   return data;
 };

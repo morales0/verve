@@ -5,14 +5,15 @@ import { LogExercise } from "@/types/app.types";
 
 export type LogCardProps = LogExercise & {
   name: string;
+  status?: boolean;
   focusAreas: string[];
   onRemove: () => Promise<any>;
   onEdit?: () => void;
 };
-
+// TODO: Remove status from this card
 export const LogCard = ({ name, status, focusAreas, onRemove, onEdit }: LogCardProps) => {
   return (
-    <Card className={classes.exerciseCard} p="xs" radius="md" data-complete={status === "complete"}>
+    <Card className={classes.exerciseCard} p="xs" radius="md" data-complete={status}>
       <Group justify="space-between">
         <Text fw={500} size="sm">
           {name}
