@@ -9,7 +9,6 @@ export const useDatabaseList = <T>(ref: DatabaseReference | Query, key?: any) =>
 
   useEffect(() => {
     const off = onValue(ref, (snapshot) => {
-      console.log("onValue: ", ref.ref.key);
       if (snapshot.exists()) {
         const dataObj = snapshot.val() as { [id: string]: T };
 

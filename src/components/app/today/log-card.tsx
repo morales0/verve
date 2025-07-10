@@ -7,9 +7,10 @@ export type LogCardProps = LogExercise & {
   name: string;
   focusAreas: string[];
   onRemove: () => Promise<any>;
+  onEdit?: () => void;
 };
 
-export const LogCard = ({ name, status, focusAreas, onRemove }: LogCardProps) => {
+export const LogCard = ({ name, status, focusAreas, onRemove, onEdit }: LogCardProps) => {
   return (
     <Card className={classes.exerciseCard} p="xs" radius="md" data-complete={status === "complete"}>
       <Group justify="space-between">
@@ -28,7 +29,9 @@ export const LogCard = ({ name, status, focusAreas, onRemove }: LogCardProps) =>
             </Menu.Target>
 
             <Menu.Dropdown>
-              <Menu.Item leftSection={<IconEdit size={14} />}>Edit</Menu.Item>
+              <Menu.Item onClick={onEdit} leftSection={<IconEdit size={14} />}>
+                Edit
+              </Menu.Item>
 
               <Menu.Divider />
 

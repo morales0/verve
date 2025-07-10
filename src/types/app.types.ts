@@ -1,3 +1,4 @@
+// omit id locally, include when fetching
 export type WithId<T> = T & { id: string };
 
 export type FocusArea = {
@@ -11,35 +12,50 @@ export type Tag = {
   name: string;
 };
 
-// Stored user exercise
-export type UserExercise = {
+// Quick log exercises
+export type QuickLogExercise = {
+  type: "quick";
+  name: string; // name to save
+  timestamp: number; // date to log to
+  effort?: string; // three options (light, normal, high)
+  focusAreaIds?: string[]; // array of default focus area IDs
+  notes?: string;
+};
+
+// Building user exercise
+type BaseUserExercise = {
   name: string; // unique, mutable
-  type: "sets" | "custom"; // unique, immutable
   focusAreaIds?: string[]; // array of default focus area IDs
   tagIds?: string[]; // array of default tag IDs
 };
 
-// Quick log exercises
-export type QuickLogExercise = Pick<UserExercise, "focusAreaIds"> & {
-  type: "quick";
-  name: string; // default to "Workout"
-  effort?: string;
+// sets have explicit metrics used every time
+export type SetsUserExercise = BaseUserExercise & {
+  type: "sets";
+  metrics: { type: string; name: string }[]; // what each set measures
 };
 
-// Exercise that goes into log
-export type BaseLoggingExercise = Omit<UserExercise, "name" | "type"> & {
-  userExerciseId: string;
-  effort?: string;
+// custom has default metrics that can be changed
+export type CustomUserExercise = BaseUserExercise & {
+  type: "custom";
+  defaultMetrics?: { type: string; name: string }[]; // default items to measure
 };
 
+// Stored user exercise
+export type UserExercise = SetsUserExercise | CustomUserExercise;
+
+// For logging
 // For sets
 export type Set = {
   values: Record<string, string | number>; // ex. { reps: 5, lb: 25 }, ...
   weights?: Record<string, number>; // used for barbell feature
 };
-export type SetsExercise = BaseLoggingExercise & {
-  type: "sets"; // Discriminator
+export type LoggingSetsUserExercise = Omit<SetsUserExercise, "metrics" | "type" | "name"> & {
+  type: "sets";
   sets?: Set[];
+  effort?: string; // only available when logging
+  timestamp: number; // date to log to
+  userExerciseId: string; // get data from id
 };
 
 // For custom
@@ -51,18 +67,15 @@ export type CustomValues = Record<
     value: any;
   }
 >;
-export type CustomExercise = BaseLoggingExercise & {
-  type: "custom"; // Discriminator
+export type LoggingCustomExercise = Omit<CustomUserExercise, "defaultMetrics" | "type" | "name"> & {
+  type: "custom";
   values?: CustomValues;
+  effort?: string; // only available when logging
+  timestamp: number; // date to log to
+  userExerciseId: string; // get data from id
 };
 
-// Union, for types, used for LogExercise
-type LoggingExercise = SetsExercise | CustomExercise | QuickLogExercise;
-
-// Union, used for log exercises
-export type LogExercise =
-  | (LoggingExercise & { status: "complete" | "editing"; timestamp: number })
-  | (LoggingExercise & { status: "logging" });
+export type LogExercise = LoggingSetsUserExercise | LoggingCustomExercise | QuickLogExercise;
 
 export type ActiveLog = {
   date: string;

@@ -1,7 +1,5 @@
 {
-  
   "rules": {
-    
     "users": {
       ".read": true,
       // Only users can access their personal data

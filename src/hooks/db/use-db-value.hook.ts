@@ -1,10 +1,13 @@
-import { DatabaseReference, onValue, set, update, remove, Query } from "firebase/database";
+import { useUser } from "@/context";
+import { DatabaseReference, onValue, set, update, remove, Query, child } from "firebase/database";
 import { useEffect, useState } from "react";
 
-export const useDatabaseValue = <T>(ref: DatabaseReference | Query, key?: any) => {
-  const [data, setData] = useState<T | null>(null);
+export const useDatabaseValue = <T>(path: string, key?: any) => {
+  const { dataRef } = useUser();
+  const [data, setData] = useState<T | undefined>(undefined);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const ref = child(dataRef, path);
 
   useEffect(() => {
     const off = onValue(
@@ -14,7 +17,7 @@ export const useDatabaseValue = <T>(ref: DatabaseReference | Query, key?: any) =
         if (snapshot.exists()) {
           setData(snapshot.val() as T);
         } else {
-          setData(null);
+          setData(undefined);
         }
         setLoading(false);
       },

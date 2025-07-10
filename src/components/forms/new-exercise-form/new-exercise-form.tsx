@@ -12,7 +12,7 @@ export type ExerciseFormProps = {
   initialValues?: FormValues;
   onSubmit: (values: Omit<UserExercise, "id">) => Promise<unknown>;
 };
-export const ExerciseForm = ({ initialValues, onSubmit }: ExerciseFormProps) => {
+export const NewExerciseForm = ({ initialValues, onSubmit }: ExerciseFormProps) => {
   const userFocusAreas = useFocusAreas();
   const tags = useTags();
   const areasMap = useMemo(

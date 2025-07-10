@@ -2,7 +2,7 @@ import { ActionIcon, Badge, Box, Flex, Group, Menu, Modal, Stack, Text } from "@
 import { useDisclosure } from "@mantine/hooks";
 import { IconArrowRight, IconDots, IconEdit, IconMinus, IconPlus } from "@tabler/icons-react";
 import { Link } from "react-router-dom";
-import { ExerciseForm } from "./exercise-form";
+import { NewExerciseForm } from "@/components/forms";
 import { useFocusAreasMap, useTagsMap } from "@/hooks/util";
 import { UserExercise, WithId } from "@/types/app.types";
 
@@ -13,7 +13,7 @@ export type ListExerciseProps = WithId<UserExercise> & {
   onStart?: () => any;
 };
 
-export const ListExercise = ({
+export const ExerciseCard = ({
   id,
   name,
   focusAreaIds,
@@ -39,7 +39,7 @@ export const ListExercise = ({
   return (
     <>
       <Modal opened={opened} onClose={close} title={`Edit "${name}" Exercise`} centered>
-        <ExerciseForm
+        <NewExerciseForm
           onSubmit={handleSubmit}
           initialValues={{
             name,

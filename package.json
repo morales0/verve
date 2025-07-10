@@ -5,6 +5,7 @@
   "private": true,
   "scripts": {
     "start": "vite",
+    "start:host": "vite --host",
     "build": "tsc && vite build",
     "serve": "vite preview",
     "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --cache",

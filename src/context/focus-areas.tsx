@@ -30,6 +30,4 @@ export const FocusAreasProvider = ({ children }: PropsWithChildren) => {
   return <FocusAreasContext.Provider value={data}>{children}</FocusAreasContext.Provider>;
 };
 
-export const useFocusAreas = () => {
-  return useContext(FocusAreasContext) as FocusAreaContextType;
-};
+export const useFocusAreas = () => useContext(FocusAreasContext) as FocusAreaContextType;

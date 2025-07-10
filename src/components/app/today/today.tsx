@@ -1,109 +1,75 @@
 import { useUser } from "@/context";
-import { useFocusAreasMap } from "@/hooks/util";
-import { getUserExercises } from "@/services/exercises.service";
-import { getLoggingExercises, getTodayLog, removeExerciseFromLog } from "@/services/log.service";
-import { LogExercise, UserExercise, WithId } from "@/types/app.types";
-import { ActionIcon, Box, Divider, Loader, SimpleGrid, Stack, Text } from "@mantine/core";
-import { IconRefresh } from "@tabler/icons-react";
+import { getActiveLog, getLogsByDate, removeExerciseFromLog, updateLogExercise } from "@/services/log.service";
+import { LogExercise, QuickLogExercise, UserExercise, WithId } from "@/types/app.types";
+import { ActionIcon, Group, Loader, Paper, Stack, Text } from "@mantine/core";
+import { IconChevronLeft, IconChevronRight } from "@tabler/icons-react";
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { LogCard } from "./log-card";
+import { QuickLogCard } from "./quick-log-card";
+import { useActiveLogExercises, useLogExercisesByDay } from "./data";
+import { getDateTitle } from "./util";
 
 export const Today = () => {
   const { dataRef } = useUser();
   const navigate = useNavigate();
-  const focusAreasMap = useFocusAreasMap();
 
-  // Subscribe to today's log
-  const [todayLog, setTodayLog] = useState<WithId<LogExercise>[]>([]);
-  const [loading, setLoading] = useState(true);
-  useEffect(() => {
-    if (!dataRef) return;
-    const off = getTodayLog(dataRef, setTodayLog, setLoading);
+  // local state for date selecting
+  const [daysBack, setDaysBack] = useState(0);
+  const dateTitle = useMemo(() => getDateTitle(daysBack), [daysBack]);
 
-    return () => off();
-  }, [dataRef]);
+  const timestamp = useMemo(() => {
+    const date = new Date();
+    date.setDate(date.getDate() - daysBack);
+    return daysBack === 0 ? undefined : date.getTime();
+  }, [daysBack])
 
-  // Subscribe to today's ongoing log
-  const [ongoingLog, setOngoingLog] = useState<WithId<LogExercise>[]>([]);
-  useEffect(() => {
-    if (!dataRef) return;
-    const off = getLoggingExercises(dataRef, setOngoingLog, setLoading);
-
-    return () => off();
-  }, [dataRef]);
-
-  // Create log id to user exercise name map
-  // todo: move to a hook
-  const [userExercises, setUserExercises] = useState<WithId<UserExercise>[]>([]);
-  const userExercisesNameMap = useMemo(
-    () => Object.fromEntries(userExercises.map(({ name, id }) => [id, name])),
-    [userExercises]
-  );
-  useEffect(() => {
-    if (!dataRef) return;
-    const off = getUserExercises(dataRef, setUserExercises, setLoading);
-
-    return () => off();
-  }, [dataRef]);
+  const { logs: currDayLogs, loading: isCurrDayLogsLoading } = useLogExercisesByDay(timestamp)
+  const { logs: activeLogs, loading: isActiveLogsLoading } = useActiveLogExercises()
 
   // handlers
   const handleRemoveExercise = (id: string) => removeExerciseFromLog(dataRef, id);
+  const handleUpdateExercise = async (exercise: WithId<QuickLogExercise>) => {
+    console.log("Adding", exercise);
+    await updateLogExercise(dataRef, exercise.id, {
+      ...exercise,
+    });
+    close();
+  };
 
   const handleRefresh = () => {
     navigate(0);
   };
 
+
   return (
     <>
-      <SimpleGrid cols={3}>
-        <Box />
-        <Text size="xs" tt="uppercase" fw={500} ff="heading" mx="auto" ta="center">
-          Today
-        </Text>
-        <ActionIcon ml="auto" onClick={handleRefresh}>
-          <IconRefresh stroke={1} />
+      <Group gap="xs" wrap="nowrap">
+        <ActionIcon size="xs" onClick={() => setDaysBack((prev) => prev + 1)}>
+          <IconChevronLeft />
         </ActionIcon>
-      </SimpleGrid>
+        <Text size="xs" tt="uppercase" fw={500} ff="heading" mx="auto" ta="center">
+          {dateTitle}
+        </Text>
+        <ActionIcon size="xs" disabled={daysBack === 0} onClick={() => setDaysBack((prev) => Math.max(0, prev - 1))}>
+          <IconChevronRight />
+        </ActionIcon>
+      </Group>
 
       <Stack gap="md">
-        {loading && <Loader type="bars" mx="auto" size="sm" />}
-        {!loading && !!ongoingLog.length && (
-          <Stack gap="xs">
-            <Text size="xs" ml="auto">
-              Ongoing Exercises
-            </Text>
-            {ongoingLog.map((exercise) => (
-              <LogCard
-                key={exercise.id}
-                {...exercise}
-                name={exercise.type === "quick" ? exercise.name : userExercisesNameMap[exercise.userExerciseId]}
-                focusAreas={exercise.focusAreaIds?.map((id) => focusAreasMap[id]).filter((a) => a !== undefined) ?? []}
-                onRemove={() => handleRemoveExercise(exercise.id)}
-              />
-            ))}
-            <Divider w="90%" mx="auto" />
-          </Stack>
-        )}
+        {isCurrDayLogsLoading && <Loader type="bars" mx="auto" size="sm" />}
+        {!isCurrDayLogsLoading &&
+          currDayLogs.length > 0 &&
+          currDayLogs.map((ex) =>
+            ex.type === "quick" ? (
+              <QuickLogCard key={ex.id} {...ex} />
+            ) : (
+              <Paper key={ex.id} p="xs">
+                <Text size="xs">{ex.id}</Text>
+              </Paper>
+            )
+          )}
 
-        {!loading && !!todayLog.length && (
-          <Stack gap="xs">
-            <Text size="xs" ml="auto">
-              Completed
-            </Text>
-            {todayLog.map((exercise) => (
-              <LogCard
-                key={exercise.id}
-                {...exercise}
-                name={exercise.type === "quick" ? exercise.name : userExercisesNameMap[exercise.userExerciseId]}
-                focusAreas={exercise.focusAreaIds?.map((id) => focusAreasMap[id]).filter((a) => a !== undefined) ?? []}
-                onRemove={() => handleRemoveExercise(exercise.id)}
-              />
-            ))}
-          </Stack>
-        )}
-
-        {!loading && ongoingLog.length === 0 && todayLog.length === 0 && (
+        {!isCurrDayLogsLoading && activeLogs.length === 0 && currDayLogs.length === 0 && (
           <Text size="sm" c="dimmed" ta="center">
             Lots of space to get started!
           </Text>

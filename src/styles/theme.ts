@@ -1,5 +1,6 @@
 import classes from "@/styles/app.module.css";
 import { ActionIcon, Badge, Button, Checkbox, Chip, Divider, Loader, Paper, createTheme } from "@mantine/core";
+import { DateInput } from "@mantine/dates";
 import cx from "clsx";
 
 export const theme = createTheme({
@@ -34,6 +35,13 @@ export const theme = createTheme({
     Chip: Chip.extend({
       defaultProps: {
         radius: "sm",
+      },
+    }),
+
+    DateInput: DateInput.extend({
+      defaultProps: {
+        firstDayOfWeek: 0,
+        highlightToday: true,
       },
     }),
 

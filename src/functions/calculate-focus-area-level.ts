@@ -2,7 +2,7 @@ import { LogExercise } from "@/types/app.types";
 
 export function calculateFocusAreaLevel(latestLog: LogExercise | undefined) {
   // Make sure this is a complete log exercise
-  if (!latestLog || latestLog.status !== "complete") return 0;
+  if (!latestLog) return 0;
 
   // get time differences
   const now = new Date();

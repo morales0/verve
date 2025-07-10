@@ -11,7 +11,7 @@ export const EffortSelect = (props: Omit<SegmentedControlProps, "data">) => (
       {...props}
       data={[
         { value: "1", label: "Light" },
-        { value: "2", label: "Moderate" },
+        { value: "2", label: "Normal" },
         { value: "3", label: "High" },
       ]}
     />

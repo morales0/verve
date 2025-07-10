@@ -5,15 +5,15 @@ import {
   removeUserExercise,
   updateUserExercise,
 } from "@/services/exercises.service";
-import { addExerciseToLog, getLoggingExercises } from "@/services/log.service";
+import { addExerciseToLog } from "@/services/log.service";
 import { LogExercise, UserExercise, WithId } from "@/types/app.types";
 import { Button, Group, Modal, Stack, Text, TextInput } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { IconPlus } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ExerciseForm } from "./exercise-form";
-import { ListExercise } from "./list-exercise";
+import { NewExerciseForm } from "@/components/forms";
+import { ExerciseCard } from "./exercise-card";
 
 export const List = () => {
   const { dataRef } = useUser();
@@ -80,13 +80,13 @@ export const List = () => {
           New
         </Button>
         <Modal opened={newOpened} onClose={closeNew} title="New Exercise" centered>
-          <ExerciseForm onSubmit={handleCreateNewExercise} />
+          <NewExerciseForm onSubmit={handleCreateNewExercise} />
         </Modal>
       </Group>
       <Stack gap="sm">
         {exercises.length ? (
           exercises.map((exercise, i) => (
-            <ListExercise
+            <ExerciseCard
               key={exercise.id}
               {...exercise}
               // started={!!exerciseIdtoLogId(exercise.id)}

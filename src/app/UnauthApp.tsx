@@ -7,8 +7,7 @@ import {
   signInWithEmailAndPassword,
   signInWithPopup,
 } from "firebase/auth";
-import { AuthForm } from "../components/app";
-import classes from "./app.module.css";
+import { AuthForm } from "@/components/forms";
 
 const UnauthApp = () => {
   const auth = getAuth(app);
@@ -21,8 +20,8 @@ const UnauthApp = () => {
   };
 
   return (
-    <Stack h="100vh" className={classes.authScreen} align="center" justify="flex-start">
-      <Text c="white" fz={rem(27)} py={rem(80)}>
+    <Stack h="100vh" align="center" justify="flex-start">
+      <Text c="white" fz={30} py={80}>
         Welcome to{" "}
         <Text span fz="inherit" fw={600}>
           verve

@@ -2,6 +2,7 @@ import { LogExercise, WithId } from "@/types/app.types";
 import {
   child,
   DatabaseReference,
+  endBefore,
   equalTo,
   onValue,
   orderByChild,
@@ -12,6 +13,39 @@ import {
   startAfter,
   update,
 } from "firebase/database";
+
+export const subscribeToActiveLog = (
+  userRef: DatabaseReference,
+  setActiveLog: (data: { date: string; exercises?: LogExercise[] }) => void,
+  setLoading: (value: boolean) => void
+) => {
+  const activeLogQuery = child(userRef, "activeLog");
+
+  const off = onValue(activeLogQuery, (snapshot) => {
+    if (snapshot.exists()) {
+      const data = snapshot.val() as { date: string; exercises?: LogExercise[] };
+
+      setActiveLog(data);
+    } else {
+      setActiveLog({
+        date: new Date().toDateString(),
+      });
+    }
+    setLoading(false);
+  });
+
+  return off;
+};
+
+export const createNewLog = (userRef: DatabaseReference) => {
+  const now = new Date();
+
+  const activeLogQuery = child(userRef, "activeLog");
+  console.log(activeLogQuery);
+  return set(activeLogQuery, {
+    date: now.toDateString(),
+  });
+};
 
 export const getThisWeekLog = (
   userRef: DatabaseReference,
@@ -31,7 +65,7 @@ export const getThisWeekLog = (
   const off = onValue(logQuery, (snapshot) => {
     if (snapshot.exists()) {
       const data = snapshot.val() as { [id: string]: LogExercise };
-      const values = Object.values(data).filter(({ status }) => status !== "logging");
+      const values = Object.values(data);
 
       setLog(values);
     } else {
@@ -76,39 +110,53 @@ export const getLast7DaysLogs = (
   return off;
 };
 
-export const getTodayLog = (
+export const getLogsByDate = (
   userRef: DatabaseReference,
-  setLog: (data: WithId<LogExercise>[]) => void,
-  setLoading: (value: boolean) => void
+  setLogs: (data: WithId<LogExercise>[]) => void,
+  setLoading: (value: boolean) => void,
+  timestamp?: number
 ) => {
-  // Get sunday of this week
+  // Create timeframe, use now if timestamp is not provided
   const now = new Date();
+  if (timestamp) {
+    now.setTime(timestamp);
+  }
   now.setHours(0, 0, 0, 0);
+  const start = now.getTime();
+  const end = start + 24 * 60 * 60 * 1000;
 
-  // Query to log exercises from sunday to now
-  const logQuery = query(child(userRef, "log"), orderByChild("timestamp"), startAfter(now.getTime(), "timestamp"));
+  // Query to log exercises from start to end
+  const logQuery = query(
+    child(userRef, "log"),
+    orderByChild("timestamp"),
+    startAfter(start, "timestamp"),
+    endBefore(end, "timestamp")
+  );
+
+  // subscribe
   const off = onValue(logQuery, (snapshot) => {
     if (snapshot.exists()) {
       const data = snapshot.val() as { [id: string]: WithId<LogExercise> };
       const values = Object.values(data);
 
-      setLog(values);
+      setLogs(values);
     } else {
-      setLog([]);
+      setLogs([]);
     }
+
     setLoading(false);
   });
 
   return off;
 };
 
-export const getLoggingExercises = (
+export const getActiveLog = (
   userRef: DatabaseReference,
   setLog: (data: WithId<LogExercise>[]) => void,
   setLoading: (value: boolean) => void
 ) => {
   // Query for ongoing log exercises
-  const logQuery = query(child(userRef, "log"), orderByChild("complete"), equalTo(false));
+  const logQuery = query(child(userRef, "activeLog/exercises"));
   const off = onValue(logQuery, (snapshot) => {
     if (snapshot.exists()) {
       const data = snapshot.val() as { [id: string]: WithId<LogExercise> };
@@ -151,7 +199,6 @@ export const addExerciseToLog = async (userRef: DatabaseReference, exercise: Log
   const childRef = push(child(userRef, "log"));
   return set(childRef, {
     ...exercise,
-    // complete: false,
     id: childRef.key,
   }).then(() => childRef.key);
 };

@@ -1,12 +1,15 @@
 import { FocusAreas, Today, WeekTracker } from "@/components/app";
 import { ThemeToggle, TopBar } from "@/components/ui";
-import { ActionIcon, Box, Button, Divider, Group, Paper, SimpleGrid, Stack, Text } from "@mantine/core";
-import { IconPlus, IconSettings } from "@tabler/icons-react";
+import { useAuth } from "@/context";
+import { ActionIcon, Box, Divider, Group, Menu, Paper, SimpleGrid, Stack, Text } from "@mantine/core";
+import { IconLogout, IconSettings } from "@tabler/icons-react";
 import classes from "./home.module.css";
-import { QuickLog } from "./quick-log";
-import { Link } from "react-router-dom";
+import { LogButton } from "./log-button";
+import { QuickLogButton } from "./quick-log-button";
 
 export const Home = () => {
+  const { signOut } = useAuth();
+
   return (
     <Stack align="stretch" mih="100vh" pb={75}>
       {/* Top nav bar with theme toggle and account access */}
@@ -14,20 +17,26 @@ export const Home = () => {
         <SimpleGrid cols={3} p="xs">
           <ThemeToggle />
           <Text ta="center">verve</Text>
-          <ActionIcon ml="auto" size="md">
-            <IconSettings stroke={1} />
-          </ActionIcon>
+          <Menu>
+            <Menu.Target>
+              <ActionIcon ml="auto" size="md">
+                <IconSettings stroke={1} />
+              </ActionIcon>
+            </Menu.Target>
+            <Menu.Dropdown>
+              <Menu.Item leftSection={<IconLogout size={14} />} onClick={signOut}>
+                Sign Out
+              </Menu.Item>
+            </Menu.Dropdown>
+          </Menu>
         </SimpleGrid>
       </TopBar>
 
       <Stack px="sm" mb="lg" style={{ flexGrow: 1 }}>
-        {/* Focus areas section */}
         <FocusAreas />
 
-        {/* Week tracker */}
         <WeekTracker />
 
-        {/* Today's exercises */}
         <Divider w="90%" mx="auto" />
         <Today />
       </Stack>
@@ -35,16 +44,8 @@ export const Home = () => {
       <Box pos="fixed" bottom={0} w="100%" mt="auto" className={classes.control}>
         <Paper radius="xl" m="xs" className={classes.paper}>
           <Group grow gap={0} className={classes.group}>
-            <QuickLog />
-            <Button
-              className={classes.logBtn}
-              rightSection={<IconPlus size={20} />}
-              radius="xl"
-              component={Link}
-              to="/active-log"
-            >
-              Log
-            </Button>
+            <QuickLogButton />
+            <LogButton />
           </Group>
         </Paper>
       </Box>

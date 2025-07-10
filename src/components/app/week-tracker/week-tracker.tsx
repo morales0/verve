@@ -24,8 +24,6 @@ export const WeekTracker = () => {
   // helper functions
   const isDayHit = (day: number) =>
     weekLog?.some((exercise) => {
-      if (exercise.status !== "complete") return false;
-
       const date = new Date(exercise.timestamp);
       return date.getDay() === day;
     });

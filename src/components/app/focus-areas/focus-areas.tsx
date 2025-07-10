@@ -5,7 +5,7 @@ import { LogExercise, WithId } from "@/types/app.types";
 import { ActionIcon, Button, Flex, Group, Loader, Modal, Stack, Text, TextInput } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { IconPlus } from "@tabler/icons-react";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { FocusAreaBadge } from "./focus-area-badge";
 
 export const FocusAreas = () => {
@@ -22,18 +22,15 @@ export const FocusAreas = () => {
     return () => off();
   }, [dataRef]);
 
+  // Focus areas local state
   const [opened, { open, close }] = useDisclosure(false);
   const [name, setName] = useState("");
 
-  // helper to calculate area badge color
-  const calcLevel = (id: string) => {
-    // Find last log that uses focus area with id and is complete
-    const latestLog = last7DaysLogs.findLast(
-      ({ focusAreaIds, status }) => focusAreaIds?.includes(id) && status === "complete"
-    );
-
-    return calculateFocusAreaLevel(latestLog);
-  };
+  // Find last log that uses focus area with id and is complete
+  const calcLevel = useCallback(
+    (id: string) => calculateFocusAreaLevel(last7DaysLogs.findLast(({ focusAreaIds }) => focusAreaIds?.includes(id))),
+    [last7DaysLogs]
+  );
 
   // create data to iterate
   const data =
@@ -54,7 +51,7 @@ export const FocusAreas = () => {
     focusAreas.data.some(({ name, archived }) => name.toLowerCase() === value.toLowerCase() && archived);
 
   // handlers
-  const handleAddFocusArea = (value: string) =>
+  const handleAddFocusArea = async (value: string) =>
     api
       .addChild({
         name: value,
@@ -64,17 +61,17 @@ export const FocusAreas = () => {
         close();
       });
 
-  const handleUpdateAreaName = (id: string, value: string) =>
+  const handleUpdateAreaName = async (id: string, value: string) =>
     api.updateChild(id, {
       name: value,
     });
 
-  const handleArchiveFocusArea = (id: string) =>
+  const handleArchiveFocusArea = async (id: string) =>
     api.updateChild(id, {
       archived: true,
     });
 
-  const handleUnarchiveFocusArea = (value: string) => {
+  const handleUnarchiveFocusArea = async (value: string) => {
     // First find focus area with value as name
     const id = focusAreas.data.find((area) => area.name.toLowerCase() === value.toLowerCase())?.id;
 
@@ -142,10 +139,10 @@ export const FocusAreas = () => {
                 onUpdateName={(value: string) => handleUpdateAreaName(area.id, value)}
               />
             )) ?? (
-              <Text c="dimmed" size="xs">
-                No active focus areas
-              </Text>
-            ))}
+                <Text c="dimmed" size="xs">
+                  No active focus areas
+                </Text>
+              ))}
         </Flex>
       </Stack>
     </>
