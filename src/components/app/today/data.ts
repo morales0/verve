@@ -4,7 +4,7 @@ import { LogExercise, WithId } from "@/types/app.types";
 import { useEffect, useState } from "react";
 
 export const useLogExercisesByDay = (timestamp: number | undefined) => {
-  const { dataRef } = useUser()
+  const { dataRef } = useUser();
 
   // Subscribe to the curent date's log
   const [logs, setLogs] = useState<WithId<LogExercise>[]>([]);
@@ -20,11 +20,11 @@ export const useLogExercisesByDay = (timestamp: number | undefined) => {
     };
   }, [dataRef, timestamp]);
 
-  return { logs, loading }
-}
+  return { logs, loading };
+};
 
 export const useActiveLogExercises = () => {
-  const { dataRef } = useUser()
+  const { dataRef } = useUser();
 
   const [logs, setLogs] = useState<WithId<LogExercise>[]>([]);
   const [loading, setLoading] = useState(true);
@@ -37,5 +37,5 @@ export const useActiveLogExercises = () => {
     return () => off();
   }, [dataRef]);
 
-  return { logs, loading }
-}
+  return { logs, loading };
+};

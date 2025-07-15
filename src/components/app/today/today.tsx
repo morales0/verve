@@ -21,10 +21,10 @@ export const Today = () => {
     const date = new Date();
     date.setDate(date.getDate() - daysBack);
     return daysBack === 0 ? undefined : date.getTime();
-  }, [daysBack])
+  }, [daysBack]);
 
-  const { logs: currDayLogs, loading: isCurrDayLogsLoading } = useLogExercisesByDay(timestamp)
-  const { logs: activeLogs, loading: isActiveLogsLoading } = useActiveLogExercises()
+  const { logs: currDayLogs, loading: isCurrDayLogsLoading } = useLogExercisesByDay(timestamp);
+  const { logs: activeLogs, loading: isActiveLogsLoading } = useActiveLogExercises();
 
   // handlers
   const handleRemoveExercise = (id: string) => removeExerciseFromLog(dataRef, id);
@@ -39,7 +39,6 @@ export const Today = () => {
   const handleRefresh = () => {
     navigate(0);
   };
-
 
   return (
     <>

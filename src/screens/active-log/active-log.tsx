@@ -10,7 +10,7 @@ export const ActiveLog = () => {
     <Stack className={classes.logScreen} gap="xs" mih="100vh">
       <Box className={classes.topbar} pos="sticky" top={0}>
         <Flex align="center" justify="center" p="xs">
-          <ActionIcon size="md" variant="transparent" component={Link} to="/">
+          <ActionIcon size="md" variant="transparent" component={Link} to="/active-log">
             <IconArrowLeft stroke={1} />
           </ActionIcon>
           <DateSelect />

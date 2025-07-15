@@ -9,8 +9,8 @@
     "build": "tsc && vite build",
     "serve": "vite preview",
     "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --cache",
-    "lint:fix": "yarn lint --fix",
-    "format": "prettier --write src/**/*.{ts,tsx,json,md} && yarn lint:fix",
+    "lint:fix": "pnpm lint --fix",
+    "format": "prettier --write src/**/*.{ts,tsx,json,md}",
     "deploy:dev": "firebase deploy --only hosting:dev"
   },
   "dependencies": {
@@ -46,6 +46,7 @@
     "postcss-preset-mantine": "^1.17.0",
     "postcss-simple-vars": "^7.0.1",
     "prettier": "^3.3.3",
+    "rollup-plugin-visualizer": "^6.0.3",
     "typescript": "^5.6.3",
     "vite": "^5.4.11",
     "vite-plugin-svgr": "^4.3.0",
@@ -64,3 +65,4 @@
     ]
   }
 }
+

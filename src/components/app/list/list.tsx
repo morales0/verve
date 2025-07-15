@@ -88,10 +88,10 @@ export const List = () => {
           exercises.map((exercise, i) => (
             <ExerciseCard
               key={exercise.id}
-              {...exercise}
+              exercise={exercise}
               // started={!!exerciseIdtoLogId(exercise.id)}
               onDelete={() => handleDeleteExercise(exercise.id)}
-              onEdit={(updates: Partial<Omit<UserExercise, "id">>) => handleEditExercise(exercise.id, updates)}
+              onEdit={(updates: Partial<UserExercise>) => handleEditExercise(exercise.id, updates)}
               onStart={() => handleStartExercise(exercise)}
             />
           ))

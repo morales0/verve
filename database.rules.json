@@ -5,7 +5,12 @@
       // Only users can access their personal data
       "$uid": {
         ".read": "auth != null && auth.uid == $uid",
-        ".write": "$uid === auth.uid"
+        ".write": "$uid === auth.uid",
+        "dev": {
+          "log": {
+            ".indexOn": "timestamp"
+          }
+        }
       }
     },
     "workouts": {

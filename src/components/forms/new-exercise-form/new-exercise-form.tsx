@@ -1,16 +1,31 @@
 import { useFocusAreas } from "@/context";
 import { useTags } from "@/context/tags";
 import { capitalizeWords } from "@/functions/utils";
-import { UserExercise } from "@/types/app.types";
-import { Button, Chip, Group, SegmentedControl, Stack, TagsInput, Text, TextInput, ThemeIcon } from "@mantine/core";
+import { CustomUserExercise, SetsUserExercise, UserExercise } from "@/types/app.types";
+import {
+  ActionIcon,
+  Button,
+  Chip,
+  Flex,
+  Group,
+  Paper,
+  SegmentedControl,
+  Select,
+  Stack,
+  TagsInput,
+  Text,
+  TextInput,
+  ThemeIcon,
+} from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { IconCircle, IconCircleCheckFilled, IconCircleDot } from "@tabler/icons-react";
+import { IconCircle, IconCircleCheckFilled, IconCircleDot, IconPlus, IconX } from "@tabler/icons-react";
 import { useMemo, useState } from "react";
 
-type FormValues = Omit<UserExercise, "id">;
+type FormValues = Omit<SetsUserExercise, "type"> & Omit<CustomUserExercise, "type"> & { type: "sets" | "custom" };
+
 export type ExerciseFormProps = {
-  initialValues?: FormValues;
-  onSubmit: (values: Omit<UserExercise, "id">) => Promise<unknown>;
+  initialValues?: UserExercise;
+  onSubmit: (values: UserExercise) => Promise<unknown>;
 };
 export const NewExerciseForm = ({ initialValues, onSubmit }: ExerciseFormProps) => {
   const userFocusAreas = useFocusAreas();
@@ -21,12 +36,14 @@ export const NewExerciseForm = ({ initialValues, onSubmit }: ExerciseFormProps) 
   );
 
   const activeUserFocusAreas = userFocusAreas.data.filter(({ archived }) => !archived);
-
   const form = useForm<FormValues>({
     mode: "uncontrolled",
     transformValues: (values) => ({
       ...values,
       name: capitalizeWords(values.name),
+      tagIds: values.tagIds
+        ?.map((tag) => tags.data.find(({ name }) => name === tag)?.id)
+        .filter((tag) => tag !== undefined),
     }),
     initialValues: {
       name: "",
@@ -34,13 +51,15 @@ export const NewExerciseForm = ({ initialValues, onSubmit }: ExerciseFormProps) 
       focusAreaIds: [],
       tagIds: [],
       ...initialValues,
-    },
+    } as FormValues,
   });
 
   const [screen, setScreen] = useState(1);
 
   const nextStep = () => setScreen((current) => (current < 4 ? current + 1 : current));
   const prevStep = () => setScreen((current) => (current > 1 ? current - 1 : current));
+  const [newMetricName, setNewMetricName] = useState("");
+  const [newMetricType, setNewMetricType] = useState("number");
 
   const isNextDisabled = screen === 1 && form.getValues().name === "";
 
@@ -52,22 +71,27 @@ export const NewExerciseForm = ({ initialValues, onSubmit }: ExerciseFormProps) 
       });
     }
   };
-  const handleSubmit = (values: FormValues) => {
-    const tagIds = values.tagIds
-      ?.map((tag) => tags.data.find(({ name }) => name === tag)?.id)
-      .filter((tag) => tag !== undefined);
+  const handleAddMetric = (name: string, type: string) => {
+    const values = form.getValues();
+    if (values.type === "sets") {
+      form.setValues({ metrics: [...(values.metrics ?? []), { name, type }] });
+    }
+    if (values.type === "custom") {
+      form.setValues({ defaultMetrics: [...(values.defaultMetrics ?? []), { name, type }] });
+    }
+  };
+  const handleRemoveMetric = (name: string) =>
+    form.setValues({ metrics: form.getValues().metrics.filter((m) => m.name !== name) });
+  const handleSubmit = async (values: FormValues) => {
+    const { metrics, defaultMetrics, ...rest } = values;
+    if (values.type === "sets") {
+      await onSubmit({ metrics, ...rest, type: "sets" });
+    } else {
+      await onSubmit({ defaultMetrics, ...rest, type: "custom" });
+    }
 
-    const newExercise: Omit<UserExercise, "id"> = {
-      name: values.name,
-      type: values.type,
-      tagIds,
-      focusAreaIds: values.focusAreaIds,
-    };
-
-    onSubmit(newExercise).then(() => {
-      setScreen(1);
-      form.reset();
-    });
+    setScreen(1);
+    form.reset();
   };
 
   return (
@@ -95,6 +119,60 @@ export const NewExerciseForm = ({ initialValues, onSubmit }: ExerciseFormProps) 
                     ? "An exercise that is split into sets."
                     : "An exercise with custom metrics, ex. Yoga."}
                 </Text>
+                <Stack>
+                  <Text size="sm" fw={500} mb={3}>
+                    {form.getValues().type === "sets" ? "Metrics" : "Default Metrics"}
+                  </Text>
+                  <Group wrap="nowrap" gap="xs">
+                    <TextInput value={newMetricName} onChange={(e) => setNewMetricName(e.target.value)} />
+                    <Select
+                      value={newMetricType}
+                      onChange={(val) => setNewMetricType(val ?? "number")}
+                      data={[
+                        { value: "weight", label: "Weight" },
+                        { value: "number", label: "Number" },
+                        { value: "time", label: "Time" },
+                      ]}
+                    />
+                    <ActionIcon
+                      onClick={() => handleAddMetric(newMetricName, newMetricType)}
+                      disabled={
+                        newMetricName === "" ||
+                        (form.getValues().type === "sets"
+                          ? form.getValues().metrics
+                          : form.getValues().defaultMetrics
+                        )?.some((m) => m.name.toLowerCase() === newMetricName.toLowerCase())
+                      }
+                      variant="outline"
+                      color="teal"
+                      size="lg"
+                    >
+                      {" "}
+                      <IconPlus />{" "}
+                    </ActionIcon>
+                  </Group>{" "}
+                  <Flex gap="sm">
+                    {(form.getValues().type === "sets"
+                      ? form.getValues().metrics
+                      : form.getValues().defaultMetrics
+                    )?.map((m) => (
+                      <Paper key={m.name} withBorder p="xs">
+                        <Flex align="center" gap="xs">
+                          <Stack gap={0}>
+                            <Text>{m.name}</Text>
+                            <Text size="xs" color="dimmed">
+                              {m.type}
+                            </Text>
+                          </Stack>
+                          <ActionIcon onClick={() => handleRemoveMetric(m.name)}>
+                            {" "}
+                            <IconX />{" "}
+                          </ActionIcon>
+                        </Flex>
+                      </Paper>
+                    ))}
+                  </Flex>
+                </Stack>
               </Stack>
             </>
           )}
@@ -137,7 +215,7 @@ export const NewExerciseForm = ({ initialValues, onSubmit }: ExerciseFormProps) 
                   .filter((a) => a !== undefined)
                   .join(", ")}
               </Text>
-              <Text>Tags: {form.getTransformedValues().tagIds?.join(", ")}</Text>
+              <Text>Tags: {form.getValues().tagIds?.join(", ")}</Text>
             </>
           )}
         </Stack>

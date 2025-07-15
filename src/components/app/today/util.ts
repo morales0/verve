@@ -10,4 +10,4 @@ export const getDateTitle = (daysBack: number) => {
     month: "short",
     day: "numeric",
   });
-} 
+};

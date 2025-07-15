@@ -10,18 +10,18 @@ import { removeExerciseFromLog, updateLogExercise } from "@/services/log.service
 import { useUser } from "@/context";
 
 export const QuickLogCard = (exercise: WithId<QuickLogExercise>) => {
-  const { dataRef } = useUser()
+  const { dataRef } = useUser();
   const { name, focusAreaIds, id } = exercise;
   const focusAreasMap = useFocusAreasMap();
   const focusAreas = useMemo(() => focusAreaIds?.map((id) => focusAreasMap[id]), [focusAreasMap, focusAreaIds]);
 
   const [opened, { open, close }] = useDisclosure(false);
 
-  const onRemove = () => removeExerciseFromLog(dataRef, id)
+  const onRemove = () => removeExerciseFromLog(dataRef, id);
   const handleSubmit = async (updates: Partial<QuickLogExercise>) => {
     await updateLogExercise(dataRef, id, updates);
-    close()
-  }
+    close();
+  };
 
   return (
     <>

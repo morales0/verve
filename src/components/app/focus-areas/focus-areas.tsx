@@ -139,10 +139,10 @@ export const FocusAreas = () => {
                 onUpdateName={(value: string) => handleUpdateAreaName(area.id, value)}
               />
             )) ?? (
-                <Text c="dimmed" size="xs">
-                  No active focus areas
-                </Text>
-              ))}
+              <Text c="dimmed" size="xs">
+                No active focus areas
+              </Text>
+            ))}
         </Flex>
       </Stack>
     </>
