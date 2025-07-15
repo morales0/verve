@@ -1,6 +1,6 @@
-import { List } from "@/components/app";
+import { ActiveExercise, List } from "@/components/app";
 import { FocusAreasProvider, TagsProvider } from "@/context";
-import { Home, ActiveLog, ActiveExercise } from "@/screens";
+import { Home, ActiveLog } from "@/screens";
 import { Route, Routes } from "react-router-dom";
 
 const UserApp = () => {
@@ -12,7 +12,7 @@ const UserApp = () => {
           <Route path="active-log" element={<ActiveLog />}>
             <Route index element={<List />} />
             <Route path="summary" element={<> Summary </>} />
-            <Route path=":logId" element={<> Exercise </>} />
+            <Route path=":logExerciseId" element={<ActiveExercise />} />
           </Route>
 
           <Route path="log/:logId" element={<>See and edit a logged exercise</>} />

@@ -1,5 +1,6 @@
 .input {
   text-align: center;
-  border: none;
+  /* border: none; */
+  border-color: var(--mantine-color-gray-6);
   background: transparent;
 }

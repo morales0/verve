@@ -21,9 +21,9 @@ export const DateSelect = () => {
         onChange={handleOnChange}
         placeholder="Enter date"
         size="sm"
+        variant="default"
         maxDate={dayjs(new Date()).toDate()}
         pointer
-        rightSection={<IconChevronDown stroke={1} color="var(--mantine-color-text)" />}
       />
     </Center>
   );
