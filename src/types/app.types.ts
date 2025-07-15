@@ -27,6 +27,7 @@ type BaseUserExercise = {
   name: string; // unique, mutable
   focusAreaIds?: string[]; // array of default focus area IDs
   tagIds?: string[]; // array of default tag IDs
+  archived?: boolean; // in place of deleting
 };
 
 // sets have explicit metrics used every time

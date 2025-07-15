@@ -62,6 +62,8 @@ export const NewExerciseForm = ({ initialValues, onSubmit }: ExerciseFormProps) 
   const [newMetricType, setNewMetricType] = useState("number");
 
   const isNextDisabled = screen === 1 && form.getValues().name === "";
+  const isEditing = !!initialValues;
+  const isMetricsEditingAllowed = !isEditing || form.getValues().type === "custom";
 
   const handleTagOptionSubmit = (value: string) => {
     const isNewTag = !tags.data.find(({ id }) => id.toLowerCase() === value.toLowerCase());
@@ -79,6 +81,8 @@ export const NewExerciseForm = ({ initialValues, onSubmit }: ExerciseFormProps) 
     if (values.type === "custom") {
       form.setValues({ defaultMetrics: [...(values.defaultMetrics ?? []), { name, type }] });
     }
+
+    setNewMetricName("");
   };
   const handleRemoveMetric = (name: string) =>
     form.setValues({ metrics: form.getValues().metrics.filter((m) => m.name !== name) });
@@ -123,34 +127,36 @@ export const NewExerciseForm = ({ initialValues, onSubmit }: ExerciseFormProps) 
                   <Text size="sm" fw={500} mb={3}>
                     {form.getValues().type === "sets" ? "Metrics" : "Default Metrics"}
                   </Text>
-                  <Group wrap="nowrap" gap="xs">
-                    <TextInput value={newMetricName} onChange={(e) => setNewMetricName(e.target.value)} />
-                    <Select
-                      value={newMetricType}
-                      onChange={(val) => setNewMetricType(val ?? "number")}
-                      data={[
-                        { value: "weight", label: "Weight" },
-                        { value: "number", label: "Number" },
-                        { value: "time", label: "Time" },
-                      ]}
-                    />
-                    <ActionIcon
-                      onClick={() => handleAddMetric(newMetricName, newMetricType)}
-                      disabled={
-                        newMetricName === "" ||
-                        (form.getValues().type === "sets"
-                          ? form.getValues().metrics
-                          : form.getValues().defaultMetrics
-                        )?.some((m) => m.name.toLowerCase() === newMetricName.toLowerCase())
-                      }
-                      variant="outline"
-                      color="teal"
-                      size="lg"
-                    >
-                      {" "}
-                      <IconPlus />{" "}
-                    </ActionIcon>
-                  </Group>{" "}
+                  {isMetricsEditingAllowed && (
+                    <Group wrap="nowrap" gap="xs">
+                      <TextInput value={newMetricName} onChange={(e) => setNewMetricName(e.target.value)} />
+                      <Select
+                        value={newMetricType}
+                        onChange={(val) => setNewMetricType(val ?? "number")}
+                        data={[
+                          { value: "weight", label: "Weight" },
+                          { value: "number", label: "Number" },
+                          { value: "time", label: "Time" },
+                          { value: "string", label: "Text" },
+                        ]}
+                      />
+                      <ActionIcon
+                        onClick={() => handleAddMetric(newMetricName, newMetricType)}
+                        disabled={
+                          newMetricName === "" ||
+                          (form.getValues().type === "sets"
+                            ? form.getValues().metrics
+                            : form.getValues().defaultMetrics
+                          )?.some((m) => m.name.toLowerCase() === newMetricName.toLowerCase())
+                        }
+                        variant="outline"
+                        color="teal"
+                        size="lg"
+                      >
+                        <IconPlus />
+                      </ActionIcon>
+                    </Group>
+                  )}
                   <Flex gap="sm">
                     {(form.getValues().type === "sets"
                       ? form.getValues().metrics
@@ -160,14 +166,15 @@ export const NewExerciseForm = ({ initialValues, onSubmit }: ExerciseFormProps) 
                         <Flex align="center" gap="xs">
                           <Stack gap={0}>
                             <Text>{m.name}</Text>
-                            <Text size="xs" color="dimmed">
+                            <Text size="xs" c="dimmed">
                               {m.type}
                             </Text>
                           </Stack>
-                          <ActionIcon onClick={() => handleRemoveMetric(m.name)}>
-                            {" "}
-                            <IconX />{" "}
-                          </ActionIcon>
+                          {isMetricsEditingAllowed && (
+                            <ActionIcon onClick={() => handleRemoveMetric(m.name)}>
+                              <IconX />
+                            </ActionIcon>
+                          )}
                         </Flex>
                       </Paper>
                     ))}

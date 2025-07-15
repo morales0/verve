@@ -5,8 +5,7 @@ import {
   removeUserExercise,
   updateUserExercise,
 } from "@/services/exercises.service";
-import { addExerciseToLog } from "@/services/log.service";
-import { LogExercise, UserExercise, WithId } from "@/types/app.types";
+import { UserExercise, WithId } from "@/types/app.types";
 import { Button, Group, Modal, Stack, Text, TextInput } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { IconPlus } from "@tabler/icons-react";
@@ -67,6 +66,7 @@ export const List = () => {
   const handleEditExercise = (id: string, updates: Partial<Omit<UserExercise, "id">>) =>
     updateUserExercise(dataRef, id, updates);
   const handleDeleteExercise = (id: string) => removeUserExercise(dataRef, id);
+  const handleArchiveExercise = (id: string) => updateUserExercise(dataRef, id, { archived: true });
   const handleCreateNewExercise = (exercise: Omit<UserExercise, "id">) =>
     addUserExercise(dataRef, exercise).then(() => {
       closeNew();
@@ -85,16 +85,18 @@ export const List = () => {
       </Group>
       <Stack gap="sm">
         {exercises.length ? (
-          exercises.map((exercise, i) => (
-            <ExerciseCard
-              key={exercise.id}
-              exercise={exercise}
-              // started={!!exerciseIdtoLogId(exercise.id)}
-              onDelete={() => handleDeleteExercise(exercise.id)}
-              onEdit={(updates: Partial<UserExercise>) => handleEditExercise(exercise.id, updates)}
-              onStart={() => handleStartExercise(exercise)}
-            />
-          ))
+          exercises
+            .filter((e) => !e.archived)
+            .map((exercise) => (
+              <ExerciseCard
+                key={exercise.id}
+                exercise={exercise}
+                // started={!!exerciseIdtoLogId(exercise.id)}
+                onArchive={() => handleArchiveExercise(exercise.id)}
+                onEdit={(updates: Partial<UserExercise>) => handleEditExercise(exercise.id, updates)}
+                onStart={() => handleStartExercise(exercise)}
+              />
+            ))
         ) : (
           <Text ta="center" c="dimmed">
             Time to make an exercise!
