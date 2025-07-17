@@ -1,6 +1,6 @@
 import { ActionIcon, Badge, Flex, Group, Menu, Modal, Stack, Text } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import { IconDotsVertical, IconEdit, IconMinus } from "@tabler/icons-react";
+import { IconDotsVertical, IconEdit, IconMinus, IconTrash } from "@tabler/icons-react";
 import { NewExerciseForm } from "@/components/forms";
 import { useFocusAreasMap, useTagsMap } from "@/hooks/util";
 import { UserExercise, WithId } from "@/types/app.types";
@@ -10,10 +10,11 @@ export type ListExerciseProps = {
   started?: boolean;
   onEdit: (updates: Partial<Omit<WithId<UserExercise>, "id">>) => Promise<void>;
   onArchive: () => Promise<void>;
+  onDelete: () => Promise<void>;
   onStart?: () => any;
 };
 
-export const ExerciseCard = ({ exercise, started, onEdit, onArchive, onStart }: ListExerciseProps) => {
+export const ExerciseCard = ({ exercise, started, onEdit, onArchive, onDelete, onStart }: ListExerciseProps) => {
   const [opened, { open, close }] = useDisclosure(false);
   const areasMap = useFocusAreasMap();
   const tagsMap = useTagsMap();
@@ -66,6 +67,10 @@ export const ExerciseCard = ({ exercise, started, onEdit, onArchive, onStart }: 
 
             <Menu.Item color="pink" leftSection={<IconMinus size={14} />} onClick={onArchive}>
               Archive
+            </Menu.Item>
+
+            <Menu.Item color="red" leftSection={<IconTrash size={14} />} onClick={onDelete}>
+              Delete
             </Menu.Item>
           </Menu.Dropdown>
         </Menu>

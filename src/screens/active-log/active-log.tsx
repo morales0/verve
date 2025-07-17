@@ -8,7 +8,9 @@ import { TopBar } from "@/components/ui";
 export const ActiveLog = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  console.log(location);
+  const isSummary = location.pathname === "/active-log/summary" || location.pathname === "/active-log/summary/";
+  const isList = location.pathname === "/active-log" || location.pathname === "/active-log/";
+
   return (
     <Stack className={classes.logScreen} gap="xs" mih="100vh">
       <TopBar>
@@ -23,21 +25,19 @@ export const ActiveLog = () => {
             </ActionIcon>
           </Group>
           <DateSelect />
-          {location.pathname === "/active-log/summary" && (
+          {isSummary && (
             <ActionIcon size="md" variant="transparent" component={Link} to="/active-log">
               <IconListCheck stroke={1} />
             </ActionIcon>
           )}
-          {location.pathname === "/active-log" && (
+          {isList && (
             <ActionIcon size="md" variant="transparent" component={Link} to="/active-log/summary">
               <IconChecklist stroke={1} />
             </ActionIcon>
           )}
         </Flex>
       </TopBar>
-      <Stack p="xs" pt={0}>
-        <Outlet />
-      </Stack>
+      <Outlet />
     </Stack>
   );
 };

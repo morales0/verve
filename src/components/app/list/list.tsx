@@ -73,7 +73,7 @@ export const List = () => {
     });
 
   return (
-    <Stack>
+    <Stack p="xs">
       <Group>
         <TextInput radius="xl" size="xs" style={{ flexGrow: 1 }} />
         <Button radius="xl" size="xs" leftSection={<IconPlus size={18} />} onClick={openNew}>
@@ -93,6 +93,7 @@ export const List = () => {
                 exercise={exercise}
                 // started={!!exerciseIdtoLogId(exercise.id)}
                 onArchive={() => handleArchiveExercise(exercise.id)}
+                onDelete={() => handleDeleteExercise(exercise.id)}
                 onEdit={(updates: Partial<UserExercise>) => handleEditExercise(exercise.id, updates)}
                 onStart={() => handleStartExercise(exercise)}
               />

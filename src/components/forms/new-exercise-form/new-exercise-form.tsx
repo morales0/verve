@@ -21,6 +21,12 @@ import { useForm } from "@mantine/form";
 import { IconCircle, IconCircleCheckFilled, IconCircleDot, IconPlus, IconX } from "@tabler/icons-react";
 import { useMemo, useState } from "react";
 
+const METRIC_MAP: Record<string, string> = {
+  reps: "number",
+  weight: "weight",
+  time: "time",
+};
+
 type FormValues = Omit<SetsUserExercise, "type"> & Omit<CustomUserExercise, "type"> & { type: "sets" | "custom" };
 
 export type ExerciseFormProps = {
@@ -41,9 +47,10 @@ export const NewExerciseForm = ({ initialValues, onSubmit }: ExerciseFormProps) 
     transformValues: (values) => ({
       ...values,
       name: capitalizeWords(values.name),
-      tagIds: values.tagIds
-        ?.map((tag) => tags.data.find(({ name }) => name === tag)?.id)
-        .filter((tag) => tag !== undefined),
+      tagIds:
+        values.tagIds
+          ?.map((tag) => tags.data.find(({ name }) => name === tag)?.id)
+          ?.filter((tag) => tag !== undefined) ?? [],
     }),
     initialValues: {
       name: "",
@@ -73,19 +80,28 @@ export const NewExerciseForm = ({ initialValues, onSubmit }: ExerciseFormProps) 
       });
     }
   };
-  const handleAddMetric = (name: string, type: string) => {
+
+  const handleChangeSetMetrics = (value: string[]) => {
+    if (!isMetricsEditingAllowed) {
+      return;
+    }
     const values = form.getValues();
     if (values.type === "sets") {
-      form.setValues({ metrics: [...(values.metrics ?? []), { name, type }] });
+      form.setValues({ metrics: value.map((v) => ({ name: v, type: METRIC_MAP[v] ?? "number" })) });
     }
+  };
+
+  const handleAddMetric = (name: string, type: string) => {
+    const values = form.getValues();
     if (values.type === "custom") {
       form.setValues({ defaultMetrics: [...(values.defaultMetrics ?? []), { name, type }] });
+      setNewMetricName("");
     }
-
-    setNewMetricName("");
   };
+
   const handleRemoveMetric = (name: string) =>
-    form.setValues({ metrics: form.getValues().metrics.filter((m) => m.name !== name) });
+    form.setValues({ defaultMetrics: form.getValues().defaultMetrics?.filter((m) => m.name !== name) });
+
   const handleSubmit = async (values: FormValues) => {
     const { metrics, defaultMetrics, ...rest } = values;
     if (values.type === "sets") {
@@ -123,11 +139,24 @@ export const NewExerciseForm = ({ initialValues, onSubmit }: ExerciseFormProps) 
                     ? "An exercise that is split into sets."
                     : "An exercise with custom metrics, ex. Yoga."}
                 </Text>
-                <Stack>
+                <Stack gap="sm">
                   <Text size="sm" fw={500} mb={3}>
                     {form.getValues().type === "sets" ? "Metrics" : "Default Metrics"}
                   </Text>
-                  {isMetricsEditingAllowed && (
+                  {form.getValues().type === "sets" && (
+                    <Chip.Group
+                      multiple
+                      value={form.getValues().metrics?.map((m) => m.name) ?? []}
+                      onChange={handleChangeSetMetrics}
+                    >
+                      <Group justify="center" mt="md">
+                        <Chip value="reps">Reps</Chip>
+                        <Chip value="weight">Weight</Chip>
+                        <Chip value="time">Time</Chip>
+                      </Group>
+                    </Chip.Group>
+                  )}
+                  {form.getValues().type === "custom" && (
                     <Group wrap="nowrap" gap="xs">
                       <TextInput value={newMetricName} onChange={(e) => setNewMetricName(e.target.value)} />
                       <Select
@@ -157,27 +186,25 @@ export const NewExerciseForm = ({ initialValues, onSubmit }: ExerciseFormProps) 
                       </ActionIcon>
                     </Group>
                   )}
-                  <Flex gap="sm">
-                    {(form.getValues().type === "sets"
-                      ? form.getValues().metrics
-                      : form.getValues().defaultMetrics
-                    )?.map((m) => (
-                      <Paper key={m.name} withBorder p="xs">
-                        <Flex align="center" gap="xs">
-                          <Stack gap={0}>
-                            <Text>{m.name}</Text>
-                            <Text size="xs" c="dimmed">
-                              {m.type}
-                            </Text>
-                          </Stack>
-                          {isMetricsEditingAllowed && (
-                            <ActionIcon onClick={() => handleRemoveMetric(m.name)}>
-                              <IconX />
-                            </ActionIcon>
-                          )}
-                        </Flex>
-                      </Paper>
-                    ))}
+                  <Flex gap="sm" wrap="wrap">
+                    {form.getValues().type === "custom" &&
+                      form.getValues().defaultMetrics?.map((m) => (
+                        <Paper key={m.name} withBorder p="xs">
+                          <Flex align="center" gap="xs">
+                            <Stack gap={0}>
+                              <Text>{m.name}</Text>
+                              <Text size="xs" c="dimmed">
+                                {m.type}
+                              </Text>
+                            </Stack>
+                            {isMetricsEditingAllowed && (
+                              <ActionIcon onClick={() => handleRemoveMetric(m.name)}>
+                                <IconX />
+                              </ActionIcon>
+                            )}
+                          </Flex>
+                        </Paper>
+                      ))}
                   </Flex>
                 </Stack>
               </Stack>
