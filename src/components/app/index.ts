@@ -4,3 +4,4 @@ export * from "./focus-areas-chips";
 export * from "./today";
 export * from "./week-tracker";
 export * from "./list";
+export * from "./active-exercise";

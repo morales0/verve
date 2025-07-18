@@ -12,7 +12,7 @@ const UserApp = () => {
           <Route path="active-log" element={<ActiveLog />}>
             <Route index element={<List />} />
             <Route path="summary" element={<> Summary </>} />
-            <Route path=":logExerciseId" element={<ActiveExercise />} />
+            <Route path=":id" element={<ActiveExercise />} />
           </Route>
 
           <Route path="log/:logId" element={<>See and edit a logged exercise</>} />
