@@ -6,8 +6,8 @@ import { useMemo, useState } from "react";
 
 export type FocusAreaBadgeProps = WithId<FocusArea> & {
   level: 1 | 2 | 0;
-  onArchive: () => Promise<string>;
-  onUpdateName: (name: string) => Promise<string> | undefined;
+  onArchive: () => Promise<unknown>;
+  onUpdateName: (name: string) => Promise<unknown> | undefined;
   doesNameExist: (name: string) => boolean;
 };
 

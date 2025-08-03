@@ -1,4 +1,4 @@
-import { useFocusAreas, useUser } from "@/context";
+import { useUser } from "@/context";
 import { calculateFocusAreaLevel } from "@/functions";
 import { getLast7DaysLogs } from "@/services/log.service";
 import { LogExercise, WithId } from "@/types/app.types";
@@ -7,11 +7,10 @@ import { useDisclosure } from "@mantine/hooks";
 import { IconPlus } from "@tabler/icons-react";
 import { useCallback, useEffect, useState } from "react";
 import { FocusAreaBadge } from "./focus-area-badge";
+import { useFocusAreas } from "@/api";
 
 export const FocusAreas = () => {
   const { dataRef } = useUser();
-  const focusAreas = useFocusAreas();
-  const { api } = focusAreas;
 
   // Subscribe to last seven days log
   const [last7DaysLogs, setLast7DaysLogs] = useState<WithId<LogExercise>[]>([]);
@@ -33,60 +32,62 @@ export const FocusAreas = () => {
   );
 
   // create data to iterate
-  const data =
-    focusAreas.data
-      ?.filter(({ archived }) => !archived)
-      .map((area) => ({
-        ...area,
-        label: area.name,
-        value: area.id,
-        level: calcLevel(area.id) as 0 | 1 | 2,
-      })) ?? [];
+  const { data: focusAreas, status } = useFocusAreas({
+    select: (data) =>
+      Object.values(data)
+        .filter(({ archived }) => !archived)
+        .map((area) => ({
+          ...area,
+          label: area.name,
+          value: area.id,
+          level: calcLevel(area.id) as 0 | 1 | 2,
+        })),
+  });
 
   // util functions
-  const doesNameExist = (value: string) =>
-    focusAreas.data.some(({ name }) => name.toLowerCase() === value.toLowerCase());
+  const doesNameExist = (value: string) => !!focusAreas?.some(({ name }) => name.toLowerCase() === value.toLowerCase());
 
   const isNameArchived = (value: string) =>
-    focusAreas.data.some(({ name, archived }) => name.toLowerCase() === value.toLowerCase() && archived);
+    !!focusAreas?.some(({ name, archived }) => name.toLowerCase() === value.toLowerCase() && archived);
 
   // handlers
-  const handleAddFocusArea = async (value: string) =>
-    api
-      .addChild({
-        name: value,
-      })
-      .then(() => {
-        setName("");
-        close();
-      });
+  const handleAddFocusArea = async (value: string) => console.log("add: needs implementation");
+  // api
+  //   .addChild({
+  //     name: value,
+  //   })
+  //   .then(() => {
+  //     setName("");
+  //     close();
+  //   });
 
-  const handleUpdateAreaName = async (id: string, value: string) =>
-    api.updateChild(id, {
-      name: value,
-    });
+  const handleUpdateAreaName = async (id: string, value: string) => console.log("update: needs implementation");
+  // api.updateChild(id, {
+  //   name: value,
+  // });
 
-  const handleArchiveFocusArea = async (id: string) =>
-    api.updateChild(id, {
-      archived: true,
-    });
+  const handleArchiveFocusArea = async (id: string) => console.log("archive: needs implementation");
+  // api.updateChild(id, {
+  //   archived: true,
+  // });
 
   const handleUnarchiveFocusArea = async (value: string) => {
+    console.log("unarchive: needs implementation");
     // First find focus area with value as name
-    const id = focusAreas.data.find((area) => area.name.toLowerCase() === value.toLowerCase())?.id;
-
-    if (!id) {
-      return;
-    }
-
-    return api
-      .updateChild(id, {
-        archived: false,
-      })
-      .then(() => {
-        setName("");
-        close();
-      });
+    // const id = focusAreas.data.find((area) => area.name.toLowerCase() === value.toLowerCase())?.id;
+    //
+    // if (!id) {
+    //   return;
+    // }
+    //
+    // return api
+    //   .updateChild(id, {
+    //     archived: false,
+    //   })
+    //   .then(() => {
+    //     setName("");
+    //     close();
+    //   });
   };
 
   return (
@@ -128,9 +129,9 @@ export const FocusAreas = () => {
         </Flex>
 
         <Flex wrap="wrap" gap="xs" justify="space-evenly">
-          {loading && <Loader />}
-          {!loading &&
-            (data?.map((area) => (
+          {status === "pending" && <Loader />}
+          {status === "success" &&
+            (focusAreas.map((area) => (
               <FocusAreaBadge
                 key={area.id}
                 {...area}
