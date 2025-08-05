@@ -1,22 +1,22 @@
 import { DefaultError, useQuery, useQueryClient, UseQueryOptions } from "@tanstack/react-query";
 import { app } from "@/firebase/config";
-import { getDatabase, onValue, ref } from "firebase/database";
+import { getDatabase, onValue, Query } from "firebase/database";
 import { useEffect } from "react";
 
 export const useRealtimeDB = <TQueryFnData, TError = DefaultError, TData = TQueryFnData>(
-  path: string,
+  ref: Query,
   options: Partial<UseQueryOptions<TQueryFnData, TError, TData>> = {}
 ) => {
-  const db = getDatabase(app);
   const queryClient = useQueryClient();
+  const queryKey = ref.toString();
 
   useEffect(() => {
     const off = onValue(
-      ref(db, path),
+      ref,
       (snapshot) => {
         if (snapshot.exists()) {
           const data = snapshot.val() as TQueryFnData | undefined;
-          queryClient.setQueryData(options.queryKey ?? [path], data ?? {});
+          queryClient.setQueryData(options.queryKey ?? [queryKey], data ?? {});
         }
       },
       (err) => {
@@ -25,10 +25,10 @@ export const useRealtimeDB = <TQueryFnData, TError = DefaultError, TData = TQuer
     );
 
     return () => off();
-  }, [queryClient, path]);
+  }, [queryClient, queryKey]);
 
   return useQuery<TQueryFnData, TError, TData>({
-    queryKey: [path],
+    queryKey: options.queryKey ?? [queryKey],
     queryFn: () => new Promise<TQueryFnData>(() => {}),
     ...options,
   });

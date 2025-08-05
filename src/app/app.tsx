@@ -9,7 +9,8 @@ const UnauthApp = lazy(() => import("./UnauthApp"));
 const App = () => {
   const { authUser, status } = useAuth();
   /* 
-  todo: enable theme modification
+  TODO: enable theme modification
+
   ? the theme doesn't update immediately, there needs to be a reload
   const { db } = useDatabase();
 
