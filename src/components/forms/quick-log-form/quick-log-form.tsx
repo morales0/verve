@@ -41,7 +41,7 @@ export const QuickLogForm = ({ initialValues, onSubmit }: QuickLogFormProps) => 
     await onSubmit({
       ...rest,
       type: "quick",
-      timestamp: date.getTime(),
+      timestamp: new Date(date).getTime(),
     });
     form.reset();
     setSubmitting(false);

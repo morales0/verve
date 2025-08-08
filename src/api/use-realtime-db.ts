@@ -1,6 +1,5 @@
 import { DefaultError, useQuery, useQueryClient, UseQueryOptions } from "@tanstack/react-query";
-import { app } from "@/firebase/config";
-import { getDatabase, onValue, Query } from "firebase/database";
+import { onValue, Query } from "firebase/database";
 import { useEffect } from "react";
 
 export const useRealtimeDB = <TQueryFnData, TError = DefaultError, TData = TQueryFnData>(
@@ -16,7 +15,7 @@ export const useRealtimeDB = <TQueryFnData, TError = DefaultError, TData = TQuer
       (snapshot) => {
         if (snapshot.exists()) {
           const data = snapshot.val() as TQueryFnData | undefined;
-          queryClient.setQueryData(options.queryKey ?? [queryKey], data ?? {});
+          queryClient.setQueryData(options.queryKey ?? [queryKey], data);
         }
       },
       (err) => {

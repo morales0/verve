@@ -1,25 +1,16 @@
-import { useUser } from "@/context";
 import { calculateFocusAreaLevel } from "@/functions";
-import { getLast7DaysLogs } from "@/services/log.service";
-import { LogExercise, WithId } from "@/types/app.types";
 import { ActionIcon, Button, Flex, Group, Loader, Modal, Stack, Text, TextInput } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { IconPlus } from "@tabler/icons-react";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import { FocusAreaBadge } from "./focus-area-badge";
-import { useFocusAreas } from "@/api";
+import { useFocusAreas, useRecentLogs } from "@/api";
+import { addFocusArea, updateFocusArea } from "@/services/focus-areas.service";
+import { useUser } from "@/context";
 
 export const FocusAreas = () => {
   const { dataRef } = useUser();
-
-  // Subscribe to last seven days log
-  const [last7DaysLogs, setLast7DaysLogs] = useState<WithId<LogExercise>[]>([]);
-  const [loading, setLoading] = useState(true);
-  useEffect(() => {
-    if (!dataRef) return;
-    const off = getLast7DaysLogs(dataRef, setLast7DaysLogs, setLoading);
-    return () => off();
-  }, [dataRef]);
+  const { data: last7DaysLogs, status: logsStatus } = useRecentLogs({ select: (data) => Object.values(data) });
 
   // Focus areas local state
   const [opened, { open, close }] = useDisclosure(false);
@@ -27,7 +18,7 @@ export const FocusAreas = () => {
 
   // Find last log that uses focus area with id and is complete
   const calcLevel = useCallback(
-    (id: string) => calculateFocusAreaLevel(last7DaysLogs.findLast(({ focusAreaIds }) => focusAreaIds?.includes(id))),
+    (id: string) => calculateFocusAreaLevel(last7DaysLogs?.findLast(({ focusAreaIds }) => focusAreaIds?.includes(id))),
     [last7DaysLogs]
   );
 
@@ -51,43 +42,23 @@ export const FocusAreas = () => {
     !!focusAreas?.some(({ name, archived }) => name.toLowerCase() === value.toLowerCase() && archived);
 
   // handlers
-  const handleAddFocusArea = async (value: string) => console.log("add: needs implementation");
-  // api
-  //   .addChild({
-  //     name: value,
-  //   })
-  //   .then(() => {
-  //     setName("");
-  //     close();
-  //   });
+  const handleAddFocusArea = async (value: string) => addFocusArea(dataRef, value);
 
-  const handleUpdateAreaName = async (id: string, value: string) => console.log("update: needs implementation");
-  // api.updateChild(id, {
-  //   name: value,
-  // });
+  const handleUpdateAreaName = async (id: string, value: string) => updateFocusArea(dataRef, id, { name: value });
 
-  const handleArchiveFocusArea = async (id: string) => console.log("archive: needs implementation");
-  // api.updateChild(id, {
-  //   archived: true,
-  // });
+  const handleArchiveFocusArea = async (id: string) => updateFocusArea(dataRef, id, { archived: true });
 
   const handleUnarchiveFocusArea = async (value: string) => {
-    console.log("unarchive: needs implementation");
     // First find focus area with value as name
-    // const id = focusAreas.data.find((area) => area.name.toLowerCase() === value.toLowerCase())?.id;
-    //
-    // if (!id) {
-    //   return;
-    // }
-    //
-    // return api
-    //   .updateChild(id, {
-    //     archived: false,
-    //   })
-    //   .then(() => {
-    //     setName("");
-    //     close();
-    //   });
+    const id = focusAreas?.find((area) => area.name.toLowerCase() === value.toLowerCase())?.id;
+
+    if (!id) {
+      return;
+    }
+
+    await updateFocusArea(dataRef, id, { archived: false });
+    setName("");
+    close();
   };
 
   return (
