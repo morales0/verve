@@ -79,7 +79,7 @@ export const QuickLogForm = ({ initialValues, onSubmit }: QuickLogFormProps) => 
         />
         <FocusAreaChips {...form.getInputProps("focusAreaIds")} key={form.key("focusAreaIds")} />
         <EffortSelect {...form.getInputProps("effort")} key={form.key("effort")} />
-        <Textarea {...form.getInputProps("notes")} key={form.key("notes")} label="Notes" autosize minRows={3} />
+        <Textarea {...form.getInputProps("notes")} key={form.key("notes")} label="Notes" autosize minRows={5} />
         <Divider />
         <Button type="submit" loading={submitting}>
           Cement it in history!
