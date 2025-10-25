@@ -8,7 +8,10 @@ const UnauthApp = lazy(() => import("./UnauthApp"));
 
 const App = () => {
   const { authUser, status } = useAuth();
-  /* 
+
+  const userIsAuthenticated = status === "authenticated" && authUser;
+
+  /*
   TODO: enable theme modification
 
   ? the theme doesn't update immediately, there needs to be a reload
@@ -36,7 +39,7 @@ const App = () => {
 
   return (
     <MantineProvider theme={theme} defaultColorScheme="dark" cssVariablesResolver={resolver}>
-      {status === "authenticated" && authUser ? (
+      {userIsAuthenticated ? (
         <UserProvider user={authUser}>
           <Suspense fallback={<LoadingOverlay />}>
             <UserApp />

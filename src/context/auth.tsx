@@ -3,12 +3,15 @@ import { Auth, getAuth, onAuthStateChanged, User, signOut as authSignOut } from 
 import { createContext, PropsWithChildren, useContext, useEffect, useState } from "react";
 
 type AuthContextType = {
+  auth: Auth;
   authUser: User | null;
   status: string;
   signOut: () => void;
 };
 
 const AuthContext = createContext<AuthContextType>({
+  // @ts-ignore
+  auth: null,
   authUser: null,
   status: "loading",
   signOut: async () => {},
@@ -48,7 +51,7 @@ export default function AuthProvider({ app, children }: PropsWithChildren<{ app:
     return () => off();
   }, [auth]);
 
-  return <AuthContext.Provider value={{ authUser, status, signOut }}>{children}</AuthContext.Provider>;
+  return <AuthContext.Provider value={{ auth, authUser, status, signOut }}>{children}</AuthContext.Provider>;
 }
 
 export function useAuth(): AuthContextType {

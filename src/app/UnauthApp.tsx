@@ -1,16 +1,16 @@
-import { app } from "@/firebase/config";
-import { Stack, Text, rem } from "@mantine/core";
+import { AuthForm } from "@/components/forms";
+import { useAuth } from "@/context";
+import { Stack, Text } from "@mantine/core";
 import {
   GoogleAuthProvider,
   createUserWithEmailAndPassword,
-  getAuth,
   signInWithEmailAndPassword,
   signInWithPopup,
 } from "firebase/auth";
-import { AuthForm } from "@/components/forms";
 
+// todo: guest version of app?
 const UnauthApp = () => {
-  const auth = getAuth(app);
+  const { auth } = useAuth();
 
   const signIn = async (email: string, password: string) => signInWithEmailAndPassword(auth, email, password);
   const register = async (email: string, password: string) => createUserWithEmailAndPassword(auth, email, password);
