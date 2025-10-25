@@ -1,6 +1,6 @@
 import { FirebaseApp } from "firebase/app";
 import { Database, getDatabase } from "firebase/database";
-import { createContext, useContext } from "react";
+import { createContext, PropsWithChildren, useContext } from "react";
 
 type DatabaseContextType = {
   db: Database;
@@ -8,15 +8,10 @@ type DatabaseContextType = {
 
 const DatabaseContext = createContext<DatabaseContextType | null>(null);
 
-type Props = {
-  children: React.ReactNode;
-  app: FirebaseApp;
-};
-
-function DatabaseProvider({ app, children }: Props) {
+function DatabaseProvider({ app, children }: PropsWithChildren<{ app: FirebaseApp }>) {
   const db = getDatabase(app);
 
-  return <DatabaseContext.Provider value={{ db: db }}>{children}</DatabaseContext.Provider>;
+  return <DatabaseContext.Provider value={{ db }}>{children}</DatabaseContext.Provider>;
 }
 
 export default DatabaseProvider;

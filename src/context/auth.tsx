@@ -1,6 +1,6 @@
 import { FirebaseApp } from "firebase/app";
 import { Auth, getAuth, onAuthStateChanged, User, signOut as authSignOut } from "firebase/auth";
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, PropsWithChildren, useContext, useEffect, useState } from "react";
 
 type AuthContextType = {
   authUser: User | null;
@@ -14,12 +14,7 @@ const AuthContext = createContext<AuthContextType>({
   signOut: async () => {},
 });
 
-type Props = {
-  app: FirebaseApp;
-  children: React.ReactNode;
-};
-
-export default function AuthProvider({ app, children }: Props) {
+export default function AuthProvider({ app, children }: PropsWithChildren<{ app: FirebaseApp }>) {
   const [authUser, setAuthUser] = useState<User | null>(null);
   const [status, setStatus] = useState("loading");
   const auth = getAuth(app);
@@ -29,6 +24,7 @@ export default function AuthProvider({ app, children }: Props) {
   // Listen to auth changes
   useEffect(() => {
     const off = onAuthStateChanged(auth, (user) => {
+      // log auth in local dev
       if (process.env.NODE_ENV === "development") {
         console.log("Auth", user);
       }

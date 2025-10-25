@@ -1,7 +1,7 @@
 import { app } from "@/firebase/config";
 import { User } from "firebase/auth";
 import { DatabaseReference, getDatabase, ref } from "firebase/database";
-import { createContext, useContext } from "react";
+import { createContext, PropsWithChildren, useContext } from "react";
 
 type UserContextType = {
   user: User;
@@ -12,14 +12,11 @@ type UserContextType = {
 
 const UserContext = createContext<UserContextType | null>(null);
 
-type Props = {
-  user: User;
-  children: React.ReactNode;
-};
-
-export const UserProvider = ({ user, children }: Props) => {
+export const UserProvider = ({ user, children }: PropsWithChildren<{ user: User }>) => {
   const db = getDatabase(app);
   // const [meta, setMeta] = useState<UserMetaData>({ isWorkingOut: false, hasUpdatedMuscleGroups: true });
+
+  // Use dev data before releasing app
   const userDataPath = `users/${user.uid}${import.meta.env.VITE_ENV === "dev" ? "/dev" : ""}`;
   const dataRef = ref(db, userDataPath);
 
