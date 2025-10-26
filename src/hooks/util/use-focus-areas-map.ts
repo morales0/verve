@@ -1,12 +1,12 @@
-import { useFocusAreas } from "@/context";
+import { useFocusAreas } from "@/api";
 import { useMemo } from "react";
 
 export const useFocusAreasMap = () => {
-  const focusAreas = useFocusAreas();
+  const { data: focusAreas } = useFocusAreas({ select: (data) => Object.values(data) });
 
   const areasMap = useMemo(
-    () => Object.fromEntries(focusAreas.data.map((area) => [area.id, area.name])),
-    [focusAreas.data]
+    () => Object.fromEntries(focusAreas?.map((area) => [area.id, area.name]) ?? []),
+    [focusAreas]
   );
 
   return areasMap;

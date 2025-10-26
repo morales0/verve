@@ -13,7 +13,7 @@ export type FocusArea = {
 };
 
 export const useFocusAreas = () => {
-  const { dataRef, meta } = useUser();
+  const { dataRef } = useUser();
   const focusAreasRef = child(dataRef, "focusAreas");
   const { loading, data, error, api } = useDatabaseList<FocusArea>(focusAreasRef);
 

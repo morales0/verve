@@ -1,10 +1,10 @@
-import { useTags } from "@/context";
+import { useTags } from "@/api";
 import { useMemo } from "react";
 
 export const useTagsMap = () => {
-  const tags = useTags();
+  const { data: tags } = useTags({ select: (data) => Object.values(data) });
 
-  const tagsMap = useMemo(() => Object.fromEntries(tags.data.map((tag) => [tag.id, tag.name])), [tags.data]);
+  const tagsMap = useMemo(() => Object.fromEntries(tags?.map((tag) => [tag.id, tag.name]) ?? []), [tags]);
 
   return tagsMap;
 };

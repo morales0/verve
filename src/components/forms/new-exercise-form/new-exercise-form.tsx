@@ -1,5 +1,4 @@
-import { useFocusAreas } from "@/context";
-import { useTags } from "@/context/tags";
+import { useFocusAreas, useTags } from "@/api";
 import { capitalizeWords } from "@/functions/utils";
 import { CustomUserExercise, SetsUserExercise, UserExercise } from "@/types/app.types";
 import {
@@ -34,23 +33,22 @@ export type ExerciseFormProps = {
   onSubmit: (values: UserExercise) => Promise<unknown>;
 };
 export const NewExerciseForm = ({ initialValues, onSubmit }: ExerciseFormProps) => {
-  const userFocusAreas = useFocusAreas();
-  const tags = useTags();
+  const { data: userFocusAreas } = useFocusAreas({ select: (data) => Object.values(data) });
+  const { data: tags } = useTags({ select: (data) => Object.values(data) });
   const areasMap = useMemo(
-    () => Object.fromEntries(userFocusAreas.data.map((area) => [area.id, area.name])),
-    [userFocusAreas.data]
+    () => Object.fromEntries(userFocusAreas?.map((area) => [area.id, area.name]) ?? []),
+    [userFocusAreas]
   );
 
-  const activeUserFocusAreas = userFocusAreas.data.filter(({ archived }) => !archived);
+  const activeUserFocusAreas = userFocusAreas?.filter(({ archived }) => !archived);
   const form = useForm<FormValues>({
     mode: "uncontrolled",
     transformValues: (values) => ({
       ...values,
       name: capitalizeWords(values.name),
       tagIds:
-        values.tagIds
-          ?.map((tag) => tags.data.find(({ name }) => name === tag)?.id)
-          ?.filter((tag) => tag !== undefined) ?? [],
+        values.tagIds?.map((tag) => tags?.find(({ name }) => name === tag)?.id)?.filter((tag) => tag !== undefined) ??
+        [],
     }),
     initialValues: {
       name: "",
@@ -73,11 +71,10 @@ export const NewExerciseForm = ({ initialValues, onSubmit }: ExerciseFormProps) 
   const isMetricsEditingAllowed = !isEditing || form.getValues().type === "custom";
 
   const handleTagOptionSubmit = (value: string) => {
-    const isNewTag = !tags.data.find(({ id }) => id.toLowerCase() === value.toLowerCase());
+    const isNewTag = tags?.find(({ id }) => id.toLowerCase() === value.toLowerCase());
     if (isNewTag) {
-      tags.api.addChild({
-        name: value,
-      });
+      // add child
+      // addNewTag(value)
     }
   };
 
@@ -217,7 +214,7 @@ export const NewExerciseForm = ({ initialValues, onSubmit }: ExerciseFormProps) 
               </Text>
               <Group wrap="wrap" gap="xs" justify="start">
                 <Chip.Group multiple {...form.getInputProps("focusAreaIds")}>
-                  {activeUserFocusAreas.map(({ id, name }) => (
+                  {activeUserFocusAreas?.map(({ id, name }) => (
                     <Chip key={id} value={id}>
                       {name}
                     </Chip>
@@ -230,7 +227,7 @@ export const NewExerciseForm = ({ initialValues, onSubmit }: ExerciseFormProps) 
             <>
               <TagsInput
                 label="Tags"
-                data={tags.data.map(({ id, name }) => ({ value: id, label: name }))}
+                data={tags?.map(({ id, name }) => ({ value: id, label: name }))}
                 onOptionSubmit={handleTagOptionSubmit}
                 acceptValueOnBlur={false}
                 {...form.getInputProps("tagIds")}

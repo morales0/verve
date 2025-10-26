@@ -1,15 +1,13 @@
-import { useState } from "react";
-import { DateInput, DateValue } from "@mantine/dates";
+import { useDatabaseValue } from "@/api";
 import { Center } from "@mantine/core";
-import { IconChevronDown, IconEdit } from "@tabler/icons-react";
-import { useDatabaseValue } from "@/hooks/db";
+import { DateInput, DateValue } from "@mantine/dates";
 import dayjs from "dayjs";
 import classes from "./data-select.module.css";
 
 export const DateSelect = () => {
-  const { data, loading, api } = useDatabaseValue<string>("activeLog/date");
+  const { data } = useDatabaseValue<string>("activeLog/date");
   const handleOnChange = (value: DateValue) => {
-    api.setValue(value?.toDateString() ?? new Date().toDateString());
+    const newDate = value?.toString() ?? new Date().toDateString();
   };
   const currValue = data ? new Date(data) : undefined;
 

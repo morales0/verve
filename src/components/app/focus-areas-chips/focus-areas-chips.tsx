@@ -1,12 +1,10 @@
-import { useFocusAreas } from "@/context";
-import { Stack, Group, Chip, Text, ChipGroupProps } from "@mantine/core";
+import { useFocusAreas } from "@/api";
+import { Chip, ChipGroupProps, Group, Stack, Text } from "@mantine/core";
 
 export type FocusAreasChipsProps = ChipGroupProps<true>;
 
 export const FocusAreaChips = (props: FocusAreasChipsProps) => {
-  const { data } = useFocusAreas();
-
-  const userFocusAreas = data.filter(({ archived }) => !archived);
+  const { data } = useFocusAreas({ select: (data) => Object.values(data).filter(({ archived }) => archived) });
 
   return (
     <Stack gap="xs">
@@ -15,7 +13,7 @@ export const FocusAreaChips = (props: FocusAreasChipsProps) => {
       </Text>
       <Group wrap="wrap" gap="xs" justify="space-evenly">
         <Chip.Group multiple {...props}>
-          {userFocusAreas.map(({ id, name }) => (
+          {data?.map(({ id, name }) => (
             <Chip key={id} value={id}>
               {name}
             </Chip>
