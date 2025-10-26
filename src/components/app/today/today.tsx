@@ -1,13 +1,22 @@
 import { useUser } from "@/context";
-import { getActiveLog, getLogsByDate, removeExerciseFromLog, updateLogExercise } from "@/services/log.service";
-import { LogExercise, QuickLogExercise, UserExercise, WithId } from "@/types/app.types";
+import { removeExerciseFromLog, updateLogExercise } from "@/services/log.service";
+import { QuickLogExercise, WithId } from "@/types/app.types";
 import { ActionIcon, Group, Loader, Paper, Stack, Text } from "@mantine/core";
 import { IconChevronLeft, IconChevronRight } from "@tabler/icons-react";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { QuickLogCard } from "./quick-log-card";
 import { useActiveLogExercises, useLogExercisesByDay } from "./data";
+import { QuickLogCard } from "./quick-log-card";
 import { getDateTitle } from "./util";
+import { useLogsByDay } from "@/api";
+
+const getDate = (daysBack: number) => {
+  const now = new Date();
+  if (daysBack === 0) return now;
+
+  now.setDate(now.getDate() - daysBack);
+  return now;
+};
 
 export const Today = () => {
   const { dataRef } = useUser();
@@ -22,6 +31,8 @@ export const Today = () => {
     date.setDate(date.getDate() - daysBack);
     return daysBack === 0 ? undefined : date.getTime();
   }, [daysBack]);
+  const logDate = getDate(daysBack);
+  const { data } = useLogsByDay(logDate);
 
   const { logs: currDayLogs, loading: isCurrDayLogsLoading } = useLogExercisesByDay(timestamp);
   const { logs: activeLogs, loading: isActiveLogsLoading } = useActiveLogExercises();

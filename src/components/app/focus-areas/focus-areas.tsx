@@ -1,12 +1,12 @@
+import { useFocusAreas, useRecentLogs } from "@/api";
+import { useUser } from "@/context";
 import { calculateFocusAreaLevel } from "@/functions";
+import { addFocusArea, updateFocusArea } from "@/services/focus-areas.service";
 import { ActionIcon, Button, Flex, Group, Loader, Modal, Stack, Text, TextInput } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { IconPlus } from "@tabler/icons-react";
 import { useCallback, useState } from "react";
 import { FocusAreaBadge } from "./focus-area-badge";
-import { useFocusAreas, useRecentLogs } from "@/api";
-import { addFocusArea, updateFocusArea } from "@/services/focus-areas.service";
-import { useUser } from "@/context";
 
 export const FocusAreas = () => {
   const { dataRef } = useUser();
@@ -90,7 +90,7 @@ export const FocusAreas = () => {
             <ActionIcon size="sm" color="default" onClick={open}>
               <IconPlus stroke={1.5} size={20} />
             </ActionIcon>
-            {/* 
+            {/*
             // todo: active once area page is created
             <ActionIcon size="sm" color="default">
               <IconArrowRight stroke={1.5} size={20} />
