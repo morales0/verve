@@ -1,13 +1,18 @@
 import { useDatabaseValue } from "@/api";
+import { useUser } from "@/context";
+import { updateActiveLogDate } from "@/services/active-log.service";
 import { Center } from "@mantine/core";
 import { DateInput, DateValue } from "@mantine/dates";
 import dayjs from "dayjs";
 import classes from "./data-select.module.css";
 
 export const DateSelect = () => {
+  const { user } = useUser();
   const { data } = useDatabaseValue<string>("activeLog/date");
-  const handleOnChange = (value: DateValue) => {
-    const newDate = value?.toString() ?? new Date().toDateString();
+
+  const handleOnChange = async (value: DateValue) => {
+    const newDate = value ? dayjs(value).toDate().toLocaleDateString() : new Date().toLocaleDateString();
+    await updateActiveLogDate(user.uid, newDate);
   };
   const currValue = data ? new Date(data) : undefined;
 
