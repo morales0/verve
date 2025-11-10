@@ -55,7 +55,7 @@ export type LoggingSetsUserExercise = Omit<SetsUserExercise, "metrics" | "type" 
   type: "sets";
   sets?: Set[];
   effort?: string; // only available when logging
-  timestamp: number; // date to log to
+  timestamp?: number; // date to log to
   userExerciseId: string; // get data from id
 };
 

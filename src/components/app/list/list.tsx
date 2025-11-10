@@ -1,4 +1,6 @@
+import { NewExerciseForm } from "@/components/forms";
 import { useUser } from "@/context";
+import { createNewActiveExercise } from "@/services/active-log.service";
 import {
   addUserExercise,
   getUserExercises,
@@ -11,11 +13,10 @@ import { useDisclosure } from "@mantine/hooks";
 import { IconPlus } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { NewExerciseForm } from "@/components/forms";
 import { ExerciseCard } from "./exercise-card";
 
 export const List = () => {
-  const { dataRef } = useUser();
+  const { user, dataRef } = useUser();
   const navigate = useNavigate();
   const [newOpened, { open: openNew, close: closeNew }] = useDisclosure(false);
 
@@ -60,7 +61,8 @@ export const List = () => {
       closeNew();
     });
     */
-  const handleStartExercise = (exercise: WithId<UserExercise>) => {
+  const handleStartExercise = async (exercise: WithId<UserExercise>) => {
+    await createNewActiveExercise(user.uid, exercise);
     navigate(`/active-log/${exercise.id}`);
   };
   const handleEditExercise = (id: string, updates: Partial<Omit<UserExercise, "id">>) =>

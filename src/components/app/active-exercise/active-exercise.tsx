@@ -1,32 +1,32 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { LoadingOverlay, Stack, Text } from "@mantine/core";
-import { useDatabaseValue } from "@/hooks/db";
 import { WithId, type UserExercise } from "@/types/app.types";
 import { SetsExercise } from "./sets-exercise";
 import { CustomExercise } from "./custom-exercise";
+import { useDatabaseValue } from "@/api";
 
 export const ActiveExercise = () => {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const { data: userExercise, loading: isUserExerciseLoading } = useDatabaseValue<WithId<UserExercise>>(
-    `exercises/${id}`
-  );
+  const { data, isLoading } = useDatabaseValue<WithId<UserExercise>>(`exercises/${id}`);
 
-  if (isUserExerciseLoading) {
+  if (isLoading) {
     return <LoadingOverlay />;
   }
 
-  if (!userExercise) {
+  if (!data) {
     navigate("/active-log");
     return null;
   }
-  const { type } = userExercise;
+
+  const { type } = data;
+
   return (
     <Stack gap="xs">
-      <Text px="xs">{userExercise.name}</Text>
-      {type === "sets" && <SetsExercise exercise={userExercise} />}
-      {type === "custom" && <CustomExercise exercise={userExercise} />}
+      <Text px="xs">{data.name}</Text>
+      {type === "sets" && <SetsExercise exercise={data} />}
+      {type === "custom" && <CustomExercise exercise={data} />}
     </Stack>
   );
 };

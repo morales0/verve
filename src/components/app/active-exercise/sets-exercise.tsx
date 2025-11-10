@@ -1,45 +1,44 @@
+import { useDatabaseValue } from "@/api";
 import { SetCard } from "@/components/ui";
-import { useDatabaseValue } from "@/hooks/db";
+import { useUser } from "@/context";
+import { updateActiveSetsExercise } from "@/services/active-log.service";
 import { LoggingSetsUserExercise, Set, SetsUserExercise, WithId } from "@/types/app.types";
-import { Button, Flex, Stack, Tabs, Text } from "@mantine/core";
+import { Button, Flex, LoadingOverlay, Stack, Tabs } from "@mantine/core";
 import { IconPlus } from "@tabler/icons-react";
-import { useMemo } from "react";
+import { useNavigate } from "react-router-dom";
 
 export type SetsExerciseProps = {
   exercise: WithId<SetsUserExercise>;
 };
 export const SetsExercise = ({ exercise }: SetsExerciseProps) => {
-  const { data: timestamp } = useDatabaseValue<string>(`activeLog/date`);
-  const { data, api } = useDatabaseValue<LoggingSetsUserExercise>(`activeLog/exercises/${exercise.id}`);
+  const { user } = useUser();
+  const navigate = useNavigate();
+  const { data: timestamp, isLoading: isTimestampLoading } = useDatabaseValue<string>(`activeLog/date`);
+  const { data, isLoading } = useDatabaseValue<LoggingSetsUserExercise>(`activeLog/exercises/${exercise.id}`);
 
-  const logExercise = useMemo(() => {
-    if (!timestamp) return undefined;
+  if (isTimestampLoading || isLoading) {
+    return <LoadingOverlay />;
+  }
 
-    const obj: LoggingSetsUserExercise = {
-      ...data,
-      type: "sets",
-      timestamp: new Date(timestamp).getTime(),
-      userExerciseId: exercise.id,
-    };
-
-    return obj;
-  }, [data, timestamp]);
+  if (!isLoading && !data) {
+    navigate("/active-log");
+  }
 
   const handleAddSet = () => {
-    if (logExercise?.sets) {
-      api.updateValue({
-        sets: [...logExercise.sets, logExercise.sets.at(-1)!],
+    if (data?.sets) {
+      updateActiveSetsExercise(user.uid, exercise.id, {
+        sets: [...data.sets, data.sets.at(-1)!],
       });
     } else {
       const newSet: Set = {
         values: Object.fromEntries(exercise.metrics.map((m) => [m.name, 0])),
       };
-      api.updateValue({ sets: [newSet] });
+      updateActiveSetsExercise(user.uid, exercise.id, { sets: [newSet] });
     }
   };
 
   const handleUpdateSet = (idx: number, name: string, value: string | number) => {
-    const target = logExercise?.sets?.at(idx);
+    const target = data?.sets?.at(idx);
     if (!target) return;
 
     const newSet = {
@@ -49,12 +48,13 @@ export const SetsExercise = ({ exercise }: SetsExerciseProps) => {
         [name]: value,
       },
     };
-    api.updateValue({
-      sets: logExercise?.sets?.map((s, i) => (i === idx ? newSet : s)) ?? [],
+    updateActiveSetsExercise(user.uid, exercise.id, {
+      sets: data?.sets?.map((s, i) => (i === idx ? newSet : s)) ?? [],
     });
   };
 
-  const handleRemoveSet = (idx: number) => api.updateValue({ sets: logExercise?.sets?.filter((_, i) => i !== idx) });
+  const handleRemoveSet = (idx: number) =>
+    updateActiveSetsExercise(user.uid, exercise.id, { sets: data?.sets?.filter((_, i) => i !== idx) });
 
   return (
     <Tabs defaultValue="sets">
@@ -66,7 +66,7 @@ export const SetsExercise = ({ exercise }: SetsExerciseProps) => {
 
       <Tabs.Panel value="sets" pt="xs">
         <Stack align="center" p="xs">
-          {logExercise?.sets?.map((s, i) => (
+          {data?.sets?.map((s, i) => (
             <Flex key={`${i}-${s.toString()}`}>
               {Object.entries(s.values).map(([name, value]) => (
                 <SetCard
